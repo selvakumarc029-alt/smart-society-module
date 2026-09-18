@@ -4,7 +4,7 @@
 <body class="dashboard-body bg-light" data-platform="smartapartment" data-dashboard-role="maintenance" th:attr="data-maintenance-superadmin=${maintenanceSuperAdmin}">
     <!-- Leaflet CSS & JS for Live Emergency Geo-Dispatch Map View -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
         <style>
         /* Custom Leaflet Map Markers & Mini-Cards for Live Emergency Dispatch */
@@ -1645,7 +1645,7 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 p-2" aria-labelledby="dutyStatusDropdown" style="font-size: 0.88rem; min-width: 270px; z-index: 1060;">
                             <li><h6 class="dropdown-header text-uppercase fw-bold text-muted px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Team Head Duty & Dispatch Mode</h6></li>
                             <li>
-                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('available')">
+                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('available', true)">
                                     <span class="badge bg-success rounded-circle p-1" style="width:10px;height:10px;display:inline-block;"></span>
                                     <div>
                                         <div class="fw-bold text-dark">Available On-Duty</div>
@@ -1654,7 +1654,7 @@
                                 </button>
                             </li>
                             <li>
-                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('busy')">
+                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('busy', true)">
                                     <span class="badge bg-warning rounded-circle p-1" style="width:10px;height:10px;display:inline-block;"></span>
                                     <div>
                                         <div class="fw-bold text-dark">Busy / In-Progress <span class="badge bg-danger-subtle text-danger ms-1" style="font-size:0.65rem;">Auto-Assign</span></div>
@@ -1663,7 +1663,7 @@
                                 </button>
                             </li>
                             <li>
-                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('off-duty')">
+                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('off-duty', true)">
                                     <span class="badge bg-secondary rounded-circle p-1" style="width:10px;height:10px;display:inline-block;"></span>
                                     <div>
                                         <div class="fw-bold text-dark">Off-Duty / On Break</div>
@@ -3065,7 +3065,7 @@
         };
 
         window.currentDutyStatus = "available";
-        window.setMaintenanceDutyStatus = function(status) {
+        window.setMaintenanceDutyStatus = function(status, syncToServer = false) {
             const normalized = (status || "available").toLowerCase();
             window.currentDutyStatus = normalized;
             const btn = document.getElementById("dutyStatusDropdown");
@@ -3080,34 +3080,36 @@
                 btn.classList.add("btn-warning", "text-dark");
                 icon.className = "fa-solid fa-bolt me-1 text-dark";
                 text.textContent = "Team Head: Busy (⚡ Auto-Assign 10m SLA Active)";
-                if (window.showToast) window.showToast("✓ Duty status set to Busy (Auto-assign active for resident requests within 10m SLA)", "warning");
+                if (syncToServer && window.showToast) window.showToast("✓ Duty status set to Busy (Auto-assign active for resident requests within 10m SLA)", "warning");
             } else if (normalized === "off-duty") {
                 btn.classList.add("btn-secondary", "text-white");
                 icon.className = "fa-solid fa-circle-pause me-1 text-white";
                 text.textContent = "Team Head: Off-Duty (⚡ Auto-Assign Active)";
-                if (window.showToast) window.showToast("✓ Duty status set to Off-Duty (Auto-assign active)", "info");
+                if (syncToServer && window.showToast) window.showToast("✓ Duty status set to Off-Duty (Auto-assign active)", "info");
             } else {
                 btn.classList.add("btn-success", "text-white");
                 icon.className = "fa-solid fa-circle-check me-1 text-white";
                 text.textContent = "Team Head: Available (Manual Mode)";
-                if (window.showToast) window.showToast("✓ Duty status set to Available On-Duty (Ready for Manual Assign)", "success");
+                if (syncToServer && window.showToast) window.showToast("✓ Duty status set to Available On-Duty (Ready for Manual Assign)", "success");
             }
             try {
                 localStorage.setItem("maintenance_duty_status", normalized);
             } catch(e) {}
-            try {
-                fetch("/api/maintenance/dispatch/admin/duty-status", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ status: normalized.toUpperCase() })
-                }).then(r => r.json()).then(data => {
-                    if (data && data.dutyStatus) {
-                        window.currentDutyStatus = data.dutyStatus.toLowerCase();
-                    }
-                    if (typeof renderUnassignedComplaintsPool === "function") renderUnassignedComplaintsPool();
-                    if (typeof loadMaintenanceWorkers === "function") loadMaintenanceWorkers();
-                }).catch(() => {});
-            } catch(e) {}
+            if (syncToServer) {
+                try {
+                    fetch("/api/maintenance/dispatch/admin/duty-status", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ status: normalized.toUpperCase() })
+                    }).then(r => r.json()).then(data => {
+                        if (data && data.dutyStatus) {
+                            window.currentDutyStatus = data.dutyStatus.toLowerCase();
+                        }
+                        if (typeof renderUnassignedComplaintsPool === "function") renderUnassignedComplaintsPool();
+                        if (typeof loadMaintenanceWorkers === "function") loadMaintenanceWorkers();
+                    }).catch(() => {});
+                } catch(e) {}
+            }
         };
 
         window.runAutoAssignOpenPool = async function() {
@@ -3165,17 +3167,17 @@
                 .then(r => r.ok ? r.json() : null)
                 .then(data => {
                     if (data && data.dutyStatus) {
-                        window.setMaintenanceDutyStatus(data.dutyStatus.toLowerCase());
+                        window.setMaintenanceDutyStatus(data.dutyStatus.toLowerCase(), false);
                     } else {
                         const savedDuty = localStorage.getItem("maintenance_duty_status") || "available";
-                        window.setMaintenanceDutyStatus(savedDuty);
+                        window.setMaintenanceDutyStatus(savedDuty, false);
                     }
                 }).catch(() => {
                     const savedDuty = localStorage.getItem("maintenance_duty_status") || "available";
-                    window.setMaintenanceDutyStatus(savedDuty);
+                    window.setMaintenanceDutyStatus(savedDuty, false);
                 });
         } catch(e) {
-            window.setMaintenanceDutyStatus("available");
+            window.setMaintenanceDutyStatus("available", false);
         }
 
         const dashboardTitles = {
@@ -6971,18 +6973,6 @@
                 maintenanceBackendRefreshTimer = window.setInterval(() => {
                     if (!document.hidden && !document.activeElement?.matches('.eta-select')) loadRoutineMaintenanceTickets({ silent: true });
                 }, 10000);
-            }
-
-            const poolTable = document.querySelector('[data-table="maintenance-complaints"]');
-            if (poolTable) {
-                let isRenderingPool = false;
-                const observer = new MutationObserver(() => {
-                    if (isRenderingPool) return;
-                    isRenderingPool = true;
-                    renderUnassignedComplaintsPool();
-                    setTimeout(() => { isRenderingPool = false; }, 100);
-                });
-                observer.observe(poolTable, { childList: true, subtree: true });
             }
 
             document.getElementById("scopeTicketSelector")?.addEventListener("change", (e) => {

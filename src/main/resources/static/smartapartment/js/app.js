@@ -420,41 +420,59 @@ async function saveSmartForgotPassword(event) {
 }
 
 async function submitDashboardCredentials() {
-    if (!pendingDashboardLogin || dashboardLoginSubmitting) return;
+    if (!pendingDashboardLogin) {
+        pendingDashboardLogin = { platform: "smartapartment", role: "maintenance", target: "/dashboards/maintenance" };
+    }
+    if (dashboardLoginSubmitting) return;
+    const username = dashboardUsername?.value?.trim() || "";
+    const password = dashboardPassword?.value || "";
+    if (!username || !password) {
+        showToast("Please enter your email and password.");
+        if (!username) dashboardUsername?.focus();
+        else dashboardPassword?.focus();
+        return;
+    }
     dashboardLoginSubmitting = true;
     if (submitDashboardLogin) {
         submitDashboardLogin.disabled = true;
         submitDashboardLogin.setAttribute("aria-busy", "true");
+        submitDashboardLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:1rem;height:1rem;border-width:2px;"></span>Signing in...';
     }
     try {
         const response = await fetch("/api/auth/dashboard-login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                platform: pendingDashboardLogin.platform,
-                role: pendingDashboardLogin.role,
-                username: dashboardUsername?.value || "",
-                password: dashboardPassword?.value || ""
+                platform: pendingDashboardLogin.platform || "smartapartment",
+                role: pendingDashboardLogin.role || "maintenance",
+                username: username,
+                password: password
             })
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) {
             showToast(data.message || "Invalid username or password");
+            if (submitDashboardLogin) {
+                submitDashboardLogin.disabled = false;
+                submitDashboardLogin.removeAttribute("aria-busy");
+                submitDashboardLogin.textContent = "Login & Open Dashboard";
+            }
+            dashboardLoginSubmitting = false;
             return;
         }
-        dashboardLoginModal?.classList.add("hidden");
-        // The authenticated backend role is authoritative. This ensures an
-        // email/password account always opens its assigned dashboard even when
-        // login was started from a generic or different dashboard shortcut.
-        window.location.href = data.redirect;
+        if (submitDashboardLogin) {
+            submitDashboardLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:1rem;height:1rem;border-width:2px;"></span>Opening Dashboard...';
+        }
+        const target = data.redirect || "/dashboards/maintenance";
+        window.location.replace(target);
     } catch (error) {
         showToast("Login failed. Please try again.");
-    } finally {
-        dashboardLoginSubmitting = false;
         if (submitDashboardLogin) {
             submitDashboardLogin.disabled = false;
             submitDashboardLogin.removeAttribute("aria-busy");
+            submitDashboardLogin.textContent = "Login & Open Dashboard";
         }
+        dashboardLoginSubmitting = false;
     }
 }
 
@@ -567,8 +585,18 @@ toggleDashboardPassword?.addEventListener("click", () => {
     toggleDashboardPassword.setAttribute("aria-label", reveal ? "Hide password" : "Show password");
     dashboardPassword.focus();
 });
+dashboardUsername?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        if (!dashboardPassword?.value) dashboardPassword?.focus();
+        else submitDashboardCredentials();
+    }
+});
 dashboardPassword?.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") submitDashboardCredentials();
+    if (event.key === "Enter") {
+        event.preventDefault();
+        submitDashboardCredentials();
+    }
 });
 
 const loginRequired = new URLSearchParams(window.location.search).get("loginRequired");

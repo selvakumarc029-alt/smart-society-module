@@ -1640,16 +1640,16 @@
                     <div class="dropdown">
                         <button class="btn btn-success rounded-pill shadow-sm px-3 dropdown-toggle d-flex align-items-center gap-1 fw-bold text-white" type="button" id="dutyStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-circle-check me-1 text-white" id="dutyStatusIcon"></i>
-                            <span id="dutyStatusText">Status: Available On-Duty</span>
+                            <span id="dutyStatusText">Team Head: Available (Manual Mode)</span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 p-2" aria-labelledby="dutyStatusDropdown" style="font-size: 0.88rem; min-width: 240px; z-index: 1060;">
-                            <li><h6 class="dropdown-header text-uppercase fw-bold text-muted px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Set Duty Status</h6></li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 p-2" aria-labelledby="dutyStatusDropdown" style="font-size: 0.88rem; min-width: 270px; z-index: 1060;">
+                            <li><h6 class="dropdown-header text-uppercase fw-bold text-muted px-2 py-1" style="font-size: 0.72rem; letter-spacing: 0.04em;">Team Head Duty & Dispatch Mode</h6></li>
                             <li>
                                 <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('available')">
                                     <span class="badge bg-success rounded-circle p-1" style="width:10px;height:10px;display:inline-block;"></span>
                                     <div>
                                         <div class="fw-bold text-dark">Available On-Duty</div>
-                                        <div class="text-muted small" style="font-size: 0.74rem;">Ready for tickets & dispatches</div>
+                                        <div class="text-muted small" style="font-size: 0.74rem;">Manual review & direct team assignment</div>
                                     </div>
                                 </button>
                             </li>
@@ -1657,8 +1657,8 @@
                                 <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2" type="button" onclick="window.setMaintenanceDutyStatus('busy')">
                                     <span class="badge bg-warning rounded-circle p-1" style="width:10px;height:10px;display:inline-block;"></span>
                                     <div>
-                                        <div class="fw-bold text-dark">Busy / In-Progress</div>
-                                        <div class="text-muted small" style="font-size: 0.74rem;">Attending active repair or booking</div>
+                                        <div class="fw-bold text-dark">Busy / In-Progress <span class="badge bg-danger-subtle text-danger ms-1" style="font-size:0.65rem;">Auto-Assign</span></div>
+                                        <div class="text-muted small" style="font-size: 0.74rem;">Requests auto-dispatch to free workers (10m SLA)</div>
                                     </div>
                                 </button>
                             </li>
@@ -1667,7 +1667,7 @@
                                     <span class="badge bg-secondary rounded-circle p-1" style="width:10px;height:10px;display:inline-block;"></span>
                                     <div>
                                         <div class="fw-bold text-dark">Off-Duty / On Break</div>
-                                        <div class="text-muted small" style="font-size: 0.74rem;">Paused / completed work shift</div>
+                                        <div class="text-muted small" style="font-size: 0.74rem;">Shift paused; auto-dispatch active for team</div>
                                     </div>
                                 </button>
                             </li>
@@ -2063,14 +2063,22 @@
                         <div class="col-6 col-md-3"><div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span class="small text-muted text-uppercase fw-bold">Awaiting triage</span><strong class="d-block fs-4 text-warning mt-1" id="complaintTriageCount">—</strong><span class="small text-muted">Needs an on-site assessment</span></div></div>
                     </div>
                     <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Unassigned Complaint Pool</h4><p class="text-muted mb-0">Claim only work you can attend within the required SLA and resident access window.</p></div>
-                            <span class="badge badge-soft-info inline-state"><i class="fa-solid fa-hand-holding-hand me-1"></i> Claim & Assign to Self</span>
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2 card-head">
+                            <div>
+                                <h4 class="fw-bold mb-1">Unassigned Complaint Pool</h4>
+                                <p class="text-muted mb-0">Incoming resident service requests. When Team Head is busy, requests auto-assign to available workers within 10 minutes.</p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold" id="manualAutoAssignBtn" onclick="window.runAutoAssignOpenPool()">
+                                    <i class="fa-solid fa-bolt text-warning me-1"></i> Auto-Assign Queued Pool (10m SLA)
+                                </button>
+                                <span class="badge badge-soft-info inline-state"><i class="fa-solid fa-hand-holding-hand me-1"></i> Claim &amp; Assign to Self</span>
+                            </div>
                         </div>
                         <div class="card-body px-4 pb-4 table-responsive">
                             <table class="table table-hover align-middle" data-table="maintenance-complaints">
                                 <thead class="table-light">
-                                    <tr><th>Ticket ID</th><th>Issue Summary</th><th>Flat / Area</th><th>Category</th><th>Logged Date</th><th>Action</th></tr>
+                                    <tr><th>Ticket ID</th><th>Issue Summary</th><th>Flat / Area</th><th>Category</th><th>Logged Date</th><th>Assignment SLA</th><th>Action</th></tr>
                                 </thead>
                                 <tbody>
                                     <tr>
@@ -2930,14 +2938,15 @@
                                             <thead>
                                                 <tr>
                                                     <th>Worker</th>
-                                                    <th>Contact</th>
-                                                    <th>Skill & shift</th>
-                                                    <th>Login access</th>
+                                                    <th>Skill &amp; Shift</th>
+                                                    <th>Attendance (Today)</th>
+                                                    <th>Active Workload</th>
+                                                    <th>Live Status</th>
                                                     <th class="text-end">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="maintenanceWorkersTable">
-                                                <tr><td colspan="5" class="text-center text-muted py-4">Loading workers...</td></tr>
+                                                <tr><td colspan="6" class="text-center text-muted py-4">Loading workers...</td></tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -3055,7 +3064,10 @@
             }
         };
 
+        window.currentDutyStatus = "available";
         window.setMaintenanceDutyStatus = function(status) {
+            const normalized = (status || "available").toLowerCase();
+            window.currentDutyStatus = normalized;
             const btn = document.getElementById("dutyStatusDropdown");
             const icon = document.getElementById("dutyStatusIcon");
             const text = document.getElementById("dutyStatusText");
@@ -3064,41 +3076,107 @@
             btn.classList.remove("btn-success", "btn-warning", "btn-secondary", "text-dark", "text-white");
             icon.className = "";
 
-            if (status === "busy") {
+            if (normalized === "busy") {
                 btn.classList.add("btn-warning", "text-dark");
-                icon.className = "fa-solid fa-clock me-1 text-dark";
-                text.textContent = "Status: Busy / In-Progress";
-                if (window.showToast) window.showToast("✓ Duty status set to Busy (Auto-assign active for new complaints)", "warning");
-            } else if (status === "off-duty") {
+                icon.className = "fa-solid fa-bolt me-1 text-dark";
+                text.textContent = "Team Head: Busy (⚡ Auto-Assign 10m SLA Active)";
+                if (window.showToast) window.showToast("✓ Duty status set to Busy (Auto-assign active for resident requests within 10m SLA)", "warning");
+            } else if (normalized === "off-duty") {
                 btn.classList.add("btn-secondary", "text-white");
                 icon.className = "fa-solid fa-circle-pause me-1 text-white";
-                text.textContent = "Status: Off-Duty / On Break";
-                if (window.showToast) window.showToast("✓ Duty status set to Off-Duty / On Break", "info");
+                text.textContent = "Team Head: Off-Duty (⚡ Auto-Assign Active)";
+                if (window.showToast) window.showToast("✓ Duty status set to Off-Duty (Auto-assign active)", "info");
             } else {
                 btn.classList.add("btn-success", "text-white");
                 icon.className = "fa-solid fa-circle-check me-1 text-white";
-                text.textContent = "Status: Available On-Duty";
+                text.textContent = "Team Head: Available (Manual Mode)";
                 if (window.showToast) window.showToast("✓ Duty status set to Available On-Duty (Ready for Manual Assign)", "success");
             }
             try {
-                localStorage.setItem("maintenance_duty_status", status);
+                localStorage.setItem("maintenance_duty_status", normalized);
             } catch(e) {}
             try {
                 fetch("/api/maintenance/dispatch/admin/duty-status", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ status: status.toUpperCase() })
+                    body: JSON.stringify({ status: normalized.toUpperCase() })
+                }).then(r => r.json()).then(data => {
+                    if (data && data.dutyStatus) {
+                        window.currentDutyStatus = data.dutyStatus.toLowerCase();
+                    }
+                    if (typeof renderUnassignedComplaintsPool === "function") renderUnassignedComplaintsPool();
+                    if (typeof loadMaintenanceWorkers === "function") loadMaintenanceWorkers();
                 }).catch(() => {});
             } catch(e) {}
         };
-        try {
-            const savedDuty = localStorage.getItem("maintenance_duty_status");
-            if (savedDuty) {
-                setTimeout(() => window.setMaintenanceDutyStatus(savedDuty), 60);
-            } else {
-                setTimeout(() => window.setMaintenanceDutyStatus("available"), 60);
+
+        window.runAutoAssignOpenPool = async function() {
+            const btn = document.getElementById("manualAutoAssignBtn") || document.getElementById("triggerAutoAssignPoolBtn");
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Evaluating Multi-Factor Rules...';
             }
-        } catch(e) {}
+            try {
+                const resp = await fetch("/api/maintenance/dispatch/tickets/auto-assign", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" }
+                });
+                const data = await resp.json();
+                const count = data.assignedCount || 0;
+                if (window.showToast) {
+                    if (count > 0) {
+                        window.showToast(`⚡ Auto-assigned ${count} queued ticket(s) to free on-duty workers!`, "success");
+                    } else {
+                        window.showToast(`All eligible tickets are already assigned or awaiting next 10m cycle.`, "info");
+                    }
+                }
+                if (typeof renderUnassignedComplaintsPool === "function") renderUnassignedComplaintsPool();
+                if (typeof loadMaintenanceWorkers === "function") loadMaintenanceWorkers();
+                if (typeof loadRoutineMaintenanceTickets === "function") loadRoutineMaintenanceTickets({ silent: true });
+            } catch(err) {
+                if (window.showToast) window.showToast("Auto-assignment check completed.", "info");
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-bolt text-warning me-1"></i> Auto-Assign Queued Pool (10m SLA)';
+                }
+            }
+        };
+
+        window.toggleStaffAttendance = async function(userId, action) {
+            try {
+                const resp = await fetch(`/api/maintenance/dispatch/admin/workers/${userId}/attendance`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: action })
+                });
+                const res = await resp.json();
+                if (window.showToast) {
+                    window.showToast(`Worker ${res.name || '#' + userId} attendance updated to ${action === 'checkin' ? 'Present (Checked-In)' : 'Absent (Checked-Out)'}`, action === 'checkin' ? 'success' : 'warning');
+                }
+                if (typeof loadMaintenanceWorkers === "function") loadMaintenanceWorkers();
+                if (typeof renderUnassignedComplaintsPool === "function") renderUnassignedComplaintsPool();
+            } catch(err) {
+                if (window.showToast) window.showToast("Failed to update worker attendance: " + err.message, "danger");
+            }
+        };
+        try {
+            fetch("/api/maintenance/dispatch/admin/duty-status")
+                .then(r => r.ok ? r.json() : null)
+                .then(data => {
+                    if (data && data.dutyStatus) {
+                        window.setMaintenanceDutyStatus(data.dutyStatus.toLowerCase());
+                    } else {
+                        const savedDuty = localStorage.getItem("maintenance_duty_status") || "available";
+                        window.setMaintenanceDutyStatus(savedDuty);
+                    }
+                }).catch(() => {
+                    const savedDuty = localStorage.getItem("maintenance_duty_status") || "available";
+                    window.setMaintenanceDutyStatus(savedDuty);
+                });
+        } catch(e) {
+            window.setMaintenanceDutyStatus("available");
+        }
 
         const dashboardTitles = {
             overview: "Overview", tasks: "My Assigned Tasks", complaints: "Open Ticket Pool",
@@ -3246,6 +3324,15 @@
                         }
                         if (typeof renderUnassignedComplaintsPool === "function") {
                             try { renderUnassignedComplaintsPool(); } catch(err) {}
+                        }
+                        if (typeof loadRoutineMaintenanceTickets === "function") {
+                            try { loadRoutineMaintenanceTickets({ silent: true }); } catch(err) {}
+                        }
+                        if (typeof loadMaintenanceWorkers === "function") {
+                            try { loadMaintenanceWorkers(); } catch(err) {}
+                        }
+                        if (evData && evData.action === "DUTY_STATUS_CHANGED" && evData.status) {
+                            try { window.setMaintenanceDutyStatus(evData.status.toLowerCase()); } catch(err) {}
                         }
                         if (typeof window.maybePlayEmergencyEscalationTone === "function") {
                             window.maybePlayEmergencyEscalationTone();
@@ -6378,9 +6465,11 @@
                     location: ticket.serviceAddress || ticket.city || "Society common area",
                     category: ticket.serviceCategory || ticket.serviceType || "General",
                     date: ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString("en-IN") : "Today",
+                    createdAt: ticket.createdAt,
                     priority: String(ticket.priority || "MEDIUM").toUpperCase(),
                     accessType: ticket.accessType || "",
-                    preferredAt: ticket.preferredAt || null
+                    preferredAt: ticket.preferredAt || null,
+                    notes: ticket.notes || ""
                 }));
         }
 
@@ -6836,18 +6925,36 @@
             const availablePool = maintenanceBackendLoaded ? maintenanceBackendOpenPool() : [];
 
             if (availablePool.length === 0) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="6" class="text-center text-muted py-4">${maintenanceBackendLoaded ? "No unassigned bookings in the pool." : "Bookings unavailable · waiting for a connection."}</td></tr>`;
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="7" class="text-center text-muted py-4">${maintenanceBackendLoaded ? "No unassigned bookings in the pool." : "Bookings unavailable · waiting for a connection."}</td></tr>`;
             } else {
-                tbody.innerHTML = availablePool.map(item => `
+                const isHeadBusy = (window.currentDutyStatus === 'busy' || localStorage.getItem("maintenance_duty_status") === "busy");
+                tbody.innerHTML = availablePool.map(item => {
+                    let slaBadge = `<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill"><i class="fa-regular fa-clock me-1"></i>Manual Queue</span>`;
+                    if (item.createdAt) {
+                        const ageMinutes = Math.max(0, Math.floor((Date.now() - new Date(item.createdAt).getTime()) / 60000));
+                        const minutesLeft = Math.max(0, 10 - ageMinutes);
+                        if (isHeadBusy) {
+                            if (minutesLeft > 0) {
+                                slaBadge = `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill"><i class="fa-solid fa-bolt text-warning me-1"></i>Auto-Assign in ${minutesLeft}m</span>`;
+                            } else {
+                                slaBadge = `<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill"><i class="fa-solid fa-fire me-1"></i>SLA Met · Auto-Dispatching</span>`;
+                            }
+                        } else {
+                            slaBadge = `<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle rounded-pill"><i class="fa-solid fa-user-clock me-1"></i>Queued ${ageMinutes}m ago</span>`;
+                        }
+                    }
+                    return `
                     <tr data-backend-id="${item.backendId || ""}">
                         <td><strong>${item.id}</strong></td>
                         <td>${escapeHtml(item.summary)}</td>
                         <td>${escapeHtml(item.location)}</td>
-                        <td>${escapeHtml(item.category)}</td>
+                        <td><span class="badge bg-light text-dark border">${escapeHtml(item.category)}</span></td>
                         <td>${item.date}</td>
+                        <td>${slaBadge}</td>
                         <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-claim-action="ticket" data-backend-id="${item.backendId || ""}"><i class="fa-solid fa-hand-holding-hand me-1"></i>Claim Ticket</button></td>
                     </tr>
-                `).join("");
+                `;
+                }).join("");
             }
 
             const openClaimCard = document.querySelector('[data-view="complaints"] .stats .col-6:first-child strong');
@@ -7036,7 +7143,7 @@
             if (count) count.textContent = workers.length;
             if (!table) return;
             if (!workers.length) {
-                table.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4">No maintenance workers added yet.</td></tr>`;
+                table.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4">No maintenance workers added yet.</td></tr>`;
                 return;
             }
             table.innerHTML = workers.map(worker => {
@@ -7044,28 +7151,64 @@
                 const email = maintenanceWorkerEscape(worker.email || "");
                 const phone = maintenanceWorkerEscape(worker.phone || "Phone not added");
                 const designation = maintenanceWorkerEscape(worker.designation || "Maintenance Technician");
-                const shift = maintenanceWorkerEscape(worker.workShift || "Shift not assigned");
+                const shift = maintenanceWorkerEscape(worker.workShift || "General Shift");
                 const employeeId = maintenanceWorkerEscape(worker.employeeId || "ID pending");
-                const status = worker.accountLocked ? "Access blocked" : "Active login";
-                const statusClass = worker.accountLocked ? "text-bg-warning" : "text-bg-success";
+
+                const isPresent = Boolean(worker.presentToday);
+                const checkInTime = worker.checkInTime ? maintenanceWorkerEscape(worker.checkInTime) : "";
+                const checkOutTime = worker.checkOutTime ? maintenanceWorkerEscape(worker.checkOutTime) : "";
+
+                const attBadge = isPresent
+                    ? `<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1"><i class="fa-solid fa-circle-check me-1"></i>Checked In</span>${checkInTime ? `<div class="small text-muted mt-1" style="font-size:0.75rem;">In: ${checkInTime}</div>` : ''}`
+                    : `<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2 py-1"><i class="fa-solid fa-circle-xmark me-1"></i>Not Present</span>${checkOutTime ? `<div class="small text-muted mt-1" style="font-size:0.75rem;">Out: ${checkOutTime}</div>` : ''}`;
+
+                const attActionBtn = isPresent
+                    ? `<button class="btn btn-sm btn-outline-warning rounded-pill mt-1 py-0 px-2 fw-semibold" style="font-size:0.75rem;" type="button" onclick="window.toggleStaffAttendance(${worker.id}, 'checkout')"><i class="fa-solid fa-right-from-bracket me-1"></i>Check Out</button>`
+                    : `<button class="btn btn-sm btn-outline-success rounded-pill mt-1 py-0 px-2 fw-semibold" style="font-size:0.75rem;" type="button" onclick="window.toggleStaffAttendance(${worker.id}, 'checkin')"><i class="fa-solid fa-right-to-bracket me-1"></i>Check In</button>`;
+
+                const activeLoad = Number(worker.activeWorkload || 0);
+                let loadBadge = "";
+                if (activeLoad === 0) {
+                    loadBadge = `<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1"><i class="fa-solid fa-gauge-high me-1"></i>0 Jobs (Idle)</span>`;
+                } else if (activeLoad < 3) {
+                    loadBadge = `<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-1"><i class="fa-solid fa-briefcase me-1"></i>${activeLoad} Active</span>`;
+                } else {
+                    loadBadge = `<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2 py-1"><i class="fa-solid fa-triangle-exclamation me-1"></i>${activeLoad} (Max Cap)</span>`;
+                }
+
+                let liveStatusBadge = "";
+                if (!isPresent) {
+                    liveStatusBadge = `<span class="badge bg-secondary text-white rounded-pill px-2 py-1"><i class="fa-regular fa-moon me-1"></i>Off-Duty</span>`;
+                } else if (worker.isFreeNow && activeLoad === 0) {
+                    liveStatusBadge = `<span class="badge bg-success text-white rounded-pill px-2 py-1"><i class="fa-solid fa-bolt me-1"></i>Free Now</span>`;
+                } else {
+                    liveStatusBadge = `<span class="badge bg-warning text-dark rounded-pill px-2 py-1"><i class="fa-solid fa-person-digging me-1"></i>Busy (${activeLoad})</span>`;
+                }
+
                 return `
                     <tr>
                         <td>
                             <strong>${name}</strong>
                             <div class="small text-muted">${employeeId}</div>
+                            <div class="small text-muted">${email}</div>
                         </td>
                         <td>
-                            <div>${email}</div>
-                            <div class="small text-muted">${phone}</div>
+                            <div><span class="badge bg-light text-dark border">${designation}</span></div>
+                            <div class="small text-muted mt-1"><i class="fa-regular fa-clock me-1"></i>${shift}</div>
                         </td>
                         <td>
-                            <div>${designation}</div>
-                            <div class="small text-muted">${shift}</div>
+                            <div>${attBadge}</div>
+                            <div>${attActionBtn}</div>
                         </td>
-                        <td><span class="badge ${statusClass} rounded-pill">${status}</span></td>
+                        <td>
+                            <div>${loadBadge}</div>
+                        </td>
+                        <td>
+                            <div>${liveStatusBadge}</div>
+                        </td>
                         <td class="text-end">
                             <button class="btn btn-sm btn-outline-primary rounded-pill copy-worker-login" type="button" data-email="${email}">
-                                Copy login
+                                <i class="fa-regular fa-copy me-1"></i>Copy login
                             </button>
                         </td>
                     </tr>`;
@@ -7074,16 +7217,28 @@
 
         async function loadMaintenanceWorkers() {
             const table = document.getElementById("maintenanceWorkersTable");
-            if (table) table.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm text-primary me-2"></span>Loading workers...</td></tr>`;
+            if (table) table.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm text-primary me-2"></span>Loading live worker statuses...</td></tr>`;
             try {
+                const statuses = await fetch("/api/maintenance/dispatch/admin/workers-status", {
+                    credentials: "same-origin",
+                    headers: { "Accept": "application/json" }
+                }).then(r => r.ok ? r.json() : null).catch(() => null);
+
+                if (Array.isArray(statuses) && statuses.length > 0) {
+                    renderMaintenanceWorkers(statuses);
+                    return;
+                }
+
                 const users = await maintenanceWorkerRequest("/api/society/team-users");
                 renderMaintenanceWorkers(users.filter(user => user.role === "MAINTENANCE_STAFF"));
             } catch (error) {
                 if (table) {
-                    table.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load workers: ${maintenanceWorkerEscape(error.message)} <button type="button" class="btn btn-sm btn-outline-danger ms-2 rounded-pill" onclick="loadMaintenanceWorkers()">Retry</button></td></tr>`;
+                    table.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load workers: ${maintenanceWorkerEscape(error.message)} <button type="button" class="btn btn-sm btn-outline-danger ms-2 rounded-pill" onclick="loadMaintenanceWorkers()">Retry</button></td></tr>`;
                 }
             }
         }
+        window.loadMaintenanceWorkers = loadMaintenanceWorkers;
+        window.renderMaintenanceWorkers = renderMaintenanceWorkers;
 
         window.submitMaintenanceWorkerForm = async function(event) {
             if (event && event.preventDefault) event.preventDefault();

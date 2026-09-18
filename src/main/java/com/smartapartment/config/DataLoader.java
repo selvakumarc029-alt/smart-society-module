@@ -10,6 +10,10 @@ import com.smartapartment.entity.Tenant;
 import com.smartapartment.entity.UserRole;
 import com.smartapartment.entity.MaintenanceHub;
 import com.smartapartment.entity.MaintenancePartner;
+import com.smartapartment.entity.StaffAttendance;
+import com.smartapartment.repository.StaffAttendanceRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import com.smartapartment.repository.ApartmentRepository;
 import com.smartapartment.repository.AppUserRepository;
 import com.smartapartment.repository.BlockRepository;
@@ -43,6 +47,7 @@ public class DataLoader {
                                MaintenanceBillRepository maintenanceBills,
                                com.smartapartment.repository.MaintenanceHubRepository hubs,
                                com.smartapartment.repository.MaintenancePartnerRepository partners,
+                               StaffAttendanceRepository staffAttendances,
                                PasswordEncoder encoder,
                                Environment environment) {
         return args -> {
@@ -263,6 +268,19 @@ public class DataLoader {
                 p3.setRating(4.7f);
                 p3.setRatingCount(19);
                 partners.save(p3);
+
+                // Seed active attendance for today for all three demo workers
+                for (AppUser w : java.util.List.of(plumberUser, electricUser, carpUser)) {
+                    staffAttendances.findByTenantIdAndUserIdAndWorkDate("green-heights", w.getId(), LocalDate.now())
+                            .orElseGet(() -> {
+                                StaffAttendance att = new StaffAttendance();
+                                att.setTenantId("green-heights");
+                                att.setUser(w);
+                                att.setWorkDate(LocalDate.now());
+                                att.setCheckInAt(LocalDateTime.now().minusHours(2));
+                                return staffAttendances.save(att);
+                            });
+                }
             }
 
             Resident resident = residents.findFirstByUserOrderByIdAsc(residentUser).orElseGet(() -> {

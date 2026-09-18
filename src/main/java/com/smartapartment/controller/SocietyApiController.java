@@ -442,7 +442,10 @@ public class SocietyApiController {
             if (emergencyService != null) {
                 matchedWorker = emergencyService.findFreeMaintenanceWorker(user.getTenantId(), complaint.getCategory()).orElse(null);
             }
-            if (maintenancePartners != null) {
+            if (matchedWorker != null && maintenancePartners != null) {
+                matchedPartner = maintenancePartners.findByUserId(matchedWorker.getId()).orElse(null);
+            }
+            if (matchedPartner == null && maintenancePartners != null) {
                 final String finalCat = cat;
                 matchedPartner = maintenancePartners.findAll().stream()
                         .filter(com.smartapartment.entity.MaintenancePartner::isOnDuty)
@@ -452,13 +455,13 @@ public class SocietyApiController {
                         .orElse(null);
             }
 
-            String assigneeName = matchedPartner != null ? matchedPartner.getPartnerName()
-                    : (matchedWorker != null ? matchedWorker.getFullName() : null);
+            String assigneeName = matchedWorker != null ? matchedWorker.getFullName()
+                    : (matchedPartner != null ? matchedPartner.getPartnerName() : null);
 
             if (assigneeName != null) {
                 complaint.setAssignedTo(assigneeName);
                 complaint.setStatus("IN_PROGRESS");
-                complaint.setResolutionNotes("⚡ Auto-assigned to worker " + assigneeName + " (" + cat + ") because Maintenance Team Leader is currently busy.");
+                complaint.setResolutionNotes("⚡ Auto-assigned to worker " + assigneeName + " (" + cat + ") [Attendance: Present | Workload Match] because Maintenance Team Head is busy.");
                 if (matchedPartner != null) {
                     matchedPartner.setAvailability("BUSY");
                     matchedPartner.setWorkState("BUSY");
@@ -467,7 +470,7 @@ public class SocietyApiController {
             } else {
                 complaint.setAssignedTo("");
                 complaint.setStatus("OPEN");
-                complaint.setResolutionNotes("Maintenance Team Leader is busy; ticket queued for auto-assignment when worker is free.");
+                complaint.setResolutionNotes("Maintenance Team Head is busy; ticket queued for auto-assignment within 10-minute SLA window.");
             }
         } else {
             complaint.setAssignedTo(clean(request != null ? request.assignedTo() : ""));
@@ -501,17 +504,19 @@ public class SocietyApiController {
                             });
                 }
 
-                if (adminBusy && matchedPartner != null) {
-                    b.setPartnerId(matchedPartner.getId());
+                if (adminBusy && (matchedPartner != null || matchedWorker != null)) {
+                    Long pId = matchedPartner != null ? matchedPartner.getId() : (matchedWorker != null ? matchedWorker.getId() : null);
+                    String name = matchedWorker != null ? matchedWorker.getFullName() : (matchedPartner != null ? matchedPartner.getPartnerName() : "Assigned Worker");
+                    b.setPartnerId(pId);
                     b.setJobStatus("ASSIGNED");
                     b.setAssignmentType("Auto");
                     b.setAssignedAt(LocalDateTime.now());
                     b.setAcceptedAt(LocalDateTime.now());
                     b.setArrivalDueAt(LocalDateTime.now().plusMinutes(30));
-                    b.setDispatchReason("⚡ Auto-assigned to " + matchedPartner.getPartnerName() + " because Maintenance TL is busy");
+                    b.setDispatchReason("⚡ Auto-assigned to " + name + " because Maintenance Team Head is busy (Multi-Factor Match)");
                 } else {
                     b.setJobStatus("UNASSIGNED");
-                    b.setDispatchReason("New resident complaint awaiting Maintenance TL assignment");
+                    b.setDispatchReason(adminBusy ? "Queued for auto-assignment within 10-minute SLA window" : "New resident complaint awaiting Maintenance Team Head assignment");
                 }
 
                 EmergencyMaintenanceBooking savedBooking = emergencyBookings.save(b);
@@ -519,12 +524,14 @@ public class SocietyApiController {
                 savedBooking = emergencyBookings.save(savedBooking);
 
                 if (emergencyService != null) {
-                    if (adminBusy && matchedPartner != null) {
-                        emergencyService.broadcastEvent(savedBooking.getId(), "ASSIGNED", "AUTO_ASSIGNED", matchedPartner.getId(),
-                                "⚡ Auto-assigned to " + matchedPartner.getPartnerName() + " (Maintenance TL Busy)");
+                    if (adminBusy && (matchedPartner != null || matchedWorker != null)) {
+                        String name = matchedWorker != null ? matchedWorker.getFullName() : matchedPartner.getPartnerName();
+                        emergencyService.broadcastEvent(savedBooking.getId(), "ASSIGNED", "AUTO_ASSIGNED",
+                                matchedPartner != null ? matchedPartner.getId() : matchedWorker.getId(),
+                                "⚡ Auto-assigned to " + name + " (" + saved.getCategory() + ") [Maintenance Team Head Busy]");
                     } else {
                         emergencyService.broadcastEvent(savedBooking.getId(), "UNASSIGNED", "CREATED", null,
-                                "🔔 New complaint from Flat " + loc + " (" + saved.getCategory() + ") - Awaiting Maintenance TL Assignment");
+                                "🔔 New complaint from Flat " + loc + " (" + saved.getCategory() + ") - Awaiting Maintenance Assignment");
                     }
                 }
             } catch (Exception ex) {
@@ -554,12 +561,17 @@ public class SocietyApiController {
                 t.setDueAt(saved.getDueAt());
                 if (!saved.getAssignedTo().isBlank()) {
                     t.setTicketStatus("ASSIGNED");
+                    t.setVendorId(matchedWorker != null ? matchedWorker.getId() : (matchedPartner != null ? matchedPartner.getUserId() : null));
                     t.setVendorName(saved.getAssignedTo());
+                    t.setVendorEmail(matchedWorker != null ? matchedWorker.getEmail() : null);
+                    t.setVendorPhone(matchedWorker != null ? matchedWorker.getPhone() : (matchedPartner != null ? matchedPartner.getPhone() : null));
                     t.setVendorNotes(saved.getResolutionNotes());
                     t.setAssignedAt(LocalDateTime.now());
                 } else {
                     t.setTicketStatus("REQUESTED");
-                    t.setVendorNotes("Awaiting Maintenance TL assignment.");
+                    t.setVendorNotes(adminBusy 
+                            ? "Maintenance Team Head is busy; queued for auto-assignment within 10-minute SLA window."
+                            : "Awaiting Maintenance Team Head assignment.");
                 }
                 ticketRepository.save(t);
             } catch (Exception ignored) {}

@@ -206,6 +206,24 @@ public class EmergencyMaintenanceController {
         List<CommonMaintenanceTicket> assigned = service.autoAssignOpenPool(a);
         return Map.of("assignedCount", assigned.size(), "assignedTickets", assigned);
     }
+
+    @GetMapping("/admin/workers-status")
+    public List<Map<String, Object>> getWorkersStatus(HttpSession s, @RequestParam(defaultValue="smartsociety") String platform) {
+        Actor a = service.actor(s, platform);
+        return service.getWorkersStatusList(a.tenant());
+    }
+
+    public record WorkerAttendanceInput(String action) {}
+
+    @PostMapping("/admin/workers/{userId}/attendance")
+    public Map<String, Object> toggleWorkerAttendance(HttpSession s, @PathVariable Long userId,
+            @RequestParam(defaultValue="smartsociety") String platform,
+            @RequestBody(required = false) WorkerAttendanceInput input) {
+        Actor a = service.actor(s, platform);
+        service.admin(a);
+        String action = (input != null && input.action() != null) ? input.action() : "checkin";
+        return service.toggleWorkerAttendance(userId, action, a.tenant());
+    }
     public record TicketUpdate(@Pattern(regexp="REQUESTED|ASSIGNED|IN_PROGRESS|ON_HOLD|RESOLVED|CLOSED") @NotNull String status,
             @Size(max=3000)String notes,@Future LocalDateTime preferredAt,
             @Min(1) @Max(10080) Integer estimatedMinutes){}

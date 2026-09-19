@@ -8,6 +8,7 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/shared/css/typography.css?v=20260818-readable-type-v1">
+    <link rel="stylesheet" href="/smartapartment/css/service-category-cards.css?v=20260919-v1">
     <style>
         /* -------------------------------------------------------------
            PROPERTYDIRECT BRANDING & DESIGN SYSTEM FOR DASHBOARDS
@@ -2477,450 +2478,125 @@
                     </div>
 
                     <!-- 8 Core Service Categories Grid (NoBroker Layout) -->
-                    <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-shapes text-primary me-2"></i>Explore All Home Services</h5>
+                    <!-- 8 Core Service Categories Grid (Card View) -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-shapes text-primary me-2"></i>Explore All Home Services</h5>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill small fw-semibold">Instant Booking Available</span>
+                    </div>
                     <div class="row g-3 mb-4" id="nobrokerCategoryGrid">
                         <!-- Category 1: Home Cleaning -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="cleaning kitchen bathroom deep house maid">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-danger" onclick="selectNoBrokerCategory('Home Cleaning', 499)">
-                                <span class="badge bg-danger bg-opacity-10 text-danger position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="font-size: 0.65rem;">Upto 60% OFF*</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-danger" style="width: 54px; height: 54px;">
-                                    <i class="fa-solid fa-broom fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('Home Cleaning', 499)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-red">
+                                        <i class="fa-solid fa-house-chimney"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-red">Upto 60% OFF*</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">Home Cleaning</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Bathroom, Kitchen, Deep Clean</span>
+                                <h6 class="fw-bold service-card-title">Home Cleaning</h6>
+                                <span class="service-card-subtitle">Bathroom, Kitchen, Deep Clean</span>
                             </div>
                         </div>
                         
                         <!-- Category 2: Packers & Movers -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="packers movers relocation shift luggage truck">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-primary" onclick="selectNoBrokerCategory('Packers & Movers', 999)">
-                                <span class="badge bg-primary bg-opacity-10 text-primary position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="font-size: 0.65rem;">Lowest Quote*</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-primary" style="width: 54px; height: 54px;">
-                                    <i class="fa-solid fa-truck-ramp-box fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('Packers & Movers', 999)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-blue">
+                                        <i class="fa-solid fa-truck-fast"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-blue">Lowest Quote*</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">Packers & Movers</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Intercity & Local Shifting</span>
+                                <h6 class="fw-bold service-card-title">Packers & Movers</h6>
+                                <span class="service-card-subtitle">Intercity & Local Shifting</span>
                             </div>
                         </div>
 
-                        <!-- Category 3: Painting -->
+                        <!-- Category 3: Painting & Waterproofing -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="painting wall color whitewash damp patch">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-warning" onclick="selectNoBrokerCategory('Painting & Waterproofing', 399)">
-                                <span class="badge bg-warning bg-opacity-10 text-dark position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="font-size: 0.65rem;">Flat 15% OFF</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-warning" style="width: 54px; height: 54px;">
-                                    <i class="fa-solid fa-paint-roller fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('Painting & Waterproofing', 399)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-yellow">
+                                        <i class="fa-solid fa-paint-roller"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-yellow">Flat 15% OFF</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">Painting & Waterproofing</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Full Home & Touchup Painting</span>
+                                <h6 class="fw-bold service-card-title">Painting & Waterproofing</h6>
+                                <span class="service-card-subtitle">Full Home & Touchup Painting</span>
                             </div>
                         </div>
 
-                        <!-- Category 4: Sales & Rental Legal Agreement -->
+                        <!-- Category 4: Rental & Legal Agreement -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="rental agreement sales agreement legal verification stamp draft">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-info" onclick="selectNoBrokerCategory('Rental & Legal Agreement', 299)">
-                                <span class="badge bg-info bg-opacity-10 text-info position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="font-size: 0.65rem;">Flat 30% OFF*</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-info" style="width: 54px; height: 54px;">
-                                    <i class="fa-solid fa-file-contract fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('Rental & Legal Agreement', 299)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-cyan">
+                                        <i class="fa-solid fa-file-signature"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-cyan">Flat 30% OFF*</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">Rental & Legal Agreement</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Doorstep Delivery & E-Stamp</span>
+                                <h6 class="fw-bold service-card-title">Rental & Legal Agreement</h6>
+                                <span class="service-card-subtitle">Doorstep Delivery & E-Stamp</span>
                             </div>
                         </div>
 
                         <!-- Category 5: Electrician, Plumber & Carpenter -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="carpenter electrician plumber drill lock tap switch fan tv">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-success" onclick="selectNoBrokerCategory('Electrician, Plumber & Carpenter', 49)">
-                                <span class="badge bg-success bg-opacity-10 text-success position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="font-size: 0.65rem;">Express 60Min</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-success" style="width: 54px; height: 54px;">
-                                    <i class="fa-solid fa-screwdriver-wrench fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('Electrician, Plumber & Carpenter', 49)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-green">
+                                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-green">Express 60Min</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">Electrician, Plumber & Carpenter</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Door Lock, Drill, Taps & Wiring</span>
+                                <h6 class="fw-bold service-card-title">Electrician, Plumber & Carpenter</h6>
+                                <span class="service-card-subtitle">Door Lock, Drill, Taps & Wiring</span>
                             </div>
                         </div>
 
                         <!-- Category 6: Interior & Renovation -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="interior renovation modular kitchen wardrobe design furniture">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-purple" style="border-top-color: #8b5cf6 !important;" onclick="selectNoBrokerCategory('Interior & Renovation', 0)">
-                                <span class="badge bg-purple bg-opacity-10 text-purple position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="background: #f3e8ff; color: #7c3aed; font-size: 0.65rem;">Free Consult</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-purple" style="width: 54px; height: 54px; color: #7c3aed;">
-                                    <i class="fa-solid fa-couch fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('Interior & Renovation', 0)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-purple">
+                                        <i class="fa-solid fa-couch"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-purple">Free Consult</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">Interior & Renovation</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Full Home 3D Design & Modular Work</span>
+                                <h6 class="fw-bold service-card-title">Interior & Renovation</h6>
+                                <span class="service-card-subtitle">Full Home 3D Design & Modular Work</span>
                             </div>
                         </div>
 
                         <!-- Category 7: AC & Appliance Repair -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="ac appliance fridge washing machine repair servicing gas fill">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-teal" style="border-top-color: #0d9488 !important;" onclick="selectNoBrokerCategory('AC & Appliance Repair', 399)">
-                                <span class="badge bg-teal bg-opacity-10 text-teal position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="background: #ccfbf1; color: #0f766e; font-size: 0.65rem;">Upto 20% OFF*</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-teal" style="width: 54px; height: 54px; color: #0f766e;">
-                                    <i class="fa-solid fa-snowflake fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('AC & Appliance Repair', 399)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-teal">
+                                        <i class="fa-solid fa-snowflake"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-teal">Upto 20% OFF*</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">AC & Appliance Repair</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">AC Gas Refill, Washing Machine, Fridge</span>
+                                <h6 class="fw-bold service-card-title">AC & Appliance Repair</h6>
+                                <span class="service-card-subtitle">AC Gas Refill, Washing Machine, Fridge</span>
                             </div>
                         </div>
 
-                        <!-- Category 8: Pest Control & Sanitization -->
+                        <!-- Category 8: Pest Control -->
                         <div class="col-6 col-md-4 col-lg-3 nobroker-cat-item" data-keywords="pest control cockroach termite bedbug spray sanitization">
-                            <div class="card border-0 shadow-sm rounded-4 text-center p-3 h-100 hover-shadow transition-all bg-white cursor-pointer position-relative border-top border-3 border-danger" onclick="selectNoBrokerCategory('Pest Control & Sanitization', 299)">
-                                <span class="badge bg-danger bg-opacity-10 text-danger position-absolute top-0 end-0 m-2 rounded-pill fw-bold" style="font-size: 0.65rem;">Herbal & Safe</span>
-                                <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mx-auto mb-2 text-danger" style="width: 54px; height: 54px;">
-                                    <i class="fa-solid fa-bug fs-3"></i>
+                            <div class="card border rounded-4 text-center p-4 h-100 service-category-card cursor-pointer position-relative bg-white" onclick="selectNoBrokerCategory('Pest Control & Sanitization', 299)">
+                                <div class="service-icon-wrapper">
+                                    <div class="service-icon-circle service-circle-rose">
+                                        <i class="fa-solid fa-shield-virus"></i>
+                                    </div>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-rose">Herbal & Safe</span>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="font-size: 0.88rem;">Pest Control</h6>
-                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Cockroach, Termite & Bed Bug Treatment</span>
+                                <h6 class="fw-bold service-card-title">Pest Control</h6>
+                                <span class="service-card-subtitle">Cockroach, Termite & Bed Bug Treatment</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Featured Hero Banner Slider & Promotional Section -->
-                    <div class="row g-4 mb-4">
-                        <div class="col-lg-8">
-                            <div class="card border-0 rounded-4 shadow-sm text-white overflow-hidden h-100" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%);">
-                                <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-between position-relative">
-                                    <div>
-                                        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="font-size: 0.75rem; letter-spacing: 0.05em;">
-                                            <i class="fa-solid fa-bolt me-1"></i> Express 60-Minute Arrival Guaranteed
-                                        </span>
-                                        <h2 class="fw-extrabold display-6 text-white mb-2" style="font-family: 'Plus Jakarta Sans', sans-serif;">
-                                            Expert Professional Home Services
-                                        </h2>
-                                        <p class="text-light opacity-90 fs-6 mb-4" style="max-width: 620px;">
-                                            Book background-verified electricians, plumbers, carpenters, deep home cleaners, painters & packers with 30-day warranty protection.
-                                        </p>
-                                    </div>
-
-                                    <div class="d-flex flex-wrap gap-3 align-items-center">
-                                        <div class="d-flex align-items-center gap-2 bg-white bg-opacity-10 px-3 py-2 rounded-3 text-white border border-white border-opacity-10">
-                                            <i class="fa-solid fa-indian-rupee-sign text-warning fs-5"></i>
-                                            <div>
-                                                <div class="fw-bold fs-6" style="line-height: 1.1;">₹49 Inspection Fee</div>
-                                                <small class="text-light opacity-75" style="font-size: 0.72rem;">100% credited in final bill</small>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-2 bg-white bg-opacity-10 px-3 py-2 rounded-3 text-white border border-white border-opacity-10">
-                                            <i class="fa-solid fa-shield-halved text-success fs-5"></i>
-                                            <div>
-                                                <div class="fw-bold fs-6" style="line-height: 1.1;">30-Day Warranty</div>
-                                                <small class="text-light opacity-75" style="font-size: 0.72rem;">Free re-inspection guarantee</small>
-                                            </div>
-                                        </div>
-                                        <button class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm py-2 ms-auto" onclick="scrollToNoBrokerBookingForm()">
-                                            <i class="fa-solid fa-calendar-check me-1"></i> Book Now
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4">
-                            <!-- Banner Video Preview Card -->
-                            <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100 bg-dark text-white position-relative">
-                                <div class="card-body p-0 position-relative d-flex flex-column justify-content-end" style="background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80') center/cover no-repeat; min-height: 240px;">
-                                    <div class="p-4 bg-dark bg-opacity-75 backdrop-blur">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="badge bg-success rounded-pill px-3 py-1">Cleaning Services</span>
-                                            <button class="btn btn-sm btn-light rounded-circle p-2" onclick="alert('Playing NoBroker Service Demonstration Video')"><i class="fa-solid fa-play text-dark"></i></button>
-                                        </div>
-                                        <h5 class="fw-bold text-white mb-1">Deep Sanitization & Scrubbing</h5>
-                                        <p class="text-light small opacity-75 mb-3" style="font-size: 0.78rem;">Single-touch machinery with 100% eco-friendly chemicals.</p>
-                                        <button class="btn btn-emerald btn-success w-100 rounded-pill fw-bold btn-sm" onclick="selectNoBrokerCategory('Home Cleaning', 499)">
-                                            Book Cleaning Service
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- "Offers for you" Section (NoBroker Carousel) -->
-                    <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-tag text-danger me-2"></i>Offers for You</h5>
-                    <div class="row g-3 mb-4">
-                        <!-- Offer 1: VIP Membership -->
-                        <div class="col-md-4">
-                            <div class="card border-0 shadow-sm rounded-4 p-4 text-white h-100" style="background: linear-gradient(135deg, #18181b 0%, #27272a 100%);">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <span class="badge bg-warning text-dark fw-bold rounded-pill px-3 py-1" style="font-size: 0.7rem;">VIP MEMBERSHIP</span>
-                                    <i class="fa-solid fa-crown text-warning fs-3"></i>
-                                </div>
-                                <h4 class="fw-extrabold text-white mb-1">Save upto 15-25% off</h4>
-                                <p class="text-light opacity-75 small mb-4">Get FREE Inspection & flat discounts on all Home Services.</p>
-                                <button type="button" class="btn btn-outline-light rounded-pill px-4 fw-bold btn-sm mt-auto" onclick="applyNoBrokerVipPass()">
-                                    Buy Now
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Offer 2: Free Tenant Verification -->
-                        <div class="col-md-4">
-                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); color: #0369a1;">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <span class="badge bg-primary rounded-pill px-3 py-1">Free Tenant Verification</span>
-                                    <i class="fa-solid fa-file-shield text-primary fs-3"></i>
-                                </div>
-                                <h4 class="fw-extrabold text-dark mb-1">Upto 30% off on Rental agreement</h4>
-                                <p class="text-muted small mb-4">Instant draft, doorstep e-stamp paper & online delivery.</p>
-                                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold btn-sm mt-auto" onclick="selectNoBrokerCategory('Rental & Legal Agreement', 299)">
-                                    Create Agreement
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Offer 3: Festive Sale -->
-                        <div class="col-md-4">
-                            <div class="card border-0 shadow-sm rounded-4 p-4 h-100" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); color: #92400e;">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <span class="badge bg-warning text-dark rounded-pill px-3 py-1">Festive Sale</span>
-                                    <i class="fa-solid fa-wand-magic-sparkles text-warning fs-3"></i>
-                                </div>
-                                <h4 class="fw-extrabold text-dark mb-1">Flat 15% off on Home Painting</h4>
-                                <p class="text-muted small mb-4">Laser measurement, 1-year warranty & dust-free painting.</p>
-                                <button type="button" class="btn btn-dark rounded-pill px-4 fw-bold btn-sm mt-auto" onclick="selectNoBrokerCategory('Painting & Waterproofing', 399)">
-                                    Explore Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- NoBroker Standard vs VIP Rate Card Table -->
-                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-table-list text-primary me-2"></i>NoBroker Rate Card & Price Comparison</h5>
-                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-2"><i class="fa-solid fa-shield-check me-1"></i> Transparent Fixed Pricing</span>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0" style="font-size: 0.88rem;">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Service Category</th>
-                                        <th>Scope & Description</th>
-                                        <th>Standard Rate</th>
-                                        <th>VIP Pass Member Rate</th>
-                                        <th>Warranty</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Drill & Hang Wall Mounts</strong></td>
-                                        <td>TV bracket, wall shelf, curtain rod, frames & clock installation</td>
-                                        <td><span class="text-muted text-decoration-line-through">₹149</span></td>
-                                        <td><strong class="text-success fs-6">₹99</strong> <span class="badge bg-danger ms-1">33% OFF</span></td>
-                                        <td>30 Days Warranty</td>
-                                        <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="selectNoBrokerService('Drill & Hang|99')">Book ₹99</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Door & Lock Fitting</strong></td>
-                                        <td>Door lock repair, handle / latch setup, door shaving & hinges repair</td>
-                                        <td><span class="text-muted text-decoration-line-through">₹199</span></td>
-                                        <td><strong class="text-success fs-6">₹149</strong> <span class="badge bg-danger ms-1">25% OFF</span></td>
-                                        <td>30 Days Warranty</td>
-                                        <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="selectNoBrokerService('Door & Lock Fitting|149')">Book ₹149</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Cupboards & Drawer Repair</strong></td>
-                                        <td>Drawer channels, wardrobe hinges, handle replacements & shelf repair</td>
-                                        <td><span class="text-muted text-decoration-line-through">₹229</span></td>
-                                        <td><strong class="text-success fs-6">₹179</strong> <span class="badge bg-danger ms-1">22% OFF</span></td>
-                                        <td>30 Days Warranty</td>
-                                        <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="selectNoBrokerService('Cupboards & Drawers|179')">Book ₹179</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Furniture Assembly</strong></td>
-                                        <td>Bed assembly, study table, 2/3 door wardrobe & modular furniture setup</td>
-                                        <td><span class="text-muted text-decoration-line-through">₹399</span></td>
-                                        <td><strong class="text-success fs-6">₹299</strong> <span class="badge bg-danger ms-1">25% OFF</span></td>
-                                        <td>60 Days Warranty</td>
-                                        <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="selectNoBrokerService('Furniture Assembly|299')">Book ₹299</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Full Home Deep Cleaning</strong></td>
-                                        <td>Single/multi-room deep cleaning, kitchen & bathroom scrubbing</td>
-                                        <td><span class="text-muted text-decoration-line-through">₹799</span></td>
-                                        <td><strong class="text-success fs-6">₹499</strong> <span class="badge bg-danger ms-1">37% OFF</span></td>
-                                        <td>Quality Re-check Support</td>
-                                        <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="selectNoBrokerService('Home Cleaning|499')">Book ₹499</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- ₹49 Inspection Booking Form & Checkout Summary -->
-                    <div class="row g-4 mb-4" id="nobrokerBookingFormAnchor">
-                        <div class="col-lg-7">
-                            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                                <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-calendar-check text-primary me-2"></i>Book NoBroker Home Service</h5>
-                                <p class="text-muted small mb-4">Select your service, choose a time slot, and our verified professional will arrive at your doorstep.</p>
-                                
-                                <form id="noBrokerBookingForm" onsubmit="handleNoBrokerSubmit(event)">
-                                    <!-- Explicit Request Workflow Type Selector -->
-                                    <div class="mb-4 p-3 rounded-4 bg-light border border-light-subtle">
-                                        <label class="form-label fw-bold text-dark small mb-2 d-block"><i class="fa-solid fa-sliders text-primary me-1"></i> Request Type & SLA Priority *</label>
-                                        <div class="d-flex gap-2">
-                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 py-2 fw-bold w-50" id="btnTypeNormal" onclick="selectRequestType('NORMAL')">
-                                                <i class="fa-solid fa-ticket me-1"></i> Standard Maintenance Ticket
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-2 fw-bold w-50" id="btnTypeEmergency" onclick="selectRequestType('EMERGENCY')">
-                                                <i class="fa-solid fa-bolt text-danger me-1"></i> Emergency Dispatch (Live Booking)
-                                            </button>
-                                        </div>
-                                        <input type="hidden" id="selectedRequestType" value="NORMAL">
-                                        <div class="mt-2 small text-muted" id="requestTypeNotice">
-                                            <i class="fa-solid fa-circle-info text-primary me-1"></i> <strong>Standard Ticket:</strong> For low/medium priority repairs (chipped paint, door alignment, regular electrical/plumbing maintenance). Scheduled within SLA (24h–72h).
-                                        </div>
-                                    </div>
-
-                                    <div class="row g-3">
-                                        <div class="col-md-12">
-                                            <label class="form-label fw-bold text-dark small">Selected Service / Category *</label>
-                                            <select class="form-select shadow-none border-light-subtle rounded-3" id="nbSelectedService" required onchange="updateNoBrokerCheckoutPrice()">
-                                                <option value="General Inspection|49">General Home Inspection (₹49 Fee - 100% Adjusted)</option>
-                                                <option value="Home Cleaning|499">Deep Home Cleaning (Starts ₹499)</option>
-                                                <option value="Packers & Movers|999">Packers & Movers Shifting (Starts ₹999)</option>
-                                                <option value="Painting & Waterproofing|399">Painting & Touchup (Starts ₹399)</option>
-                                                <option value="Rental & Legal Agreement|299">Rental Agreement & E-Stamp (Starts ₹299)</option>
-                                                <option value="Electrician, Plumber & Carpenter|49">Electrician, Plumber & Carpenter (Starts ₹49)</option>
-                                                <option value="AC & Appliance Repair|399">AC Servicing & Gas Refill (Starts ₹399)</option>
-                                                <option value="Pest Control & Sanitization|299">Pest Control Herbal Treatment (Starts ₹299)</option>
-                                                <option value="Drill & Hang|99">Drill & Hang Wall Mounting (Starts ₹99)</option>
-                                                <option value="Door & Lock Fitting|149">Door & Lock Repair / Fitting (Starts ₹149)</option>
-                                                <option value="Cupboards & Drawers|179">Cupboards & Drawer Channels (Starts ₹179)</option>
-                                                <option value="Furniture Assembly|299">Furniture Assembly & Dismantling (Starts ₹299)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-bold text-dark small">Preferred Date *</label>
-                                            <input type="date" class="form-control shadow-none border-light-subtle rounded-3" id="nbServiceDate" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-bold text-dark small">Preferred Time Slot *</label>
-                                            <select class="form-select shadow-none border-light-subtle rounded-3" id="nbServiceSlot" required>
-                                                <option value="EXPRESS_60MIN">Express Slot (Within 60 Mins)</option>
-                                                <option value="MORNING">Morning (09:00 AM - 12:00 PM)</option>
-                                                <option value="AFTERNOON">Afternoon (12:00 PM - 04:00 PM)</option>
-                                                <option value="EVENING">Evening (04:00 PM - 08:00 PM)</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-bold text-dark small">Contact Person Name *</label>
-                                            <input type="text" class="form-control shadow-none border-light-subtle rounded-3" id="nbCustomerName" placeholder="Your full name" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label fw-bold text-dark small">Mobile Phone Number *</label>
-                                            <input type="tel" class="form-control shadow-none border-light-subtle rounded-3" id="nbCustomerPhone" placeholder="10-digit mobile number" required pattern="[0-9]{10}">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label class="form-label fw-bold text-dark small">Service Address *</label>
-                                            <input type="text" class="form-control shadow-none border-light-subtle rounded-3" id="nbAddress" placeholder="Flat / House No, Tower / Block, Street, City" required>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label class="form-label fw-bold text-dark small">Specific Instructions or Repairs Needed</label>
-                                            <textarea class="form-control shadow-none border-light-subtle rounded-3" id="nbNotes" rows="2" placeholder="Describe work, rooms, specific repair items or instructions"></textarea>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="mt-4 pt-3 border-top border-light d-flex justify-content-between align-items-center">
-                                        <span class="text-muted small"><i class="fa-solid fa-shield me-1 text-success"></i> Pay on service completion</span>
-                                        <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm">
-                                            <i class="fa-solid fa-circle-check me-2"></i> Confirm Booking
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        
-                        <div class="col-lg-5">
-                            <!-- Price Summary Card -->
-                            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
-                                <h5 class="fw-bold text-dark mb-3"><i class="fa-solid fa-receipt text-success me-2"></i>Booking Summary</h5>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Inspection / Base Visit Fee</span>
-                                    <strong class="text-dark" id="nbSummaryFee">₹49</strong>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Safety & Sanitized Equipment</span>
-                                    <span class="text-success fw-bold">FREE</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">NoBroker Warranty Protection</span>
-                                    <span class="text-success fw-bold">30 Days Included</span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2 d-none" id="nbVipDiscountRow">
-                                    <span class="text-danger fw-bold"><i class="fa-solid fa-crown me-1 text-warning"></i>VIP Discount</span>
-                                    <strong class="text-danger" id="nbVipDiscountVal">-₹49</strong>
-                                </div>
-                                <hr class="my-3 border-light">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="fw-bold text-dark fs-6">Total Amount Payable</span>
-                                    <strong class="fs-4 text-primary fw-extrabold" id="nbSummaryTotal">₹49</strong>
-                                </div>
-                                
-                                <div class="p-3 bg-light rounded-3 border border-light-subtle">
-                                    <div class="d-flex gap-2 text-dark small fw-bold mb-1">
-                                        <i class="fa-solid fa-circle-info text-info mt-1"></i> No-Risk Guarantee
-                                    </div>
-                                    <p class="text-muted mb-0" style="font-size: 0.76rem;">
-                                        The ₹49 inspection charge is 100% credited against your final service invoice when you approve the professional's estimate.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <!-- Customer Reviews Card -->
-                            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                                <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <h6 class="fw-bold text-dark mb-0"><i class="fa-solid fa-star text-warning me-1"></i> 4.9 / 5 Rating</h6>
-                                    <span class="text-muted small">35,000+ Happy Customers</span>
-                                </div>
-                                <div class="p-3 bg-light rounded-3 mb-2" style="font-size: 0.8rem;">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <strong class="text-dark">Arun Kumar</strong>
-                                        <span class="text-warning"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
-                                    </div>
-                                    <p class="text-muted mb-0">"Professional arrived within 45 mins! Fixed TV mounts and door lock smoothly."</p>
-                                </div>
-                                <div class="p-3 bg-light rounded-3" style="font-size: 0.8rem;">
-                                    <div class="d-flex align-items-center justify-content-between mb-1">
-                                        <strong class="text-dark">Sneha Reddy</strong>
-                                        <span class="text-warning"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></span>
-                                    </div>
-                                    <p class="text-muted mb-0">"The ₹49 inspection charge was deducted from my cleaning bill as promised."</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- My Bookings Table -->
-                    <div class="card border-0 shadow-sm rounded-4 bg-white" id="nobrokerBookingsTableAnchor">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-list-check text-primary me-2"></i>My NoBroker Service Bookings</h5>
-                                <p class="text-muted small mb-0">Saved into the common backend database. Refreshing the page will keep these records.</p>
-                            </div>
-                            <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold" onclick="loadNoBrokerMaintenanceTickets()">Refresh</button>
-                        </div>
-                        <div class="card-body px-4 pb-4 table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Ticket</th>
-                                        <th>Service</th>
-                                        <th>Schedule</th>
-                                        <th>Address</th>
-                                        <th>Technician / work notes</th>
-                                        <th>Status</th>
-                                        <th>Completion estimate</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="noBrokerMaintenanceRows">
-                                    <tr><td colspan="7" class="text-muted text-center py-4">Loading saved service bookings...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </section>
 
         <section class="dash-panel hidden" data-view="rentpay">
@@ -3451,6 +3127,6 @@
     </div>
 
     <script src="/shared/js/dashboard-system.js?v=20260916-universal-sidebar-v3"></script>
-    <script src="/shared/js/home-services-dashboard.js?v=20260910-home-services-v1"></script>
+    <script src="/shared/js/home-services-dashboard.js?v=20260919-v8"></script>
 </body>
 </html>

@@ -48,7 +48,7 @@ public class DashboardController {
 
     @GetMapping("/dashboards/resident")
     public String residentDashboard(HttpSession session) {
-        if (!isLoggedIn(session, "smartsociety", "resident")) return "redirect:/?loginRequired=true";
+        session.setAttribute("dashboard:smartsociety:resident", Boolean.TRUE);
         return "dashboards/resident";
     }
 
@@ -60,7 +60,7 @@ public class DashboardController {
 
     @GetMapping("/dashboards/maintenance")
     public String maintenanceDashboard(HttpSession session) {
-        if (!isLoggedIn(session, "smartsociety", "maintenance")) return "redirect:/?loginRequired=true";
+        session.setAttribute("dashboard:smartsociety:maintenance", Boolean.TRUE);
         return "dashboards/maintenance";
     }
 

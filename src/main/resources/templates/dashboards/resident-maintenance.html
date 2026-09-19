@@ -1,194 +1,351 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Live Maintenance Tracking')}"></head>
+<head th:replace="~{fragments/layout :: head('Live Maintenance Tracking - SmartApartment')}"></head>
 <body class="bg-light">
+<link rel="stylesheet" href="/smartapartment/css/maintenance-workflow.css?v=20260918-v1">
 <style>
-    :root {
-        --track-primary:#2563eb; --track-success:#16a34a; --track-muted:#94a3b8;
-        --track-ink:#0f172a; --track-border:#e2e8f0; --track-card:#ffffff;
-    }
-    body { min-height:100vh; color:var(--track-ink); background:linear-gradient(180deg,#eff6ff 0,#f8fafc 280px,#f8fafc 100%); }
-    .tracking-shell { max-width:1040px; margin:0 auto; padding:28px 20px 56px; }
-    .tracking-topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:22px; }
-    .tracking-brand { display:flex; align-items:center; gap:12px; font-weight:800; font-size:1.05rem; }
-    .tracking-brand-mark { width:40px; height:40px; border-radius:13px; display:grid; place-items:center; color:#fff; background:#0f172a; box-shadow:0 8px 22px rgba(15,23,42,.14); }
-    .tracking-card { background:var(--track-card); border:1px solid var(--track-border); border-radius:22px; box-shadow:0 14px 38px rgba(15,23,42,.07); }
-    .hero-card { padding:24px; overflow:hidden; position:relative; }
-    .hero-card:after { content:""; position:absolute; width:180px; height:180px; border-radius:50%; right:-70px; top:-90px; background:rgba(37,99,235,.08); }
-    .status-chip { display:inline-flex; align-items:center; gap:7px; border-radius:999px; padding:7px 12px; font-size:.78rem; font-weight:800; background:#dbeafe; color:#1d4ed8; }
-    .status-chip.complete { background:#dcfce7; color:#15803d; }
-    .status-chip.pending { background:#fee2e2; color:#b91c1c; }
-    .live-dot { width:8px; height:8px; border-radius:50%; background:currentColor; animation:pulse 1.4s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1; transform:scale(1)} 50%{opacity:.35; transform:scale(1.45)} }
-    .order-ref { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.79rem; color:#64748b; }
-    .technician-card { padding:20px; height:100%; }
-    .tech-avatar { width:56px; height:56px; border-radius:17px; display:grid; place-items:center; background:#eff6ff; color:#2563eb; font-size:1.3rem; }
-    .trade-badge { display:inline-flex; align-items:center; border:1px solid #bfdbfe; background:#eff6ff; color:#1d4ed8; border-radius:999px; padding:4px 9px; font-size:.72rem; font-weight:800; }
-    .stepper-card { padding:24px; }
-    .stepper { display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:22px; }
-    .step { position:relative; text-align:center; padding:0 8px; }
-    .step:not(:last-child):after { content:""; height:3px; position:absolute; top:20px; left:calc(50% + 22px); right:calc(-50% + 22px); background:#e2e8f0; z-index:0; }
-    .step.done:not(:last-child):after { background:var(--track-success); }
-    .step.active:not(:last-child):after { background:linear-gradient(90deg,var(--track-primary) 0 52%,#e2e8f0 52%); }
-    .step-circle { width:42px; height:42px; margin:0 auto 10px; border-radius:50%; display:grid; place-items:center; position:relative; z-index:1; border:3px solid #e2e8f0; color:#94a3b8; background:#fff; font-weight:800; }
-    .step.done .step-circle { background:var(--track-success); color:#fff; border-color:var(--track-success); }
-    .step.active .step-circle { background:var(--track-primary); color:#fff; border-color:#bfdbfe; box-shadow:0 0 0 7px rgba(37,99,235,.10); animation:pulseRing 1.8s infinite; }
-    @keyframes pulseRing { 50%{box-shadow:0 0 0 10px rgba(37,99,235,.04)} }
-    .step-title { font-size:.82rem; font-weight:800; }
-    .step-sub { font-size:.69rem; color:#94a3b8; margin-top:3px; }
-    .live-message { margin-top:22px; padding:14px 16px; border-radius:14px; background:#f8fafc; border:1px solid var(--track-border); display:flex; align-items:center; gap:11px; font-weight:700; }
-    .proof-card { padding:20px; }
-    .proof-img { width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:14px; border:1px solid var(--track-border); background:#f1f5f9; cursor:zoom-in; }
-    .empty-proof { min-height:170px; border:1px dashed #cbd5e1; border-radius:14px; background:#f8fafc; display:grid; place-items:center; text-align:center; color:#94a3b8; padding:20px; }
-    .review-card { padding:24px; border:1px solid #bbf7d0; background:linear-gradient(180deg,#fff,#f0fdf4); }
-    .stars { display:flex; gap:8px; }
-    .star-btn { appearance:none; border:0; background:transparent; padding:2px; font-size:2rem; color:#cbd5e1; line-height:1; cursor:pointer; transition:.15s; }
-    .star-btn.selected, .star-btn:hover { color:#f59e0b; transform:translateY(-1px); }
-    .sentiment-tag { border:1px solid #cbd5e1; background:#fff; color:#475569; border-radius:999px; padding:8px 12px; font-size:.78rem; font-weight:700; cursor:pointer; }
-    .sentiment-tag.active { border-color:#2563eb; background:#eff6ff; color:#1d4ed8; }
-    .thankyou { text-align:center; padding:38px 24px; }
-    .thankyou-icon { width:70px; height:70px; margin:0 auto 14px; display:grid; place-items:center; border-radius:50%; background:#dcfce7; color:#16a34a; font-size:1.8rem; }
-    .lookup-card { max-width:620px; margin:80px auto; padding:28px; }
-    .skeleton { background:linear-gradient(90deg,#eef2f7 25%,#f8fafc 37%,#eef2f7 63%); background-size:400% 100%; animation:shine 1.3s infinite; border-radius:10px; }
-    @keyframes shine { 0%{background-position:100% 0} 100%{background-position:0 0} }
-    @media(max-width:700px){ .tracking-shell{padding:18px 12px 40px}.hero-card,.stepper-card,.review-card{padding:18px}.stepper{grid-template-columns:1fr;gap:16px}.step{text-align:left;display:grid;grid-template-columns:46px 1fr;column-gap:10px}.step-circle{margin:0}.step:not(:last-child):after{width:3px;height:auto;left:21px;top:42px;bottom:-16px;right:auto}.step-title,.step-sub{grid-column:2}.tracking-topbar{align-items:flex-start}.tracking-topbar .btn span{display:none} }
+    body { min-height: 100vh; background: linear-gradient(180deg, #eff6ff 0, #f8fafc 260px, #f8fafc 100%); color: #0f172a; }
+    .tracking-shell { max-width: 1060px; margin: 0 auto; padding: 24px 20px 60px; }
+    .tracking-topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    .tracking-brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.1rem; }
+    .tracking-brand-mark { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #fff; background: #0f172a; box-shadow: 0 8px 22px rgba(15,23,42,.14); }
+    .lookup-card { max-width: 580px; margin: 60px auto; padding: 32px; background: #fff; border-radius: 20px; box-shadow: 0 14px 38px rgba(15,23,42,.07); border: 1px solid #e2e8f0; }
 </style>
 
 <div class="tracking-shell">
     <div class="tracking-topbar">
-        <div class="tracking-brand"><span class="tracking-brand-mark"><i class="fa-solid fa-screwdriver-wrench"></i></span><span>SmartApartment <span class="text-primary">Maintenance</span></span></div>
-        <a class="btn btn-outline-secondary rounded-pill px-3" href="/dashboards/resident"><i class="fa-solid fa-arrow-left me-2"></i><span>Back to Resident Dashboard</span></a>
+        <div class="tracking-brand">
+            <span class="tracking-brand-mark"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+            <span>SmartApartment <span class="text-primary">Maintenance Tracker</span></span>
+        </div>
+        <a class="btn btn-outline-secondary rounded-pill px-3 fw-bold" href="/dashboards/resident">
+            <i class="fa-solid fa-arrow-left me-2"></i>Back to Resident Dashboard
+        </a>
     </div>
 
     <div id="trackingRoot">
-        <div class="tracking-card hero-card">
-            <div class="skeleton" style="height:22px;width:160px"></div>
-            <div class="skeleton mt-3" style="height:36px;width:62%"></div>
-            <div class="skeleton mt-3" style="height:18px;width:78%"></div>
+        <div class="card p-4 shadow-sm border-0 rounded-4 text-center">
+            <div class="spinner-border text-primary mx-auto mb-3" role="status"></div>
+            <h5 class="fw-bold">Loading Live Service Details…</h5>
+            <p class="text-muted small mb-0">Connecting to Auto Assignment & Real-Time Dispatch Pipeline.</p>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="proofModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered"><div class="modal-content border-0 rounded-4 overflow-hidden"><div class="modal-header"><h5 class="modal-title fw-bold">Before-work Photo Proof</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body p-2 bg-dark text-center"><img id="proofModalImg" alt="Before work proof" class="img-fluid rounded" style="max-height:76vh"></div></div></div>
+<!-- Tax Invoice Modal -->
+<div id="residentInvoiceModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); z-index: 1070; justify-content: center; align-items: center; padding: 1rem;">
+    <div style="background: #ffffff; width: 100%; max-width: 780px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); padding: 2rem; max-height: 92vh; overflow-y: auto;" class="animate__animated animate__zoomIn">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px dashed #e2e8f0; padding-bottom: 1rem; margin-bottom: 1.25rem;">
+            <div>
+                <h4 style="margin: 0; font-weight: 900; color: #0f172a;">SmartSociety Housing Co-operative Ltd.</h4>
+                <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #475569;">Reg No: CHS/MUM/2021/88412 | GSTIN: 33AAACS1234F1Z8</p>
+            </div>
+            <div style="text-align: right;">
+                <span style="background: #dcfce7; color: #166534; font-size: 0.75rem; font-weight: 800; padding: 4px 10px; border-radius: 9999px;">OFFICIAL TAX INVOICE</span>
+                <h5 id="invModalNumber" style="margin: 6px 0 0 0; font-size: 1.1rem; color: #0f172a;">INV-2026-0801</h5>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <div>
+                <span style="font-size: 0.725rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Billed To</span>
+                <strong id="invModalName" style="display: block; font-size: 1rem; color: #0f172a; margin-top: 2px;">Kavya Sharma</strong>
+                <span id="invModalUnit" style="font-size: 0.85rem; color: #475569;">Flat: A-101</span>
+            </div>
+            <div style="text-align: right;">
+                <span style="font-size: 0.725rem; color: #64748b; font-weight: 800; text-transform: uppercase;">Payment Status</span>
+                <div style="margin-top: 4px;">
+                    <span id="invModalStatus" style="padding: 4px 10px; background: #dcfce7; color: #15803d; font-size: 0.75rem; font-weight: 800; border-radius: 6px;">PAID</span>
+                </div>
+            </div>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 1.25rem; font-size: 0.85rem;">
+            <thead>
+                <tr style="background: #f1f5f9;">
+                    <th style="padding: 8px 10px; border-bottom: 2px solid #cbd5e1;">Particulars</th>
+                    <th style="padding: 8px 10px; border-bottom: 2px solid #cbd5e1; text-align: right;">Amount (INR)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0;">Diagnostic & Labor Service Charge</td><td id="invModalLabor" style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700;">Rs. 200.00</td></tr>
+                <tr><td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0;">Approved Replacement Spares & Hardware</td><td id="invModalParts" style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700;">Rs. 350.00</td></tr>
+                <tr><td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0;">Statutory GST (18%)</td><td id="invModalGst" style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: 700;">Rs. 0.00</td></tr>
+            </tbody>
+            <tfoot>
+                <tr style="background: #f8fafc; font-weight: 900; font-size: 1.05rem;">
+                    <td style="padding: 10px; border-top: 2px solid #0f172a; text-align: right;">Total Paid:</td>
+                    <td id="invModalTotal" style="padding: 10px; border-top: 2px solid #0f172a; text-align: right; color: #10b981;">Rs. 550.00</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; border-top: 1px dashed #cbd5e1; padding-top: 1rem;">
+            <button type="button" class="btn btn-light rounded-pill px-4" onclick="document.getElementById('residentInvoiceModal').style.display='none'">Close</button>
+            <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="window.print()"><i class="fa-solid fa-print me-2"></i>Print Receipt</button>
+        </div>
+    </div>
 </div>
 
 <div th:replace="~{fragments/layout :: scripts}"></div>
+<script src="/smartapartment/js/maintenance-workflow.js?v=20260918-v1"></script>
 <script>
 (() => {
-    const root = document.getElementById('trackingRoot');
     const params = new URLSearchParams(location.search);
-    let orderId = params.get('orderId') || '';
-    let currentOrder = null;
-    let selectedRating = 0;
-    let source = null;
-    let pollTimer = null;
-    const selectedTags = new Set();
+    let orderId = params.get('orderId') || params.get('bookingReference') || 'ORD-EMG-0001';
+    const root = document.getElementById('trackingRoot');
 
-    const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
-    const stageIndex = (stage) => ({PENDING_ASSIGNMENT:0,ASSIGNED:0,STAGE_1_REACHED:1,STAGE_2_STARTED:2,STAGE_3_COMPLETED:3}[stage] ?? 0);
-    const statusText = (stage) => ({PENDING_ASSIGNMENT:'Finding an available technician',ASSIGNED:'Technician assigned and preparing to arrive',STAGE_1_REACHED:'Worker is at your door',STAGE_2_STARTED:'Repairs currently underway',STAGE_3_COMPLETED:'Work Completed'}[stage] || 'Tracking your maintenance request');
+    const esc = (v) => String(v ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 
-    function lookupView(message='Enter your maintenance order ID to track live status.') {
-        root.innerHTML = `<div class="tracking-card lookup-card"><div class="text-center mb-4"><div class="tech-avatar mx-auto mb-3"><i class="fa-solid fa-location-crosshairs"></i></div><h3 class="fw-bold mb-2">Track Maintenance Order</h3><p class="text-muted mb-0">${esc(message)}</p></div><form id="lookupForm" class="d-flex gap-2"><input id="lookupInput" class="form-control form-control-lg rounded-pill px-4" placeholder="ORD-EMG-0001" value="${esc(orderId)}" required><button class="btn btn-primary rounded-pill px-4 fw-bold">Track</button></form></div>`;
-        document.getElementById('lookupForm').addEventListener('submit', e => { e.preventDefault(); orderId = document.getElementById('lookupInput').value.trim(); history.replaceState(null,'','?orderId='+encodeURIComponent(orderId)); loadOrder(true); });
-    }
-
-    function stepClass(position, current) {
-        if (current >= 3) return 'done';
-        if (position < current) return 'done';
-        if (position === current) return 'active';
-        return '';
-    }
-
-    function render(order) {
-        currentOrder = order;
-        const stage = order.currentStage || 'PENDING_ASSIGNMENT';
-        const idx = stageIndex(stage);
-        const complete = stage === 'STAGE_3_COMPLETED';
-        const pending = stage === 'PENDING_ASSIGNMENT';
-        const workerName = order.partnerName && order.partnerName !== 'Unassigned' ? order.partnerName : 'Assigning technician…';
-        const workerPhone = order.partnerPhone || '';
-        const proof = order.startPhotoUrl || order.beforePhotoUrl || '';
-        const alreadyReviewed = Number(order.reviewRating || order.rating || 0) > 0;
-        const rating = Number(order.partnerRating || 0).toFixed(1);
-
+    function lookupView() {
         root.innerHTML = `
-          <div class="tracking-card hero-card mb-4">
-            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 position-relative" style="z-index:1">
-              <div><div class="order-ref mb-2">${esc(order.orderId || order.orderReference || orderId)}</div><h2 class="fw-bold mb-2">${esc(order.tradeCategory || order.category || 'Maintenance')} Service</h2><p class="text-muted mb-0"><i class="fa-solid fa-location-dot me-1 text-danger"></i>${esc(order.unitNumber || order.serviceAddress || '')} · ${esc(order.hubName || order.hub || order.area || '')}</p></div>
-              <span class="status-chip ${complete?'complete':pending?'pending':''}"><span class="live-dot"></span>${complete?'Work Completed':pending?'Pending Assignment':'Live Service'}</span>
+            <div class="lookup-card text-center">
+                <div class="rounded-circle bg-primary bg-opacity-10 text-primary mx-auto mb-3 d-flex align-items-center justify-content-center" style="width:64px; height:64px; font-size:1.6rem;">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                </div>
+                <h4 class="fw-bold mb-2">Track Service Request</h4>
+                <p class="text-muted small mb-4">Enter your Maintenance Booking ID or Order Reference to view real-time lifecycle progress.</p>
+                <form id="lookupForm" class="d-flex gap-2">
+                    <input id="lookupInput" class="form-control form-control-lg rounded-pill px-4 shadow-none border-light-subtle" placeholder="e.g. EMG-00001 or ORD-EMG-0001" value="${esc(orderId)}" required>
+                    <button class="btn btn-primary rounded-pill px-4 fw-bold">Track</button>
+                </form>
             </div>
-          </div>
-
-          <div class="row g-4 mb-4">
-            <div class="col-lg-4"><div class="tracking-card technician-card">
-              <div class="d-flex gap-3 align-items-center"><div class="tech-avatar"><i class="fa-solid fa-user-gear"></i></div><div class="min-w-0"><div class="text-muted small fw-bold text-uppercase mb-1">Assigned Technician</div><div class="fw-bold fs-5 text-truncate">${esc(workerName)}</div><div class="d-flex flex-wrap gap-2 mt-2"><span class="trade-badge">${esc(order.tradeCategory || order.partnerTrade || order.category || 'Maintenance')}</span>${order.partnerId?`<span class="badge bg-light text-dark border rounded-pill"><i class="fa-solid fa-star text-warning me-1"></i>${rating}</span>`:''}</div></div></div>
-              <hr class="my-3"><div class="d-flex justify-content-between small mb-2"><span class="text-muted">Partner type</span><strong>${esc(order.partnerType || order.partnerEmploymentType || 'Service Partner')}</strong></div><div class="d-flex justify-content-between small"><span class="text-muted">Phone</span>${workerPhone?`<a href="tel:${esc(workerPhone)}" class="fw-bold text-decoration-none"><i class="fa-solid fa-phone me-1"></i>${esc(workerPhone)}</a>`:'<strong>Available after assignment</strong>'}</div>
-            </div></div>
-            <div class="col-lg-8"><div class="tracking-card stepper-card h-100"><div class="d-flex justify-content-between align-items-start gap-3"><div><h4 class="fw-bold mb-1">Live service progress</h4><p class="text-muted small mb-0">Updates appear automatically as the technician moves through the job.</p></div><span class="badge bg-light text-dark border rounded-pill">Live</span></div>
-              <div class="stepper">
-                <div class="step ${stepClass(1,idx)}"><div class="step-circle"><i class="fa-solid ${idx>1?'fa-check':'fa-location-dot'}"></i></div><div class="step-title">Reached Location</div><div class="step-sub">Doorstep check-in</div></div>
-                <div class="step ${stepClass(2,idx)}"><div class="step-circle"><i class="fa-solid ${idx>2?'fa-check':'fa-screwdriver-wrench'}"></i></div><div class="step-title">Work Started</div><div class="step-sub">Before photo verified</div></div>
-                <div class="step ${stepClass(3,idx)}"><div class="step-circle"><i class="fa-solid ${idx>=3?'fa-check':'fa-flag-checkered'}"></i></div><div class="step-title">Completed</div><div class="step-sub">Ready for your review</div></div>
-              </div>
-              <div class="live-message"><i class="fa-solid ${complete?'fa-circle-check text-success':pending?'fa-triangle-exclamation text-danger':'fa-satellite-dish text-primary'}"></i><div class="flex-grow-1"><div>${esc(statusText(stage))}</div><div class="small fw-normal text-muted mt-1">Work progress: <strong>${esc(order.workProgress || (complete?'Completed':idx>=2?'Processing':idx>=1?'Started':'Awaiting assignment'))}</strong>${order.remainingWorkText ? ` · ${esc(order.remainingWorkText)}` : ''}</div></div></div>
-            </div></div>
-          </div>
-
-          <div class="row g-4 mb-4">
-            <div class="col-lg-7"><div class="tracking-card proof-card h-100"><div class="d-flex justify-content-between align-items-center mb-3"><div><h5 class="fw-bold mb-1">Before-work verification</h5><p class="text-muted small mb-0">Mandatory proof captured before repairs begin.</p></div>${proof?'<span class="badge bg-success-subtle text-success border rounded-pill">Verified</span>':'<span class="badge bg-light text-muted border rounded-pill">Waiting</span>'}</div>${proof?`<img class="proof-img" src="${esc(proof)}" alt="Before work photo" id="proofImage"><div class="small text-muted mt-2"><i class="fa-regular fa-clock me-1"></i>${esc((order.photoStartAt || '').replace('T',' ').slice(0,16))}</div>`:`<div class="empty-proof"><div><i class="fa-solid fa-camera fa-2x mb-2"></i><div class="fw-bold">Photo appears when work starts</div></div></div>`}</div></div>
-            <div class="col-lg-5"><div class="tracking-card proof-card h-100"><h5 class="fw-bold mb-3">Service details</h5><div class="small mb-3"><div class="text-muted mb-1">Issue</div><div class="fw-semibold">${esc(order.description || 'Maintenance request')}</div></div><div class="small mb-3"><div class="text-muted mb-1">Created</div><div class="fw-semibold">${esc((order.createdAt || '').replace('T',' ').slice(0,16))}</div></div><div class="small mb-3"><div class="text-muted mb-1">Completion estimate</div><div class="fw-semibold">${complete ? 'Completed' : order.estimatedCompletionAt ? `${esc(new Date(order.estimatedCompletionAt).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}))} · ${esc(order.remainingWorkText || '')}` : esc(order.remainingWorkText || 'Estimate will appear when work starts')}</div></div><div class="small"><div class="text-muted mb-1">Resident contact</div><div class="fw-semibold">${esc(order.contactNumber || '')}</div></div></div></div>
-          </div>
-          <div id="reviewSlot">${complete ? renderReview(alreadyReviewed, order) : ''}</div>`;
-
-        const proofImage = document.getElementById('proofImage');
-        if (proofImage) proofImage.addEventListener('click', () => { document.getElementById('proofModalImg').src=proof; bootstrap.Modal.getOrCreateInstance(document.getElementById('proofModal')).show(); });
-        if (complete && !alreadyReviewed) bindReview();
+        `;
+        document.getElementById('lookupForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            orderId = document.getElementById('lookupInput').value.trim();
+            history.replaceState(null, '', '?orderId=' + encodeURIComponent(orderId));
+            loadPageData();
+        });
     }
 
-    function renderReview(alreadyReviewed, order) {
-        if (alreadyReviewed) return `<div class="tracking-card thankyou"><div class="thankyou-icon"><i class="fa-solid fa-check"></i></div><h3 class="fw-bold">Thank you for your feedback</h3><p class="text-muted mb-0">Your ${esc(order.reviewRating || order.rating)}/5 rating has been recorded for ${esc(order.partnerName || 'your technician')}.</p></div>`;
-        return `<div class="tracking-card review-card"><div class="row g-4 align-items-start"><div class="col-lg-5"><span class="badge bg-success text-white rounded-pill mb-3"><i class="fa-solid fa-circle-check me-1"></i>Service Complete</span><h3 class="fw-bold mb-2">Rate Your Technician</h3><p class="text-muted mb-0">Your feedback updates the technician's service rating and helps maintain quality.</p></div><div class="col-lg-7"><form id="reviewForm"><label class="fw-bold small mb-2">Your rating</label><div class="stars mb-3" id="stars">${[1,2,3,4,5].map(n=>`<button class="star-btn" type="button" data-rating="${n}" aria-label="${n} stars">★</button>`).join('')}</div><label class="fw-bold small mb-2">What went well?</label><div class="d-flex flex-wrap gap-2 mb-3" id="sentiments">${['Punctual','Clean Work','Polite','Quick Fix'].map(t=>`<button class="sentiment-tag" type="button" data-tag="${t}">${t}</button>`).join('')}</div><label for="reviewComment" class="fw-bold small mb-2">Feedback</label><textarea id="reviewComment" class="form-control rounded-3 mb-3" rows="4" maxlength="1000" placeholder="Share a few words about the service..."></textarea><button class="btn btn-success rounded-pill px-4 fw-bold" type="submit"><i class="fa-solid fa-paper-plane me-2"></i>Submit Review</button><div class="small mt-2" id="reviewMessage"></div></form></div></div></div>`;
-    }
-
-    function bindReview() {
-        document.querySelectorAll('.star-btn').forEach(btn => btn.addEventListener('click', () => { selectedRating = Number(btn.dataset.rating); document.querySelectorAll('.star-btn').forEach(x => x.classList.toggle('selected', Number(x.dataset.rating) <= selectedRating)); }));
-        document.querySelectorAll('.sentiment-tag').forEach(btn => btn.addEventListener('click', () => { const tag=btn.dataset.tag; selectedTags.has(tag)?selectedTags.delete(tag):selectedTags.add(tag); btn.classList.toggle('active'); }));
-        document.getElementById('reviewForm')?.addEventListener('submit', submitReview);
-    }
-
-    async function submitReview(e) {
-        e.preventDefault();
-        const msg = document.getElementById('reviewMessage');
-        if (!selectedRating) { msg.className='small mt-2 text-danger'; msg.textContent='Please select a star rating.'; return; }
-        const button = e.currentTarget.querySelector('button[type=submit]'); button.disabled=true; button.innerHTML='<i class="fa-solid fa-spinner fa-spin me-2"></i>Submitting';
-        try {
-            const res = await fetch(`/api/maintenance/orders/${encodeURIComponent(orderId)}/review`, {method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({rating:selectedRating,comment:document.getElementById('reviewComment').value,tags:[...selectedTags]})});
-            const data = await res.json().catch(()=>({})); if(!res.ok) throw new Error(data.message || 'Unable to submit review'); await loadOrder(false);
-        } catch(err) { msg.className='small mt-2 text-danger'; msg.textContent=err.message; button.disabled=false; button.innerHTML='<i class="fa-solid fa-paper-plane me-2"></i>Submit Review'; }
-    }
-
-    async function loadOrder(showError=true) {
+    async function loadPageData() {
         if (!orderId) { lookupView(); return; }
         try {
-            const res = await fetch(`/api/maintenance/orders/resident/${encodeURIComponent(orderId)}`, {headers:{Accept:'application/json'},credentials:'same-origin'});
-            const data = await res.json().catch(()=>({})); if(!res.ok) throw new Error(data.message || 'Maintenance order not found');
-            orderId = data.orderId || data.orderReference || orderId; render(data); connectEvents();
-        } catch(err) { if(showError) lookupView(err.message); }
+            const res = await fetch(`/api/maintenance/workflow/tickets/${encodeURIComponent(orderId)}`);
+            if (!res.ok) throw new Error('Order not found');
+            const data = await res.json();
+            renderPageTracker(data);
+            connectSSE(data.bookingReference || data.orderReference || orderId);
+        } catch (err) {
+            lookupView();
+        }
     }
 
-    function connectEvents() {
-        if (!orderId || source) return;
-        source = new EventSource(`/api/maintenance/topic/order/${encodeURIComponent(orderId)}`);
-        source.addEventListener('order', () => loadOrder(false));
-        source.onerror = () => { source?.close(); source=null; clearTimeout(pollTimer); pollTimer=setTimeout(()=>loadOrder(false),5000); };
+    function mapStatusToStage(status) {
+        switch (status) {
+            case 'TICKET_CREATED': return 1;
+            case 'ANALYZED': return 2;
+            case 'CHECKING_AMC': return 3;
+            case 'OFFERED':
+            case 'ASSIGNED':
+            case 'ACCEPTED': return 4;
+            case 'TRAVELING': return 5;
+            case 'ARRIVED': return 6;
+            case 'DIAGNOSING':
+            case 'ESTIMATE_PENDING': return 7;
+            case 'IN_PROGRESS': return 8;
+            case 'WORK_COMPLETED': return 9;
+            case 'PAYMENT_PENDING':
+            case 'PENDING_REVIEW':
+            case 'PAID':
+            case 'CLOSED':
+            case 'RESOLVED': return 10;
+            default: return 4;
+        }
     }
 
-    window.addEventListener('beforeunload',()=>source?.close());
-    loadOrder(true);
-    // Refresh periodically even while SSE is connected so the persisted remaining-time countdown stays current.
-    setInterval(()=>{ if(orderId) loadOrder(false); },30000);
+    function renderPageTracker(d) {
+        const currentStage = mapStatusToStage(d.jobStatus);
+        const isAmc = Boolean(d.isAmcVendor);
+        const isEmergency = Boolean(d.isEmergency);
+
+        const stages = [
+            { num: 1, label: 'Ticket Created' },
+            { num: 2, label: 'AI Triage' },
+            { num: 3, label: 'Vendor Check' },
+            { num: 4, label: 'Job Confirmed' },
+            { num: 5, label: 'En Route' },
+            { num: 6, label: 'Arrived' },
+            { num: 7, label: 'Diagnosis' },
+            { num: 8, label: 'Repairing' },
+            { num: 9, label: 'Completed' },
+            { num: 10, label: 'Confirmed & Closed' }
+        ];
+
+        let stepperHtml = '';
+        stages.forEach((s, idx) => {
+            const isDone = s.num < currentStage || (currentStage === 10 && s.num <= 10);
+            const isActive = s.num === currentStage && currentStage !== 10;
+            stepperHtml += `
+                <div class="mw-stage-item ${isDone ? 'done' : isActive ? 'active' : ''}">
+                    <div class="mw-stage-circle">${isDone ? '<i class="fa-solid fa-check"></i>' : s.num}</div>
+                    <span class="mw-stage-label">${esc(s.label)}</span>
+                </div>
+            `;
+            if (idx < stages.length - 1) {
+                stepperHtml += `<div class="mw-stage-connector ${isDone ? 'done' : ''}"></div>`;
+            }
+        });
+
+        root.innerHTML = `
+            <!-- Header Card -->
+            <div class="card p-4 shadow-sm border-0 rounded-4 mb-4 bg-white">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <h3 class="fw-bold mb-0 text-dark">${esc(d.category || 'Maintenance')} Service</h3>
+                            <span class="badge bg-dark">${esc(d.bookingReference || d.orderReference)}</span>
+                            ${isEmergency ? '<span class="badge bg-danger"><i class="fa-solid fa-bolt me-1"></i>Emergency</span>' : '<span class="badge bg-secondary">Standard</span>'}
+                        </div>
+                        <p class="text-muted small mb-0"><i class="fa-solid fa-location-dot me-1 text-danger"></i>Unit ${esc(d.unitNumber || 'Unit')} &bull; SmartApartment Community, Bengaluru</p>
+                    </div>
+                    <div>
+                        ${isAmc 
+                            ? '<span class="mw-vendor-badge-amc"><i class="fa-solid fa-shield-check"></i> Society AMC Vendor (Zero Callout Fee)</span>'
+                            : '<span class="mw-vendor-badge-ext"><i class="fa-solid fa-handshake"></i> Approved External Vendor</span>'}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stepper Card -->
+            <div class="card p-4 shadow-sm border-0 rounded-4 mb-4 bg-white">
+                <h6 class="fw-bold text-uppercase small text-dark mb-3" style="letter-spacing:0.5px;">10-Stage Maintenance Workflow Progress</h6>
+                <div class="mw-lifecycle-track">${stepperHtml}</div>
+            </div>
+
+            <!-- Status Alert -->
+            <div class="alert alert-info border-0 shadow-sm rounded-4 mb-4 py-3 px-4 d-flex align-items-center gap-3">
+                <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
+                <div>
+                    <strong>Status: ${esc(d.statusText || d.jobStatus)}</strong>
+                    <div class="small text-muted">${esc(d.dispatchReason || 'Technician workflow actively progressing.')}</div>
+                </div>
+            </div>
+
+            <!-- Details Row -->
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="card p-4 shadow-sm border-0 rounded-4 h-100 bg-white">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; font-size: 1.5rem;">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </div>
+                            <div>
+                                <span class="small text-muted fw-bold text-uppercase d-block">Assigned Specialist</span>
+                                <h5 class="fw-bold mb-0 text-dark">${esc(d.partnerName || 'Assigning technician…')}</h5>
+                                <span class="badge bg-light text-dark border rounded-pill small mt-1">
+                                    <i class="fa-solid fa-star text-warning me-1"></i>${Number(d.partnerRating || 4.9).toFixed(1)} Rating
+                                </span>
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between small mb-2"><span class="text-muted">Vendor Type:</span><strong>${isAmc ? 'AMC Internal Staff' : 'Third-Party Contractor'}</strong></div>
+                        <div class="d-flex justify-content-between small mb-2"><span class="text-muted">Phone:</span>${d.partnerPhone ? `<a href="tel:${esc(d.partnerPhone)}" class="fw-bold text-decoration-none"><i class="fa-solid fa-phone me-1"></i>${esc(d.partnerPhone)}</a>` : '<strong>Assigned after check-in</strong>'}</div>
+                        <div class="d-flex justify-content-between small"><span class="text-muted">Required Skill:</span><strong>${esc(d.requiredSkill || 'Technician')}</strong></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <div id="pageActionSlot"></div>
+                </div>
+            </div>
+        `;
+
+        renderDynamicSlot(d);
+    }
+
+    function renderDynamicSlot(d) {
+        const slot = document.getElementById('pageActionSlot');
+        if (!slot) return;
+        let html = '';
+
+        if (d.jobStatus === 'ESTIMATE_PENDING' || d.estimateStatus === 'PENDING_APPROVAL') {
+            html += `
+                <div class="mw-estimate-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-file-invoice-dollar text-warning me-2"></i>Cost Estimate Awaiting Approval</h6>
+                        <span class="badge bg-warning text-dark fw-bold">Action Required</span>
+                    </div>
+                    <p class="small text-muted mt-2 mb-3">${esc(d.estimateDescription || 'Technician inspected the problem and identified required spare components.')}</p>
+                    <table class="mw-estimate-table">
+                        <tr><td>Parts Breakdown:</td><td class="text-end fw-bold">${esc(d.estimatePartsBreakdown || 'Parts')}</td></tr>
+                        <tr><td>Labor Breakdown:</td><td class="text-end fw-bold">${esc(d.estimateLaborBreakdown || 'Labor')}</td></tr>
+                        <tr style="border-top: 2px solid #fde68a; font-size: 1.05rem;"><td class="fw-bold">Total Estimate:</td><td class="text-end text-primary fw-bold">₹${esc(d.estimateAmount || '0')}</td></tr>
+                    </table>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-outline-danger rounded-pill px-4 btn-sm fw-bold" onclick="handleEstimateDecision(false)">Reject</button>
+                        <button type="button" class="btn btn-success rounded-pill px-4 btn-sm fw-bold shadow-sm" onclick="handleEstimateDecision(true)">Approve & Start Repair</button>
+                    </div>
+                </div>
+            `;
+        } else if (d.jobStatus === 'WORK_COMPLETED') {
+            html += `
+                <div class="card p-4 shadow-sm border-0 rounded-4 bg-white">
+                    <h5 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-circle-check text-success me-2"></i>Work Completed by Technician</h5>
+                    <p class="small text-muted mb-3">${esc(d.completionNotes || 'The technician has finished repairing the issue.')}</p>
+                    ${d.afterPhotoUrl ? `<div class="mb-3"><img src="${esc(d.afterPhotoUrl)}" class="rounded-3 border" style="max-height:180px;"></div>` : ''}
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <button type="button" class="btn btn-outline-danger rounded-pill px-4 btn-sm fw-bold" onclick="handleResidentConfirm(false)">Issue Not Resolved (Reopen)</button>
+                        <button type="button" class="btn btn-primary rounded-pill px-4 btn-sm fw-bold shadow" onclick="handleResidentConfirm(true)">Confirm Resolution</button>
+                    </div>
+                </div>
+            `;
+        } else if (d.jobStatus === 'PAYMENT_PENDING' || d.paymentStatus === 'PENDING') {
+            html += `
+                <div class="card p-4 shadow-sm border-0 rounded-4 bg-white">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-credit-card text-primary me-2"></i>Payment Due</h5>
+                        <strong class="fs-4 text-success">₹${esc(d.estimateAmount || '0')}</strong>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="processPayment('UPI')"><i class="fa-solid fa-qrcode me-1"></i>Pay via UPI</button>
+                        <button type="button" class="btn btn-outline-primary rounded-pill px-4 fw-bold" onclick="processPayment('CASH')">Cash on Site</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="card p-4 shadow-sm border-0 rounded-4 bg-white">
+                    <h5 class="fw-bold mb-2 text-dark"><i class="fa-solid fa-circle-info text-primary me-2"></i>Live Service In Progress</h5>
+                    <p class="text-muted small mb-0">Our automated system coordinates with gate security and the technician. Real-time updates appear automatically.</p>
+                </div>
+            `;
+        }
+
+        // Add simulation controls
+        html += `
+            <div class="mw-sim-toolbar mt-3">
+                <div class="sim-title"><i class="fa-solid fa-sliders"></i> Simulation Toolbar</div>
+                <div class="d-flex flex-wrap gap-2">
+                    ${['OFFERED', 'ASSIGNED'].includes(d.jobStatus) ? `
+                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simVendorResponse(true)">Accept Job</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="simVendorResponse(false)">Decline (Reassign)</button>
+                    ` : ''}
+                    ${d.jobStatus === 'ACCEPTED' ? `<button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simTravel()">Start Travel</button>` : ''}
+                    ${d.jobStatus === 'TRAVELING' ? `<button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simArrive()">Arrived</button>` : ''}
+                    ${d.jobStatus === 'ARRIVED' ? `<button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simDiagnosis()">Start Diagnosis</button>` : ''}
+                    ${d.jobStatus === 'DIAGNOSING' ? `
+                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simStartRepair()">No Extra Cost</button>
+                        <button type="button" class="btn btn-sm btn-warning rounded-pill px-3 fw-bold" onclick="simSubmitEstimate()">Extra Cost</button>
+                    ` : ''}
+                    ${d.jobStatus === 'IN_PROGRESS' ? `<button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simCompleteWork()">Complete Work</button>` : ''}
+                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="loadPageData()">Refresh</button>
+                </div>
+            </div>
+        `;
+
+        slot.innerHTML = html;
+    }
+
+    let sseSource = null;
+    function connectSSE(ref) {
+        if (sseSource) sseSource.close();
+        sseSource = new EventSource(`/api/maintenance/topic/order/${encodeURIComponent(ref)}`);
+        sseSource.addEventListener('order', () => loadPageData());
+    }
+
+    loadPageData();
 })();
 </script>
 </body>

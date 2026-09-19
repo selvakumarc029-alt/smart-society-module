@@ -54,4 +54,19 @@ public class Complaint extends BaseEntity {
     private LocalDateTime dueAt;
     private LocalDateTime escalatedAt;
     private LocalDateTime closedAt;
+
+    @Column(length = 40)
+    private String bookingReference;
+
+    @Column(length = 40)
+    private String orderReference;
+
+    @Column(length = 40)
+    private String estimateStatus;
+
+    @Column(length = 40)
+    private String paymentStatus;
+
+    @Column(length = 80)
+    private String invoiceNumber;
 }

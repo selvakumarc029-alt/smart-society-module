@@ -26,7 +26,8 @@ const titles = {
     polls: "Community Polls",
     assets: "Assets and Preventive Maintenance",
     "audit-logs": "Granular Audit Trail",
-    services: "NoBroker Carpentry & Home Services"
+    services: "NoBroker Carpentry & Home Services",
+    maintenance: "Maintenance / Service Requests"
 };
 const securityPanelTitles = {
     overview: "Overview",
@@ -49,7 +50,7 @@ const residentPaymentProofsKey = "smartapartment-resident-payment-proofs:v1";
 const rolePanelRoutes = {
     superadmin: ["monitoring", "audit-logs", "societies", "subscriptions", "analytics"],
     admin: ["residents", "billing", "visitors", "complaints"],
-    resident: ["billing", "pass", "services", "complaints", "amenities", "announcements", "deliveries", "profile"],
+    resident: ["maintenance", "billing", "pass", "services", "complaints", "amenities", "announcements", "deliveries", "profile"],
     security: ["entries", "pass", "visitors", "entries"],
     maintenance: ["tasks", "complaints", "tasks", "profile"]
 };

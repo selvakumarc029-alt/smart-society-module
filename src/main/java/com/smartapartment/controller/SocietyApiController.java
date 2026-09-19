@@ -833,11 +833,19 @@ public class SocietyApiController {
     @GetMapping("/announcements")
     public List<Map<String, Object>> announcements() {
         AppUser user = currentUser.requireUser();
+        String tenant = user.getTenantId();
+        if (tenant == null || "platform".equalsIgnoreCase(tenant)) {
+            tenant = tenants.findAll().stream()
+                    .filter(Tenant::isApproved)
+                    .map(Tenant::getCode)
+                    .findFirst()
+                    .orElse("green-heights");
+        }
         LocalDateTime now = LocalDateTime.now();
-        return announcements.findByTenantIdOrderByCreatedAtDesc(user.getTenantId()).stream()
+        return announcements.findByTenantIdOrderByCreatedAtDesc(tenant).stream()
                 .filter(a -> canViewAnnouncement(user.getRole(), clean(a.getAudience()).toUpperCase(Locale.ROOT)))
-                .filter(a -> user.getRole() == UserRole.SOCIETY_ADMIN || (a.getEffectiveFrom() == null || !a.getEffectiveFrom().isAfter(now)))
-                .filter(a -> user.getRole() == UserRole.SOCIETY_ADMIN || a.getValidUntil() == null || !a.getValidUntil().isBefore(now))
+                .filter(a -> user.getRole() == UserRole.SOCIETY_ADMIN || user.getRole() == UserRole.SUPER_ADMIN || (a.getEffectiveFrom() == null || !a.getEffectiveFrom().isAfter(now)))
+                .filter(a -> user.getRole() == UserRole.SOCIETY_ADMIN || user.getRole() == UserRole.SUPER_ADMIN || a.getValidUntil() == null || !a.getValidUntil().isBefore(now))
                 .map(a -> map("id", a.getId(), "title", a.getTitle(), "message", a.getMessage(),
                         "audience", a.getAudience(), "emergency", a.isEmergency(), "createdAt", a.getCreatedAt(),
                         "category", clean(a.getCategory()), "effectiveFrom", a.getEffectiveFrom(), "validUntil", a.getValidUntil(),
@@ -848,11 +856,20 @@ public class SocietyApiController {
     }
 
     @PostMapping("/announcements")
-    @PreAuthorize("hasRole('SOCIETY_ADMIN')")
+    @PreAuthorize("hasAnyRole('SOCIETY_ADMIN','SUPER_ADMIN','FACILITY_MANAGER')")
     @Transactional
     public Map<String, Object> announce(@Valid @RequestBody AnnouncementRequest request) {
+        AppUser user = currentUser.requireUser();
+        String tenant = currentUser.requireTenantId();
+        if (tenant == null || "platform".equalsIgnoreCase(tenant)) {
+            tenant = tenants.findAll().stream()
+                    .filter(Tenant::isApproved)
+                    .map(Tenant::getCode)
+                    .findFirst()
+                    .orElse("green-heights");
+        }
         Announcement item = new Announcement();
-        item.setTenantId(currentUser.requireTenantId());
+        item.setTenantId(tenant);
         item.setTitle(request.title().trim());
         item.setMessage(request.message().trim());
         item.setAudience(request.audience().trim().toUpperCase(Locale.ROOT));
@@ -868,10 +885,10 @@ public class SocietyApiController {
         item = announcements.save(item);
         String savedAudience = item.getAudience();
         long recipientCount = users.findByTenantId(item.getTenantId()).stream()
-                .filter(user -> canViewAnnouncement(user.getRole(), savedAudience))
+                .filter(u -> canViewAnnouncement(u.getRole(), savedAudience))
                 .count();
         long residentCount = users.findByTenantId(item.getTenantId()).stream()
-                .filter(user -> user.getRole() == UserRole.RESIDENT)
+                .filter(u -> u.getRole() == UserRole.RESIDENT)
                 .count();
         return Map.of("id", item.getId(), "message", "Announcement published", "recipientCount", recipientCount,
                 "residentCount", residentCount,
@@ -1084,13 +1101,15 @@ public class SocietyApiController {
     }
 
     private Map<String, Object> complaintView(Complaint c) {
+        String residentName = (c.getResident() != null && c.getResident().getUser() != null) ? c.getResident().getUser().getFullName() : "Resident";
+        String unitNumber = (c.getResident() != null && c.getResident().getApartment() != null) ? c.getResident().getApartment().getUnitNo() : "—";
         return map("id", c.getId(), "title", c.getTitle(), "category", c.getCategory(), "priority", c.getPriority(),
                 "subcategory", clean(c.getSubcategory()), "description", c.getDescription(), "locationDetails", clean(c.getLocationDetails()),
                 "incidentAt", c.getIncidentAt(), "preferredContactMethod", clean(c.getPreferredContactMethod()),
                 "reporterPhone", clean(c.getReporterPhone()), "accessPermission", Boolean.TRUE.equals(c.getAccessPermission()),
                 "attachmentReference", clean(c.getAttachmentReference()), "status", c.getStatus(), "assignedTo", clean(c.getAssignedTo()),
-                "resolutionNotes", clean(c.getResolutionNotes()), "dueAt", c.getDueAt(), "escalatedAt", c.getEscalatedAt(), "closedAt", c.getClosedAt(), "resident", c.getResident().getUser().getFullName(),
-                "unitNo", c.getResident().getApartment().getUnitNo(), "createdAt", c.getCreatedAt(),
+                "resolutionNotes", clean(c.getResolutionNotes()), "dueAt", c.getDueAt(), "escalatedAt", c.getEscalatedAt(), "closedAt", c.getClosedAt(), "resident", residentName,
+                "unitNo", unitNumber, "createdAt", c.getCreatedAt(),
                 "sparePartsUsed", clean(c.getSparePartsUsed()), "repairCost", value(c.getRepairCost()));
     }
 
@@ -1195,7 +1214,7 @@ public class SocietyApiController {
 
     private static String clean(String value) { return value == null ? "" : value; }
     private static boolean canViewAnnouncement(UserRole role, String audience) {
-        if (role == UserRole.SOCIETY_ADMIN) return true;
+        if (role == UserRole.SOCIETY_ADMIN || role == UserRole.SUPER_ADMIN || role == UserRole.FACILITY_MANAGER) return true;
         return switch (role) {
             case RESIDENT -> Set.of("ALL", "RESIDENTS").contains(audience);
             case MAINTENANCE_STAFF -> Set.of("ALL", "STAFF", "MAINTENANCE").contains(audience);

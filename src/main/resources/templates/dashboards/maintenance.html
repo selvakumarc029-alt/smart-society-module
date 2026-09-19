@@ -1251,6 +1251,153 @@
             background: #f8fafc;
         }
 
+        /* ==========================================================================
+           LIVE EMERGENCY FEED: PRECISION ALIGNMENT & CONTROL SYSTEM
+           ========================================================================== */
+        #dispatchLegendsContainer {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 14px 18px !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+            margin-bottom: 16px !important;
+        }
+        #dispatchLegendsContainer .legend-row {
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 16px !important;
+        }
+        #dispatchLegendsContainer .legend-row:not(:last-child) {
+            padding-bottom: 12px !important;
+            margin-bottom: 12px !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+        }
+        #dispatchLegendsContainer .legend-label {
+            min-width: 155px !important;
+            max-width: 155px !important;
+            flex-shrink: 0 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            font-size: 0.70rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            color: #475569 !important;
+            padding-top: 4px !important;
+        }
+        #dispatchLegendsContainer .legend-badges {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            gap: 6px 8px !important;
+            flex-grow: 1 !important;
+        }
+        #dispatchLegendsContainer .legend-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 5px !important;
+            padding: 4px 10px !important;
+            border-radius: 999px !important;
+            font-size: 0.70rem !important;
+            font-weight: 600 !important;
+            line-height: 1.2 !important;
+            white-space: nowrap !important;
+            border: 1px solid transparent !important;
+            transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        #dispatchLegendsContainer .legend-badge:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06) !important;
+        }
+
+        /* Dispatch List Toolbar: Laser-aligned input, select, and counter */
+        #dispatchListToolbar {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 10px 14px !important;
+            margin-bottom: 16px !important;
+        }
+        #dispatchListToolbar .input-group-text,
+        #dispatchListToolbar .form-control,
+        #dispatchListToolbar .form-select {
+            height: 38px !important;
+            font-size: 0.84rem !important;
+            border-color: #cbd5e1 !important;
+        }
+        #dispatchListToolbar .input-group-text {
+            background: #ffffff !important;
+            border-right: none !important;
+            color: #64748b !important;
+            border-top-left-radius: 8px !important;
+            border-bottom-left-radius: 8px !important;
+        }
+        #dispatchListToolbar .form-control {
+            border-left: none !important;
+            border-top-right-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+        }
+        #dispatchListToolbar .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+            border-color: #3b82f6 !important;
+        }
+        #dispatchListToolbar .form-select {
+            border-radius: 8px !important;
+            background-color: #ffffff !important;
+        }
+        #dispatchListToolbar .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+            border-color: #3b82f6 !important;
+        }
+        #dispatchListToolbar .count-pill {
+            height: 38px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 0 16px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 999px !important;
+            color: #475569 !important;
+            font-size: 0.78rem !important;
+            font-weight: 600 !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+            white-space: nowrap !important;
+        }
+
+        /* View switcher & refresh buttons precision alignment */
+        #dispatchViewSwitcher {
+            background: #f1f5f9 !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 999px !important;
+            padding: 3px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 2px !important;
+        }
+        #dispatchViewSwitcher .btn {
+            height: 32px !important;
+            padding: 0 14px !important;
+            font-size: 0.78rem !important;
+            font-weight: 600 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            border-radius: 999px !important;
+            border: none !important;
+        }
+        #btnRefreshOperations {
+            height: 38px !important;
+            padding: 0 16px !important;
+            font-size: 0.82rem !important;
+            font-weight: 600 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            border-radius: 999px !important;
+        }
+
         /* Live Emergency Feed Streamlined Table Styling & Sticky Actions */
         #liveDispatchTable {
             width: 100%;
@@ -1588,6 +1735,8 @@
                 <a href="#overview" class="nav-link btn btn-link text-start text-decoration-none active" data-panel="overview"><i class="fa-solid fa-house me-2"></i> Overview</a>
 
                 <div class="px-3 pb-1 pt-3 text-uppercase fw-bold small text-white-50" style="letter-spacing: 0.08em; font-size: 0.68rem;">Track 1: Tickets (Non-Emergency)</div>
+                <a href="#manager-operations" class="nav-link btn btn-link text-start text-decoration-none" data-panel="manager-operations"><i class="fa-solid fa-gauge-high me-2"></i> Operations Dashboard <span class="badge bg-danger rounded-pill float-end ms-auto" id="mgr-live-beacon">LIVE</span></a>
+                <a href="#resident-requests" class="nav-link btn btn-link text-start text-decoration-none" data-panel="resident-requests"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Resident Service Requests <span class="badge bg-primary rounded-pill float-end ms-auto" id="sidebarResidentReqBadge">0</span></a>
                 <a href="#tasks" class="nav-link btn btn-link text-start text-decoration-none" data-panel="tasks"><i class="fa-solid fa-clipboard-list me-2"></i> My Assigned Tasks</a>
                 <a href="#complaints" class="nav-link btn btn-link text-start text-decoration-none" data-panel="complaints"><i class="fa-solid fa-ticket me-2"></i> Open Ticket Pool</a>
                 <a href="#assets" class="nav-link btn btn-link text-start text-decoration-none" data-panel="assets"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Assets & Preventive</a>
@@ -1679,6 +1828,49 @@
             <div class="container-fluid p-4 dashboard-container">
                 <!-- Overview Panel -->
                 <section data-view="overview" class="animate__animated animate__fadeIn">
+
+                    <!-- Worker Attendance & Live Availability Widget -->
+                    <div class="card border-0 shadow-sm rounded-4 p-3.5 mb-4 bg-white" id="workerAttendanceControlBar">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; font-size: 1.35rem;">
+                                    <i class="fa-solid fa-user-clock"></i>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                                        <span class="fw-bold fs-6 text-dark">Duty &amp; Attendance</span>
+                                        <span id="workerAttBadgeContainer"><span class="badge bg-secondary rounded-pill px-3 py-1.5">OFFLINE</span></span>
+                                        <span id="workerAvailBadgeContainer"><span class="badge bg-secondary rounded-pill px-3 py-1.5">OFFLINE</span></span>
+                                        <span id="workerCurrentTaskPill" style="display:none;"></span>
+                                    </div>
+                                    <div class="small text-muted d-flex flex-wrap gap-2">
+                                        <span class="me-2"><i class="fa-regular fa-clock me-1 text-primary"></i>Shift: <strong id="workerShiftLabel" class="text-dark">General Shift</strong></span>
+                                        <span class="me-2"><i class="fa-solid fa-calendar-day me-1 text-success"></i>Today: <strong id="workerTodayHours" class="text-dark font-monospace">0m</strong></span>
+                                        <span class="me-2"><i class="fa-solid fa-calendar-week me-1 text-info"></i>Week: <strong id="workerWeeklyHours" class="text-dark font-monospace">0m</strong></span>
+                                        <span><i class="fa-solid fa-calendar me-1 text-secondary"></i>Month: <strong id="workerMonthlyHours" class="text-dark font-monospace">0m</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap align-items-center">
+                                <button type="button" class="btn btn-success btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm" id="btnWorkerClockIn" onclick="window.workerClockIn()">
+                                    <i class="fa-solid fa-right-to-bracket me-1.5"></i>Clock In
+                                </button>
+                                <button type="button" class="btn btn-outline-info btn-sm rounded-pill px-3 py-2 fw-bold" id="btnWorkerStartBreak" onclick="window.workerStartBreak()" disabled>
+                                    <i class="fa-solid fa-mug-hot me-1.5"></i>Start Break
+                                </button>
+                                <button type="button" class="btn btn-outline-success btn-sm rounded-pill px-3 py-2 fw-bold" id="btnWorkerEndBreak" onclick="window.workerEndBreak()" disabled>
+                                    <i class="fa-solid fa-play me-1.5"></i>End Break
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm rounded-pill px-3 py-2 fw-bold shadow-sm" id="btnWorkerClockOut" onclick="window.workerClockOut()" disabled>
+                                    <i class="fa-solid fa-arrow-right-from-bracket me-1.5"></i>Clock Out
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Task Notification Banner (if currently working on a task) -->
+                    <div id="workerActiveTaskBanner" class="mb-4" style="display:none;"></div>
+
                     <!-- Operational Flow Selector Banner -->
                     <div class="maintenance-command-banner mb-4" id="maintenanceCommandBanner" style="background: linear-gradient(135deg, #0b1329 0%, #1e293b 60%, #0f172a 100%) !important; background-color: #0b1329 !important; border: 1px solid rgba(255, 255, 255, 0.14) !important; border-radius: 16px !important; padding: 1.5rem 1.75rem !important; box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.35), 0 8px 10px -6px rgba(15, 23, 42, 0.2) !important; color: #ffffff !important;">
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
@@ -1884,8 +2076,639 @@
                     </div>
                 </section>
 
+                <!-- Maintenance Manager Operations Dashboard -->
+                <section class="d-none animate__animated animate__fadeIn" data-view="manager-operations" id="maintenance-manager-operations-container">
+                    <!-- Top Summary & Real-Time Header -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="badge bg-primary px-3 py-2 rounded-pill fw-bold text-uppercase" style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-gauge-high me-1"></i> Maintenance Operations Command Center
+                                    </span>
+                                    <div id="mgr-live-beacon" class="badge bg-success-subtle text-success border border-success">
+                                        <i class="fas fa-circle text-success me-1 fa-beat" style="font-size: 8px;"></i> LIVE SYSTEM ONLINE
+                                    </div>
+                                </div>
+                                <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.35rem;">
+                                    Maintenance Manager Operations Dashboard
+                                </h3>
+                                <p class="text-muted small mb-0">
+                                    Live queue processing, real-time worker dispatch board, 11-column Kanban, and audited manual overrides.
+                                </p>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-bold" onclick="window.MaintenanceManagerDashboard.loadDashboardSummary()">
+                                    <i class="fa-solid fa-rotate-right me-1"></i> Refresh Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 11 Dashboard KPI Cards -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">Total Requests</span>
+                                <strong class="fs-3 fw-bold text-primary mt-1" id="kpi-total-requests">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">New Requests</span>
+                                <strong class="fs-3 fw-bold text-info mt-1" id="kpi-new-requests">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">Waiting Queue</span>
+                                <strong class="fs-3 fw-bold text-warning mt-1" id="kpi-waiting-requests">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">Assigned</span>
+                                <strong class="fs-3 fw-bold text-primary mt-1" id="kpi-assigned-requests">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">Travelling</span>
+                                <strong class="fs-3 fw-bold text-info mt-1" id="kpi-travelling-requests">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">In Progress</span>
+                                <strong class="fs-3 fw-bold text-success mt-1" id="kpi-in-progress-requests">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">Completed Today</span>
+                                <strong class="fs-3 fw-bold text-dark mt-1" id="kpi-completed-today">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4 border-start border-danger border-4">
+                                <span class="text-danger small fw-bold text-uppercase">⚠️ Overdue</span>
+                                <strong class="fs-3 fw-bold text-danger mt-1" id="kpi-overdue-requests">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">🟢 Available Workers</span>
+                                <strong class="fs-3 fw-bold text-success mt-1" id="kpi-available-workers">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">🟡 Busy Workers</span>
+                                <strong class="fs-3 fw-bold text-warning mt-1" id="kpi-busy-workers">0</strong>
+                            </div>
+                        </div>
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                            <div class="card p-3 text-center h-100 shadow-sm border-0 bg-white rounded-4">
+                                <span class="text-muted small fw-bold text-uppercase">⚫ On Leave</span>
+                                <strong class="fs-3 fw-bold text-secondary mt-1" id="kpi-workers-on-leave">0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Urgent Alerts Container -->
+                    <div id="mgr-alerts-container" class="mb-4"></div>
+
+                    <!-- Live Kanban Board Section -->
+                    <div class="card shadow-sm border-0 rounded-4 bg-white mb-4">
+                        <div class="card-header bg-transparent border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold text-dark mb-0"><i class="fas fa-columns text-primary me-2"></i> Live Operations Kanban</h5>
+                            <span class="small text-muted">11 Workflow Columns · Real-Time Automatic Status Transitions</span>
+                        </div>
+                        <div class="card-body p-3" id="mgr-kanban-container">
+                            <div class="text-center py-4 text-muted"><div class="spinner-border text-primary me-2"></div>Loading Kanban board...</div>
+                        </div>
+                    </div>
+
+                    <!-- Live Worker Board Section -->
+                    <div class="card shadow-sm border-0 rounded-4 bg-white mb-4">
+                        <div class="card-header bg-transparent border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold text-dark mb-0"><i class="fas fa-users-gear text-primary me-2"></i> Live Worker Board</h5>
+                            <div class="small text-secondary">
+                                Indicators: 🟢 AVAILABLE · 🟡 BUSY · 🔵 TRAVELLING · 🟣 WORKING · 🟠 ON BREAK · 🔴 OFFLINE · ⚫ ABSENT · ⚠️ OVERDUE
+                            </div>
+                        </div>
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light small text-uppercase">
+                                    <tr>
+                                        <th class="ps-4">Worker Name</th>
+                                        <th>Skill</th>
+                                        <th>Attendance</th>
+                                        <th>Availability</th>
+                                        <th>Current Request</th>
+                                        <th>Current Status</th>
+                                        <th>Started</th>
+                                        <th>Expected Completion</th>
+                                        <th class="pe-4">Remaining Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mgr-worker-board-tbody" class="border-top-0">
+                                    <tr><td colspan="9" class="text-center py-4 text-muted">Loading worker board...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Live Request Queue with Filters Section -->
+                    <div class="card shadow-sm border-0 rounded-4 bg-white mb-4">
+                        <div class="card-header bg-transparent border-bottom py-3 px-4">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                                <h5 class="fw-bold text-dark mb-0"><i class="fas fa-list-check text-primary me-2"></i> Live Request Queue</h5>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" id="filter-mgr-reset">
+                                    <i class="fas fa-undo me-1"></i> Reset Filters
+                                </button>
+                            </div>
+
+                            <!-- Queue Filters -->
+                            <div class="row g-2 align-items-center">
+                                <div class="col-md-2 col-6">
+                                    <label class="small text-muted fw-semibold">Status:</label>
+                                    <select id="filter-mgr-status" class="form-select form-select-sm">
+                                        <option value="ALL">All Statuses</option>
+                                        <option value="REQUESTED">NEW (Requested)</option>
+                                        <option value="AUTO_ASSIGN_PENDING">Auto Assign Pending</option>
+                                        <option value="WAITING_FOR_WORKER">Waiting Queue</option>
+                                        <option value="ASSIGNED">Assigned</option>
+                                        <option value="WORKER_ACCEPTED">Accepted</option>
+                                        <option value="TRAVELLING">Travelling</option>
+                                        <option value="ARRIVED">Arrived</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="ON_HOLD">On Hold</option>
+                                        <option value="COMPLETED">Completed</option>
+                                        <option value="OVERDUE">⚠️ Overdue</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <label class="small text-muted fw-semibold">Priority:</label>
+                                    <select id="filter-mgr-priority" class="form-select form-select-sm">
+                                        <option value="ALL">All Priorities</option>
+                                        <option value="URGENT">URGENT</option>
+                                        <option value="HIGH">HIGH</option>
+                                        <option value="MEDIUM">MEDIUM</option>
+                                        <option value="LOW">LOW</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <label class="small text-muted fw-semibold">Category:</label>
+                                    <select id="filter-mgr-category" class="form-select form-select-sm">
+                                        <option value="ALL">All Categories</option>
+                                        <option value="Electrical">Electrical</option>
+                                        <option value="Plumbing">Plumbing</option>
+                                        <option value="Carpentry">Carpentry</option>
+                                        <option value="Cleaning">Cleaning</option>
+                                        <option value="AC">AC</option>
+                                        <option value="Lift/Elevator">Lift/Elevator</option>
+                                        <option value="Painting">Painting</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <label class="small text-muted fw-semibold">Building:</label>
+                                    <input type="text" id="filter-mgr-building" class="form-control form-control-sm" placeholder="e.g. Block A, Tower 1">
+                                </div>
+                                <div class="col-md-3 col-12">
+                                    <label class="small text-muted fw-semibold">Created Date:</label>
+                                    <input type="date" id="filter-mgr-date" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light small text-uppercase">
+                                    <tr>
+                                        <th class="ps-4">Request #</th>
+                                        <th>Resident</th>
+                                        <th>Flat</th>
+                                        <th>Building</th>
+                                        <th>Service</th>
+                                        <th>Priority</th>
+                                        <th>Created</th>
+                                        <th>Auto Assign</th>
+                                        <th>Worker</th>
+                                        <th>Status</th>
+                                        <th>ETA</th>
+                                        <th>Remaining</th>
+                                        <th class="pe-4 text-end">Manage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="mgr-queue-tbody" class="border-top-0">
+                                    <tr><td colspan="13" class="text-center py-4 text-muted">Loading queue...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Maintenance Analytics Section -->
+                    <div class="card shadow-sm border-0 rounded-4 bg-white mb-4">
+                        <div class="card-header bg-transparent border-bottom py-3 px-4">
+                            <h5 class="fw-bold text-dark mb-0"><i class="fas fa-chart-line text-primary me-2"></i> Maintenance Performance Analytics</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-4 text-center">
+                                <div class="col-md-2 col-6">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <span class="text-muted small fw-bold text-uppercase d-block">Avg Assignment</span>
+                                        <strong class="fs-4 text-primary mt-1 d-block" id="analytics-avg-assignment">4m 30s</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <span class="text-muted small fw-bold text-uppercase d-block">Avg Response</span>
+                                        <strong class="fs-4 text-info mt-1 d-block" id="analytics-avg-response">6m 15s</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <span class="text-muted small fw-bold text-uppercase d-block">Avg Completion</span>
+                                        <strong class="fs-4 text-success mt-1 d-block" id="analytics-avg-completion">1h 20m</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <span class="text-muted small fw-bold text-uppercase d-block">Worker Utilization</span>
+                                        <strong class="fs-4 text-primary mt-1 d-block" id="analytics-worker-utilization">78.5%</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <span class="text-muted small fw-bold text-uppercase d-block">Attendance Rate</span>
+                                        <strong class="fs-4 text-success mt-1 d-block" id="analytics-attendance-rate">92.0%</strong>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-6">
+                                    <div class="p-3 bg-light rounded-4">
+                                        <span class="text-danger small fw-bold text-uppercase d-block">Overdue Rate</span>
+                                        <strong class="fs-4 text-danger mt-1 d-block" id="analytics-overdue-rate">8.0%</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Resident Service Requests Panel -->
+                <section class="d-none animate__animated animate__fadeIn" data-view="resident-requests" id="adminResidentRequestsSection">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="badge bg-primary px-3 py-2 rounded-pill fw-bold text-uppercase" style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-screwdriver-wrench me-1"></i> Resident Service Pool
+                                    </span>
+                                    <h3 class="fw-bold mb-0 text-dark" style="font-size: 1.35rem;">
+                                        Resident Service Requests
+                                    </h3>
+                                </div>
+                                <p class="text-muted small mb-0">
+                                    Requests submitted directly by residents. Review issue details, assign technicians, set ETAs, and update status.
+                                </p>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-bold" onclick="loadAdminResidentRequests()">
+                                    <i class="fa-solid fa-rotate-right me-1"></i>Refresh Pool
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Requests Table Card -->
+                    <div class="card shadow-sm border-0 rounded-4 bg-white mb-4">
+                        <div class="card-header bg-transparent border-bottom border-light-subtle pt-4 px-4 d-flex flex-wrap justify-content-between align-items-center gap-3">
+                            <!-- Filter Pills -->
+                            <div class="btn-group btn-group-sm rounded-pill p-1 bg-light border" role="group" id="adminResidentFilterGroup">
+                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold btn-primary" data-admin-filter="all" onclick="filterAdminResidentRequests('all')">All</button>
+                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary" data-admin-filter="requested" onclick="filterAdminResidentRequests('requested')">Requested</button>
+                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary" data-admin-filter="assigned" onclick="filterAdminResidentRequests('assigned')">Assigned</button>
+                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary" data-admin-filter="in_progress" onclick="filterAdminResidentRequests('in_progress')">In Progress</button>
+                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary" data-admin-filter="completed" onclick="filterAdminResidentRequests('completed')">Completed</button>
+                            </div>
+
+                            <!-- Search -->
+                            <div style="min-width: 260px; max-width: 360px;" class="flex-grow-1">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-light border-light-subtle rounded-start-pill ps-3 text-muted">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+                                    <input type="search" id="adminResidentSearchInput" class="form-control bg-light border-light-subtle rounded-end-pill py-2 shadow-none" placeholder="Search by request #, resident, title..." oninput="searchAdminResidentRequests(this.value)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0 table-responsive">
+                            <table class="table table-hover align-middle mb-0" id="adminResidentRequestsTable">
+                                <thead class="table-light">
+                                    <tr style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        <th class="ps-4">Request #</th>
+                                        <th>Resident & Unit</th>
+                                        <th>Category & Service</th>
+                                        <th>Problem Title</th>
+                                        <th>Priority</th>
+                                        <th>Created Date</th>
+                                        <th>Status</th>
+                                        <th>Assigned Worker</th>
+                                        <th class="pe-4 text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminResidentRequestsTbody" class="border-top-0">
+                                    <tr>
+                                        <td colspan="9" class="text-center text-muted py-5">
+                                            <div class="spinner-border spinner-border-sm text-primary me-2"></div>Loading requests...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Admin Assign Worker Modal -->
+                <div id="adminAssignWorkerModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); z-index: 1060; justify-content: center; align-items: center; padding: 1rem;">
+                    <div style="background: #ffffff; width: 100%; max-width: 600px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); padding: 2rem; max-height: 92vh; overflow-y: auto;" class="animate__animated animate__zoomIn">
+                        <div class="d-flex justify-content-between align-items-start border-bottom border-light-subtle pb-3 mb-3">
+                            <div>
+                                <h4 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-user-gear text-primary me-2"></i>Assign Worker & Update Status</h4>
+                                <p class="text-muted small mb-0" id="assignModalReqNumber">Request: MR-2026-00001</p>
+                            </div>
+                            <button type="button" class="btn-close" onclick="closeAdminAssignModal()"></button>
+                        </div>
+
+                        <form id="adminAssignWorkerForm" onsubmit="submitAdminAssignWorker(event)">
+                            <input type="hidden" id="assignReqId">
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Worker Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control shadow-none" id="assignWorkerName" placeholder="e.g. Ramesh Kumar" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Worker Phone</label>
+                                    <input type="tel" class="form-control shadow-none" id="assignWorkerPhone" placeholder="e.g. 9876543210">
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Status</label>
+                                    <select class="form-select shadow-none" id="assignStatus">
+                                        <option value="REQUESTED">Requested</option>
+                                        <option value="ASSIGNED">Assigned</option>
+                                        <option value="WORKER_ACCEPTED">Worker Accepted</option>
+                                        <option value="TRAVELLING">Travelling</option>
+                                        <option value="ARRIVED">Arrived</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="ON_HOLD">On Hold</option>
+                                        <option value="COMPLETED">Completed</option>
+                                        <option value="CLOSED">Closed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-dark">Estimated Duration</label>
+                                    <input type="text" class="form-control shadow-none" id="assignEstimatedDuration" placeholder="e.g. 1 hour, 45 mins">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-dark">Internal Staff Notes</label>
+                                <textarea class="form-control shadow-none" id="assignNotes" rows="2" placeholder="Notes on parts required, inspection notes..."></textarea>
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2 border-top border-light-subtle pt-3">
+                                <button type="button" class="btn btn-light rounded-pill px-4" onclick="closeAdminAssignModal()">Cancel</button>
+                                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" id="assignSubmitBtn">
+                                    <i class="fa-solid fa-check me-1"></i>Save & Update
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <script>
+                    let adminResidentCache = [];
+                    let adminCurrentFilter = 'all';
+
+                    async function loadAdminResidentRequests() {
+                        const tbody = document.getElementById('adminResidentRequestsTbody');
+                        if (!tbody) return;
+                        try {
+                            const res = await fetch('/api/maintenance/requests?filter=all');
+                            if (!res.ok) throw new Error('Failed to load requests');
+                            const data = await res.json();
+                            adminResidentCache = Array.isArray(data) ? data : [];
+
+                            // Update sidebar badge
+                            const badge = document.getElementById('sidebarResidentReqBadge');
+                            const activeCount = adminResidentCache.filter(r => !['COMPLETED','CLOSED','CANCELLED'].includes(r.status)).length;
+                            if (badge) {
+                                badge.textContent = activeCount;
+                                badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
+                            }
+
+                            renderAdminResidentTable(filterAdminList(adminResidentCache, adminCurrentFilter));
+                        } catch (err) {
+                            if (tbody) tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger py-4">${err.message}</td></tr>`;
+                        }
+                    }
+
+                    function filterAdminList(list, filter) {
+                        if (!filter || filter === 'all') return list;
+                        return list.filter(r => (r.status || '').toLowerCase() === filter.toLowerCase());
+                    }
+
+                    function filterAdminResidentRequests(filter) {
+                        adminCurrentFilter = filter;
+                        document.querySelectorAll('#adminResidentFilterGroup button').forEach(btn => {
+                            const active = btn.dataset.adminFilter === filter;
+                            btn.classList.toggle('btn-primary', active);
+                            btn.classList.toggle('text-secondary', !active);
+                        });
+                        renderAdminResidentTable(filterAdminList(adminResidentCache, filter));
+                    }
+
+                    function searchAdminResidentRequests(query) {
+                        if (!query || query.trim() === '') {
+                            renderAdminResidentTable(filterAdminList(adminResidentCache, adminCurrentFilter));
+                            return;
+                        }
+                        const q = query.toLowerCase().trim();
+                        const filtered = adminResidentCache.filter(r =>
+                            (r.requestNumber && r.requestNumber.toLowerCase().includes(q)) ||
+                            (r.residentName && r.residentName.toLowerCase().includes(q)) ||
+                            (r.apartmentUnit && r.apartmentUnit.toLowerCase().includes(q)) ||
+                            (r.category && r.category.toLowerCase().includes(q)) ||
+                            (r.title && r.title.toLowerCase().includes(q)) ||
+                            (r.assignedWorkerName && r.assignedWorkerName.toLowerCase().includes(q))
+                        );
+                        renderAdminResidentTable(filtered);
+                    }
+
+                    function renderAdminResidentTable(list) {
+                        const tbody = document.getElementById('adminResidentRequestsTbody');
+                        if (!tbody) return;
+                        if (!list || list.length === 0) {
+                            tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fs-3 d-block mb-2"></i>No resident requests found in this view.</td></tr>`;
+                            return;
+                        }
+
+                        tbody.innerHTML = list.map(req => {
+                            const priorityClass = req.priority === 'URGENT' ? 'badge bg-danger' :
+                                                  req.priority === 'HIGH' ? 'badge bg-warning text-dark' :
+                                                  req.priority === 'LOW' ? 'badge bg-secondary' : 'badge bg-info text-dark';
+                            const statusClass = req.status === 'COMPLETED' || req.status === 'CLOSED' ? 'badge bg-success' :
+                                                req.status === 'CANCELLED' ? 'badge bg-danger' :
+                                                req.status === 'IN_PROGRESS' ? 'badge bg-warning text-dark' : 'badge bg-primary';
+
+                            return `
+                                <tr>
+                                    <td class="ps-4">
+                                        <strong class="font-monospace text-primary">${req.requestNumber}</strong>
+                                    </td>
+                                    <td>
+                                        <strong class="text-dark d-block">${req.residentName || 'Resident'}</strong>
+                                        <span class="small text-muted">${req.apartmentUnit || 'Unit'} &bull; ${req.buildingName || 'Block'}</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-light text-dark border px-2 py-1">${req.category}</span>
+                                        <div class="small text-muted mt-1">${req.serviceType}</div>
+                                    </td>
+                                    <td>
+                                        <strong class="d-block text-dark text-truncate" style="max-width:200px;">${req.title}</strong>
+                                        <span class="small text-muted text-truncate d-block" style="max-width:200px;">${req.description}</span>
+                                    </td>
+                                    <td><span class="${priorityClass}">${req.priority}</span></td>
+                                    <td><span class="small text-muted">${(req.createdAt || '').substring(0, 10)}</span></td>
+                                    <td><span class="${statusClass}">${req.status}</span></td>
+                                    <td>
+                                        ${req.assignedWorkerName ? `<strong class="small text-dark"><i class="fa-solid fa-user-gear text-primary me-1"></i>${req.assignedWorkerName}</strong>` : '<span class="badge bg-light text-muted border">Unassigned</span>'}
+                                    </td>
+                                    <td class="pe-4 text-end">
+                                        ${!req.assignedWorkerName && req.status !== 'COMPLETED' && req.status !== 'CLOSED' && req.status !== 'CANCELLED' ? `
+                                            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-2.5 fw-bold me-1" onclick="window.autoAssignWorkerToRequest(${req.id})" title="Auto-assign available on-duty worker">
+                                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Auto-Assign
+                                            </button>
+                                        ` : ''}
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="openAdminAssignModal(${req.id})">
+                                            <i class="fa-solid fa-pen-to-square me-1"></i>Manage
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+
+                    function openAdminAssignModal(id) {
+                        const req = adminResidentCache.find(r => r.id === id);
+                        if (!req) return;
+                        document.getElementById('assignReqId').value = req.id;
+                        document.getElementById('assignModalReqNumber').textContent = `Request: ${req.requestNumber} (${req.category} - ${req.title})`;
+                        document.getElementById('assignWorkerName').value = req.assignedWorkerName || '';
+                        document.getElementById('assignWorkerPhone').value = req.assignedWorkerPhone || '';
+                        document.getElementById('assignStatus').value = req.status || 'ASSIGNED';
+                        document.getElementById('assignEstimatedDuration').value = req.estimatedDuration || '';
+                        document.getElementById('assignNotes').value = req.notes || '';
+                        document.getElementById('adminAssignWorkerModal').style.display = 'flex';
+                    }
+
+                    function closeAdminAssignModal() {
+                        document.getElementById('adminAssignWorkerModal').style.display = 'none';
+                    }
+
+                    async function submitAdminAssignWorker(e) {
+                        e.preventDefault();
+                        const id = document.getElementById('assignReqId').value;
+                        const workerName = document.getElementById('assignWorkerName').value;
+                        const workerPhone = document.getElementById('assignWorkerPhone').value;
+                        const status = document.getElementById('assignStatus').value;
+                        const duration = document.getElementById('assignEstimatedDuration').value;
+                        const notes = document.getElementById('assignNotes').value;
+
+                        const btn = document.getElementById('assignSubmitBtn');
+                        btn.disabled = true;
+                        try {
+                            const res = await fetch(`/api/maintenance/requests/${id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    assignedWorkerName: workerName.trim(),
+                                    assignedWorkerPhone: workerPhone ? workerPhone.trim() : null,
+                                    status: status,
+                                    estimatedDuration: duration ? duration.trim() : null,
+                                    notes: notes ? notes.trim() : null
+                                })
+                            });
+
+                            if (!res.ok) throw new Error('Failed to update request');
+                            closeAdminAssignModal();
+                            await loadAdminResidentRequests();
+                            if (typeof showToast === 'function') showToast('Request updated successfully');
+                        } catch (err) {
+                            alert('Error: ' + err.message);
+                        } finally {
+                            btn.disabled = false;
+                        }
+                    }
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        loadAdminResidentRequests();
+                    });
+                </script>
+
                 <!-- Assigned Tasks Panel -->
                 <section class="d-none animate__animated animate__fadeIn" data-view="tasks">
+
+                    <!-- Worker Task Queue Categories: Pending, Completed, Upcoming -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                            <div>
+                                <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-list-check text-primary me-2"></i>My Service Request Tasks</h5>
+                                <p class="text-muted small mb-0">Assigned maintenance requests tracked in real time.</p>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="window.loadWorkerDashboardSummary()">
+                                <i class="fa-solid fa-rotate-right me-1"></i>Refresh Tasks
+                            </button>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-lg-4">
+                                <div class="card border-0 bg-light rounded-3 p-3 h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="fw-bold text-primary mb-0"><i class="fa-solid fa-hourglass-start me-1.5"></i>Pending Tasks</h6>
+                                    </div>
+                                    <div id="workerPendingTasksList" class="small">
+                                        <div class="text-muted py-2 text-center">Loading pending tasks...</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card border-0 bg-light rounded-3 p-3 h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="fw-bold text-info-emphasis mb-0"><i class="fa-regular fa-calendar-check me-1.5"></i>Upcoming Tasks</h6>
+                                    </div>
+                                    <div id="workerUpcomingTasksList" class="small">
+                                        <div class="text-muted py-2 text-center">Loading upcoming tasks...</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card border-0 bg-light rounded-3 p-3 h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h6 class="fw-bold text-success mb-0"><i class="fa-solid fa-check-double me-1.5"></i>Completed Tasks</h6>
+                                    </div>
+                                    <div id="workerCompletedTasksList" class="small">
+                                        <div class="text-muted py-2 text-center">Loading completed tasks...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Track 1 Header Banner: Strictly Separated Routine Tickets Queue -->
                     <div class="alert bg-white border border-primary-subtle rounded-4 p-3 mb-4 shadow-sm d-flex flex-wrap align-items-center justify-content-between gap-3" id="track1TasksBanner">
@@ -2301,63 +3124,78 @@
                     </div>
 
                     <div class="card shadow-sm border-0 rounded-4 mb-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                            <!-- Top Header: Title, Active Badge, View Switcher & Refresh Button -->
                             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
                                 <div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <h4 class="fw-bold mb-0">Live Emergency Feed</h4>
-                                        <span class="badge bg-danger text-white rounded-pill px-2.5 py-1" id="liveBookingsBadgeCount">0 Active</span>
+                                        <h4 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.01em;">Live Emergency Feed</h4>
+                                        <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 fw-bold" id="liveBookingsBadgeCount" style="font-size: 0.72rem; line-height: 1;">0 Active</span>
                                     </div>
                                     <p class="text-muted mb-0 small mt-1">Live dispatch pipeline, partner assignments, geofence radius tracking, and SLA urgency monitoring.</p>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     <!-- View Switcher: List/Grid View vs Map View -->
-                                    <div class="btn-group btn-group-sm p-1 bg-light border rounded-pill shadow-xs" role="group" id="dispatchViewSwitcher">
-                                        <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold btn-primary text-white" id="btnDispatchViewList" onclick="window.switchDispatchLayout('list')">
-                                            <i class="fa-solid fa-list-check me-1.5"></i>List/Grid View
+                                    <div class="btn-group btn-group-sm rounded-pill shadow-xs" role="group" id="dispatchViewSwitcher">
+                                        <button type="button" class="btn btn-sm btn-primary text-white" id="btnDispatchViewList" onclick="window.switchDispatchLayout('list')">
+                                            <i class="fa-solid fa-list-check"></i><span>List/Grid View</span>
                                         </button>
-                                        <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary" id="btnDispatchViewMap" onclick="window.switchDispatchLayout('map')">
-                                            <i class="fa-solid fa-map-location-dot me-1.5"></i>Map View
+                                        <button type="button" class="btn btn-sm text-secondary" id="btnDispatchViewMap" onclick="window.switchDispatchLayout('map')">
+                                            <i class="fa-solid fa-map-location-dot"></i><span>Map View</span>
                                         </button>
                                     </div>
 
-                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 shadow-sm" onclick="loadDispatchBookings()">
-                                        <i class="fa-solid fa-rotate me-1"></i> Refresh Operations
+                                    <button type="button" class="btn btn-primary shadow-sm" id="btnRefreshOperations" onclick="loadDispatchBookings()">
+                                        <i class="fa-solid fa-rotate"></i><span>Refresh Operations</span>
                                     </button>
                                 </div>
                             </div>
-                            <!-- Status Indicators Legend -->
-                            <div class="d-flex flex-wrap align-items-center gap-1.5 py-2 px-3 bg-white rounded-3 border mb-3 shadow-xs" id="emergencyStatusLegend">
-                                <span class="text-muted fw-bold me-1 text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Status Indicators:</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-dark" style="background-color: #fef08a; border: 1px solid #fde047; font-size: 0.68rem;"><i class="fa-solid fa-magnifying-glass me-1 text-warning-emphasis"></i>Searching Partner</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-dark" style="background-color: #fed7aa; border: 1px solid #fdba74; font-size: 0.68rem;"><i class="fa-solid fa-hourglass-half me-1"></i>Awaiting Acceptance</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #06b6d4; font-size: 0.68rem;"><i class="fa-solid fa-user-check me-1"></i>Accepted</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #2563eb; font-size: 0.68rem;"><i class="fa-solid fa-truck-fast me-1"></i>En Route</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #6366f1; font-size: 0.68rem;"><i class="fa-solid fa-location-dot me-1"></i>On Site</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #0d9488; font-size: 0.68rem;"><i class="fa-solid fa-camera me-1"></i>Before Photo Uploaded</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #1d4ed8; font-size: 0.68rem;"><i class="fa-solid fa-screwdriver-wrench me-1"></i>In Progress</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #16a34a; font-size: 0.68rem;"><i class="fa-solid fa-circle-check me-1"></i>Completed</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #334155; font-size: 0.68rem;"><i class="fa-solid fa-triangle-exclamation me-1 text-warning"></i>Failed Assignment</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-dark" style="background-color: #fbbf24; border: 1px solid #f59e0b; font-size: 0.68rem;"><i class="fa-solid fa-hourglass-half me-1"></i>SLA Risk</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white" style="background-color: #dc2626; font-size: 0.68rem;"><i class="fa-solid fa-triangle-exclamation me-1"></i>SLA Breached</span>
-                                <span class="badge rounded-pill px-2 py-0.5 text-white dispatch-alert-pulse" style="background-color:#991b1b;font-size:0.68rem;"><i class="fa-solid fa-bell me-1"></i>Dispatch Escalated</span>
+
+                            <!-- Structured Operations Reference Console (Status Indicators + SLA Rules) -->
+                            <div class="shadow-xs" id="dispatchLegendsContainer">
+                                <!-- Row 1: Status Indicators -->
+                                <div class="legend-row">
+                                    <div class="legend-label">
+                                        <i class="fa-solid fa-tags text-primary"></i>
+                                        <span>Status Indicators:</span>
+                                    </div>
+                                    <div class="legend-badges" id="emergencyStatusLegend">
+                                        <span class="legend-badge" style="background-color: #fef9c3; border-color: #fde047 !important; color: #854d0e;"><i class="fa-solid fa-magnifying-glass text-warning-emphasis"></i>Searching Partner</span>
+                                        <span class="legend-badge" style="background-color: #ffedd5; border-color: #fed7aa !important; color: #9a3412;"><i class="fa-solid fa-hourglass-half"></i>Awaiting Acceptance</span>
+                                        <span class="legend-badge" style="background-color: #cffafe; border-color: #a5f3fc !important; color: #155e75;"><i class="fa-solid fa-user-check"></i>Accepted</span>
+                                        <span class="legend-badge" style="background-color: #2563eb; color: #ffffff;"><i class="fa-solid fa-truck-fast"></i>En Route</span>
+                                        <span class="legend-badge" style="background-color: #4f46e5; color: #ffffff;"><i class="fa-solid fa-location-dot"></i>On Site</span>
+                                        <span class="legend-badge" style="background-color: #0d9488; color: #ffffff;"><i class="fa-solid fa-camera"></i>Before Photo Uploaded</span>
+                                        <span class="legend-badge" style="background-color: #1d4ed8; color: #ffffff;"><i class="fa-solid fa-screwdriver-wrench"></i>In Progress</span>
+                                        <span class="legend-badge" style="background-color: #16a34a; color: #ffffff;"><i class="fa-solid fa-circle-check"></i>Completed</span>
+                                        <span class="legend-badge" style="background-color: #334155; color: #ffffff;"><i class="fa-solid fa-triangle-exclamation text-warning"></i>Failed Assignment</span>
+                                        <span class="legend-badge" style="background-color: #fde68a; border-color: #f59e0b !important; color: #78350f;"><i class="fa-solid fa-hourglass-half"></i>SLA Risk</span>
+                                        <span class="legend-badge" style="background-color: #dc2626; color: #ffffff;"><i class="fa-solid fa-triangle-exclamation"></i>SLA Breached</span>
+                                        <span class="legend-badge dispatch-alert-pulse" style="background-color: #991b1b; color: #ffffff;"><i class="fa-solid fa-bell"></i>Dispatch Escalated</span>
+                                    </div>
+                                </div>
+
+                                <!-- Row 2: SLA Urgency Rules -->
+                                <div class="legend-row">
+                                    <div class="legend-label">
+                                        <i class="fa-solid fa-stopwatch text-danger"></i>
+                                        <span>SLA Rules (30m):</span>
+                                    </div>
+                                    <div class="legend-badges" id="slaUrgencyLegend">
+                                        <span class="legend-badge" style="background-color: #ecfdf5; border-color: #a7f3d0 !important; color: #065f46;" data-sla-guide="within"><i class="fa-solid fa-clock-rotate-left"></i>Within SLA (&gt;10m remaining)</span>
+                                        <span class="legend-badge" style="background-color: #fffbeb; border-color: #fde68a !important; color: #92400e;" data-sla-guide="approaching"><i class="fa-solid fa-triangle-exclamation text-warning-emphasis"></i>Approaching SLA Breach (&le;10m remaining)</span>
+                                        <span class="legend-badge" style="background-color: #fef2f2; border-color: #fca5a5 !important; color: #991b1b;" data-sla-guide="breached"><i class="fa-solid fa-circle-exclamation"></i>SLA Breached (Overdue)</span>
+                                        <span class="legend-badge" style="background-color: #f0fdf4; border-color: #bbf7d0 !important; color: #15803d;" data-sla-guide="met"><i class="fa-solid fa-circle-check"></i>Within SLA (Arrived On-Time)</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- SLA Urgency Reference Legend (Business Rules: 30m Arrival Target) -->
-                            <div class="d-flex align-items-center gap-2 flex-wrap mb-3 p-2.5 bg-white rounded-3 border" id="slaUrgencyLegend">
-                                <span class="small fw-bold text-uppercase text-dark" style="font-size: 0.70rem;"><i class="fa-solid fa-stopwatch me-1 text-primary"></i>SLA Urgency Rules (30m Target):</span>
-                                <span class="badge rounded-pill px-2.5 py-1 fw-bold text-success border border-success-subtle shadow-xs" style="background-color: #ecfdf5; font-size: 0.70rem;" data-sla-guide="within"><i class="fa-solid fa-clock-rotate-left me-1"></i>Within SLA (&gt;10m remaining)</span>
-                                <span class="badge rounded-pill px-2.5 py-1 fw-bold text-dark border border-warning shadow-xs" style="background-color: #fef3c7; font-size: 0.70rem;" data-sla-guide="approaching"><i class="fa-solid fa-triangle-exclamation me-1 text-warning-emphasis"></i>Approaching SLA Breach (&le;10m remaining)</span>
-                                <span class="badge rounded-pill px-2.5 py-1 fw-bold text-white shadow-xs" style="background-color: #dc2626; font-size: 0.70rem;" data-sla-guide="breached"><i class="fa-solid fa-circle-exclamation me-1"></i>SLA Breached (Overdue)</span>
-                                <span class="badge rounded-pill px-2.5 py-1 fw-bold text-success border border-success-subtle shadow-xs" style="background-color: #dcfce7; font-size: 0.70rem;" data-sla-guide="met"><i class="fa-solid fa-circle-check me-1"></i>Within SLA (Arrived On-Time)</span>
-                            </div>
-
-                            <!-- Operational Filter & Search Toolbar (Shared for List View) -->
-                            <div class="row g-2 align-items-center bg-light p-2.5 rounded-3 border" id="dispatchListToolbar">
+                            <!-- Operational Filter & Search Toolbar (Precision Grid Alignment) -->
+                            <div class="row g-2.5 align-items-center" id="dispatchListToolbar">
                                 <div class="col-md-5">
                                     <div class="input-group input-group-sm">
-                                        <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                        <input type="text" class="form-control border-start-0" id="liveBookingsSearchInput" placeholder="Search Booking ID, Customer, Area, Partner..." oninput="window.filterDispatchTable()">
+                                        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                        <input type="text" class="form-control" id="liveBookingsSearchInput" placeholder="Search Booking ID, Customer, Area, Partner..." oninput="window.filterDispatchTable()">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -2379,8 +3217,11 @@
                                         <option value="SLA_BREACHED">SLA Breached</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3 text-md-end text-muted small">
-                                    <span id="liveBookingsFilteredCount" class="fw-semibold">Showing all bookings</span>
+                                <div class="col-md-3 d-flex justify-content-md-end align-items-center">
+                                    <span class="count-pill">
+                                        <i class="fa-solid fa-list-ol text-primary"></i>
+                                        <span id="liveBookingsFilteredCount">Showing all bookings</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -2928,8 +3769,8 @@
                                         <h4 class="fw-bold mb-1">Worker Accounts</h4>
                                         <p class="text-muted mb-0">Workers listed here can sign in and access their separate maintenance dashboard.</p>
                                     </div>
-                                    <button class="btn btn-outline-primary rounded-pill" type="button" id="refreshMaintenanceWorkers">
-                                        <i class="fa-solid fa-rotate me-2"></i>Refresh
+                                    <button class="btn btn-outline-primary rounded-pill" type="button" id="refreshMaintenanceWorkers" onclick="window.loadMaintenanceWorkersAttendance()">
+                                        <i class="fa-solid fa-rotate me-2"></i>Refresh Roster
                                     </button>
                                 </div>
                                 <div class="card-body px-4 pb-4">
@@ -2938,15 +3779,18 @@
                                             <thead>
                                                 <tr>
                                                     <th>Worker</th>
-                                                    <th>Skill &amp; Shift</th>
+                                                    <th>Department / Skill</th>
+                                                    <th>Shift</th>
                                                     <th>Attendance (Today)</th>
-                                                    <th>Active Workload</th>
-                                                    <th>Live Status</th>
-                                                    <th class="text-end">Action</th>
+                                                    <th>Clock In</th>
+                                                    <th>Clock Out</th>
+                                                    <th>Working Hours</th>
+                                                    <th>Availability</th>
+                                                    <th>Current Task</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="maintenanceWorkersTable">
-                                                <tr><td colspan="6" class="text-center text-muted py-4">Loading workers...</td></tr>
+                                            <tbody id="maintenanceWorkersAttendanceTable">
+                                                <tr><td colspan="9" class="text-center text-muted py-4">Loading worker attendance roster...</td></tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -7550,5 +8394,7 @@
 
 <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
+<script src="/smartapartment/js/worker-attendance-module.js?v=20260919-v1"></script>
+<script src="/smartapartment/js/maintenance-manager-dashboard.js?v=20260919-v1"></script>
 </body>
 </html>

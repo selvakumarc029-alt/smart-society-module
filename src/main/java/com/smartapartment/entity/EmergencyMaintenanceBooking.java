@@ -71,6 +71,36 @@ public class EmergencyMaintenanceBooking extends BaseEntity {
     @Lob @com.fasterxml.jackson.annotation.JsonIgnore private byte[] beforePhoto;
     @Lob @com.fasterxml.jackson.annotation.JsonIgnore private byte[] afterPhoto;
 
+    private Boolean isEmergency;
+    @Column(length = 80) private String requiredSkill;
+    @Column(length = 1500) private String aiCategorizationNotes;
+    private Boolean isAmcVendor;
+    @Column(length = 60) private String vendorType; // AMC_SOCIETY_VENDOR or EXTERNAL_APPROVED_VENDOR
+    @Column(length = 1000) private String vendorDeclineReason;
+    private LocalDateTime diagnosisStartedAt;
+    private Boolean additionalCostRequired;
+    private java.math.BigDecimal estimateAmount;
+    @Column(length = 2000) private String estimateDescription;
+    @Column(length = 2000) private String estimatePartsBreakdown;
+    @Column(length = 1000) private String estimateLaborBreakdown;
+    @Column(length = 40) private String estimateStatus; // NONE, PENDING_APPROVAL, APPROVED, REJECTED
+    private LocalDateTime estimateApprovedAt;
+    @Column(length = 1000) private String estimateRejectionReason;
+    private LocalDateTime workCompletedAt;
+    private Integer reopenCount = 0;
+    @Column(length = 1500) private String reopenReason;
+    private LocalDateTime reopenedAt;
+    private LocalDateTime residentConfirmedAt;
+    @Column(length = 40) private String paymentStatus; // NOT_REQUIRED, PENDING, PAID
+    @Column(length = 60) private String paymentMethod;
+    @Column(length = 120) private String paymentReference;
+    private java.math.BigDecimal paidAmount;
+    private LocalDateTime paidAt;
+    @Column(length = 80) private String invoiceNumber;
+    private java.time.LocalDate preferredDate;
+    @Column(length = 80) private String preferredSlot;
+    @Column(length = 1000) private String residentAttachmentUrl;
+
     @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY)
     public String getBookingReference() {
         return getId() == null ? null : String.format(java.util.Locale.ROOT, "EMG-%05d", getId());

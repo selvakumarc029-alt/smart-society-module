@@ -421,7 +421,7 @@ async function saveSmartForgotPassword(event) {
 
 async function submitDashboardCredentials() {
     if (!pendingDashboardLogin) {
-        pendingDashboardLogin = { platform: "smartapartment", role: "maintenance", target: "/dashboards/maintenance" };
+        pendingDashboardLogin = { platform: "smartapartment" };
     }
     if (dashboardLoginSubmitting) return;
     const username = dashboardUsername?.value?.trim() || "";
@@ -444,7 +444,7 @@ async function submitDashboardCredentials() {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 platform: pendingDashboardLogin.platform || "smartapartment",
-                role: pendingDashboardLogin.role || "maintenance",
+                role: pendingDashboardLogin.role || "",
                 username: username,
                 password: password
             })
@@ -463,7 +463,7 @@ async function submitDashboardCredentials() {
         if (submitDashboardLogin) {
             submitDashboardLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:1rem;height:1rem;border-width:2px;"></span>Opening Dashboard...';
         }
-        const target = data.redirect || "/dashboards/maintenance";
+        const target = data.redirect || pendingDashboardLogin.target || "/dashboards/superadmin";
         window.location.replace(target);
     } catch (error) {
         showToast("Login failed. Please try again.");

@@ -48,6 +48,8 @@ public class DataLoader {
                                com.smartapartment.repository.MaintenanceHubRepository hubs,
                                com.smartapartment.repository.MaintenancePartnerRepository partners,
                                StaffAttendanceRepository staffAttendances,
+                               com.smartapartment.repository.WorkerAttendanceRepository workerAttendances,
+                               com.smartapartment.repository.WorkerAvailabilityRepository workerAvailabilities,
                                PasswordEncoder encoder,
                                Environment environment) {
         return args -> {
@@ -250,6 +252,7 @@ public class DataLoader {
                 AppUser carpUser = createDemoUser(users, encoder, "green-heights", "Anand Carpenter",
                         "carpenter@smartapartment", "password123", UserRole.MAINTENANCE_STAFF);
                 carpUser.setDesignation("Carpenter");
+                carpUser.setWorkShift("ALL_DAY");
                 carpUser.setPhone("9876543213");
                 users.save(carpUser);
                 MaintenancePartner p3 = new MaintenancePartner();
@@ -269,8 +272,36 @@ public class DataLoader {
                 p3.setRatingCount(19);
                 partners.save(p3);
 
-                // Seed active attendance for today for all three demo workers
-                for (AppUser w : java.util.List.of(plumberUser, electricUser, carpUser)) {
+                AppUser cleanUser = createDemoUser(users, encoder, "green-heights", "Manoj Cleaner",
+                        "cleaner@smartapartment", "password123", UserRole.MAINTENANCE_STAFF);
+                cleanUser.setDesignation("Housekeeping");
+                cleanUser.setWorkShift("ALL_DAY");
+                cleanUser.setPhone("9876543214");
+                users.save(cleanUser);
+                MaintenancePartner p4 = new MaintenancePartner();
+                p4.setUserId(cleanUser.getId());
+                p4.setName("Manoj Cleaner");
+                p4.setPhone("9876543214");
+                p4.setHubId(defaultHub.getId());
+                p4.setTrade("Cleaning");
+                p4.setSkillCategories("Cleaning,Deep Cleaning,Housekeeping,Disinfection");
+                p4.setEmploymentType("INTERNAL");
+                p4.setOnDuty(true);
+                p4.setWorkState("IDLE");
+                p4.setAvailability("IDLE");
+                p4.setLatitude(12.9716);
+                p4.setLongitude(77.5946);
+                p4.setRating(4.9f);
+                p4.setRatingCount(42);
+                partners.save(p4);
+
+                plumberUser.setWorkShift("ALL_DAY");
+                users.save(plumberUser);
+                electricUser.setWorkShift("ALL_DAY");
+                users.save(electricUser);
+
+                // Seed active attendance and availability for today for all demo workers
+                for (AppUser w : java.util.List.of(plumberUser, electricUser, carpUser, cleanUser)) {
                     staffAttendances.findByTenantIdAndUserIdAndWorkDate("green-heights", w.getId(), LocalDate.now())
                             .orElseGet(() -> {
                                 StaffAttendance att = new StaffAttendance();
@@ -280,7 +311,88 @@ public class DataLoader {
                                 att.setCheckInAt(LocalDateTime.now().minusHours(2));
                                 return staffAttendances.save(att);
                             });
+
+                    workerAttendances.findFirstByWorkerIdAndDateOrderByCreatedAtDesc(w.getId(), LocalDate.now())
+                            .orElseGet(() -> {
+                                com.smartapartment.entity.WorkerAttendance wa = new com.smartapartment.entity.WorkerAttendance();
+                                wa.setWorkerId(w.getId());
+                                wa.setTenantId("green-heights");
+                                wa.setDate(LocalDate.now());
+                                wa.setShiftId("ALL_DAY");
+                                wa.setAttendanceStatus("PRESENT");
+                                wa.setClockIn(LocalDateTime.now().minusHours(2));
+                                return workerAttendances.save(wa);
+                            });
+
+                    workerAvailabilities.findByWorkerId(w.getId())
+                            .orElseGet(() -> {
+                                com.smartapartment.entity.WorkerAvailability wav = new com.smartapartment.entity.WorkerAvailability();
+                                wav.setWorkerId(w.getId());
+                                wav.setTenantId("green-heights");
+                                wav.setStatus("AVAILABLE");
+                                wav.setLastUpdatedAt(LocalDateTime.now());
+                                return workerAvailabilities.save(wav);
+                            });
                 }
+            }
+
+            // Unconditionally ensure cleaner and all maintenance workers have shifts, attendance, and availability
+            AppUser cleanerStaff = users.findByEmail("cleaner@smartapartment").orElseGet(() -> {
+                AppUser u = createDemoUser(users, encoder, "green-heights", "Manoj Cleaner",
+                        "cleaner@smartapartment", "password123", UserRole.MAINTENANCE_STAFF);
+                u.setDesignation("Housekeeping");
+                u.setWorkShift("ALL_DAY");
+                u.setPhone("9876543214");
+                return users.save(u);
+            });
+            cleanerStaff.setDesignation("Housekeeping");
+            cleanerStaff.setWorkShift("ALL_DAY");
+            users.save(cleanerStaff);
+
+            if (partners.findByUserId(cleanerStaff.getId()).isEmpty()) {
+                MaintenancePartner p4 = new MaintenancePartner();
+                p4.setUserId(cleanerStaff.getId());
+                p4.setName("Manoj Cleaner");
+                p4.setPhone("9876543214");
+                p4.setHubId(defaultHub.getId());
+                p4.setTrade("Cleaning");
+                p4.setSkillCategories("Cleaning,Deep Cleaning,Housekeeping,Disinfection");
+                p4.setEmploymentType("INTERNAL");
+                p4.setOnDuty(true);
+                p4.setWorkState("IDLE");
+                p4.setAvailability("IDLE");
+                p4.setLatitude(12.9716);
+                p4.setLongitude(77.5946);
+                p4.setRating(4.9f);
+                p4.setRatingCount(42);
+                partners.save(p4);
+            }
+
+            for (AppUser w : users.findAll().stream().filter(u -> u.getRole() == UserRole.MAINTENANCE_STAFF).toList()) {
+                w.setWorkShift("ALL_DAY");
+                users.save(w);
+
+                workerAttendances.findFirstByWorkerIdAndDateOrderByCreatedAtDesc(w.getId(), LocalDate.now())
+                        .orElseGet(() -> {
+                            com.smartapartment.entity.WorkerAttendance wa = new com.smartapartment.entity.WorkerAttendance();
+                            wa.setWorkerId(w.getId());
+                            wa.setTenantId(w.getTenantId() != null ? w.getTenantId() : "green-heights");
+                            wa.setDate(LocalDate.now());
+                            wa.setShiftId("ALL_DAY");
+                            wa.setAttendanceStatus("PRESENT");
+                            wa.setClockIn(LocalDateTime.now().minusHours(2));
+                            return workerAttendances.save(wa);
+                        });
+
+                workerAvailabilities.findByWorkerId(w.getId())
+                        .orElseGet(() -> {
+                            com.smartapartment.entity.WorkerAvailability wav = new com.smartapartment.entity.WorkerAvailability();
+                            wav.setWorkerId(w.getId());
+                            wav.setTenantId(w.getTenantId() != null ? w.getTenantId() : "green-heights");
+                            wav.setStatus("AVAILABLE");
+                            wav.setLastUpdatedAt(LocalDateTime.now());
+                            return workerAvailabilities.save(wav);
+                        });
             }
 
             Resident resident = residents.findFirstByUserOrderByIdAsc(residentUser).orElseGet(() -> {

@@ -2492,9 +2492,139 @@
                     </div>
                 </div>
 
+                <!-- Worker Live Stage Progression Modal (Technician Controls) -->
+                <div id="workerLiveStageModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); z-index: 1060; justify-content: center; align-items: center; padding: 1rem;">
+                    <div style="background: #ffffff; width: 100%; max-width: 680px; border-radius: 24px; box-shadow: 0 25px 60px -12px rgba(0,0,0,0.3); padding: 2rem; max-height: 92vh; overflow-y: auto;" class="animate__animated animate__zoomIn">
+                        <div class="d-flex justify-content-between align-items-start border-bottom border-light-subtle pb-3 mb-3">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="badge bg-warning text-dark font-monospace px-2.5 py-1 rounded-pill" style="font-size:0.75rem; font-weight:800;">
+                                        <i class="fa-solid fa-wrench me-1"></i>TECHNICIAN FIELD CONTROL
+                                    </span>
+                                    <span class="badge bg-light text-dark border font-monospace px-2.5 py-1 rounded-pill" id="workerStageModalReqNumber">MR-2026-00005</span>
+                                </div>
+                                <h4 class="fw-bold mb-0 text-dark" id="workerStageModalTitle">Full House Cleaning</h4>
+                                <p class="text-muted small mb-0 mt-1" id="workerStageModalMeta">Resident: Demo Resident &bull; Unit: A-101 &bull; Technician: Manoj Cleaner</p>
+                            </div>
+                            <button type="button" class="btn-close" onclick="closeWorkerLiveStageModal()"></button>
+                        </div>
+
+                        <!-- Current Active Stage Callout -->
+                        <div class="card border-0 rounded-4 p-3 mb-4" style="background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%); border: 1px solid #bfdbfe !important;">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-muted small fw-bold text-uppercase d-block" style="font-size: 0.72rem; letter-spacing: 0.05em;">Current Live Stage (Resident is seeing this):</span>
+                                    <h5 class="fw-bold text-primary mb-0 mt-0.5 d-flex align-items-center gap-2" id="workerStageCurrentLabel">
+                                        <i class="fa-solid fa-circle-dot fa-fade text-primary"></i> Stage 1
+                                    </h5>
+                                </div>
+                                <span class="badge bg-primary text-white rounded-pill px-3 py-1.5 fw-bold" id="workerStageCurrentStatusBadge">IN_PROGRESS</span>
+                            </div>
+                        </div>
+
+                        <!-- 6 Stage Action Buttons for Worker -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark text-uppercase mb-2" style="letter-spacing: 0.05em; font-size: 0.75rem;">
+                                Select New Stage (Click to update resident live tracking immediately):
+                            </label>
+
+                            <div class="d-grid gap-2" id="workerStageButtonsList">
+                                <button type="button" class="btn btn-outline-primary text-start p-3 rounded-4 d-flex align-items-center justify-content-between worker-stage-btn" data-stage="ACCEPTED" onclick="executeWorkerStageUpdate('ACCEPTED')">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                            <i class="fa-solid fa-handshake"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="text-dark d-block">1. Accepted</strong>
+                                            <span class="text-muted small">Technician confirmed booking & assigned to order</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5">Mark Stage</span>
+                                </button>
+
+                                <button type="button" class="btn btn-outline-primary text-start p-3 rounded-4 d-flex align-items-center justify-content-between worker-stage-btn" data-stage="REACHED_LOCATION" onclick="executeWorkerStageUpdate('REACHED_LOCATION')">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="text-dark d-block">2. Reached your location</strong>
+                                            <span class="text-muted small">Technician arrived at society gate / apartment premises</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5">Mark Stage</span>
+                                </button>
+
+                                <button type="button" class="btn btn-outline-primary text-start p-3 rounded-4 d-flex align-items-center justify-content-between worker-stage-btn" data-stage="STARTED" onclick="executeWorkerStageUpdate('STARTED')">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                            <i class="fa-solid fa-play"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="text-dark d-block">3. Started</strong>
+                                            <span class="text-muted small">Technician verified service scope & prepped tools</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5">Mark Stage</span>
+                                </button>
+
+                                <button type="button" class="btn btn-outline-primary text-start p-3 rounded-4 d-flex align-items-center justify-content-between worker-stage-btn" data-stage="STAGE_1" onclick="executeWorkerStageUpdate('STAGE_1')">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                            <i class="fa-solid fa-layer-group"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="text-dark d-block">4. Stage 1</strong>
+                                            <span class="text-muted small">Surface prep, initial dusting & high-touch wipe down</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5">Mark Stage</span>
+                                </button>
+
+                                <button type="button" class="btn btn-outline-primary text-start p-3 rounded-4 d-flex align-items-center justify-content-between worker-stage-btn" data-stage="PROCESSING" onclick="executeWorkerStageUpdate('PROCESSING')">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                            <i class="fa-solid fa-spray-can-sparkles"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="text-dark d-block">5. Processing</strong>
+                                            <span class="text-muted small">Deep machine scrubbing, sanitization & chemical treatment</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5">Mark Stage</span>
+                                </button>
+
+                                <button type="button" class="btn btn-outline-success text-start p-3 rounded-4 d-flex align-items-center justify-content-between worker-stage-btn" data-stage="COMPLETED" onclick="executeWorkerStageUpdate('COMPLETED')" style="border-width: 2px;">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                        </div>
+                                        <div>
+                                            <strong class="text-success d-block">6. Completed 🎉</strong>
+                                            <span class="text-muted small">Service 100% finished & verified (Unlocks resident review/rating prompt)</span>
+                                        </div>
+                                    </div>
+                                    <span class="badge bg-success text-white rounded-pill px-3 py-1.5 fw-bold">Finish Job & Prompt Rating</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Optional Technician Notes Input -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark">Technician Field Notes (Optional):</label>
+                            <input type="text" class="form-control rounded-3" id="workerStageNotesInput" placeholder="e.g. Arrived on site / Surface prep completed / Machine scrub in progress...">
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 border-top border-light-subtle pt-3">
+                            <button type="button" class="btn btn-light rounded-pill px-4" onclick="closeWorkerLiveStageModal()">Close</button>
+                        </div>
+                    </div>
+                </div>
+
                 <script>
                     let adminResidentCache = [];
                     let adminCurrentFilter = 'all';
+                    let activeWorkerStageReqId = null;
 
                     async function loadAdminResidentRequests() {
                         const tbody = document.getElementById('adminResidentRequestsTbody');
@@ -2513,42 +2643,47 @@
                                 badge.style.display = activeCount > 0 ? 'inline-block' : 'none';
                             }
 
-                            renderAdminResidentTable(filterAdminList(adminResidentCache, adminCurrentFilter));
+                            filterAdminResidentRequests();
                         } catch (err) {
-                            if (tbody) tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger py-4">${err.message}</td></tr>`;
+                            tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>${err.message}</td></tr>`;
                         }
-                    }
-
-                    function filterAdminList(list, filter) {
-                        if (!filter || filter === 'all') return list;
-                        return list.filter(r => (r.status || '').toLowerCase() === filter.toLowerCase());
                     }
 
                     function filterAdminResidentRequests(filter) {
-                        adminCurrentFilter = filter;
-                        document.querySelectorAll('#adminResidentFilterGroup button').forEach(btn => {
-                            const active = btn.dataset.adminFilter === filter;
-                            btn.classList.toggle('btn-primary', active);
-                            btn.classList.toggle('text-secondary', !active);
+                        if (filter) {
+                            adminCurrentFilter = filter;
+                            document.querySelectorAll('#adminResidentFilterGroup button').forEach(btn => {
+                                const active = btn.dataset.adminFilter === filter;
+                                btn.classList.toggle('btn-primary', active);
+                                btn.classList.toggle('text-secondary', !active);
+                            });
+                        }
+
+                        const searchInput = document.getElementById('adminResidentSearchInput');
+                        const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+
+                        const filtered = adminResidentCache.filter(r => {
+                            if (adminCurrentFilter === 'requested' && (r.status || '').toLowerCase() !== 'requested') return false;
+                            if (adminCurrentFilter === 'assigned' && (r.status || '').toLowerCase() !== 'assigned') return false;
+                            if (adminCurrentFilter === 'in_progress' && (r.status || '').toLowerCase() !== 'in_progress') return false;
+                            if (adminCurrentFilter === 'completed' && !['completed', 'closed'].includes((r.status || '').toLowerCase())) return false;
+
+                            if (!query) return true;
+                            return (
+                                (r.requestNumber && r.requestNumber.toLowerCase().includes(query)) ||
+                                (r.title && r.title.toLowerCase().includes(query)) ||
+                                (r.residentName && r.residentName.toLowerCase().includes(query)) ||
+                                (r.assignedWorkerName && r.assignedWorkerName.toLowerCase().includes(query)) ||
+                                (r.category && r.category.toLowerCase().includes(query)) ||
+                                (r.apartmentUnit && r.apartmentUnit.toLowerCase().includes(query))
+                            );
                         });
-                        renderAdminResidentTable(filterAdminList(adminResidentCache, filter));
+
+                        renderAdminResidentTable(filtered);
                     }
 
                     function searchAdminResidentRequests(query) {
-                        if (!query || query.trim() === '') {
-                            renderAdminResidentTable(filterAdminList(adminResidentCache, adminCurrentFilter));
-                            return;
-                        }
-                        const q = query.toLowerCase().trim();
-                        const filtered = adminResidentCache.filter(r =>
-                            (r.requestNumber && r.requestNumber.toLowerCase().includes(q)) ||
-                            (r.residentName && r.residentName.toLowerCase().includes(q)) ||
-                            (r.apartmentUnit && r.apartmentUnit.toLowerCase().includes(q)) ||
-                            (r.category && r.category.toLowerCase().includes(q)) ||
-                            (r.title && r.title.toLowerCase().includes(q)) ||
-                            (r.assignedWorkerName && r.assignedWorkerName.toLowerCase().includes(q))
-                        );
-                        renderAdminResidentTable(filtered);
+                        filterAdminResidentRequests();
                     }
 
                     function renderAdminResidentTable(list) {
@@ -2596,6 +2731,9 @@
                                                 <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Auto-Assign
                                             </button>
                                         ` : ''}
+                                        <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-3 fw-bold me-1 shadow-sm" onclick="openWorkerLiveStageModal(${req.id})" title="Technician Live Stage Progress Control">
+                                            <i class="fa-solid fa-route me-1"></i>Update Stage
+                                        </button>
                                         <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="openAdminAssignModal(${req.id})">
                                             <i class="fa-solid fa-pen-to-square me-1"></i>Manage
                                         </button>
@@ -2604,6 +2742,93 @@
                             `;
                         }).join('');
                     }
+
+                    window.openWorkerLiveStageModal = function(id) {
+                        activeWorkerStageReqId = id;
+                        const req = adminResidentCache.find(r => r.id === id);
+                        if (!req) return;
+
+                        document.getElementById('workerStageModalReqNumber').textContent = req.requestNumber || `#${id}`;
+                        document.getElementById('workerStageModalTitle').textContent = req.title || req.serviceType || 'Service Request';
+                        document.getElementById('workerStageModalMeta').innerHTML = `Resident: <strong>${req.residentName || 'Resident'}</strong> &bull; Unit: <strong>${req.apartmentUnit || 'Unit'}</strong> &bull; Technician: <strong>${req.assignedWorkerName || 'Manoj Cleaner'}</strong>`;
+                        
+                        const notes = String(req.notes || '');
+                        const status = String(req.status || '').toUpperCase();
+                        let curStageKey = 'ACCEPTED';
+                        let curStageLabel = 'Accepted';
+                        if (notes.includes('Verified Resident Review:') || status === 'CLOSED' || status === 'COMPLETED') {
+                            curStageKey = 'COMPLETED';
+                            curStageLabel = 'Completed';
+                        } else if (notes.includes('[PROCESSING]')) {
+                            curStageKey = 'PROCESSING';
+                            curStageLabel = 'Processing';
+                        } else if (notes.includes('[STAGE_1]')) {
+                            curStageKey = 'STAGE_1';
+                            curStageLabel = 'Stage 1';
+                        } else if (status === 'IN_PROGRESS') {
+                            curStageKey = 'STARTED';
+                            curStageLabel = 'Started';
+                        } else if (status === 'ARRIVED') {
+                            curStageKey = 'REACHED_LOCATION';
+                            curStageLabel = 'Reached your location';
+                        }
+
+                        document.getElementById('workerStageCurrentLabel').innerHTML = `<i class="fa-solid fa-circle-dot fa-fade text-primary me-1"></i> ${curStageLabel}`;
+                        document.getElementById('workerStageCurrentStatusBadge').textContent = status;
+
+                        document.querySelectorAll('.worker-stage-btn').forEach(btn => {
+                            const isThis = btn.dataset.stage === curStageKey;
+                            btn.classList.toggle('active', isThis);
+                            btn.classList.toggle('border-primary', isThis);
+                        });
+
+                        document.getElementById('workerStageNotesInput').value = '';
+                        document.getElementById('workerLiveStageModal').style.display = 'flex';
+                    };
+
+                    window.closeWorkerLiveStageModal = function() {
+                        document.getElementById('workerLiveStageModal').style.display = 'none';
+                        activeWorkerStageReqId = null;
+                    };
+
+                    window.executeWorkerStageUpdate = async function(stageKey) {
+                        if (!activeWorkerStageReqId) return;
+                        const notesInput = document.getElementById('workerStageNotesInput');
+                        const customNotes = notesInput ? notesInput.value.trim() : '';
+
+                        try {
+                            const res = await fetch(`/api/maintenance/requests/${activeWorkerStageReqId}/stage`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    stage: stageKey,
+                                    notes: customNotes || `Technician updated stage to: ${stageKey}`
+                                })
+                            });
+
+                            if (!res.ok) throw new Error('Failed to update stage');
+                            const updated = await res.json();
+
+                            const idx = adminResidentCache.findIndex(r => r.id === activeWorkerStageReqId);
+                            if (idx !== -1) adminResidentCache[idx] = updated;
+
+                            if (typeof showToast === 'function') {
+                                showToast(`Technician updated stage to ${stageKey}! Resident live tracking updated in real-time.`);
+                            } else {
+                                alert(`Technician updated stage to ${stageKey}! Resident live tracking updated in real-time.`);
+                            }
+
+                            renderAdminResidentTable(adminResidentCache);
+
+                            if (stageKey === 'COMPLETED') {
+                                closeWorkerLiveStageModal();
+                            } else {
+                                openWorkerLiveStageModal(activeWorkerStageReqId);
+                            }
+                        } catch (err) {
+                            alert('Error updating stage: ' + err.message);
+                        }
+                    };
 
                     function openAdminAssignModal(id) {
                         const req = adminResidentCache.find(r => r.id === id);

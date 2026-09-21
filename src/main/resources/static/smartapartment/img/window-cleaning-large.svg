@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="glassBg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#0284c7" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#0369a1" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="blueGlove2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="50%" stop-color="#1d4ed8"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="squeegeeMetal2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#64748b"/>
+      <stop offset="50%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <linearGradient id="foamGrad2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="80%" stop-color="#f1f5f9"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Large Glass Pane -->
+  <rect width="400" height="400" fill="#e2e8f0"/>
+  <rect width="400" height="400" fill="url(#glassBg2)"/>
+
+  <!-- Large Window Panes Architecture -->
+  <rect x="0" y="0" width="400" height="400" fill="none" stroke="#ffffff" stroke-width="20"/>
+  <line x1="200" y1="0" x2="200" y2="400" stroke="#ffffff" stroke-width="8"/>
+
+  <!-- Foam / Lather across glass -->
+  <g fill="url(#foamGrad2)" opacity="0.88">
+    <ellipse cx="330" cy="160" rx="90" ry="150"/>
+    <ellipse cx="270" cy="310" rx="130" ry="90"/>
+    <circle cx="340" cy="70" r="50"/>
+    <circle cx="370" cy="280" r="60"/>
+    <circle cx="180" cy="330" r="45"/>
+    <circle cx="120" cy="350" r="35"/>
+    <circle cx="210" cy="180" r="8" fill="#ffffff"/>
+    <circle cx="230" cy="150" r="5" fill="#ffffff"/>
+    <circle cx="170" cy="240" r="6" fill="#ffffff"/>
+  </g>
+
+  <!-- Cleaned Streak-Free Path -->
+  <path d="M30 30 L 210 190 L 150 370 L 30 370 Z" fill="#38bdf8" fill-opacity="0.15"/>
+  <line x1="110" y1="50" x2="180" y2="170" stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Squeegee Tool & Arm -->
+  <g transform="translate(135, 55) rotate(32)">
+    <rect x="-75" y="0" width="150" height="9" rx="2" fill="#0f172a"/>
+    <rect x="-70" y="-10" width="140" height="10" rx="2" fill="url(#squeegeeMetal2)"/>
+    <path d="M-14 -10 L -7 -35 L 7 -35 L 14 -10 Z" fill="url(#squeegeeMetal2)"/>
+    <rect x="-11" y="-78" width="22" height="43" rx="5" fill="#1e293b"/>
+
+    <!-- Hand with Blue Rubber Glove -->
+    <g transform="translate(0, -72)">
+      <ellipse cx="0" cy="0" rx="23" ry="19" fill="url(#blueGlove2)"/>
+      <path d="M-17 -8 C -25 -16 -21 -31 -11 -25 Z" fill="url(#blueGlove2)"/>
+      <rect x="-9" y="-17" width="24" height="9" rx="4" fill="#2563eb"/>
+      <rect x="-9" y="-8" width="24" height="9" rx="4" fill="#1d4ed8"/>
+      <rect x="-9" y="1" width="24" height="9" rx="4" fill="#1e40af"/>
+      <path d="M-19 7 L -38 85 L 16 85 L 19 7 Z" fill="url(#blueGlove2)"/>
+    </g>
+  </g>
+
+  <!-- Sparkles -->
+  <path d="M80 85 L 90 85 M 85 80 L 85 90" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M125 210 L 135 210 M 130 205 L 130 215" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+</svg>

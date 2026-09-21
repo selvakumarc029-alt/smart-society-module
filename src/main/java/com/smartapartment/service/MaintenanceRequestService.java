@@ -468,7 +468,18 @@ public class MaintenanceRequestService {
         for (String c : VALID_CATEGORIES) {
             if (c.equalsIgnoreCase(trimmed)) return c;
         }
-        return trimmed;
+        String lower = trimmed.toLowerCase(Locale.ROOT);
+        if (lower.contains("clean") || lower.contains("housekeep")) return "Cleaning";
+        if (lower.contains("plumb") || lower.contains("water") || lower.contains("pipe") || lower.contains("drain")) return "Plumbing";
+        if (lower.contains("electr") || lower.contains("wiring") || lower.contains("light") || lower.contains("switch")) return "Electrical";
+        if (lower.contains("carpent") || lower.contains("wood") || lower.contains("door") || lower.contains("furniture") || lower.contains("drill") || lower.contains("repair")) return "Carpentry";
+        if (lower.contains("ac") || lower.contains("cooling") || lower.contains("hvac")) return "AC";
+        if (lower.contains("paint")) return "Painting";
+        if (lower.contains("appliance") || lower.contains("fridge") || lower.contains("geyser") || lower.contains("ro")) return "Appliance";
+        if (lower.contains("lift") || lower.contains("elevator")) return "Lift/Elevator";
+        if (lower.contains("civil") || lower.contains("mason")) return "Civil Work";
+        if (lower.contains("net") || lower.contains("wifi") || lower.contains("internet")) return "Internet/Network";
+        return "Other";
     }
 
     private boolean isResidentRole(AppUser user) {
@@ -477,5 +488,129 @@ public class MaintenanceRequestService {
 
     private boolean isSuperAdmin(AppUser user) {
         return user.getRole() == UserRole.SUPER_ADMIN;
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public MaintenanceRequestResponseDto updateStage(Long id, String stage, String notes, AppUser user) {
+        MaintenanceRequest request = requestRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Maintenance request not found with id: " + id));
+
+        String oldStatus = request.getRequestStatus();
+        String normalizedStage = stage != null ? stage.trim().toUpperCase(Locale.ROOT) : "ACCEPTED";
+        String newStatus;
+        String reason;
+
+        switch (normalizedStage) {
+            case "ACCEPTED" -> {
+                newStatus = "ASSIGNED";
+                reason = "Worker accepted and confirmed service booking.";
+            }
+            case "REACHED_LOCATION" -> {
+                newStatus = "ARRIVED";
+                reason = "Technician reached resident location / apartment unit.";
+            }
+            case "STARTED" -> {
+                newStatus = "IN_PROGRESS";
+                request.setActualStartTime(LocalDateTime.now());
+                reason = "Service initiated. Preliminary checks complete.";
+            }
+            case "STAGE_1" -> {
+                newStatus = "IN_PROGRESS";
+                reason = "Stage 1: Preliminary deep clean & surface prep underway.";
+            }
+            case "PROCESSING" -> {
+                newStatus = "IN_PROGRESS";
+                reason = "Active processing: Deep machine scrub & sanitization in progress.";
+            }
+            case "COMPLETED" -> {
+                newStatus = "COMPLETED";
+                request.setCompletedAt(LocalDateTime.now());
+                request.setActualEndTime(LocalDateTime.now());
+                reason = "Service completed and verified.";
+            }
+            default -> {
+                newStatus = normalizedStage;
+                reason = notes != null ? notes : "Stage updated to " + normalizedStage;
+            }
+        }
+
+        request.setRequestStatus(newStatus);
+        if (notes != null && !notes.isBlank()) {
+            request.setNotes(request.getNotes() != null ? request.getNotes() + "\n[" + normalizedStage + "] " + notes : "[" + normalizedStage + "] " + notes);
+        }
+        MaintenanceRequest updated = requestRepository.save(request);
+
+        MaintenanceStatusHistory history = new MaintenanceStatusHistory();
+        history.setRequestId(id);
+        history.setOldStatus(oldStatus);
+        history.setNewStatus(newStatus);
+        history.setChangedBy(user != null && user.getFullName() != null ? user.getFullName() : "Technician");
+        history.setReason(reason);
+        history.setCreatedAt(LocalDateTime.now());
+        historyRepository.save(history);
+
+        List<MaintenanceStatusHistory> historyList = historyRepository.findByRequestIdOrderByCreatedAtAsc(id);
+
+        try {
+            trackingService.broadcastEvent(com.smartapartment.dto.RealTimeTrackingDtos.TrackingEventDto.of(
+                    "STATUS_CHANGE",
+                    updated.getId(),
+                    updated.getRequestNumber(),
+                    updated.getRequestStatus(),
+                    updated.getTenantId(),
+                    updated.getAssignedWorkerId(),
+                    updated.getAssignedWorkerName(),
+                    updated.getResidentId(),
+                    reason,
+                    null
+            ));
+        } catch (Exception ignored) {}
+
+        return MaintenanceRequestResponseDto.from(updated, historyList);
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public MaintenanceRequestResponseDto submitReview(Long id, Integer rating, String review, String tags, AppUser user) {
+        MaintenanceRequest request = requestRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Maintenance request not found with id: " + id));
+
+        int validRating = (rating != null && rating >= 1 && rating <= 5) ? rating : 5;
+        String reviewText = (review != null && !review.isBlank()) ? review.trim() : "Satisfactory service.";
+        String tagsText = (tags != null && !tags.isBlank()) ? " | Tags: " + tags.trim() : "";
+
+        String reviewNote = String.format(Locale.ROOT, "Verified Resident Review: %d/5 Stars - \"%s\"%s", validRating, reviewText, tagsText);
+        request.setNotes(request.getNotes() != null ? request.getNotes() + "\n" + reviewNote : reviewNote);
+        request.setRequestStatus("CLOSED");
+        request.setClosedAt(LocalDateTime.now());
+
+        MaintenanceRequest updated = requestRepository.save(request);
+
+        MaintenanceStatusHistory history = new MaintenanceStatusHistory();
+        history.setRequestId(id);
+        history.setOldStatus("COMPLETED");
+        history.setNewStatus("CLOSED");
+        history.setChangedBy(user != null && user.getFullName() != null ? user.getFullName() : "Resident");
+        history.setReason("Resident submitted service rating & review (" + validRating + "★).");
+        history.setCreatedAt(LocalDateTime.now());
+        historyRepository.save(history);
+
+        List<MaintenanceStatusHistory> historyList = historyRepository.findByRequestIdOrderByCreatedAtAsc(id);
+
+        try {
+            trackingService.broadcastEvent(com.smartapartment.dto.RealTimeTrackingDtos.TrackingEventDto.of(
+                    "REQUEST_CLOSED",
+                    updated.getId(),
+                    updated.getRequestNumber(),
+                    updated.getRequestStatus(),
+                    updated.getTenantId(),
+                    updated.getAssignedWorkerId(),
+                    updated.getAssignedWorkerName(),
+                    updated.getResidentId(),
+                    reviewNote,
+                    null
+            ));
+        } catch (Exception ignored) {}
+
+        return MaintenanceRequestResponseDto.from(updated, historyList);
     }
 }

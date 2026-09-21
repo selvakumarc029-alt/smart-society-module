@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="mattressBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="60%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="quiltPattern" x1="0" y1="0" x2="0.2" y2="0.2">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="vacNozzle" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="vacHose" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#64748b"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#475569"/>
+    </linearGradient>
+    <filter id="mShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="6" stdDeviation="6" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Bedroom / Window Background -->
+  <rect width="400" height="400" fill="#f1f5f9"/>
+  <rect x="220" y="20" width="160" height="180" rx="4" fill="#e0f2fe" opacity="0.6"/>
+  <line x1="300" y1="20" x2="300" y2="200" stroke="#ffffff" stroke-width="4"/>
+  <line x1="220" y1="110" x2="380" y2="110" stroke="#ffffff" stroke-width="4"/>
+
+  <!-- Potted Plant on Window Sill -->
+  <g transform="translate(340, 160)">
+    <polygon points="4,35 7,20 23,20 26,35" fill="#ffffff"/>
+    <circle cx="15" cy="15" r="7" fill="#16a34a"/>
+    <circle cx="10" cy="9" r="5" fill="#22c55e"/>
+    <circle cx="20" cy="10" r="5" fill="#4ade80"/>
+  </g>
+
+  <!-- Quilted Tufted Mattress (Perspective Slab) -->
+  <path d="M0 160 L 400 130 L 400 400 L 0 400 Z" fill="url(#mattressBg)"/>
+
+  <!-- Mattress Tufting Buttons & Diamond Quilt Lines -->
+  <g stroke="#cbd5e1" stroke-width="1.5" fill="none">
+    <!-- Diamond Grid -->
+    <path d="M40 220 L 140 180 L 240 220 L 140 260 Z"/>
+    <path d="M140 260 L 240 220 L 340 260 L 240 300 Z"/>
+    <path d="M40 300 L 140 260 L 240 300 L 140 340 Z"/>
+    <path d="M140 340 L 240 300 L 340 340 L 240 380 Z"/>
+    <path d="M240 220 L 340 180 L 440 220 L 340 260 Z"/>
+    <path d="M-60 260 L 40 220 L 140 260 L 40 300 Z"/>
+  </g>
+
+  <!-- Tuft Dents (Circular Indentations) -->
+  <g fill="#94a3b8">
+    <ellipse cx="140" cy="180" rx="6" ry="3.5" opacity="0.6"/>
+    <ellipse cx="240" cy="220" rx="6.5" ry="4" opacity="0.6"/>
+    <ellipse cx="340" cy="180" rx="6" ry="3.5" opacity="0.6"/>
+    <ellipse cx="40" cy="220" rx="6" ry="3.5" opacity="0.6"/>
+    <ellipse cx="140" cy="260" rx="7" ry="4.5" opacity="0.6"/>
+    <ellipse cx="240" cy="300" rx="7.5" ry="5" opacity="0.6"/>
+    <ellipse cx="340" cy="260" rx="7" ry="4.5" opacity="0.6"/>
+    <ellipse cx="40" cy="300" rx="7" ry="4.5" opacity="0.6"/>
+    <ellipse cx="140" cy="340" rx="8" ry="5" opacity="0.6"/>
+    <ellipse cx="240" cy="380" rx="8.5" ry="5.5" opacity="0.6"/>
+  </g>
+
+  <!-- Vacuum Cleaner Hose & Handheld Extraction Nozzle -->
+  <g transform="translate(180, 100) rotate(28)">
+    <!-- Vacuum Hose Tube -->
+    <path d="M-10 -70 Q 15 -20 0 60" fill="none" stroke="url(#vacHose)" stroke-width="26" stroke-linecap="round"/>
+    <path d="M-10 -70 Q 15 -20 0 60" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="4 6"/>
+
+    <!-- Clear / Dark Plastic Extraction Nozzle -->
+    <path d="M-22 55 L 22 55 L 36 125 L -36 125 Z" fill="url(#vacNozzle)" filter="url(#mShadow)"/>
+    <!-- Transparent Window in Nozzle -->
+    <path d="M-14 68 L 14 68 L 24 112 L -24 112 Z" fill="#38bdf8" fill-opacity="0.35" stroke="#7dd3fc" stroke-width="1"/>
+
+    <!-- Rubber Squeegee Lip at Base -->
+    <rect x="-38" y="125" width="76" height="6" rx="2" fill="#0f172a"/>
+
+    <!-- Cleaning Technician Hand / Arm (Gloves) -->
+    <g transform="translate(0, 10)">
+      <ellipse cx="5" cy="0" rx="22" ry="18" fill="#f59e0b"/>
+      <rect x="-8" y="-12" width="22" height="24" rx="6" fill="#d97706"/>
+    </g>
+  </g>
+
+  <!-- Cleaned Foam & Moisture Gleam -->
+  <path d="M220 280 Q 280 260 320 300" stroke="#ffffff" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.75"/>
+  <circle cx="250" cy="275" r="3" fill="#ffffff"/>
+  <circle cx="290" cy="290" r="4" fill="#ffffff"/>
+</svg>

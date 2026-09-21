@@ -6,7 +6,8 @@ public enum WorkerShift {
     MORNING("Morning Shift", LocalTime.of(6, 0), LocalTime.of(14, 0)),
     EVENING("Evening Shift", LocalTime.of(14, 0), LocalTime.of(22, 0)),
     NIGHT("Night Shift", LocalTime.of(22, 0), LocalTime.of(6, 0)),
-    GENERAL("General Shift", LocalTime.of(9, 0), LocalTime.of(17, 0));
+    GENERAL("General Shift", LocalTime.of(9, 0), LocalTime.of(17, 0)),
+    ALL_DAY("All Day / 24x7", LocalTime.of(0, 0), LocalTime.of(23, 59, 59));
 
     private final String displayName;
     private final LocalTime startTime;
@@ -32,6 +33,7 @@ public enum WorkerShift {
 
     public boolean isWithinShift(LocalTime time) {
         if (time == null) return false;
+        if (this == ALL_DAY) return true;
         if (startTime.isBefore(endTime)) {
             return !time.isBefore(startTime) && time.isBefore(endTime);
         } else {
@@ -51,6 +53,7 @@ public enum WorkerShift {
         if (clean.contains("MORNING")) return MORNING;
         if (clean.contains("EVENING")) return EVENING;
         if (clean.contains("NIGHT")) return NIGHT;
+        if (clean.contains("ALL") || clean.contains("24") || clean.contains("FLEX")) return ALL_DAY;
         return GENERAL;
     }
 }

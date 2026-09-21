@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="leatherGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#785539"/>
+      <stop offset="50%" stop-color="#5a3d25"/>
+      <stop offset="100%" stop-color="#3d2716"/>
+    </linearGradient>
+    <linearGradient id="leatherHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a17551"/>
+      <stop offset="50%" stop-color="#785539"/>
+      <stop offset="100%" stop-color="#4a301c"/>
+    </linearGradient>
+    <linearGradient id="wallFloor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f1f5f9"/>
+      <stop offset="70%" stop-color="#e2e8f0"/>
+      <stop offset="70%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+    <filter id="reclinerShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Living Room Minimal Background -->
+  <rect width="400" height="400" fill="url(#wallFloor)"/>
+
+  <!-- Leather Recliner Armchair -->
+  <g transform="translate(110, 60)" filter="url(#reclinerShadow)">
+    <!-- Backrest (Upper Pillow Section) -->
+    <rect x="35" y="10" width="110" height="60" rx="16" fill="url(#leatherHighlight)"/>
+    <!-- Headrest Cushion Lines -->
+    <path d="M45 40 Q 90 48 135 40" stroke="#3d2716" stroke-width="2" fill="none" opacity="0.6"/>
+
+    <!-- Backrest (Lower Lumbar Section) -->
+    <rect x="32" y="65" width="116" height="75" rx="14" fill="url(#leatherGrad)"/>
+    <path d="M45 105 Q 90 115 135 105" stroke="#3d2716" stroke-width="2" fill="none" opacity="0.6"/>
+
+    <!-- Seat Cushion (Thick & Plump) -->
+    <rect x="30" y="135" width="120" height="65" rx="12" fill="url(#leatherHighlight)"/>
+    <ellipse cx="90" cy="165" rx="45" ry="15" fill="#a17551" opacity="0.3"/>
+
+    <!-- Left Padded Armrest (Pillowy Roll) -->
+    <g transform="translate(0, 85)">
+      <rect x="0" y="0" width="38" height="120" rx="18" fill="url(#leatherGrad)"/>
+      <ellipse cx="19" cy="20" rx="15" ry="10" fill="#a17551" opacity="0.5"/>
+      <line x1="6" y1="25" x2="6" y2="105" stroke="#3d2716" stroke-width="2" opacity="0.4"/>
+    </g>
+
+    <!-- Right Padded Armrest (Pillowy Roll) -->
+    <g transform="translate(142, 85)">
+      <rect x="0" y="0" width="38" height="120" rx="18" fill="url(#leatherGrad)"/>
+      <ellipse cx="19" cy="20" rx="15" ry="10" fill="#a17551" opacity="0.5"/>
+      <line x1="32" y1="25" x2="32" y2="105" stroke="#3d2716" stroke-width="2" opacity="0.4"/>
+    </g>
+
+    <!-- Lower Footrest / Base Section -->
+    <rect x="32" y="195" width="116" height="40" rx="10" fill="url(#leatherGrad)"/>
+    <line x1="35" y1="215" x2="145" y2="215" stroke="#3d2716" stroke-width="2" opacity="0.5"/>
+
+    <!-- Heavy Swivel / Glider Base (Black Metal) -->
+    <rect x="40" y="235" width="100" height="8" rx="4" fill="#1e293b"/>
+  </g>
+</svg>

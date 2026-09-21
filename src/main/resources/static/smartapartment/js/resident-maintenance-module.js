@@ -419,7 +419,10 @@
                             Created: <strong>${formatDateTime(req.createdAt)}</strong> &bull; Apartment: <strong>${esc(req.apartmentUnit)} (${esc(req.buildingName)})</strong>
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 flex-wrap">
+                        <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 fw-bold" onclick="window.openMaintenanceLiveTracking ? window.openMaintenanceLiveTracking(${req.id}, '${esc(req.requestNumber)}') : null">
+                            <i class="fa-solid fa-satellite-dish me-1"></i>Live Journey & Rating
+                        </button>
                         ${req.eligibleForCancellation ? `
                             <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-bold" onclick="window.ResidentMaintenance.cancelRequest(${req.id})">
                                 <i class="fa-solid fa-ban me-1"></i>Cancel Request

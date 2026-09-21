@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="60%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+    <linearGradient id="curtainGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#854d0e"/>
+      <stop offset="30%" stop-color="#ca8a04"/>
+      <stop offset="70%" stop-color="#a16207"/>
+      <stop offset="100%" stop-color="#713f12"/>
+    </linearGradient>
+    <linearGradient id="tileFloor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e2d8cd"/>
+      <stop offset="50%" stop-color="#d4c7b8"/>
+      <stop offset="100%" stop-color="#c5b6a5"/>
+    </linearGradient>
+    <linearGradient id="railingMet" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky / Daylight Outside -->
+  <rect width="400" height="250" fill="url(#skyB)"/>
+
+  <!-- Balcony Parapet Wall & Floor -->
+  <!-- Parapet Wall (White Stucco) -->
+  <rect x="0" y="115" width="400" height="135" fill="#f8fafc"/>
+  <line x1="0" y1="115" x2="400" y2="115" stroke="#cbd5e1" stroke-width="2"/>
+
+  <!-- Stainless Steel Glass Railing -->
+  <rect x="0" y="75" width="400" height="8" rx="2" fill="url(#railingMet)"/>
+  <!-- Railing Posts -->
+  <rect x="105" y="75" width="8" height="42" fill="url(#railingMet)"/>
+  <rect x="250" y="75" width="8" height="42" fill="url(#railingMet)"/>
+  <rect x="375" y="75" width="8" height="42" fill="url(#railingMet)"/>
+  <!-- Glass Infill -->
+  <rect x="113" y="83" width="137" height="32" fill="#38bdf8" fill-opacity="0.15" stroke="#7dd3fc" stroke-width="0.8"/>
+  <rect x="258" y="83" width="117" height="32" fill="#38bdf8" fill-opacity="0.15" stroke="#7dd3fc" stroke-width="0.8"/>
+
+  <!-- Balcony Floor (Perspective Tiles) -->
+  <path d="M0 250 L 400 250 L 400 400 L 0 400 Z" fill="url(#tileFloor)"/>
+  <!-- Tile Grid Lines -->
+  <line x1="120" y1="250" x2="70" y2="400" stroke="#b8a795" stroke-width="1.5"/>
+  <line x1="260" y1="250" x2="240" y2="400" stroke="#b8a795" stroke-width="1.5"/>
+  <line x1="0" y1="310" x2="400" y2="310" stroke="#b8a795" stroke-width="1.5"/>
+
+  <!-- Warm Golden Curtains on the Left Side -->
+  <g fill="url(#curtainGrad)">
+    <path d="M0 0 C 15 80 10 180 0 250 L 32 250 C 45 180 40 80 32 0 Z"/>
+    <path d="M28 0 C 42 80 38 180 28 250 L 62 250 C 72 180 68 80 62 0 Z"/>
+  </g>
+
+  <!-- Yellow Floor Wiper / Squeegee Standing on Balcony -->
+  <g transform="translate(180, 180)">
+    <!-- Wooden / Aluminum Long Handle -->
+    <line x1="90" y1="10" x2="5" y2="135" stroke="#d97706" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- Yellow Squeegee Wiper Blade -->
+    <g transform="translate(5, 135) rotate(-15)">
+      <!-- Wiper Body -->
+      <polygon points="-40,0 40,0 20,-18 -20,-18" fill="#eab308"/>
+      <!-- Rubber Blade Edge -->
+      <rect x="-44" y="0" width="88" height="4" rx="1.5" fill="#ca8a04"/>
+    </g>
+    <!-- Wiper Shadow on Floor -->
+    <ellipse cx="0" cy="142" rx="35" ry="5" fill="#000" opacity="0.18"/>
+  </g>
+</svg>

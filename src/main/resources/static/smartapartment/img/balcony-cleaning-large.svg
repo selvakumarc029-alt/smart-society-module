@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyB2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="60%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+    <linearGradient id="curtainGrad2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#854d0e"/>
+      <stop offset="30%" stop-color="#ca8a04"/>
+      <stop offset="70%" stop-color="#a16207"/>
+      <stop offset="100%" stop-color="#713f12"/>
+    </linearGradient>
+    <linearGradient id="tileFloor2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e2d8cd"/>
+      <stop offset="50%" stop-color="#d4c7b8"/>
+      <stop offset="100%" stop-color="#c5b6a5"/>
+    </linearGradient>
+    <linearGradient id="railingMet2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Outside -->
+  <rect width="400" height="230" fill="url(#skyB2)"/>
+
+  <!-- Parapet Wall (Deep perspective for wide balcony) -->
+  <rect x="0" y="105" width="400" height="125" fill="#f8fafc"/>
+  <line x1="0" y1="105" x2="400" y2="105" stroke="#cbd5e1" stroke-width="2"/>
+
+  <!-- Railing -->
+  <rect x="0" y="65" width="400" height="8" rx="2" fill="url(#railingMet2)"/>
+  <rect x="80" y="65" width="8" height="42" fill="url(#railingMet2)"/>
+  <rect x="200" y="65" width="8" height="42" fill="url(#railingMet2)"/>
+  <rect x="320" y="65" width="8" height="42" fill="url(#railingMet2)"/>
+  <rect x="88" y="73" width="112" height="32" fill="#38bdf8" fill-opacity="0.15" stroke="#7dd3fc" stroke-width="0.8"/>
+  <rect x="208" y="73" width="112" height="32" fill="#38bdf8" fill-opacity="0.15" stroke="#7dd3fc" stroke-width="0.8"/>
+
+  <!-- Wide Floor Tiles -->
+  <path d="M0 230 L 400 230 L 400 400 L 0 400 Z" fill="url(#tileFloor2)"/>
+  <line x1="90" y1="230" x2="40" y2="400" stroke="#b8a795" stroke-width="1.5"/>
+  <line x1="200" y1="230" x2="170" y2="400" stroke="#b8a795" stroke-width="1.5"/>
+  <line x1="310" y1="230" x2="300" y2="400" stroke="#b8a795" stroke-width="1.5"/>
+  <line x1="0" y1="290" x2="400" y2="290" stroke="#b8a795" stroke-width="1.5"/>
+  <line x1="0" y1="350" x2="400" y2="350" stroke="#b8a795" stroke-width="1.5"/>
+
+  <!-- Curtains Left -->
+  <g fill="url(#curtainGrad2)">
+    <path d="M0 0 C 15 80 10 180 0 230 L 30 230 C 42 180 38 80 30 0 Z"/>
+    <path d="M26 0 C 40 80 36 180 26 230 L 56 230 C 66 180 62 80 56 0 Z"/>
+  </g>
+
+  <!-- Yellow Wiper positioned in wide balcony -->
+  <g transform="translate(230, 160)">
+    <line x1="85" y1="10" x2="5" y2="145" stroke="#d97706" stroke-width="5" stroke-linecap="round"/>
+    <g transform="translate(5, 145) rotate(-15)">
+      <polygon points="-46,0 46,0 24,-20 -24,-20" fill="#eab308"/>
+      <rect x="-50" y="0" width="100" height="4.5" rx="1.5" fill="#ca8a04"/>
+    </g>
+    <ellipse cx="0" cy="152" rx="42" ry="6" fill="#000" opacity="0.18"/>
+  </g>
+</svg>

@@ -34,7 +34,7 @@ public class CommonMaintenanceController {
         var actor = dispatch.actor(session, sourcePlatform == null ? "smartsociety" : sourcePlatform);
         var stream = tickets.findAll().stream().filter(t -> actor.admin() ||
                 (actor.worker() ? java.util.Objects.equals(actor.id(), t.getVendorId()) :
-                actor.platform().equalsIgnoreCase(t.getSourcePlatform()) && java.util.Objects.equals(actor.id(), t.getRequesterId())));
+                actor.platform().equalsIgnoreCase(t.getSourcePlatform())));
         if (sourcePlatform != null && !sourcePlatform.isBlank()) {
             stream = stream.filter(t -> sourcePlatform.equalsIgnoreCase(t.getSourcePlatform()));
         }

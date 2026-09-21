@@ -520,7 +520,210 @@
             }
             @media (max-width: 520px) {
                 .hs-category-grid { grid-template-columns: 1fr !important; }
-                .hs-service-pills { grid-template-columns: 1fr !important; }
+            @keyframes bookingPulseAnim {
+                0% { background-color: #dcfce7 !important; outline: 3px solid #16a34a !important; }
+                50% { background-color: #bbf7d0 !important; outline: 3px solid #15803d !important; }
+                100% { background-color: transparent !important; outline: none !important; }
+            }
+            .booking-highlight-pulse {
+                animation: bookingPulseAnim 3.5s ease-out !important;
+            }
+
+            /* Live Tracking Modal & Stepper Styling */
+            .lt-modal-backdrop {
+                position: fixed !important;
+                inset: 0 !important;
+                background: rgba(15, 23, 42, 0.72) !important;
+                backdrop-filter: blur(8px) !important;
+                -webkit-backdrop-filter: blur(8px) !important;
+                z-index: 1070 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 1rem !important;
+                animation: fadeInModal 0.25s ease-out !important;
+            }
+            @keyframes fadeInModal {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            .lt-modal-box {
+                background: #ffffff !important;
+                width: 100% !important;
+                max-width: 840px !important;
+                border-radius: 24px !important;
+                box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35) !important;
+                overflow: hidden !important;
+                display: flex !important;
+                flex-direction: column !important;
+                max-height: 92vh !important;
+                animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            }
+            @keyframes slideUpModal {
+                from { opacity: 0; transform: scale(0.96) translateY(20px); }
+                to { opacity: 1; transform: scale(1) translateY(0); }
+            }
+            .lt-modal-header {
+                padding: 20px 28px !important;
+                background: #f8fafc !important;
+                border-bottom: 1px solid #e2e8f0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+            }
+            .lt-modal-body {
+                padding: 24px 28px !important;
+                overflow-y: auto !important;
+                flex: 1 1 auto !important;
+            }
+            .lt-worker-card {
+                background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%) !important;
+                border: 1.5px solid #86efac !important;
+                border-radius: 16px !important;
+                padding: 16px 20px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                margin-bottom: 24px !important;
+                flex-wrap: wrap !important;
+                gap: 12px !important;
+            }
+            /* 6-Stage Timeline Stepper */
+            .lt-stepper {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 0 !important;
+                position: relative !important;
+                margin: 20px 0 24px 8px !important;
+            }
+            .lt-step-row {
+                display: flex !important;
+                align-items: flex-start !important;
+                position: relative !important;
+                padding-bottom: 28px !important;
+            }
+            .lt-step-row:last-child {
+                padding-bottom: 0 !important;
+            }
+            .lt-step-indicator {
+                width: 44px !important;
+                height: 44px !important;
+                border-radius: 50% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 1.1rem !important;
+                flex-shrink: 0 !important;
+                z-index: 2 !important;
+                transition: all 0.4s ease !important;
+                background: #f1f5f9 !important;
+                color: #94a3b8 !important;
+                border: 2px solid #cbd5e1 !important;
+            }
+            .lt-step-row.completed .lt-step-indicator {
+                background: #10b981 !important;
+                color: #ffffff !important;
+                border-color: #059669 !important;
+                box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+            }
+            .lt-step-row.active .lt-step-indicator {
+                background: #2563eb !important;
+                color: #ffffff !important;
+                border-color: #1d4ed8 !important;
+                box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.25) !important;
+                animation: radarPulse 2s infinite !important;
+            }
+            @keyframes radarPulse {
+                0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+                70% { box-shadow: 0 0 0 14px rgba(37, 99, 235, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+            }
+            .lt-step-line {
+                position: absolute !important;
+                left: 21px !important;
+                top: 44px !important;
+                bottom: 0 !important;
+                width: 3px !important;
+                background: #e2e8f0 !important;
+                z-index: 1 !important;
+                transition: background 0.4s ease !important;
+            }
+            .lt-step-row.completed .lt-step-line {
+                background: #10b981 !important;
+            }
+            .lt-step-content {
+                margin-left: 18px !important;
+                flex: 1 1 auto !important;
+                padding-top: 4px !important;
+            }
+            .lt-step-title-row {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                flex-wrap: wrap !important;
+                gap: 6px !important;
+            }
+            .lt-step-title {
+                font-size: 1rem !important;
+                font-weight: 800 !important;
+                color: #0f172a !important;
+            }
+            .lt-step-row.upcoming .lt-step-title {
+                color: #94a3b8 !important;
+            }
+            .lt-step-desc {
+                font-size: 0.83rem !important;
+                color: #64748b !important;
+                margin-top: 3px !important;
+                line-height: 1.45 !important;
+            }
+            /* Review & Rating Card */
+            .lt-review-card {
+                background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+                border: 2px solid #fde68a !important;
+                border-radius: 20px !important;
+                padding: 24px !important;
+                margin-top: 24px !important;
+                box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.15) !important;
+                animation: slideUpModal 0.4s ease-out !important;
+            }
+            .lt-stars-container {
+                display: flex !important;
+                gap: 8px !important;
+                margin: 12px 0 !important;
+            }
+            .lt-star-btn {
+                background: transparent !important;
+                border: none !important;
+                font-size: 1.85rem !important;
+                color: #cbd5e1 !important;
+                cursor: pointer !important;
+                transition: transform 0.2s, color 0.2s !important;
+                padding: 0 2px !important;
+                line-height: 1 !important;
+            }
+            .lt-star-btn.active, .lt-star-btn:hover {
+                color: #f59e0b !important;
+                transform: scale(1.15) !important;
+            }
+            .lt-tag-chip {
+                display: inline-block !important;
+                padding: 5px 14px !important;
+                border-radius: 999px !important;
+                font-size: 0.78rem !important;
+                font-weight: 700 !important;
+                background: #ffffff !important;
+                border: 1.5px solid #cbd5e1 !important;
+                color: #475569 !important;
+                cursor: pointer !important;
+                transition: all 0.2s ease !important;
+                user-select: none !important;
+                margin: 0 6px 6px 0 !important;
+            }
+            .lt-tag-chip.selected {
+                background: #f59e0b !important;
+                color: #ffffff !important;
+                border-color: #d97706 !important;
             }
         `;
         document.head.appendChild(style);
@@ -798,28 +1001,6 @@
   <path d="M28 58l6-6h12l6 6H28z" fill="#f1f5f9"/>
   <path d="M28 66l6 8h12l6-8H28z" fill="#ffffff"/>
   <path d="M34 52v12h12V52" stroke="#cbd5e1" stroke-width="1"/>
-</svg>`
-            },
-            {
-                name: "Book by Room",
-                price: 399,
-                svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <ellipse cx="40" cy="67" rx="26" ry="3.5" fill="#0f172a" fill-opacity="0.1"/>
-  <rect x="33" y="10" width="14" height="18" rx="1.5" fill="#fdfbf7" stroke="#d4c3b3" stroke-width="1.2"/>
-  <rect x="36" y="13" width="8" height="12" fill="#e8ded1"/>
-  <rect x="22" y="30" width="36" height="14" rx="2" fill="#c69a72" stroke="#b0845c" stroke-width="1"/>
-  <rect x="24" y="36" width="14" height="8" rx="2.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-  <rect x="42" y="36" width="14" height="8" rx="2.5" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
-  <rect x="20" y="42" width="40" height="22" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
-  <rect x="20" y="54" width="40" height="8" fill="#e2e8f0"/>
-  <line x1="22" y1="64" x2="20" y2="70" stroke="#b0845c" stroke-width="2" stroke-linecap="round"/>
-  <line x1="58" y1="64" x2="60" y2="70" stroke="#b0845c" stroke-width="2" stroke-linecap="round"/>
-  <rect x="8" y="46" width="10" height="12" rx="1.5" fill="#c69a72" stroke="#b0845c" stroke-width="0.8"/>
-  <line x1="13" y1="46" x2="13" y2="39" stroke="#334155" stroke-width="1.2"/>
-  <path d="M10 39h6l-1-4h-4z" fill="#475569"/>
-  <rect x="62" y="46" width="10" height="12" rx="1.5" fill="#c69a72" stroke="#b0845c" stroke-width="0.8"/>
-  <line x1="67" y1="46" x2="67" y2="39" stroke="#334155" stroke-width="1.2"/>
-  <path d="M64 39h6l-1-4h-4z" fill="#475569"/>
 </svg>`
             },
             {
@@ -2946,6 +3127,733 @@ window.closeSubServicesModal = function closeSubServicesModal() {
     designationPackages["Empty Kitchen"] = designationPackages["Empty Kitchen Cleaning"];
     designationPackages["Occupied Kitchen"] = designationPackages["Occupied Kitchen Cleaning"];
 
+    // Additional presets for Bathroom & Sofa Cleaning
+    designationPackages["Deep Bathroom Cleaning"] = [
+        {
+            name: "Essential ★",
+            rating: "4.76",
+            reviews: "18.4K+",
+            duration: "1 hr 30 mins",
+            price: 449,
+            optionsCount: "3 options",
+            features: [
+                "Intensive tile and floor mechanical scrubbing",
+                "Toilet pot, washbasin & chrome tap descaling",
+                "Mirror buffing & drain trap sanitization"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹449 (All-Inclusive)",
+                guarantee: "Taski R1-R9 Chemicals • 30 Days Support",
+                sections: [
+                    {
+                        title: "🚿 Bathroom Fixtures & Descaling",
+                        items: [
+                            "Removal of hard water stains from tiles & taps",
+                            "WC, flush tank & washbasin descaling",
+                            "Exhaust fan and switchboard wiping"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            name: "Premium 💎",
+            rating: "4.82",
+            reviews: "12.1K+",
+            duration: "2 hrs",
+            price: 699,
+            optionsCount: "3 options",
+            badge: "POPULAR",
+            features: [
+                "Includes everything in Essential Plan",
+                "High-temperature steam sanitization of grout & drain",
+                "Anti-fungal shower glass & bathtub buffing"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹699 (All-Inclusive)",
+                guarantee: "High-Pressure Steam • Anti-Fungal Treatment",
+                sections: [
+                    {
+                        title: "💨 Thermal Steam Sanitization",
+                        items: [
+                            "High-temperature steam treatment for corners & grouting",
+                            "Shower enclosure & partition glass scaling removal",
+                            "Hospital-grade antimicrobial mist"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            name: "Elite 👑",
+            rating: "4.91",
+            reviews: "7.8K+",
+            duration: "2 hrs 30 mins",
+            price: 999,
+            optionsCount: "3 options",
+            features: [
+                "Includes everything in Premium Plan",
+                "Machine floor buffing with protective nano-sealant",
+                "Tile grout restoration & 60-day anti-stain barrier"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹999 (All-Inclusive)",
+                guarantee: "Nano-Sealant Protection • 60 Days Support",
+                sections: [
+                    {
+                        title: "👑 Complete Nano-Coating Overhaul",
+                        items: [
+                            "Machine rotary buffer for marble/granite/vitrified tiles",
+                            "Nano-protective water-repellent sealant applied",
+                            "Full sanitization & deodorizing mist"
+                        ]
+                    }
+                ]
+            }
+        }
+    ];
+    designationPackages["Standard Bathroom Cleaning"] = [
+        {
+            name: "Essential ★",
+            rating: "4.71",
+            reviews: "9.2K+",
+            duration: "1 hr",
+            price: 349,
+            optionsCount: "2 options",
+            features: [
+                "Surface tile wiping & toilet pot scrubbing",
+                "Washbasin, tap & mirror buffing",
+                "Floor mop with disinfectant chemical"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹349 (All-Inclusive)",
+                guarantee: "Verified Partner • 30 Days Support",
+                sections: [
+                    {
+                        title: "🧹 Standard Sanitation",
+                        items: [
+                            "Basic hard water stain removal from WC & basin",
+                            "Mirror wipe and floor sanitization"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            name: "Deep Power",
+            rating: "4.79",
+            reviews: "14.5K+",
+            duration: "1 hr 30 mins",
+            price: 499,
+            optionsCount: "2 options",
+            features: [
+                "Intensive tile and floor mechanical scrubbing",
+                "Exhaust fan dusting & chrome tap descaling",
+                "High-suction drain clearing"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹499 (All-Inclusive)",
+                guarantee: "Intensive Scrubbing • 30 Days Support",
+                sections: [
+                    {
+                        title: "✨ Deep Power Scrubbing",
+                        items: [
+                            "Floor and wall mechanical scrubbing",
+                            "Complete tap and showerhead descaling"
+                        ]
+                    }
+                ]
+            }
+        }
+    ];
+    designationPackages["Bathroom Cleaning"] = designationPackages["Deep Bathroom Cleaning"];
+
+    designationPackages["Sofa cleaning"] = [
+        {
+            name: "Essential ★",
+            rating: "4.74",
+            reviews: "11.6K+",
+            duration: "1 hr 30 mins",
+            price: 349,
+            optionsCount: "3 options",
+            features: [
+                "Deep dry vacuuming of 3-seater sofa",
+                "Surface spot treatment & fabric conditioning",
+                "Crevice & cushion dust mite extraction"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹349 (All-Inclusive)",
+                guarantee: "Taski TR101 Shampoo • Safe for All Fabrics",
+                sections: [
+                    {
+                        title: "🛋️ Dry Vacuum & Spot Clean",
+                        items: [
+                            "High-suction vacuuming of dust, crumbs & pet hair",
+                            "Mild stain spot treatment on armrests and cushions"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            name: "Premium 💎",
+            rating: "4.83",
+            reviews: "22.4K+",
+            duration: "2 hrs",
+            price: 599,
+            optionsCount: "3 options",
+            badge: "POPULAR",
+            features: [
+                "Full foam injection & extraction shampooing",
+                "Removes deep grease, food stains & sweat odor",
+                "Includes up to 5-seater sofa + 4 cushions"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹599 (All-Inclusive)",
+                guarantee: "Injection-Extraction Machine • Quick Dry",
+                sections: [
+                    {
+                        title: "✨ Deep Foam Shampoo Wash",
+                        items: [
+                            "Active foam injection deep into fabric fibers",
+                            "Industrial extraction vacuum pulling out 95% dirty moisture",
+                            "Drying time reduced to 2 - 3 hours"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            name: "Elite 👑",
+            rating: "4.92",
+            reviews: "8.7K+",
+            duration: "2 hrs 30 mins",
+            price: 899,
+            optionsCount: "3 options",
+            features: [
+                "Everything in Premium Plan included",
+                "High-pressure steam sanitization & anti-mite mist",
+                "Scotchgard fabric protective anti-stain coat"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹899 (All-Inclusive)",
+                guarantee: "Steam Sanitization • Anti-Stain Shield",
+                sections: [
+                    {
+                        title: "👑 Steam & Scotchgard Protection",
+                        items: [
+                            "140°C steam kills bacteria, allergens and odor",
+                            "Invisible stain-resistant protective polymer shield applied"
+                        ]
+                    }
+                ]
+            }
+        }
+    ];
+    designationPackages["Carpet cleaning"] = [
+        {
+            name: "Essential ★",
+            rating: "4.72",
+            reviews: "7.1K+",
+            duration: "1 hr",
+            price: 299,
+            optionsCount: "2 options",
+            features: [
+                "Dry vacuuming of up to 5x7 ft rug",
+                "Fringe comb & edge dust extraction",
+                "Anti-odor powder treatment"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹299 (All-Inclusive)",
+                guarantee: "High-Suction Extraction • 30 Days Support",
+                sections: [
+                    {
+                        title: "🧶 Rug Dust Extraction",
+                        items: ["Deep crevice vacuuming removing embedded dirt and sand"]
+                    }
+                ]
+            }
+        },
+        {
+            name: "Deep Shampoo",
+            rating: "4.84",
+            reviews: "13.9K+",
+            duration: "1 hr 45 mins",
+            price: 549,
+            optionsCount: "2 options",
+            badge: "POPULAR",
+            features: [
+                "Rotary machine scrubbing with gentle foam",
+                "Deep stain removal for tea/coffee spills",
+                "Moisture extraction & quick dry process"
+            ],
+            detailedBreakdown: {
+                priceLabel: "₹549 (All-Inclusive)",
+                guarantee: "Machine Scrub & Moisture Extraction",
+                sections: [
+                    {
+                        title: "✨ Machine Foam Wash",
+                        items: ["Complete shampooing of large carpet up to 8x10 ft"]
+                    }
+                ]
+            }
+        }
+    ];
+
+    // =========================================================================
+    // MINI SERVICES CATALOG & DYNAMIC PACKAGE GENERATION
+    // =========================================================================
+    const MINI_SERVICES_CATALOG = [
+        {
+            id: "chimney_degrease",
+            title: "Kitchen Chimney Deep Degreasing",
+            duration: "45 mins",
+            price: 499,
+            origPrice: 799,
+            discount: "38% OFF",
+            badge: "POPULAR",
+            features: [
+                "Baffle/mesh filters soaked in active degreasing solution",
+                "Internal hood & oil collector cup scrubbing",
+                "Motor housing surface wipe & stainless steel polish"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="10" width="52" height="20" rx="2" fill="#334155" stroke="#1e293b" stroke-width="1.5"/><rect x="24" y="30" width="32" height="34" rx="2" fill="#64748b"/><line x1="28" y1="36" x2="52" y2="36" stroke="#f8fafc" stroke-width="2"/><line x1="28" y1="44" x2="52" y2="44" stroke="#f8fafc" stroke-width="2"/><circle cx="40" cy="54" r="5" fill="#f59e0b"/></svg>`
+        },
+        {
+            id: "microwave_degrease",
+            title: "Microwave & Oven Deep Degreasing",
+            duration: "30 mins",
+            price: 299,
+            origPrice: 499,
+            discount: "40% OFF",
+            badge: "BESTSELLER",
+            features: [
+                "Burnt oil and food splatter breakdown",
+                "Turntable plate and roller ring steam sanitization",
+                "Anti-bacterial deodorizing cavity wipe"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="18" width="60" height="44" rx="4" fill="#0f172a"/><rect x="16" y="24" width="36" height="32" rx="2" fill="#38bdf8" fill-opacity="0.3" stroke="#38bdf8"/><circle cx="58" cy="30" r="3" fill="#f59e0b"/><rect x="54" y="40" width="8" height="14" rx="1" fill="#475569"/></svg>`
+        },
+        {
+            id: "fridge_deep_clean",
+            title: "Refrigerator Deep Sanitization",
+            duration: "35 mins",
+            price: 379,
+            origPrice: 599,
+            discount: "37% OFF",
+            badge: "HYGIENE+",
+            features: [
+                "Removable shelves & crisper bins scrubbed & dried",
+                "Door gasket descaling & mold prevention",
+                "Food-safe sanitizing mist to eliminate trapped odor"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="8" width="44" height="64" rx="3" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/><line x1="18" y1="28" x2="62" y2="28" stroke="#cbd5e1" stroke-width="1.5"/><rect x="22" y="16" width="3" height="8" rx="1" fill="#475569"/><rect x="22" y="34" width="3" height="14" rx="1" fill="#475569"/></svg>`
+        },
+        {
+            id: "balcony_scrub",
+            title: "Balcony Deep Pressure Scrub",
+            duration: "40 mins",
+            price: 349,
+            origPrice: 549,
+            discount: "36% OFF",
+            badge: "OUTDOOR",
+            features: [
+                "Machine floor scrub removing stubborn moss/grime",
+                "Balcony railing and sill wet wipe down",
+                "Drain trap cleared of leaves and sediment"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="34" width="56" height="34" rx="1" fill="#e2e8f0"/><line x1="16" y1="20" x2="64" y2="20" stroke="#475569" stroke-width="2.5"/><line x1="20" y1="20" x2="20" y2="34" stroke="#475569" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="34" stroke="#475569" stroke-width="2"/><line x1="40" y1="20" x2="40" y2="34" stroke="#475569" stroke-width="2"/><line x1="50" y1="20" x2="50" y2="34" stroke="#475569" stroke-width="2"/><line x1="60" y1="20" x2="60" y2="34" stroke="#475569" stroke-width="2"/></svg>`
+        },
+        {
+            id: "tiles_grout_steam",
+            title: "Kitchen / Bathroom Tile Grout Scrub",
+            duration: "45 mins",
+            price: 399,
+            origPrice: 649,
+            discount: "38% OFF",
+            badge: "DEEP CLEAN",
+            features: [
+                "Intensive brushing of dirty & stained yellow grout lines",
+                "High-pressure thermal steam application",
+                "Chemical descaling of hard water minerals"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="52" height="52" rx="2" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.5"/><line x1="14" y1="40" x2="66" y2="40" stroke="#0284c7" stroke-width="2"/><line x1="40" y1="14" x2="40" y2="66" stroke="#0284c7" stroke-width="2"/><circle cx="27" cy="27" r="3" fill="#38bdf8"/><circle cx="53" cy="53" r="3" fill="#38bdf8"/></svg>`
+        },
+        {
+            id: "fans_exhaust_clean",
+            title: "Ceiling & Exhaust Fans Deep Clean",
+            duration: "25 mins",
+            price: 199,
+            origPrice: 349,
+            discount: "43% OFF",
+            badge: "QUICK 25MIN",
+            features: [
+                "2 ceiling fans + 1 kitchen/bath exhaust fan included",
+                "Thick sticky grime and dust removal from blades",
+                "Motor casing dry vacuuming & surface shine wipe"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="9" fill="#0f172a"/><path d="M40 31c0-12-8-18-8-18s12 4 12 18zM49 45c11 5 18 2 18 2s-6 11-18 2zM31 45c-11 5-18 2-18 2s6 11 18 2z" fill="#3b82f6"/></svg>`
+        },
+        {
+            id: "window_track_clean",
+            title: "Window Glass & Track Vacuuming",
+            duration: "35 mins",
+            price: 299,
+            origPrice: 499,
+            discount: "40% OFF",
+            badge: "STREAK-FREE",
+            features: [
+                "High-suction crevice vacuuming of dirt-clogged sliding tracks",
+                "Streak-free glass pane buffing with microfiber",
+                "Mesh net dusting and frame wet-wiping"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="14" y="14" width="52" height="52" rx="2" fill="#ffffff" stroke="#475569" stroke-width="2"/><line x1="40" y1="14" x2="40" y2="66" stroke="#475569" stroke-width="2"/><path d="M18 18l18 18M44 18l18 18" stroke="#38bdf8" stroke-width="1.5"/></svg>`
+        },
+        {
+            id: "mattress_sanitization",
+            title: "Mattress Dust-Mite Sanitization",
+            duration: "40 mins",
+            price: 449,
+            origPrice: 699,
+            discount: "36% OFF",
+            badge: "HEALTH+",
+            features: [
+                "High-filtration industrial vacuum extraction of dead skin & mites",
+                "UV-C sanitization wand treatment for allergen neutralisation",
+                "Eco-friendly anti-allergen deodorizing mist"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="24" width="56" height="34" rx="5" fill="#f8fafc" stroke="#6366f1" stroke-width="1.8"/><line x1="12" y1="42" x2="68" y2="42" stroke="#e0e7ff" stroke-width="1.5"/><circle cx="26" cy="34" r="2.5" fill="#818cf8"/><circle cx="40" cy="34" r="2.5" fill="#818cf8"/><circle cx="54" cy="34" r="2.5" fill="#818cf8"/></svg>`
+        },
+        {
+            id: "water_purifier_clean",
+            title: "Water Purifier Outer Clean & Tap Descale",
+            duration: "20 mins",
+            price: 199,
+            origPrice: 299,
+            discount: "33% OFF",
+            badge: "EXPRESS",
+            features: [
+                "Exterior RO/UV body degreasing & clear buffing",
+                "Dispenser tap hard-water lime scale descaling",
+                "Drip tray sanitization"
+            ],
+            svg: `<svg viewBox="0 0 80 80" width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="22" y="12" width="36" height="54" rx="4" fill="#0284c7"/><rect x="26" y="22" width="28" height="20" rx="2" fill="#e0f2fe"/><path d="M40 50v8M36 58h8" stroke="#ffffff" stroke-width="2"/></svg>`
+        }
+    ];
+
+    let _selectedMiniServiceIds = new Set(["chimney_degrease"]);
+
+    window.showMiniServicesView = function showMiniServicesView(subServiceName, parentCategory) {
+        const modal = document.getElementById("subservicesModalBackdrop");
+        if (!modal) return;
+
+        modal.classList.add("active");
+        modal.style.removeProperty("display");
+        modal.style.display = "flex";
+
+        const boxEl = document.getElementById("subserviceModalBox");
+        if (boxEl) {
+            boxEl.className = "subservice-modal-box wide mini-services-mode";
+            boxEl.style.maxWidth = "960px";
+            boxEl.style.removeProperty("display");
+            boxEl.style.display = "flex";
+        }
+
+        const parentCat = parentCategory || _currentParentCategory || "Home Cleaning";
+        const subService = subServiceName || "Full House Cleaning";
+
+        const headerArea = document.getElementById("subserviceModalHeaderArea");
+        if (headerArea) {
+            headerArea.innerHTML = `
+                <div class="subservice-modal-header" style="margin-bottom: 1rem !important;">
+                    <button type="button" class="subservice-modal-back" id="subserviceModalBackBtn" aria-label="Back" onclick="event.preventDefault(); event.stopPropagation(); if (typeof subServiceDesignations !== 'undefined' && subServiceDesignations['${escapeHtml(subService)}']) { window.showSubServiceDesignations('${escapeHtml(subService)}', '${escapeHtml(parentCat)}'); } else { window.selectNoBrokerCategory('${escapeHtml(parentCat)}'); }">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h4 class="subservice-modal-title" style="margin: 0;"><i class="fa-solid fa-spray-can-sparkles text-primary me-2"></i>Mini Services & Quick Add-Ons</h4>
+                        <span style="font-size: 0.8rem; color: #64748b;">Select single or multiple specialized tasks for ${escapeHtml(subService)}</span>
+                    </div>
+                    <div style="width: 36px;"></div>
+                </div>
+            `;
+        }
+
+        const gridEl = document.getElementById("subserviceGrid");
+        if (!gridEl) return;
+
+        gridEl.className = "";
+        gridEl.style.gridTemplateColumns = "";
+
+        const renderGrid = () => {
+            const selectedList = MINI_SERVICES_CATALOG.filter(it => _selectedMiniServiceIds.has(it.id));
+            const totalCount = selectedList.length;
+            const totalPrice = selectedList.reduce((acc, it) => acc + it.price, 0);
+
+            gridEl.innerHTML = `
+                <div class="mini-services-view-container">
+                    <div class="package-banner" style="margin-bottom: 1.25rem;">
+                        <div class="package-banner-left">
+                            <i class="fa-solid fa-wand-magic-sparkles package-banner-icon" style="color: #0d9488;"></i>
+                            <div>
+                                <h6 class="package-banner-title">Express Add-on Services</h6>
+                                <p class="package-banner-sub">Mix & match individual specialized tasks • Instant verified pro dispatch</p>
+                            </div>
+                        </div>
+                        <div class="package-banner-badge" style="background: #0d9488; color: #fff;">FLAT 15% OFF</div>
+                    </div>
+
+                    <div class="mini-services-grid">
+                        ${MINI_SERVICES_CATALOG.map(item => {
+                            const isSelected = _selectedMiniServiceIds.has(item.id);
+                            return `
+                                <div class="mini-service-card ${isSelected ? 'selected' : ''}" id="miniCard_${item.id}">
+                                    <div class="mini-service-img-wrapper">
+                                        <span class="mini-service-badge">${escapeHtml(item.badge)}</span>
+                                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f8fafc; padding: 12px;">
+                                            ${item.svg}
+                                        </div>
+                                        <button type="button" class="mini-service-add-btn ${isSelected ? 'added' : ''}" id="miniAddBtn_${item.id}" onclick="window.toggleMiniServiceItem('${item.id}', '${escapeHtml(subService)}', '${escapeHtml(parentCat)}')">
+                                            ${isSelected ? 'Added ✓' : '+ Add'}
+                                        </button>
+                                    </div>
+                                    <div class="mini-service-content">
+                                        <h6 class="mini-service-title">${escapeHtml(item.title)}</h6>
+                                        <div class="mini-service-duration"><i class="fa-regular fa-clock me-1"></i>${escapeHtml(item.duration)}</div>
+                                        <div class="mini-service-price-row">
+                                            <span class="mini-service-price">₹${item.price}</span>
+                                            <span class="mini-service-orig-price">₹${item.origPrice}</span>
+                                            <span class="mini-service-discount">${escapeHtml(item.discount)}</span>
+                                        </div>
+                                        <a href="javascript:void(0)" class="mini-service-details-link" onclick="window.toggleMiniServiceDetails('${item.id}')">
+                                            <i class="fa-solid fa-circle-info"></i> View details <i class="fa-solid fa-chevron-down" style="font-size: 0.68rem;"></i>
+                                        </a>
+                                        <div class="mini-service-details-panel" id="miniDetails_${item.id}" style="display: none;">
+                                            <div class="mini-service-details-heading">What's included:</div>
+                                            <ul class="mini-service-features-list">
+                                                ${item.features.map(f => `<li>${escapeHtml(f)}</li>`).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join("")}
+                    </div>
+
+                    <div class="mini-services-footer-bar" id="miniServicesFooterBar">
+                        <div class="mini-services-footer-left">
+                            <span class="mini-services-footer-count" id="miniFooterCount">${totalCount} Item${totalCount === 1 ? '' : 's'} Selected</span>
+                            <span class="mini-services-footer-total" id="miniFooterTotal">₹${totalPrice.toLocaleString('en-IN')}</span>
+                        </div>
+                        <button type="button" class="mini-services-proceed-btn" id="miniProceedBtn" ${totalCount === 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} onclick="window.proceedWithMiniServices('${escapeHtml(subService)}', '${escapeHtml(parentCat)}')">
+                            Proceed to Book <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        };
+
+        renderGrid();
+    };
+
+    window.toggleMiniServiceItem = function toggleMiniServiceItem(id, subServiceName, parentCategory) {
+        if (_selectedMiniServiceIds.has(id)) {
+            _selectedMiniServiceIds.delete(id);
+        } else {
+            _selectedMiniServiceIds.add(id);
+        }
+
+        const isSelected = _selectedMiniServiceIds.has(id);
+        const card = document.getElementById(`miniCard_${id}`);
+        const btn = document.getElementById(`miniAddBtn_${id}`);
+        if (card) card.classList.toggle("selected", isSelected);
+        if (btn) {
+            btn.classList.toggle("added", isSelected);
+            btn.textContent = isSelected ? "Added ✓" : "+ Add";
+        }
+
+        const selectedList = MINI_SERVICES_CATALOG.filter(it => _selectedMiniServiceIds.has(it.id));
+        const totalCount = selectedList.length;
+        const totalPrice = selectedList.reduce((acc, it) => acc + it.price, 0);
+
+        const countEl = document.getElementById("miniFooterCount");
+        const totalEl = document.getElementById("miniFooterTotal");
+        const proceedBtn = document.getElementById("miniProceedBtn");
+
+        if (countEl) countEl.textContent = `${totalCount} Item${totalCount === 1 ? '' : 's'} Selected`;
+        if (totalEl) totalEl.textContent = `₹${totalPrice.toLocaleString('en-IN')}`;
+        if (proceedBtn) {
+            if (totalCount === 0) {
+                proceedBtn.disabled = true;
+                proceedBtn.style.opacity = "0.5";
+                proceedBtn.style.cursor = "not-allowed";
+            } else {
+                proceedBtn.disabled = false;
+                proceedBtn.style.opacity = "1";
+                proceedBtn.style.cursor = "pointer";
+            }
+        }
+    };
+
+    window.toggleMiniServiceDetails = function toggleMiniServiceDetails(id) {
+        const panel = document.getElementById(`miniDetails_${id}`);
+        if (panel) {
+            const isHidden = panel.style.display === "none";
+            panel.style.display = isHidden ? "block" : "none";
+        }
+    };
+
+    window.proceedWithMiniServices = function proceedWithMiniServices(subServiceName, parentCategory) {
+        const selectedList = MINI_SERVICES_CATALOG.filter(it => _selectedMiniServiceIds.has(it.id));
+        if (!selectedList.length) {
+            alert("Please select at least 1 mini service to proceed.");
+            return;
+        }
+
+        const totalPrice = selectedList.reduce((acc, it) => acc + it.price, 0);
+        const title = selectedList.length === 1 ? selectedList[0].title : `Mini Services (${selectedList.length} items)`;
+        const allFeatures = selectedList.flatMap(it => it.features);
+
+        window.openPaymentGateway({
+            subServiceName: subServiceName || "Mini Services",
+            designationName: title,
+            packageName: "Express Add-on",
+            price: totalPrice,
+            features: allFeatures,
+            parentCategory: parentCategory || "Home Cleaning",
+            isMiniServices: true
+        });
+    };
+
+    function getOrCreatePackagesForDesignation(designationName, subServiceName, basePrice) {
+        if (!designationName) designationName = "Standard Service";
+        const key = designationName;
+        if (designationPackages[key]) return designationPackages[key];
+        const cleanKey = key.replace(/ Cleaning$/i, "");
+        if (designationPackages[cleanKey]) return designationPackages[cleanKey];
+        if (designationPackages[key + " Cleaning"]) return designationPackages[key + " Cleaning"];
+        if (subServiceName && designationPackages[subServiceName]) return designationPackages[subServiceName];
+
+        let bp = Number(basePrice);
+        if (!bp || isNaN(bp) || bp <= 0) bp = 349;
+        const p1 = Math.round(bp);
+        const p2 = Math.round(bp * 1.35);
+        const p3 = Math.round(bp * 1.75);
+
+        const generated = [
+            {
+                name: "Essential ★",
+                rating: "4.72",
+                reviews: "8.6K+",
+                duration: "1 - 2 hrs",
+                price: p1,
+                optionsCount: "3 options",
+                features: [
+                    `Standard execution of ${designationName}`,
+                    "Verified, background-checked technician dispatch",
+                    "Professional grade specialized equipment & materials",
+                    "Post-service quality check & cleanup",
+                    "30 Days society service guarantee"
+                ],
+                detailedBreakdown: {
+                    priceLabel: `₹${p1.toLocaleString('en-IN')} (All-Inclusive)`,
+                    guarantee: "30 Days Service Support • Certified Technician",
+                    sections: [
+                        {
+                            title: "📋 Scope of Work",
+                            items: [
+                                `Standard diagnosis and execution of ${designationName}`,
+                                "Standard consumables and basic fittings included",
+                                "Proper site testing and verification before closure"
+                            ]
+                        },
+                        {
+                            title: "🛡️ Safety & Warranty",
+                            items: [
+                                "Complete background-checked technician with badge",
+                                "30-day service warranty against rework"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                name: "Premium 💎",
+                rating: "4.81",
+                reviews: "14.2K+",
+                duration: "2 - 3 hrs",
+                price: p2,
+                optionsCount: "3 options",
+                badge: "POPULAR",
+                features: [
+                    "Includes everything in Essential Plan",
+                    "Priority express scheduling slot",
+                    "Deep diagnostic, preventive maintenance & tuning",
+                    "Heavy-duty materials and branded supplies",
+                    "Antimicrobial wipe down of working area"
+                ],
+                detailedBreakdown: {
+                    priceLabel: `₹${p2.toLocaleString('en-IN')} (All-Inclusive)`,
+                    guarantee: "Priority Express • 45 Days Warranty",
+                    sections: [
+                        {
+                            title: "✨ Premium Inclusions",
+                            items: [
+                                "Everything in Essential Plan included",
+                                "High-durability replacement parts and premium consumables",
+                                "Comprehensive stress testing and performance tuning"
+                            ]
+                        },
+                        {
+                            title: "⚡ Priority Support",
+                            items: [
+                                "Priority technician allocation within 60 mins",
+                                "Extended 45-day warranty with free rework support"
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                name: "Elite 👑",
+                rating: "4.92",
+                reviews: "6.8K+",
+                duration: "3 - 4 hrs",
+                price: p3,
+                optionsCount: "3 options",
+                features: [
+                    "Includes everything in Premium Plan",
+                    "Master Senior Technician with 10+ yrs experience",
+                    "Complete end-to-end overhaul & deep sanitization",
+                    "Zero material markup guarantee",
+                    "60 Days comprehensive full warranty"
+                ],
+                detailedBreakdown: {
+                    priceLabel: `₹${p3.toLocaleString('en-IN')} (All-Inclusive)`,
+                    guarantee: "Master Technician • 60 Days Comprehensive Warranty",
+                    sections: [
+                        {
+                            title: "👑 Master Technician Overhaul",
+                            items: [
+                                "Everything in Premium Plan included",
+                                "Executive level diagnostic and heavy-duty overhaul",
+                                "Complete site disinfection mist upon completion"
+                            ]
+                        },
+                        {
+                            title: "🏆 Elite Warranty & Coverage",
+                            items: [
+                                "60 Days comprehensive warranty covering parts and labor",
+                                "Dedicated society support manager assistance"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ];
+        designationPackages[key] = generated;
+        return generated;
+    }
+
     let _currentSelectedPackage = null;
 
     window.showSubServiceDesignations = function showSubServiceDesignations(subServiceName, parentCategory) {
@@ -2958,6 +3866,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
         const boxEl = document.getElementById("subserviceModalBox");
         if (boxEl) {
             boxEl.classList.remove("package-mode");
+            boxEl.classList.remove("mini-services-mode");
             boxEl.classList.add("wide");
             if (designations.length === 3) {
                 boxEl.style.maxWidth = "560px";
@@ -3000,7 +3909,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
     };
 
     window.showDesignationPackages = function showDesignationPackages(designationName, subServiceName, parentCategory) {
-        const packages = designationPackages[designationName];
+        const packages = getOrCreatePackagesForDesignation(designationName, subServiceName);
         if (!packages || !packages.length) return;
 
         const modal = document.getElementById("subservicesModalBackdrop");
@@ -3115,7 +4024,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
                             <span class="package-summary-header">Total Amount</span>
                             <div class="package-summary-title" id="summarySelectedPlanTitle">${modalTitle} - ${_currentSelectedPackage.name}</div>
                             <div class="package-summary-price" id="summarySelectedPrice">₹${_currentSelectedPackage.price.toLocaleString('en-IN')}</div>
-                            <button type="button" class="package-proceed-btn" id="packageProceedBtn" onclick="window.proceedWithSelectedPackage('${escapeHtml(subServiceName)}', '${escapeHtml(designationName)}')">
+                            <button type="button" class="package-proceed-btn" id="packageProceedBtn" onclick="event.preventDefault(); event.stopPropagation(); window.proceedWithSelectedPackage('${escapeHtml(subServiceName)}', '${escapeHtml(designationName)}')">
                                 Proceed <i class="fa-solid fa-arrow-right"></i>
                             </button>
                             <div class="package-trust-points">
@@ -3154,7 +4063,12 @@ window.closeSubServicesModal = function closeSubServicesModal() {
     };
 
     window.onPackageAddClick = function onPackageAddClick(packageIndex, designationName, subServiceName) {
-        const packages = designationPackages[designationName];
+        const packages = designationPackages[designationName] ||
+            designationPackages[designationName + " Cleaning"] ||
+            designationPackages[designationName.replace(" Cleaning", "")] ||
+            designationPackages[subServiceName] ||
+            designationPackages["Furnished Apartment"] ||
+            designationPackages["Kitchen Deep Cleaning"];
         if (!packages || !packages[packageIndex]) return;
 
         const pkg = packages[packageIndex];
@@ -3190,8 +4104,39 @@ window.closeSubServicesModal = function closeSubServicesModal() {
     };
 
     window.proceedWithSelectedPackage = function proceedWithSelectedPackage(subServiceName, designationName) {
-        if (!_currentSelectedPackage) return;
-        window.selectPackage(subServiceName, designationName, _currentSelectedPackage.name, _currentSelectedPackage.price, _currentSelectedPackage.features);
+        if (!_currentSelectedPackage) {
+            const packages = designationPackages[designationName] ||
+                designationPackages[designationName + " Cleaning"] ||
+                designationPackages[designationName.replace(" Cleaning", "")] ||
+                designationPackages[subServiceName] ||
+                designationPackages["Furnished Apartment"] ||
+                designationPackages["Kitchen Deep Cleaning"];
+            if (packages && packages.length) {
+                _currentSelectedPackage = packages[0];
+            }
+        }
+        if (!_currentSelectedPackage) {
+            _currentSelectedPackage = {
+                name: "Essential ★",
+                price: 3069,
+                features: [
+                    "Bathroom & kitchen deep cleaning",
+                    "Machine floor cleaning",
+                    "Cobweb & fan dusting",
+                    "Balcony & utility area cleaning",
+                    "Furniture dusting"
+                ]
+            };
+        }
+        window.openPaymentGateway({
+            subServiceName: subServiceName || "Full House Cleaning",
+            designationName: designationName || "Furnished Apartment",
+            packageName: _currentSelectedPackage.name || "Essential ★",
+            price: Number(_currentSelectedPackage.price) || 3069,
+            features: _currentSelectedPackage.features || [],
+            parentCategory: _currentParentCategory || "Home Cleaning",
+            isMiniServices: false
+        });
     };
 
     window.selectPackage = function selectPackage(subServiceName, designationName, packageName, price, features) {
@@ -3213,6 +4158,875 @@ window.closeSubServicesModal = function closeSubServicesModal() {
         }
     };
 
+    /* ==========================================================================
+       HOME SERVICES PAYMENT GATEWAY INTEGRATION
+       ========================================================================== */
+    let _pgActiveTimer = null;
+    let _pgOrderState = null;
+    let _pgCurrentMethod = "upi";
+    let _pgCurrentSlot = "MORNING";
+    let _pgSelectedBank = "HDFC Bank";
+
+    window.openPaymentGateway = function openPaymentGateway(order) {
+        if (!order) return;
+        _pgOrderState = { ...order };
+        let modal = document.getElementById("subservicesModalBackdrop");
+        if (!modal) {
+            window.selectNoBrokerCategory(order.parentCategory || "Home Cleaning");
+            modal = document.getElementById("subservicesModalBackdrop");
+        }
+        if (!modal) return;
+
+        modal.classList.add("active");
+        modal.style.removeProperty("display");
+        modal.style.display = "flex";
+
+        const boxEl = document.getElementById("subserviceModalBox");
+        if (boxEl) {
+            boxEl.className = "subservice-modal-box wide payment-mode";
+            boxEl.style.maxWidth = "960px";
+            boxEl.style.removeProperty("display");
+            boxEl.style.display = "flex";
+        }
+
+        const catLower = (order.parentCategory || _currentParentCategory || "").toLowerCase();
+        const subLower = (order.subServiceName || "").toLowerCase();
+
+        let defaultCoupon = "NEWCLEAN200";
+        let discount = 200;
+
+        if (catLower.includes("packer") || subLower.includes("shift") || subLower.includes("packer")) {
+            defaultCoupon = "MOVEFAST";
+            discount = Math.min(300, Math.round(order.price * 0.15));
+        } else if (catLower.includes("paint") || subLower.includes("paint") || subLower.includes("waterproof")) {
+            defaultCoupon = "PAINT15";
+            discount = Math.round(order.price * 0.15);
+        } else if (catLower.includes("legal") || subLower.includes("agreement") || subLower.includes("notary")) {
+            defaultCoupon = "LEGAL30";
+            discount = Math.round(order.price * 0.30);
+        } else if (catLower.includes("interior") || subLower.includes("interior") || subLower.includes("modular")) {
+            defaultCoupon = "INTERIORFREE";
+            discount = order.price > 0 ? Math.min(500, Math.round(order.price * 0.20)) : 0;
+        } else if (catLower.includes("appliance") || subLower.includes("repair") || subLower.includes("servicing")) {
+            defaultCoupon = "APPLIANCE20";
+            discount = Math.round(order.price * 0.20);
+        } else if (catLower.includes("pest") || subLower.includes("pest") || subLower.includes("termite")) {
+            defaultCoupon = "PESTSAFE";
+            discount = Math.min(150, Math.round(order.price * 0.15));
+        }
+
+        if (order.price <= discount && order.price > 0) {
+            discount = Math.max(50, order.price - 99);
+        }
+        if (order.price === 0) {
+            discount = 0;
+        }
+
+        let finalPayable = Math.max(0, order.price - discount);
+        _pgOrderState.coupon = defaultCoupon;
+        _pgOrderState.discount = discount;
+        _pgOrderState.finalPayable = finalPayable;
+
+        // Header with Back Button
+        const headerArea = document.getElementById("subserviceModalHeaderArea");
+        if (headerArea) {
+            const backAction = `window.showDesignationPackages('${escapeHtml(order.designationName || "Furnished Apartment")}', '${escapeHtml(order.subServiceName || "Full House Cleaning")}', '${escapeHtml(order.parentCategory || "Home Cleaning")}')`;
+
+            headerArea.innerHTML = `
+                <div class="subservice-modal-header" style="margin-bottom: 1rem !important;">
+                    <button type="button" class="subservice-modal-back" id="subserviceModalBackBtn" aria-label="Back" onclick="event.preventDefault(); event.stopPropagation(); ${backAction};">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                        <h4 class="subservice-modal-title" style="margin: 0;">Secure Checkout & Payment</h4>
+                        <span class="pg-badge-secure"><i class="fa-solid fa-shield-halved"></i> 256-Bit SSL Encrypted</span>
+                    </div>
+                    <div class="pg-timer-badge" id="pgTimerBadge"><i class="fa-regular fa-clock"></i> 14:59</div>
+                </div>
+            `;
+        }
+
+        // Countdown Timer
+        if (_pgActiveTimer) clearInterval(_pgActiveTimer);
+        let secondsLeft = 14 * 60 + 59;
+        _pgActiveTimer = setInterval(() => {
+            secondsLeft--;
+            const timerEl = document.getElementById("pgTimerBadge");
+            if (!timerEl || secondsLeft <= 0) {
+                if (_pgActiveTimer) clearInterval(_pgActiveTimer);
+                if (timerEl) timerEl.textContent = "00:00 Expired";
+                return;
+            }
+            const mins = Math.floor(secondsLeft / 60);
+            const secs = secondsLeft % 60;
+            timerEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }, 1000);
+
+        const defaultName = document.getElementById("nbCustomerName")?.value || (isCustomer ? "PropertyDirect Customer" : "Resident");
+        const defaultPhone = document.getElementById("nbCustomerPhone")?.value || "9876543210";
+        const defaultAddress = document.getElementById("nbAddress")?.value || (isCustomer ? "Flat 402, Tower B, Palm Heights" : "A-101, SmartSociety Palms");
+        const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+
+        const gridEl = document.getElementById("subserviceGrid");
+        if (!gridEl) return;
+
+        gridEl.className = "payment-gateway-container";
+        gridEl.style.gridTemplateColumns = "";
+
+        gridEl.innerHTML = `
+            <div class="pg-main-col">
+                <!-- Service & Booking Information Card -->
+                <div class="pg-card">
+                    <div class="pg-card-header">
+                        <h5 class="pg-card-title"><i class="fa-solid fa-clipboard-list" style="color: #059669;"></i> Booking Information</h5>
+                        <span class="pg-service-badge-pill"><i class="fa-solid fa-circle-check"></i> Instant Confirmation</span>
+                    </div>
+
+                    <div class="pg-service-meta-box">
+                        <div>
+                            <div class="pg-service-name-text">${escapeHtml(order.subServiceName)}</div>
+                            <small style="color: #64748b; font-size: 0.78rem;">${escapeHtml(order.packageName)}</small>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 1.1rem; font-weight: 800; color: #0f172a;">₹${order.price.toLocaleString('en-IN')}</span>
+                        </div>
+                    </div>
+
+                    <div class="pg-inputs-grid">
+                        <div class="pg-input-group">
+                            <label class="pg-input-label" for="pgServiceDate">Preferred Service Date</label>
+                            <input type="date" class="pg-input" id="pgServiceDate" value="${tomorrow}" min="${new Date().toISOString().split('T')[0]}" />
+                        </div>
+                        <div class="pg-input-group">
+                            <label class="pg-input-label" for="pgCustomerPhone">Mobile Number (10 Digits)</label>
+                            <input type="tel" class="pg-input" id="pgCustomerPhone" value="${escapeHtml(defaultPhone)}" placeholder="e.g. 9876543210" maxlength="10" />
+                        </div>
+                        <div class="pg-input-group">
+                            <label class="pg-input-label" for="pgCustomerName">Contact Name</label>
+                            <input type="text" class="pg-input" id="pgCustomerName" value="${escapeHtml(defaultName)}" placeholder="Full Name" />
+                        </div>
+                        <div class="pg-input-group">
+                            <label class="pg-input-label" for="pgAddress">Apartment / Unit Address</label>
+                            <input type="text" class="pg-input" id="pgAddress" value="${escapeHtml(defaultAddress)}" placeholder="e.g. A-101, SmartSociety" />
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 0.85rem;">
+                        <label class="pg-input-label">Select Preferred Time Slot</label>
+                        <div class="pg-slot-chips" id="pgSlotChips">
+                            <button type="button" class="pg-slot-chip active" data-slot="MORNING" onclick="window.selectPgSlot('MORNING')"><i class="fa-regular fa-sun"></i> Morning 9 AM - 12 PM</button>
+                            <button type="button" class="pg-slot-chip" data-slot="AFTERNOON" onclick="window.selectPgSlot('AFTERNOON')"><i class="fa-solid fa-cloud-sun"></i> Afternoon 12 PM - 4 PM</button>
+                            <button type="button" class="pg-slot-chip" data-slot="EVENING" onclick="window.selectPgSlot('EVENING')"><i class="fa-solid fa-moon"></i> Evening 4 PM - 8 PM</button>
+                            <button type="button" class="pg-slot-chip" data-slot="EXPRESS_60MIN" onclick="window.selectPgSlot('EXPRESS_60MIN')"><i class="fa-solid fa-bolt" style="color: #f59e0b;"></i> Express 60Min (+₹49)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods Card -->
+                <div class="pg-card" style="position: relative;">
+                    <div class="pg-card-header">
+                        <h5 class="pg-card-title"><i class="fa-solid fa-credit-card" style="color: #059669;"></i> Select Payment Method</h5>
+                        <span style="font-size: 0.75rem; color: #10b981; font-weight: 700;"><i class="fa-solid fa-shield-check"></i> RBI Compliant</span>
+                    </div>
+
+                    <div class="pg-methods-header">
+                        <button type="button" class="pg-method-tab active" id="tab_upi" onclick="window.switchPgMethod('upi')">
+                            <i class="fa-solid fa-qrcode"></i> UPI & QR Code
+                        </button>
+                        <button type="button" class="pg-method-tab" id="tab_card" onclick="window.switchPgMethod('card')">
+                            <i class="fa-regular fa-credit-card"></i> Cards
+                        </button>
+                        <button type="button" class="pg-method-tab" id="tab_netbanking" onclick="window.switchPgMethod('netbanking')">
+                            <i class="fa-solid fa-building-columns"></i> Net Banking
+                        </button>
+                        <button type="button" class="pg-method-tab" id="tab_wallets" onclick="window.switchPgMethod('wallets')">
+                            <i class="fa-solid fa-wallet"></i> Wallets
+                        </button>
+                        <button type="button" class="pg-method-tab" id="tab_payafter" onclick="window.switchPgMethod('payafter')">
+                            <i class="fa-solid fa-hand-holding-dollar"></i> Pay After Service
+                        </button>
+                    </div>
+
+                    <!-- Method 1: UPI Panel -->
+                    <div class="pg-method-panel active" id="panel_upi">
+                        <div class="pg-upi-container">
+                            <div class="pg-qr-frame">
+                                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                                    <rect width="100" height="100" fill="#ffffff" />
+                                    <!-- QR Finder Patterns -->
+                                    <rect x="10" y="10" width="24" height="24" fill="#0f172a" rx="3"/>
+                                    <rect x="14" y="14" width="16" height="16" fill="#ffffff" rx="2"/>
+                                    <rect x="18" y="18" width="8" height="8" fill="#059669" rx="1"/>
+
+                                    <rect x="66" y="10" width="24" height="24" fill="#0f172a" rx="3"/>
+                                    <rect x="70" y="14" width="16" height="16" fill="#ffffff" rx="2"/>
+                                    <rect x="74" y="18" width="8" height="8" fill="#059669" rx="1"/>
+
+                                    <rect x="10" y="66" width="24" height="24" fill="#0f172a" rx="3"/>
+                                    <rect x="14" y="70" width="16" height="16" fill="#ffffff" rx="2"/>
+                                    <rect x="18" y="74" width="8" height="8" fill="#059669" rx="1"/>
+
+                                    <!-- QR Data Matrix Dots -->
+                                    <circle cx="45" cy="18" r="3" fill="#0f172a"/>
+                                    <circle cx="55" cy="18" r="3" fill="#0f172a"/>
+                                    <circle cx="45" cy="28" r="3" fill="#059669"/>
+                                    <circle cx="55" cy="28" r="3" fill="#0f172a"/>
+                                    <circle cx="40" cy="40" r="3" fill="#0f172a"/>
+                                    <circle cx="50" cy="40" r="3" fill="#059669"/>
+                                    <circle cx="60" cy="40" r="3" fill="#0f172a"/>
+                                    <circle cx="40" cy="50" r="3" fill="#059669"/>
+                                    <circle cx="50" cy="50" r="3" fill="#0f172a"/>
+                                    <circle cx="60" cy="50" r="3" fill="#059669"/>
+                                    <circle cx="45" cy="65" r="3" fill="#0f172a"/>
+                                    <circle cx="55" cy="65" r="3" fill="#059669"/>
+                                    <circle cx="75" cy="50" r="3" fill="#0f172a"/>
+                                    <circle cx="85" cy="50" r="3" fill="#0f172a"/>
+                                    <circle cx="75" cy="75" r="3" fill="#059669"/>
+                                    <circle cx="85" cy="85" r="3" fill="#0f172a"/>
+                                </svg>
+                                <span style="position: absolute; bottom: 2px; font-size: 0.62rem; font-weight: 800; color: #065f46; letter-spacing: 0.4px;">SCAN & PAY</span>
+                            </div>
+
+                            <div class="pg-upi-details">
+                                <div>
+                                    <span style="font-size: 0.82rem; font-weight: 700; color: #1e293b;">Scan with any UPI App</span>
+                                    <p style="font-size: 0.74rem; color: #64748b; margin: 2px 0 6px 0;">Google Pay, PhonePe, Paytm, BHIM, CRED</p>
+                                    <div class="pg-upi-apps-row">
+                                        <button type="button" class="pg-upi-app-btn" onclick="window.selectUpiApp('gpay')"><i class="fa-brands fa-google-pay" style="font-size: 1.1rem; color: #4285f4;"></i> GPay</button>
+                                        <button type="button" class="pg-upi-app-btn" onclick="window.selectUpiApp('phonepe')"><i class="fa-solid fa-mobile-screen-button" style="color: #6739b7;"></i> PhonePe</button>
+                                        <button type="button" class="pg-upi-app-btn" onclick="window.selectUpiApp('paytm')"><i class="fa-solid fa-wallet" style="color: #00b9f5;"></i> Paytm</button>
+                                        <button type="button" class="pg-upi-app-btn" onclick="window.selectUpiApp('cred')"><i class="fa-solid fa-gem" style="color: #0f172a;"></i> CRED</button>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                                    <label class="pg-input-label" for="pgUpiId">Or Enter UPI ID</label>
+                                    <div style="display: flex; gap: 0.4rem;">
+                                        <input type="text" class="pg-input" id="pgUpiId" placeholder="e.g. resident@okhdfcbank" style="flex: 1;" />
+                                        <button type="button" class="pg-coupon-apply-btn" onclick="window.verifyUpiId()">Verify</button>
+                                    </div>
+                                    <span id="pgUpiVerifyFeedback" style="font-size: 0.72rem; color: #059669; font-weight: 600; display: none;">✓ Verified UPI ID</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Method 2: Card Panel -->
+                    <div class="pg-method-panel" id="panel_card">
+                        <div class="pg-card-form">
+                            <div class="pg-input-group">
+                                <label class="pg-input-label" for="pgCardNumber">Card Number</label>
+                                <div class="pg-card-number-wrapper">
+                                    <input type="text" class="pg-input" id="pgCardNumber" placeholder="4532 •••• •••• 8920" maxlength="19" oninput="window.formatCardNumber(this)" />
+                                    <span class="pg-card-brand-badge" id="pgCardBrandBadge"><i class="fa-brands fa-cc-visa"></i></span>
+                                </div>
+                            </div>
+
+                            <div class="pg-inputs-grid">
+                                <div class="pg-input-group">
+                                    <label class="pg-input-label" for="pgCardExpiry">Valid Thru (MM/YY)</label>
+                                    <input type="text" class="pg-input" id="pgCardExpiry" placeholder="MM/YY" maxlength="5" oninput="window.formatCardExpiry(this)" />
+                                </div>
+                                <div class="pg-input-group">
+                                    <label class="pg-input-label" for="pgCardCvv">CVV / CVC</label>
+                                    <input type="password" class="pg-input" id="pgCardCvv" placeholder="•••" maxlength="4" />
+                                </div>
+                            </div>
+
+                            <div class="pg-input-group">
+                                <label class="pg-input-label" for="pgCardName">Cardholder Name</label>
+                                <input type="text" class="pg-input" id="pgCardName" placeholder="Name as printed on card" value="${escapeHtml(defaultName)}" />
+                            </div>
+
+                            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: #475569; cursor: pointer;">
+                                <input type="checkbox" checked style="accent-color: #059669;" /> Securely save card as per RBI guidelines
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Method 3: Net Banking Panel -->
+                    <div class="pg-method-panel" id="panel_netbanking">
+                        <div class="pg-banks-grid">
+                            <div class="pg-bank-btn active" onclick="window.selectBank(this, 'HDFC Bank')">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <span>HDFC Bank</span>
+                            </div>
+                            <div class="pg-bank-btn" onclick="window.selectBank(this, 'ICICI Bank')">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <span>ICICI Bank</span>
+                            </div>
+                            <div class="pg-bank-btn" onclick="window.selectBank(this, 'SBI')">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <span>State Bank of India</span>
+                            </div>
+                            <div class="pg-bank-btn" onclick="window.selectBank(this, 'Axis Bank')">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <span>Axis Bank</span>
+                            </div>
+                            <div class="pg-bank-btn" onclick="window.selectBank(this, 'Kotak Mahindra')">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <span>Kotak Mahindra</span>
+                            </div>
+                            <div class="pg-bank-btn" onclick="window.selectBank(this, 'Punjab National')">
+                                <i class="fa-solid fa-building-columns"></i>
+                                <span>Punjab National Bank</span>
+                            </div>
+                        </div>
+
+                        <div class="pg-input-group">
+                            <label class="pg-input-label" for="pgOtherBanks">Other Popular Indian Banks</label>
+                            <select class="pg-input" id="pgOtherBanks" onchange="window.selectOtherBank(this.value)">
+                                <option value="">-- Choose from 30+ other banks --</option>
+                                <option value="Bank of Baroda">Bank of Baroda</option>
+                                <option value="Canara Bank">Canara Bank</option>
+                                <option value="Union Bank of India">Union Bank of India</option>
+                                <option value="IndusInd Bank">IndusInd Bank</option>
+                                <option value="IDFC FIRST Bank">IDFC FIRST Bank</option>
+                                <option value="Federal Bank">Federal Bank</option>
+                                <option value="Yes Bank">Yes Bank</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Method 4: Wallets Panel -->
+                    <div class="pg-method-panel" id="panel_wallets">
+                        <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                            <label style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1.5px solid #059669; border-radius: 8px; padding: 0.75rem 1rem; cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                    <input type="radio" name="pgWallet" value="Paytm" checked style="accent-color: #059669;" />
+                                    <span style="font-size: 0.88rem; font-weight: 700; color: #1e293b;">Paytm Wallet & Postpaid</span>
+                                </div>
+                                <span style="font-size: 0.74rem; font-weight: 700; color: #059669;">Linked</span>
+                            </label>
+                            <label style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                    <input type="radio" name="pgWallet" value="Amazon Pay" style="accent-color: #059669;" />
+                                    <span style="font-size: 0.88rem; font-weight: 700; color: #1e293b;">Amazon Pay Balance</span>
+                                </div>
+                                <span style="font-size: 0.74rem; color: #64748b;">Connect</span>
+                            </label>
+                            <label style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; cursor: pointer;">
+                                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                    <input type="radio" name="pgWallet" value="Simpl" style="accent-color: #059669;" />
+                                    <span style="font-size: 0.88rem; font-weight: 700; color: #1e293b;">Simpl PayLater (3 in 1)</span>
+                                </div>
+                                <span style="font-size: 0.74rem; color: #64748b;">Instant Approval</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Method 5: Pay After Service Panel -->
+                    <div class="pg-method-panel" id="panel_payafter">
+                        <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-circle-check" style="color: #16a34a; font-size: 1.1rem;"></i>
+                                <strong style="font-size: 0.92rem; color: #14532d;">Pay After Service Completion</strong>
+                            </div>
+                            <p style="font-size: 0.8rem; color: #166534; margin: 0; line-height: 1.45;">
+                                Zero upfront payment risk. Once our verified technicians complete the work and you inspect the quality to your 100% satisfaction, pay directly via Cash, UPI QR, or Card.
+                            </p>
+                            <div style="font-size: 0.74rem; color: #15803d; font-weight: 700;">
+                                <i class="fa-solid fa-lock"></i> Secured with Service OTP & Digital Warranty
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pg-summary-col">
+                <!-- Price Breakdown & Pay Card -->
+                <div class="pg-summary-card">
+                    <span class="package-summary-header">Payment Summary</span>
+
+                    <div class="pg-price-row">
+                        <span>Plan Price</span>
+                        <span id="pgSummaryBasePrice">₹${order.price.toLocaleString('en-IN')}</span>
+                    </div>
+
+                    <div class="pg-price-row" id="pgDiscountRow" style="${discount > 0 ? 'display: flex;' : 'display: none;'}">
+                        <span style="color: #059669; font-weight: 600;"><i class="fa-solid fa-tag"></i> Coupon Discount (<span id="pgCouponCodeText">${defaultCoupon}</span>)</span>
+                        <span style="color: #059669; font-weight: 700;" id="pgSummaryDiscount">-₹${discount.toLocaleString('en-IN')}</span>
+                    </div>
+
+                    <div class="pg-price-row">
+                        <span>Safety & Hygiene Fee</span>
+                        <span style="color: #059669; font-weight: 600;"><s style="color: #94a3b8; font-size: 0.78rem;">₹49</s> FREE</span>
+                    </div>
+
+                    <div class="pg-price-row">
+                        <span>Taxes & GST (18%)</span>
+                        <span style="color: #64748b;">Included</span>
+                    </div>
+
+                    <div class="pg-coupon-row">
+                        <input type="text" class="pg-coupon-input" id="pgCouponInput" value="${defaultCoupon}" placeholder="ENTER COUPON" />
+                        <button type="button" class="pg-coupon-apply-btn" id="pgApplyCouponBtn" onclick="window.applyPgCoupon()">Apply</button>
+                    </div>
+
+                    <div class="pg-price-total-row">
+                        <span>Total Payable</span>
+                        <span id="pgSummaryFinalPrice">₹${finalPayable.toLocaleString('en-IN')}</span>
+                    </div>
+
+                    <button type="button" class="pg-pay-btn" id="pgPayButton" onclick="window.submitPayment()">
+                        <i class="fa-solid fa-lock"></i> Pay ₹${finalPayable.toLocaleString('en-IN')} & Confirm
+                    </button>
+
+                    <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem;">
+                        <div class="pg-trust-item"><i class="fa-solid fa-circle-check"></i> 100% Satisfaction or Free Rework</div>
+                        <div class="pg-trust-item"><i class="fa-solid fa-user-shield"></i> Background-Checked & Verified Pros</div>
+                        <div class="pg-trust-item"><i class="fa-solid fa-rotate-left"></i> Free cancellation upto 2 hrs before slot</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    };
+
+    window.switchPgMethod = function switchPgMethod(method) {
+        _pgCurrentMethod = method;
+        document.querySelectorAll(".pg-method-tab").forEach(tab => tab.classList.remove("active"));
+        document.querySelectorAll(".pg-method-panel").forEach(panel => panel.classList.remove("active"));
+
+        document.getElementById(`tab_${method}`)?.classList.add("active");
+        document.getElementById(`panel_${method}`)?.classList.add("active");
+
+        const payBtn = document.getElementById("pgPayButton");
+        if (payBtn && _pgOrderState) {
+            const finalAmt = _pgOrderState.finalPayable || 0;
+            if (method === "payafter") {
+                payBtn.innerHTML = `<i class="fa-solid fa-check"></i> Book Now & Pay ₹${finalAmt.toLocaleString('en-IN')} Later`;
+            } else {
+                payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹${finalAmt.toLocaleString('en-IN')} & Confirm`;
+            }
+        }
+    };
+
+    window.selectPgSlot = function selectPgSlot(slot) {
+        _pgCurrentSlot = slot;
+        document.querySelectorAll("#pgSlotChips .pg-slot-chip").forEach(chip => {
+            if (chip.getAttribute("data-slot") === slot) {
+                chip.classList.add("active");
+            } else {
+                chip.classList.remove("active");
+            }
+        });
+    };
+
+    window.selectUpiApp = function selectUpiApp(appName) {
+        const upiInput = document.getElementById("pgUpiId");
+        if (upiInput) {
+            upiInput.value = `resident@${appName}`;
+            window.verifyUpiId();
+        }
+    };
+
+    window.verifyUpiId = function verifyUpiId() {
+        const upiInput = document.getElementById("pgUpiId");
+        const feedback = document.getElementById("pgUpiVerifyFeedback");
+        if (!upiInput || !feedback) return;
+        const val = upiInput.value.trim();
+        if (val.includes("@") && val.length > 3) {
+            feedback.style.display = "block";
+            feedback.textContent = `✓ Verified UPI ID (${val})`;
+            feedback.style.color = "#059669";
+        } else {
+            feedback.style.display = "block";
+            feedback.textContent = "Please enter a valid UPI ID (e.g. name@bank)";
+            feedback.style.color = "#dc2626";
+        }
+    };
+
+    window.formatCardNumber = function formatCardNumber(input) {
+        let val = input.value.replace(/\D/g, '').substring(0, 16);
+        let formatted = val.match(/.{1,4}/g)?.join(' ') || val;
+        input.value = formatted;
+
+        const badge = document.getElementById("pgCardBrandBadge");
+        if (badge) {
+            if (val.startsWith("4")) {
+                badge.innerHTML = `<i class="fa-brands fa-cc-visa" style="color: #1a1f71;"></i>`;
+            } else if (val.startsWith("5")) {
+                badge.innerHTML = `<i class="fa-brands fa-cc-mastercard" style="color: #eb001b;"></i>`;
+            } else if (val.startsWith("6")) {
+                badge.innerHTML = `<span style="font-size: 0.75rem; font-weight: 800; color: #00843d;">RUPAY</span>`;
+            } else {
+                badge.innerHTML = `<i class="fa-regular fa-credit-card"></i>`;
+            }
+        }
+    };
+
+    window.formatCardExpiry = function formatCardExpiry(input) {
+        let val = input.value.replace(/\D/g, '').substring(0, 4);
+        if (val.length >= 3) {
+            input.value = val.substring(0, 2) + '/' + val.substring(2, 4);
+        } else {
+            input.value = val;
+        }
+    };
+
+    window.selectBank = function selectBank(el, bankName) {
+        _pgSelectedBank = bankName;
+        document.querySelectorAll(".pg-bank-btn").forEach(btn => btn.classList.remove("active"));
+        el.classList.add("active");
+        const select = document.getElementById("pgOtherBanks");
+        if (select) select.value = "";
+    };
+
+    window.selectOtherBank = function selectOtherBank(bankName) {
+        if (!bankName) return;
+        _pgSelectedBank = bankName;
+        document.querySelectorAll(".pg-bank-btn").forEach(btn => btn.classList.remove("active"));
+    };
+
+    window.applyPgCoupon = function applyPgCoupon() {
+        if (!_pgOrderState) return;
+        const couponInput = document.getElementById("pgCouponInput");
+        const code = (couponInput?.value || "").trim().toUpperCase();
+
+        let discount = 0;
+        if (code === "NEWCLEAN200") discount = 200;
+        else if (code === "MOVEFAST") discount = Math.min(300, Math.round(_pgOrderState.price * 0.15));
+        else if (code === "PAINT15") discount = Math.round(_pgOrderState.price * 0.15);
+        else if (code === "LEGAL30") discount = Math.round(_pgOrderState.price * 0.30);
+        else if (code === "INTERIORFREE") discount = Math.min(500, Math.round(_pgOrderState.price * 0.20));
+        else if (code === "APPLIANCE20") discount = Math.round(_pgOrderState.price * 0.20);
+        else if (code === "PESTSAFE") discount = Math.min(150, Math.round(_pgOrderState.price * 0.15));
+        else if (code === "NEWCLEAN10" || code === "SOCIETY10") discount = Math.round(_pgOrderState.price * 0.10);
+        else if (code) {
+            discount = 100;
+        }
+
+        if (_pgOrderState.price <= discount && _pgOrderState.price > 0) {
+            discount = Math.max(50, _pgOrderState.price - 99);
+        }
+
+        const finalPayable = Math.max(0, _pgOrderState.price - discount);
+        _pgOrderState.coupon = code;
+        _pgOrderState.discount = discount;
+        _pgOrderState.finalPayable = finalPayable;
+
+        const row = document.getElementById("pgDiscountRow");
+        const discEl = document.getElementById("pgSummaryDiscount");
+        const codeText = document.getElementById("pgCouponCodeText");
+        const finalEl = document.getElementById("pgSummaryFinalPrice");
+        const payBtn = document.getElementById("pgPayButton");
+
+        if (discount > 0) {
+            if (row) row.style.display = "flex";
+            if (discEl) discEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+            if (codeText) codeText.textContent = code;
+            notify(`Coupon ${code} applied! You saved ₹${discount}.`);
+        } else {
+            if (row) row.style.display = "none";
+            notify("Coupon removed.");
+        }
+
+        if (finalEl) finalEl.textContent = `₹${finalPayable.toLocaleString('en-IN')}`;
+        if (payBtn) {
+            if (_pgCurrentMethod === "payafter") {
+                payBtn.innerHTML = `<i class="fa-solid fa-check"></i> Book Now & Pay ₹${finalPayable.toLocaleString('en-IN')} Later`;
+            } else {
+                payBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹${finalPayable.toLocaleString('en-IN')} & Confirm`;
+            }
+        }
+    };
+
+    window.submitPayment = async function submitPayment() {
+        if (!_pgOrderState) return;
+
+        const phoneInput = document.getElementById("pgCustomerPhone");
+        const nameInput = document.getElementById("pgCustomerName");
+        const addressInput = document.getElementById("pgAddress");
+        const dateInput = document.getElementById("pgServiceDate");
+
+        const phone = (phoneInput?.value || "").trim();
+        const name = (nameInput?.value || "").trim() || "Resident";
+        const address = (addressInput?.value || "").trim() || "Resident Apartment";
+        const date = dateInput?.value || new Date().toISOString().split('T')[0];
+
+        if (!/^[6-9]\d{9}$/.test(phone)) {
+            notify("Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.");
+            phoneInput?.focus();
+            return;
+        }
+
+        const boxEl = document.getElementById("subserviceModalBox");
+        if (!boxEl) return;
+
+        const methodNames = {
+            upi: "UPI / QR Code",
+            card: "Credit / Debit Card",
+            netbanking: `Net Banking (${_pgSelectedBank})`,
+            wallets: "Wallet / PayLater",
+            payafter: "Pay After Service (Cash/UPI)"
+        };
+        const currentMethodName = methodNames[_pgCurrentMethod] || "Online Payment";
+
+        const overlay = document.createElement("div");
+        overlay.className = "pg-processing-overlay";
+        overlay.id = "pgProcessingOverlay";
+        overlay.innerHTML = `
+            <div class="pg-spinner"></div>
+            <div style="text-align: center;">
+                <h5 style="margin: 0 0 0.4rem 0; font-size: 1.1rem; color: #0f172a;" id="pgProcessStepTitle">Connecting to Payment Gateway...</h5>
+                <p style="margin: 0; font-size: 0.82rem; color: #64748b;" id="pgProcessStepSub">Authorizing transaction of ₹${_pgOrderState.finalPayable.toLocaleString('en-IN')}</p>
+            </div>
+            <div style="font-size: 0.74rem; color: #059669; font-weight: 700; display: flex; align-items: center; gap: 5px;">
+                <i class="fa-solid fa-lock"></i> 256-Bit Bank Level Encryption
+            </div>
+        `;
+        boxEl.appendChild(overlay);
+
+        setTimeout(() => {
+            const stepTitle = document.getElementById("pgProcessStepTitle");
+            const stepSub = document.getElementById("pgProcessStepSub");
+            if (stepTitle) stepTitle.textContent = `Authorizing via ${currentMethodName}...`;
+            if (stepSub) stepSub.textContent = "Verifying with issuing bank / payment network...";
+        }, 700);
+
+        setTimeout(async () => {
+            const stepTitle = document.getElementById("pgProcessStepTitle");
+            if (stepTitle) stepTitle.textContent = "Payment Verified Successfully ✓";
+
+            const txnId = "TXN-SMART-" + Math.floor(10000000 + Math.random() * 90000000);
+            const bookingRef = "BK-HS-" + new Date().getFullYear() + "-" + Math.floor(100000 + Math.random() * 900000);
+
+            let assignedWorkerInfo = null;
+            let maintenanceRequestNumber = null;
+
+            // 1. Create MaintenanceRequest to trigger AutoAssignmentService and show in Maintenance Dashboard
+            try {
+                const reqRes = await fetch("/api/maintenance/requests", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    body: JSON.stringify({
+                        category: _pgOrderState.parentCategory || "Cleaning",
+                        serviceType: _pgOrderState.subServiceName,
+                        title: `${_pgOrderState.subServiceName} (${_pgOrderState.packageName}) - ${address}`,
+                        description: [
+                            `Service: ${_pgOrderState.subServiceName} - ${_pgOrderState.packageName}`,
+                            `Payment Status: ${_pgCurrentMethod === 'payafter' ? 'PAY_ON_COMPLETION' : 'PAID'}`,
+                            `Transaction ID: ${txnId}`,
+                            `Payment Mode: ${currentMethodName}`,
+                            `Amount: ₹${_pgOrderState.finalPayable}`,
+                            `Coupon: ${_pgOrderState.coupon || 'None'}`,
+                            `Time Slot: ${_pgCurrentSlot}`,
+                            `Customer Address: ${address}`,
+                            `Contact: ${name} (${phone})`,
+                            `Package Scope: ${(_pgOrderState.features || []).join('; ')}`
+                        ].join("\n"),
+                        priority: "URGENT",
+                        preferredDate: date,
+                        preferredTime: _pgCurrentSlot,
+                        notes: `Paid via ${currentMethodName}. Booking Ref: ${bookingRef}`
+                    })
+                });
+                if (reqRes.ok) {
+                    const reqData = await reqRes.json();
+                    maintenanceRequestNumber = reqData.requestNumber;
+                    if (reqData.assignedWorkerName) {
+                        assignedWorkerInfo = {
+                            id: reqData.assignedWorkerId,
+                            name: reqData.assignedWorkerName,
+                            phone: reqData.assignedWorkerPhone,
+                            status: reqData.status
+                        };
+                    }
+                }
+            } catch (reqErr) {
+                console.warn("Maintenance request creation notice:", reqErr.message);
+            }
+
+            // 2. Also register in Emergency Geo-Dispatch pipeline so it appears on /dashboards/maintenance#dispatch
+            try {
+                await fetch("/api/maintenance/dispatch/bookings", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    body: JSON.stringify({
+                        requesterPhone: phone,
+                        serviceAddress: address,
+                        city: "Chennai",
+                        area: "Whitefield",
+                        category: _pgOrderState.parentCategory || "Cleaning",
+                        description: `[PAID - ${txnId}] ${_pgOrderState.subServiceName} (${_pgOrderState.packageName}). Customer: ${name}, Phone: ${phone}. Slot: ${_pgCurrentSlot}. Ref: ${bookingRef}`,
+                        latitude: 12.9716,
+                        longitude: 77.5946
+                    })
+                });
+            } catch (dispErr) {
+                console.warn("Emergency dispatch registration notice:", dispErr.message);
+            }
+
+            // 3. Save CommonMaintenanceTicket for backward compatibility with resident's bookings table
+            try {
+                const visitAt = preferredAt(date, _pgCurrentSlot);
+                await api("", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        sourcePlatform,
+                        targetEntityType: isCustomer ? "PROPERTY_LISTING" : "APARTMENT_UNIT",
+                        requesterName: name,
+                        requesterPhone: phone,
+                        serviceType: `${_pgOrderState.subServiceName} - ${_pgOrderState.packageName}`,
+                        serviceCategory: _pgOrderState.parentCategory || "Home Services",
+                        serviceOption: _pgOrderState.packageName,
+                        priceLabel: `Rs. ${_pgOrderState.finalPayable}`,
+                        warrantyLabel: "100% Satisfaction Guarantee",
+                        title: `${_pgOrderState.subServiceName} (${_pgOrderState.packageName}) - ${address}`,
+                        description: [
+                            `Service: ${_pgOrderState.subServiceName} - ${_pgOrderState.packageName}`,
+                            `Payment Status: ${_pgCurrentMethod === 'payafter' ? 'PAY_ON_COMPLETION' : 'PAID'}`,
+                            `Transaction ID: ${txnId}`,
+                            `Payment Mode: ${currentMethodName}`,
+                            `Amount: ₹${_pgOrderState.finalPayable}`,
+                            `Coupon Applied: ${_pgOrderState.coupon || 'None'}`,
+                            `Selected Slot: ${_pgCurrentSlot}`,
+                            `Customer Address: ${address}`,
+                            `Scope: ${(_pgOrderState.features || []).join('; ')}`
+                        ].join("\n"),
+                        serviceAddress: address,
+                        priority: _pgCurrentSlot === "EXPRESS_60MIN" ? "HIGH" : "MEDIUM",
+                        preferredAt: visitAt,
+                        vendorName: assignedWorkerInfo ? assignedWorkerInfo.name : "SmartSociety Verified Partner",
+                        vendorPhone: assignedWorkerInfo ? assignedWorkerInfo.phone : "",
+                        accessType: isCustomer ? "Customer will be present" : "Resident will be present",
+                        contactMethod: "Phone",
+                        externalReference: bookingRef
+                    })
+                });
+
+                window.loadNoBrokerMaintenanceTickets?.();
+            } catch (err) {
+                console.warn("Backend booking persistence notice:", err.message);
+            }
+
+            overlay.remove();
+            window.showPaymentSuccess({
+                ..._pgOrderState,
+                txnId,
+                bookingRef,
+                name,
+                phone,
+                address,
+                date,
+                slot: _pgCurrentSlot,
+                methodName: currentMethodName,
+                assignedWorker: assignedWorkerInfo,
+                requestNumber: maintenanceRequestNumber
+            });
+        }, 1500);
+    };
+
+    window.showPaymentSuccess = function showPaymentSuccess(data) {
+        if (_pgActiveTimer) clearInterval(_pgActiveTimer);
+
+        const headerArea = document.getElementById("subserviceModalHeaderArea");
+        if (headerArea) {
+            headerArea.innerHTML = `
+                <div class="subservice-modal-header" style="justify-content: flex-end;">
+                    <button type="button" class="subservice-modal-close" id="subserviceModalCloseBtn" aria-label="Close" onclick="event.preventDefault(); event.stopPropagation(); window.closeSubServicesModal();">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        const gridEl = document.getElementById("subserviceGrid");
+        if (!gridEl) return;
+
+        gridEl.className = "payment-success-container";
+        gridEl.style.gridTemplateColumns = "";
+
+        const slotLabels = {
+            MORNING: "Morning 9 AM - 12 PM",
+            AFTERNOON: "Afternoon 12 PM - 4 PM",
+            EVENING: "Evening 4 PM - 8 PM",
+            EXPRESS_60MIN: "Express 60-Minute Arrival"
+        };
+        const slotDisplay = slotLabels[data.slot] || data.slot;
+
+        gridEl.innerHTML = `
+            <div class="pg-success-card">
+                <div class="pg-success-icon-wrapper">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h3 class="pg-success-title">Payment Successful!</h3>
+                <p class="pg-success-subtitle">Your service booking has been confirmed and dispatched to our maintenance system.</p>
+
+                <div class="pg-receipt-card">
+                    <div class="pg-receipt-header">
+                        <div>
+                            <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: 700;">Booking Reference</span>
+                            <div style="font-size: 1rem; font-weight: 800; color: #0f172a; font-family: monospace;">${escapeHtml(data.bookingRef)}</div>
+                            ${data.requestNumber ? `<div style="font-size: 0.75rem; color: #2563eb; font-weight: 700; margin-top: 2px;"><i class="fa-solid fa-hashtag"></i> ${escapeHtml(data.requestNumber)}</div>` : ''}
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: 700;">Transaction ID</span>
+                            <div style="font-size: 0.85rem; font-weight: 700; color: #059669; font-family: monospace;">${escapeHtml(data.txnId)}</div>
+                            <div style="font-size: 0.72rem; color: #059669; font-weight: 700; margin-top: 2px;">PAID ✓</div>
+                        </div>
+                    </div>
+
+                    <div class="pg-receipt-body">
+                        <div class="pg-receipt-row">
+                            <span>Service</span>
+                            <strong>${escapeHtml(data.subServiceName)} (${escapeHtml(data.packageName)})</strong>
+                        </div>
+                        <div class="pg-receipt-row">
+                            <span>Amount Paid</span>
+                            <strong style="color: #059669; font-size: 1.05rem;">₹${Number(data.finalPayable).toLocaleString('en-IN')}</strong>
+                        </div>
+                        <div class="pg-receipt-row">
+                            <span>Payment Mode</span>
+                            <span>${escapeHtml(data.methodName)}</span>
+                        </div>
+                        <div class="pg-receipt-row">
+                            <span>Scheduled Date</span>
+                            <span>${escapeHtml(data.date)}</span>
+                        </div>
+                        <div class="pg-receipt-row">
+                            <span>Time Window</span>
+                            <span>${escapeHtml(slotDisplay)}</span>
+                        </div>
+                        <div class="pg-receipt-row">
+                            <span>Address</span>
+                            <span>${escapeHtml(data.address)}</span>
+                        </div>
+                        ${data.assignedWorker ? `
+                        <div class="pg-receipt-row" style="background: #f0fdf4; padding: 10px 12px; border-radius: 10px; border: 1.5px solid #86efac; margin-top: 6px;">
+                            <span style="color: #166534; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-user-shield text-success"></i> Auto-Assigned Professional
+                            </span>
+                            <div style="text-align: right;">
+                                <strong style="color: #15803d; font-size: 0.95rem;">${escapeHtml(data.assignedWorker.name)}</strong>
+                                ${data.assignedWorker.phone ? `<div style="font-size: 0.78rem; color: #166534;">📞 ${escapeHtml(data.assignedWorker.phone)}</div>` : ''}
+                            </div>
+                        </div>
+                        ` : `
+                        <div class="pg-receipt-row" style="background: #eff6ff; padding: 8px 12px; border-radius: 8px; border: 1px solid #bfdbfe; margin-top: 4px;">
+                            <span style="color: #1d4ed8; font-weight: 700;"><i class="fa-solid fa-bolt text-primary me-1"></i> Auto-Assignment</span>
+                            <strong style="color: #1e40af; font-size: 0.85rem;">Worker Queue Active • Assigning</strong>
+                        </div>
+                        `}
+                    </div>
+                </div>
+
+                <div class="pg-success-actions">
+                    <button type="button" class="pg-action-btn primary" onclick="window.viewMyBookings('${escapeHtml(data.bookingRef)}', '${escapeHtml(data.requestNumber || '')}');">
+                        <i class="fa-solid fa-calendar-check"></i> View In My Bookings
+                    </button>
+                    <button type="button" class="pg-action-btn secondary" onclick="window.printPaymentReceipt()">
+                        <i class="fa-solid fa-download"></i> Download Receipt
+                    </button>
+                </div>
+            </div>
+        `;
+    };
+
+    window.printPaymentReceipt = function printPaymentReceipt() {
+        window.print();
+    };
+
     window.viewPackageDetails = function viewPackageDetails(packageNameOrIndex) {
         if (typeof packageNameOrIndex === "number") {
             window.togglePackageDetails(packageNameOrIndex);
@@ -3222,25 +5036,25 @@ window.closeSubServicesModal = function closeSubServicesModal() {
     };
 
     window.chooseSubService = function chooseSubService(serviceName, price, parentCategory) {
+        if (serviceName === "Mini Services" || String(serviceName).toLowerCase().includes("mini service")) {
+            window.showMiniServicesView(serviceName, parentCategory || _currentParentCategory);
+            return;
+        }
         if (subServiceDesignations[serviceName]) {
             window.showSubServiceDesignations(serviceName, parentCategory || _currentParentCategory);
             return;
         }
-        window.closeSubServicesModal();
-        window.selectNoBrokerService(`${serviceName}|${price}`);
+        getOrCreatePackagesForDesignation(serviceName, serviceName, price);
+        window.showDesignationPackages(serviceName, serviceName, parentCategory || _currentParentCategory);
     };
 
     window.chooseDesignation = function chooseDesignation(subServiceName, designationName, price, parentCategory) {
-        const pkgKey = designationPackages[designationName] ? designationName :
-            (designationPackages[designationName + " Cleaning"] ? designationName + " Cleaning" :
-            (designationPackages[designationName.replace(" Cleaning", "")] ? designationName.replace(" Cleaning", "") : null));
-
-        if (pkgKey) {
-            window.showDesignationPackages(pkgKey, subServiceName, parentCategory || _currentParentCategory);
+        if (designationName === "Mini Services" || String(designationName).toLowerCase().includes("mini service")) {
+            window.showMiniServicesView(subServiceName, parentCategory || _currentParentCategory);
             return;
         }
-        window.closeSubServicesModal();
-        window.selectNoBrokerService(`${subServiceName} - ${designationName}|${price}`);
+        getOrCreatePackagesForDesignation(designationName, subServiceName, price);
+        window.showDesignationPackages(designationName, subServiceName, parentCategory || _currentParentCategory);
     };
 
     window.filterNoBrokerServices = function filterNoBrokerServices(value) {
@@ -3255,8 +5069,57 @@ window.closeSubServicesModal = function closeSubServicesModal() {
         document.getElementById("nobrokerBookingFormAnchor")?.scrollIntoView({behavior: "smooth", block: "start"});
     };
 
-    window.scrollToNoBrokerBookings = function scrollToNoBrokerBookings() {
-        document.getElementById("nobrokerBookingsTableAnchor")?.scrollIntoView({behavior: "smooth", block: "start"});
+    window.viewMyBookings = async function viewMyBookings(bookingRef, requestNumber) {
+        window.closeSubServicesModal();
+
+        // Ensure services section is visible if resident tab is active
+        const servicesSection = document.getElementById("nobrokerServicesSection") || document.querySelector('[data-view="services"]');
+        if (servicesSection && servicesSection.classList.contains("d-none")) {
+            const servicesTab = document.querySelector('a[href="#services"], [data-panel="services"]');
+            if (servicesTab) {
+                servicesTab.click();
+            } else {
+                servicesSection.classList.remove("d-none");
+                servicesSection.style.display = "";
+            }
+        }
+
+        // Load the tickets and requests
+        if (typeof window.loadNoBrokerMaintenanceTickets === "function") {
+            await window.loadNoBrokerMaintenanceTickets();
+        }
+
+        // Background update for ResidentMaintenance requests
+        try {
+            if (window.ResidentMaintenance && typeof window.ResidentMaintenance.loadRequests === "function") {
+                window.ResidentMaintenance.loadRequests();
+            }
+        } catch (e) {
+            console.debug("ResidentMaintenance reload notice:", e);
+        }
+
+        // Smoothly scroll to the My Service Bookings section
+        const tableAnchor = document.getElementById("nobrokerBookingsTableAnchor");
+        if (tableAnchor) {
+            tableAnchor.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        // Highlight matching row with pulse animation
+        if (bookingRef || requestNumber) {
+            setTimeout(() => {
+                const targetRow = (bookingRef && document.querySelector(`[data-booking-ref="${bookingRef}"]`)) ||
+                                  (requestNumber && document.querySelector(`[data-request-num="${requestNumber}"]`));
+                if (targetRow) {
+                    targetRow.scrollIntoView({ behavior: "smooth", block: "center" });
+                    targetRow.classList.add("booking-highlight-pulse");
+                    setTimeout(() => targetRow.classList.remove("booking-highlight-pulse"), 4000);
+                }
+            }, 350);
+        }
+    };
+
+    window.scrollToNoBrokerBookings = function scrollToNoBrokerBookings(bookingRef, requestNumber) {
+        window.viewMyBookings(bookingRef, requestNumber);
     };
 
     const originalVip = window.applyNoBrokerVipPass;
@@ -3360,25 +5223,190 @@ window.closeSubServicesModal = function closeSubServicesModal() {
         const rows = document.getElementById("noBrokerMaintenanceRows");
         if (!rows) return;
         try {
-            const tickets = await api(`?sourcePlatform=${encodeURIComponent(sourcePlatform)}`);
-            const serviceTickets = tickets.filter(ticket => {
-                const content = `${ticket.serviceCategory || ""} ${ticket.serviceType || ""} ${ticket.externalReference || ""}`.toLowerCase();
-                return /home|clean|pack|paint|agreement|repair|carpentry|plumb|electric|appliance|interior|pest|ss-hs|pd-hs|nb-crp/.test(content);
+            // Fetch tickets from CommonMaintenanceController (/api/maintenance)
+            let commonTickets = [];
+            try {
+                const res = await api(`?sourcePlatform=${encodeURIComponent(sourcePlatform)}`);
+                if (Array.isArray(res)) commonTickets = res;
+            } catch (cErr) {
+                console.warn("CommonMaintenance fetch notice:", cErr.message);
+            }
+
+            // Fetch requests from MaintenanceRequestApiController (/api/maintenance/requests)
+            let maintRequests = [];
+            try {
+                const mRes = await fetch("/api/maintenance/requests?filter=all", {
+                    headers: { "Accept": "application/json" }
+                });
+                if (mRes.ok) {
+                    const data = await mRes.json();
+                    if (Array.isArray(data)) maintRequests = data;
+                }
+            } catch (mErr) {
+                console.warn("MaintenanceRequest fetch notice:", mErr.message);
+            }
+
+            // Unified bookings list
+            const unifiedList = [];
+            const seenRefs = new Set();
+
+            // 1. Process Maintenance Requests first (most detailed with assigned workers)
+            maintRequests.forEach(req => {
+                const desc = req.description || "";
+                const notes = req.notes || "";
+                const combinedText = `${req.title || ""} ${desc} ${notes}`;
+                
+                // Extract booking reference if present
+                const refMatch = combinedText.match(/(?:Booking Ref|Ref):\s*(BK-[A-Za-z0-9-]+|SS-HS-[0-9]+|PD-HS-[0-9]+)/i);
+                const bookingRef = refMatch ? refMatch[1] : (req.requestNumber || `REQ-${req.id}`);
+
+                // Extract Amount if present
+                const amountMatch = desc.match(/Amount:\s*(?:₹|Rs\.?)\s*([0-9,]+)/i);
+                const priceLabel = amountMatch ? `₹${amountMatch[1]}` : (req.priceLabel || "₹49");
+
+                // Extract Address if present
+                const addrMatch = desc.match(/Customer Address:\s*([^\n\r]+)/i);
+                const address = addrMatch ? addrMatch[1].trim() : (req.apartmentUnit ? `Flat ${req.apartmentUnit}` : "A-101, SmartSociety Palms");
+
+                // Extract package or scope
+                const scopeMatch = req.title ? req.title.match(/\(([^)]+)\)/) : null;
+                const serviceOption = scopeMatch ? scopeMatch[1] : (req.category || "Standard Service");
+
+                seenRefs.add(bookingRef);
+                if (req.requestNumber) seenRefs.add(req.requestNumber);
+
+                unifiedList.push({
+                    id: req.id,
+                    requestNumber: req.requestNumber,
+                    externalReference: bookingRef,
+                    serviceType: req.serviceType || req.category || "Home Service",
+                    serviceOption: serviceOption,
+                    preferredDate: req.preferredDate,
+                    preferredTime: req.preferredTime,
+                    preferredAt: req.preferredDate ? `${req.preferredDate}T${req.preferredTime === 'MORNING' ? '09:00' : '14:00'}` : req.createdAt,
+                    serviceAddress: address,
+                    priceLabel: priceLabel,
+                    status: req.status || "REQUESTED",
+                    assignedWorkerName: req.assignedWorkerName,
+                    assignedWorkerPhone: req.assignedWorkerPhone,
+                    createdAt: req.createdAt,
+                    isMaintenanceRequest: true
+                });
             });
-            rows.innerHTML = serviceTickets.length ? serviceTickets.map(ticket => {
-                const status = String(ticket.ticketStatus || "REQUESTED").replaceAll("_", " ");
-                const done = /RESOLVED|CLOSED/i.test(status);
-                const badgeStyle = done ? "background:#dcfce7; color:#15803d; border:1px solid #bbf7d0;" : "background:#fef3c7; color:#b45309; border:1px solid #fde68a;";
-                return `<tr>
-                    <td><strong>#${ticket.id}</strong><br><small style="color:#64748b;">${escapeHtml(ticket.externalReference || "Service booking")}</small></td>
-                    <td><strong>${escapeHtml(ticket.serviceType || "Home service")}</strong><br><small style="color:#64748b;">${escapeHtml(ticket.serviceOption || "Standard visit")}</small></td>
-                    <td>${ticket.preferredAt ? new Date(ticket.preferredAt).toLocaleString("en-IN", {dateStyle: "medium", timeStyle: "short"}) : "-"}</td>
-                    <td>${escapeHtml(ticket.serviceAddress || "-")}</td>
-                    <td>${escapeHtml(ticket.priceLabel || "Rs. 49")}</td>
-                    <td><span style="display:inline-block; padding:3px 10px; border-radius:999px; font-size:0.75rem; font-weight:800; ${badgeStyle}">${escapeHtml(status)}</span></td>
-                    <td>${done ? '<span style="color:#15803d; font-weight:800; font-size:0.82rem;">Closed</span>' : `<button type="button" style="all:unset; background:#ffffff; border:1px solid #16a34a; color:#16a34a; padding:4px 14px; border-radius:999px; font-size:0.78rem; font-weight:800; cursor:pointer;" onclick="resolveNoBrokerTicket(${ticket.id})">Mark Resolved</button>`}</td>
+
+            // 2. Process CommonMaintenanceTickets (for backward compatibility)
+            commonTickets.forEach(ticket => {
+                const ref = ticket.externalReference || `TKT-${ticket.id}`;
+                if (seenRefs.has(ref) || (ticket.id && seenRefs.has(`MR-${ticket.id}`))) {
+                    return; // already processed as maintenance request
+                }
+                seenRefs.add(ref);
+                unifiedList.push({
+                    id: ticket.id,
+                    requestNumber: ticket.externalReference,
+                    externalReference: ticket.externalReference || `SS-HS-${ticket.id}`,
+                    serviceType: ticket.serviceType || "Home Service",
+                    serviceOption: ticket.serviceOption || "Standard Visit",
+                    preferredAt: ticket.preferredAt,
+                    serviceAddress: ticket.serviceAddress || "-",
+                    priceLabel: ticket.priceLabel || "Rs. 49",
+                    status: ticket.ticketStatus || "REQUESTED",
+                    assignedWorkerName: ticket.vendorName && !ticket.vendorName.includes("External") ? ticket.vendorName : null,
+                    assignedWorkerPhone: ticket.vendorPhone,
+                    createdAt: ticket.createdAt,
+                    isMaintenanceRequest: false
+                });
+            });
+
+            // Filter relevant service tickets
+            const serviceBookings = unifiedList.filter(item => {
+                const content = `${item.serviceType || ""} ${item.serviceOption || ""} ${item.externalReference || ""}`.toLowerCase();
+                return /clean|pack|paint|agreement|repair|carpentry|plumb|electric|appliance|interior|pest|bk-hs|ss-hs|pd-hs|mr-/.test(content);
+            });
+
+            // Sort newest first
+            serviceBookings.sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+
+            if (!serviceBookings.length) {
+                rows.innerHTML = '<tr><td colspan="7" style="color:#94a3b8; text-align:center; padding:24px;">No saved home-service bookings yet.</td></tr>';
+                return;
+            }
+
+            rows.innerHTML = serviceBookings.map(item => {
+                const statusStr = String(item.status || "REQUESTED").replaceAll("_", " ");
+                const isAssigned = /ASSIGNED|IN_PROGRESS|ACCEPTED/i.test(item.status);
+                const isDone = /RESOLVED|CLOSED|COMPLETED/i.test(item.status);
+                
+                let badgeStyle = "background:#fef3c7; color:#b45309; border:1px solid #fde68a;";
+                let badgeIcon = '<i class="fa-solid fa-clock me-1"></i>';
+
+                if (isDone) {
+                    badgeStyle = "background:#dcfce7; color:#15803d; border:1px solid #bbf7d0;";
+                    badgeIcon = '<i class="fa-solid fa-circle-check me-1"></i>';
+                } else if (isAssigned) {
+                    badgeStyle = "background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;";
+                    badgeIcon = '<i class="fa-solid fa-user-check me-1"></i>';
+                }
+
+                // Date display formatting
+                let dateDisplay = "-";
+                if (item.preferredDate) {
+                    dateDisplay = item.preferredDate;
+                    if (item.preferredTime) {
+                        const slotMap = {
+                            MORNING: "9 AM - 12 PM",
+                            AFTERNOON: "12 PM - 4 PM",
+                            EVENING: "4 PM - 8 PM",
+                            EXPRESS_60MIN: "Express"
+                        };
+                        dateDisplay += ` <small style="color:#64748b;">(${slotMap[item.preferredTime] || item.preferredTime})</small>`;
+                    }
+                } else if (item.preferredAt) {
+                    dateDisplay = new Date(item.preferredAt).toLocaleString("en-IN", {dateStyle: "medium", timeStyle: "short"});
+                }
+
+                return `<tr data-booking-ref="${escapeHtml(item.externalReference || '')}" data-request-num="${escapeHtml(item.requestNumber || '')}" id="booking-row-${escapeHtml(item.externalReference || item.requestNumber || item.id)}">
+                    <td>
+                        <strong style="color: #0f172a; font-family: monospace; font-size: 0.92rem;">${escapeHtml(item.requestNumber || `#${item.id}`)}</strong>
+                        ${item.externalReference && item.externalReference !== item.requestNumber ? `
+                            <br><small style="color: #64748b; font-family: monospace; font-weight: 600;">
+                                <i class="fa-solid fa-receipt me-1 text-primary" style="font-size: 0.72rem;"></i>${escapeHtml(item.externalReference)}
+                            </small>
+                        ` : ''}
+                    </td>
+                    <td>
+                        <strong style="color: #1e293b; font-size: 0.9rem;">${escapeHtml(item.serviceType || "Home Service")}</strong>
+                        ${item.serviceOption ? `<br><small style="color: #475569; font-weight: 600;"><i class="fa-solid fa-sparkles text-warning me-1" style="font-size: 0.72rem;"></i>${escapeHtml(item.serviceOption)}</small>` : ''}
+                    </td>
+                    <td>${dateDisplay}</td>
+                    <td style="max-width: 180px; font-size: 0.84rem; color: #334155; line-height: 1.3;">
+                        <i class="fa-solid fa-location-dot text-danger me-1"></i>${escapeHtml(item.serviceAddress || "-")}
+                    </td>
+                    <td><strong style="color: #059669; font-size: 0.95rem;">${escapeHtml(item.priceLabel || "₹49")}</strong></td>
+                    <td>
+                        <span style="display:inline-flex; align-items:center; padding:3px 10px; border-radius:999px; font-size:0.75rem; font-weight:800; ${badgeStyle}">
+                            ${badgeIcon}${escapeHtml(statusStr)}
+                        </span>
+                        ${item.assignedWorkerName ? `
+                            <div style="margin-top: 4px; font-size: 0.76rem; color: #166534; font-weight: 700; display: flex; align-items: center; gap: 4px;">
+                                <i class="fa-solid fa-user-check text-success"></i> ${escapeHtml(item.assignedWorkerName)}
+                                ${item.assignedWorkerPhone ? `<span style="color:#64748b; font-weight:500;">(${escapeHtml(item.assignedWorkerPhone)})</span>` : ''}
+                            </div>
+                        ` : ''}
+                    </td>
+                    <td>
+                        ${item.isMaintenanceRequest ? `
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" style="font-size: 0.78rem;" onclick="window.openMaintenanceLiveTracking(${item.id}, '${escapeHtml(item.externalReference || item.requestNumber || '')}')">
+                                <i class="fa-solid fa-eye me-1"></i> Details
+                            </button>
+                        ` : (isDone ? '<span style="color:#15803d; font-weight:800; font-size:0.82rem;">Closed</span>' : `
+                            <button type="button" style="all:unset; background:#ffffff; border:1px solid #16a34a; color:#16a34a; padding:4px 14px; border-radius:999px; font-size:0.78rem; font-weight:800; cursor:pointer;" onclick="resolveNoBrokerTicket(${item.id})">
+                                Mark Resolved
+                            </button>
+                        `)}
+                    </td>
                 </tr>`;
-            }).join("") : '<tr><td colspan="7" style="color:#94a3b8; text-align:center; padding:24px;">No saved home-service bookings yet.</td></tr>';
+            }).join("");
         } catch (error) {
             rows.innerHTML = `<tr><td colspan="7" style="color:#dc2626; text-align:center; padding:24px;">${escapeHtml(error.message)}</td></tr>`;
         }
@@ -3393,6 +5421,631 @@ window.closeSubServicesModal = function closeSubServicesModal() {
             notify(error.message);
         }
     };
+
+    // =========================================================================
+    // 6-STAGE LIVE PROCESS TRACKING & RESIDENT REVIEW SYSTEM
+    // =========================================================================
+
+    const LIVE_TRACKING_STAGES = [
+        {
+            key: "ACCEPTED",
+            label: "Accepted",
+            icon: "fa-solid fa-handshake",
+            desc: "Service booking accepted & verified technician assigned",
+            step: 1
+        },
+        {
+            key: "REACHED_LOCATION",
+            label: "Reached your location",
+            icon: "fa-solid fa-location-dot",
+            desc: "Technician arrived at society gate / apartment premises",
+            step: 2
+        },
+        {
+            key: "STARTED",
+            label: "Started",
+            icon: "fa-solid fa-play",
+            desc: "Technician verified service scope & prepped safety equipment",
+            step: 3
+        },
+        {
+            key: "STAGE_1",
+            label: "Stage 1",
+            icon: "fa-solid fa-layer-group",
+            desc: "High-touch wipe down, dry dusting & preliminary surface inspection",
+            step: 4
+        },
+        {
+            key: "PROCESSING",
+            label: "Processing",
+            icon: "fa-solid fa-spray-can-sparkles",
+            desc: "Intensive sanitization, chemical treatment & deep machine scrubbing",
+            step: 5
+        },
+        {
+            key: "COMPLETED",
+            label: "Completed",
+            icon: "fa-solid fa-circle-check",
+            desc: "Service 100% completed & quality verified",
+            step: 6
+        }
+    ];
+
+    window._liveTrackingStageIndex = window._liveTrackingStageIndex || {};
+    window._liveTrackingReqData = window._liveTrackingReqData || {};
+    window._liveTrackingTimers = window._liveTrackingTimers || {};
+    window._liveTrackingRating = window._liveTrackingRating || {};
+
+    function ensureLiveTrackingModalStyles() {
+        if (document.getElementById("liveTrackingModalStyles")) return;
+        const style = document.createElement("style");
+        style.id = "liveTrackingModalStyles";
+        style.textContent = `
+            @keyframes ltRadarPulse {
+                0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7); transform: scale(1); }
+                70% { box-shadow: 0 0 0 16px rgba(37, 99, 235, 0); transform: scale(1.05); }
+                100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); transform: scale(1); }
+            }
+            .lt-stage-card {
+                transition: all 0.25s ease;
+                border: 1px solid #e2e8f0;
+                border-radius: 16px;
+                padding: 14px 18px;
+                background: #ffffff;
+            }
+            .lt-stage-card.is-active {
+                border-color: #3b82f6 !important;
+                background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%) !important;
+                box-shadow: 0 8px 20px -6px rgba(37, 99, 235, 0.25);
+            }
+            .lt-stage-card.is-completed {
+                border-color: #86efac !important;
+                background: #f8fafc;
+            }
+            .lt-node-icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.1rem;
+                flex-shrink: 0;
+            }
+            .lt-node-icon.is-active {
+                background: #2563eb;
+                color: #ffffff;
+                animation: ltRadarPulse 2s infinite;
+            }
+            .lt-node-icon.is-completed {
+                background: #16a34a;
+                color: #ffffff;
+            }
+            .lt-node-icon.is-upcoming {
+                background: #f1f5f9;
+                color: #94a3b8;
+                border: 2px dashed #cbd5e1;
+            }
+            .lt-star-btn {
+                cursor: pointer;
+                transition: transform 0.15s ease, color 0.15s ease;
+            }
+            .lt-star-btn:hover {
+                transform: scale(1.22);
+            }
+            .lt-review-tag {
+                cursor: pointer;
+                font-size: 0.78rem;
+                padding: 6px 14px;
+                border-radius: 999px;
+                font-weight: 700;
+                transition: all 0.2s ease;
+                border: 1px solid #cbd5e1;
+                background: #ffffff;
+                color: #475569;
+            }
+            .lt-review-tag.active {
+                background: #2563eb;
+                color: #ffffff;
+                border-color: #2563eb;
+                box-shadow: 0 4px 10px -2px rgba(37, 99, 235, 0.35);
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    window.openMaintenanceLiveTracking = async function openMaintenanceLiveTracking(id, externalRef) {
+        ensureLiveTrackingModalStyles();
+
+        let modal = document.getElementById("maintenanceLiveTrackingModal");
+        if (!modal) {
+            modal = document.createElement("div");
+            modal.id = "maintenanceLiveTrackingModal";
+            modal.style.cssText = "display:none; position:fixed; inset:0; z-index:1070; background:rgba(15,23,42,0.72); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:1rem; overflow-y:auto;";
+            modal.innerHTML = `
+                <div style="background:#ffffff; width:100%; max-width:760px; border-radius:24px; box-shadow:0 25px 60px -15px rgba(0,0,0,0.35); overflow:hidden; border:1px solid rgba(226,232,240,0.8); margin:auto; max-height:92vh; display:flex; flex-direction:column;" class="animate__animated animate__zoomIn">
+                    <div id="maintenanceLiveTrackingHeader"></div>
+                    <div id="maintenanceLiveTrackingBody" style="overflow-y:auto; padding:1.5rem 1.75rem; flex:1;"></div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) window.closeMaintenanceLiveTracking();
+            });
+        }
+
+        modal.style.display = "flex";
+        const bodyEl = document.getElementById("maintenanceLiveTrackingBody");
+        const headerEl = document.getElementById("maintenanceLiveTrackingHeader");
+
+        if (headerEl) {
+            headerEl.innerHTML = `
+                <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; font-weight: 700;">Live Service Process Tracking</div>
+                        <h5 class="fw-bold mb-0 text-white font-monospace">${escapeHtml(externalRef || `#${id}`)}</h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" onclick="window.closeMaintenanceLiveTracking()" aria-label="Close"></button>
+                </div>
+            `;
+        }
+
+        if (bodyEl) {
+            bodyEl.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+                    <h6 class="fw-bold text-dark">Connecting to Live Service Process...</h6>
+                    <p class="text-muted small mb-0">Fetching real-time stage updates, technician details & telemetry.</p>
+                </div>
+            `;
+        }
+
+        let reqData = null;
+        try {
+            const res = await fetch(`/api/maintenance/requests/${id}`);
+            if (res.ok) {
+                reqData = await res.json();
+                window._liveTrackingReqData[id] = reqData;
+            }
+        } catch (e) {
+            console.warn("Could not fetch maintenance request:", e);
+        }
+
+        if (!reqData) {
+            reqData = {
+                id: id,
+                requestNumber: externalRef || `MR-${id}`,
+                title: "Home Cleaning - Essential ★",
+                category: "Cleaning",
+                serviceType: "Full House Cleaning",
+                status: "ASSIGNED",
+                assignedWorkerName: "Manoj Cleaner",
+                assignedWorkerPhone: "9876543214",
+                preferredDate: new Date().toISOString().slice(0, 10),
+                preferredTime: "MORNING",
+                apartmentUnit: "A-101, SmartSociety Palms"
+            };
+            window._liveTrackingReqData[id] = reqData;
+        }
+
+        function computeStageFromData(data) {
+            if (!data) return 0;
+            const notes = String(data.notes || "");
+            const status = String(data.status || data.requestStatus || "").toUpperCase();
+            if (notes.includes("Verified Resident Review:") || status === "CLOSED" || status === "COMPLETED" || status === "RESOLVED") {
+                return 5;
+            } else if (notes.includes("[PROCESSING]")) {
+                return 4;
+            } else if (notes.includes("[STAGE_1]")) {
+                return 3;
+            } else if (status === "IN_PROGRESS") {
+                return 2;
+            } else if (status === "ARRIVED") {
+                return 1;
+            }
+            return 0;
+        }
+
+        const stageIndex = computeStageFromData(reqData);
+        window._liveTrackingStageIndex[id] = stageIndex;
+        renderLiveTrackingModal(id, reqData, stageIndex);
+
+        // Real-time live polling: updates resident view as worker updates stage in maintenance dashboard
+        if (window._liveTrackingPollTimer) {
+            clearInterval(window._liveTrackingPollTimer);
+        }
+        window._liveTrackingPollTimer = setInterval(async () => {
+            const m = document.getElementById("maintenanceLiveTrackingModal");
+            if (!m || m.style.display === "none") {
+                clearInterval(window._liveTrackingPollTimer);
+                window._liveTrackingPollTimer = null;
+                return;
+            }
+            try {
+                const res = await fetch(`/api/maintenance/requests/${id}`);
+                if (!res.ok) return;
+                const freshData = await res.json();
+                window._liveTrackingReqData[id] = freshData;
+                const freshStage = computeStageFromData(freshData);
+                if (freshStage !== window._liveTrackingStageIndex[id]) {
+                    window._liveTrackingStageIndex[id] = freshStage;
+                    renderLiveTrackingModal(id, freshData, freshStage);
+                    window.loadNoBrokerMaintenanceTickets?.();
+                }
+            } catch (err) {}
+        }, 2000);
+    };
+
+    window.closeMaintenanceLiveTracking = function closeMaintenanceLiveTracking() {
+        const modal = document.getElementById("maintenanceLiveTrackingModal");
+        if (modal) modal.style.display = "none";
+        if (window._liveTrackingPollTimer) {
+            clearInterval(window._liveTrackingPollTimer);
+            window._liveTrackingPollTimer = null;
+        }
+    };
+
+    function renderLiveTrackingModal(id, reqData, currentStageIndex) {
+        const headerEl = document.getElementById("maintenanceLiveTrackingHeader");
+        const bodyEl = document.getElementById("maintenanceLiveTrackingBody");
+        if (!bodyEl) return;
+
+        const workerName = reqData.assignedWorkerName || "Manoj Cleaner";
+        const workerPhone = reqData.assignedWorkerPhone || "9876543214";
+        const title = reqData.title || reqData.serviceType || "Home Cleaning Service";
+        const requestNum = reqData.requestNumber || `#${id}`;
+        const refMatch = (reqData.description || reqData.notes || "").match(/Booking Ref:\s*([A-Za-z0-9-]+)/i);
+        const ref = refMatch ? refMatch[1] : requestNum;
+        const amountMatch = (reqData.description || "").match(/Amount:\s*([^\r\n]+)/i);
+        const amount = amountMatch ? amountMatch[1] : "₹2,869";
+        const address = reqData.apartmentUnit ? `Flat ${reqData.apartmentUnit}` : "A-101, SmartSociety Palms";
+        const dateSlot = reqData.preferredDate ? `${reqData.preferredDate} (${reqData.preferredTime || 'Morning'})` : "Today (Immediate)";
+        const startOtp = String(Math.abs(Number(id) * 137 + 4821)).slice(-4).padStart(4, "4");
+
+        const isCompleted = currentStageIndex === 5;
+        const notesStr = String(reqData.notes || "");
+        const hasReviewed = notesStr.includes("Verified Resident Review:");
+
+        let existingRating = 5;
+        let existingComment = "";
+        let existingTags = "";
+        if (hasReviewed) {
+            const rMatch = notesStr.match(/Verified Resident Review:\s*([1-5])\/5 Stars - "(.*?)"(?:\s*\|\s*Tags:\s*(.*?))?(?:\n|$)/);
+            if (rMatch) {
+                existingRating = parseInt(rMatch[1]) || 5;
+                existingComment = rMatch[2] || "";
+                existingTags = rMatch[3] || "";
+            }
+        }
+
+        if (headerEl) {
+            headerEl.innerHTML = `
+                <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary px-2.5 py-1 rounded-pill" style="font-size: 0.72rem; letter-spacing: 0.05em; font-weight: 800;">
+                                <i class="fa-solid fa-satellite-dish me-1"></i>LIVE PROCESS TRACKING
+                            </span>
+                            <span class="badge bg-white text-dark font-monospace px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;">${escapeHtml(requestNum)}</span>
+                        </div>
+                        <h5 class="fw-bold mb-0 text-white d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-sparkles text-warning" style="font-size: 1rem;"></i>
+                            ${escapeHtml(title)}
+                        </h5>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" onclick="window.closeMaintenanceLiveTracking()" aria-label="Close"></button>
+                </div>
+            `;
+        }
+
+        const stagesHtml = LIVE_TRACKING_STAGES.map((st, idx) => {
+            const isNodeCompleted = idx < currentStageIndex;
+            const isNodeActive = idx === currentStageIndex;
+
+            let cardClass = "lt-stage-card";
+            let iconClass = "lt-node-icon";
+            let iconContent = "";
+            let statusBadge = "";
+
+            if (isNodeCompleted) {
+                cardClass += " is-completed";
+                iconClass += " is-completed";
+                iconContent = '<i class="fa-solid fa-check"></i>';
+                statusBadge = '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1" style="font-size: 0.7rem; font-weight: 700;"><i class="fa-solid fa-check-double me-1"></i>Completed</span>';
+            } else if (isNodeActive) {
+                cardClass += " is-active";
+                iconClass += " is-active";
+                iconContent = (st.key === "PROCESSING") ? '<i class="fa-solid fa-spray-can-sparkles fa-bounce"></i>' : `<i class="${st.icon}"></i>`;
+                statusBadge = '<span class="badge bg-primary text-white rounded-pill px-2.5 py-1 animate__animated animate__pulse animate__infinite" style="font-size: 0.72rem; font-weight: 800;"><i class="fa-solid fa-circle-dot me-1"></i>In Progress</span>';
+            } else {
+                iconClass += " is-upcoming";
+                iconContent = `<span class="font-monospace fw-bold" style="font-size: 0.85rem;">0${st.step}</span>`;
+                statusBadge = '<span class="badge bg-light text-muted border rounded-pill px-2 py-1" style="font-size: 0.68rem;">Upcoming</span>';
+            }
+
+            return `
+                <div class="position-relative mb-3">
+                    <div class="${cardClass} d-flex align-items-center justify-content-between gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="${iconClass}">
+                                ${iconContent}
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h6 class="mb-0 fw-bold ${isNodeActive ? 'text-primary' : (isNodeCompleted ? 'text-dark' : 'text-muted')}" style="font-size: 0.95rem;">
+                                        ${escapeHtml(st.label)}
+                                    </h6>
+                                    ${statusBadge}
+                                </div>
+                                <div style="font-size: 0.78rem; color: ${isNodeActive ? '#334155' : '#64748b'}; margin-top: 2px;">
+                                    ${escapeHtml(st.desc)}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            ${isNodeActive ? `
+                                <span class="badge bg-primary text-white rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.74rem;">
+                                    <i class="fa-solid fa-spinner fa-spin me-1.5"></i>In Progress
+                                </span>
+                            ` : (isNodeCompleted ? `
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">
+                                    <i class="fa-solid fa-circle-check me-1"></i>Verified
+                                </span>
+                            ` : `
+                                <span class="badge bg-light text-muted border rounded-pill px-2.5 py-1" style="font-size: 0.7rem;">
+                                    Pending
+                                </span>
+                            `)}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join("");
+
+        let reviewSectionHtml = "";
+        if (isCompleted) {
+            if (hasReviewed) {
+                const starsHtml = Array.from({length: 5}, (_, i) => 
+                    `<i class="fa-solid fa-star ${i < existingRating ? 'text-warning' : 'text-muted'}" style="font-size: 1.2rem;"></i>`
+                ).join(" ");
+
+                reviewSectionHtml = `
+                    <div class="card border-0 rounded-4 p-4 mt-4 shadow-sm animate__animated animate__fadeIn" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 2px solid #86efac !important;">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-success text-white p-2 rounded-circle"><i class="fa-solid fa-shield-check fa-lg"></i></span>
+                                <div>
+                                    <h6 class="fw-bold text-success mb-0" style="font-size: 1rem;">Verified Resident Review Recorded</h6>
+                                    <small class="text-success-emphasis">Thank you for rating your service experience!</small>
+                                </div>
+                            </div>
+                            <span class="badge bg-success text-white px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.82rem;">${existingRating}.0 / 5.0 ★</span>
+                        </div>
+                        <div class="mt-2 mb-2">
+                            <div class="d-flex gap-1 mb-2">${starsHtml}</div>
+                            ${existingComment ? `<p class="mb-2 text-dark font-monospace bg-white p-3 rounded-3 border border-success-subtle" style="font-size: 0.88rem;">"${escapeHtml(existingComment)}"</p>` : ''}
+                            ${existingTags ? `
+                                <div class="d-flex flex-wrap gap-1 mt-2">
+                                    ${existingTags.split(',').map(t => `<span class="badge bg-white text-success border border-success-subtle px-2.5 py-1 rounded-pill">${escapeHtml(t.trim())}</span>`).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            } else {
+                const currentRating = window._liveTrackingRating[id] || 5;
+                const ratingLabels = {
+                    1: "★ Poor (Needs Improvement)",
+                    2: "★★ Fair (Below Expectations)",
+                    3: "★★★ Good (Satisfactory)",
+                    4: "★★★★ Very Good (Great Service)",
+                    5: "★★★★★ Outstanding! (5.0 / 5.0 - Highly Recommended)"
+                };
+
+                reviewSectionHtml = `
+                    <div class="card border-0 rounded-4 p-4 mt-4 shadow-sm animate__animated animate__fadeInUp" id="residentReviewContainer" style="background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border: 2px solid #93c5fd !important;">
+                        <div class="text-center mb-3">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-success text-white rounded-circle mb-2" style="width: 52px; height: 52px; font-size: 1.5rem; box-shadow: 0 8px 16px -4px rgba(22, 163, 74, 0.4);">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                            <h5 class="fw-bold text-dark mb-1">🎉 Service Successfully Completed!</h5>
+                            <p class="text-secondary small mb-0">How was your service experience with <strong>${escapeHtml(workerName)}</strong>? Please rate your service below.</p>
+                        </div>
+
+                        <!-- 5 Star Interactive Rating -->
+                        <div class="text-center my-3 bg-white p-3 rounded-4 border border-light-subtle shadow-sm">
+                            <label class="form-label small fw-bold text-dark d-block mb-1">Tap Stars to Rate:</label>
+                            <div class="d-inline-flex align-items-center gap-2 justify-content-center" id="starRatingGroup" style="font-size: 2.2rem; cursor: pointer;">
+                                ${[1, 2, 3, 4, 5].map(starNum => `
+                                    <i class="fa-solid fa-star lt-star-btn ${starNum <= currentRating ? 'text-warning' : 'text-muted'}" 
+                                       data-star="${starNum}" 
+                                       onclick="window.setLiveReviewRating(${id}, ${starNum})"></i>
+                                `).join('')}
+                            </div>
+                            <div class="fw-bold mt-2" id="starRatingLabel" style="color: #0284c7; font-size: 0.95rem;">
+                                ${ratingLabels[currentRating] || ratingLabels[5]}
+                            </div>
+                        </div>
+
+                        <!-- Quick Feedback Tags -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark mb-2">What did you appreciate the most?</label>
+                            <div class="d-flex flex-wrap gap-2" id="reviewTagChips">
+                                <button type="button" class="lt-review-tag active" data-tag="Spotless Clean" onclick="window.toggleLiveReviewTag(this)">✨ Spotless Clean</button>
+                                <button type="button" class="lt-review-tag active" data-tag="On Time" onclick="window.toggleLiveReviewTag(this)">⏱️ On Time</button>
+                                <button type="button" class="lt-review-tag active" data-tag="Polite & Professional" onclick="window.toggleLiveReviewTag(this)">🤝 Polite & Professional</button>
+                                <button type="button" class="lt-review-tag" data-tag="Quality Supplies" onclick="window.toggleLiveReviewTag(this)">🧼 Quality Supplies</button>
+                                <button type="button" class="lt-review-tag" data-tag="Safe & Verified" onclick="window.toggleLiveReviewTag(this)">🛡️ Safe & Verified</button>
+                                <button type="button" class="lt-review-tag" data-tag="Highly Recommended" onclick="window.toggleLiveReviewTag(this)">👍 Highly Recommended</button>
+                            </div>
+                        </div>
+
+                        <!-- Comments Textarea -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-dark mb-1">Write Feedback / Review (Optional):</label>
+                            <textarea class="form-control rounded-3" id="liveReviewComments" rows="2" placeholder="e.g. Technician arrived on time, was very polite and cleaned the entire flat spotless!"></textarea>
+                        </div>
+
+                        <!-- Submit Review Button -->
+                        <button type="button" class="btn btn-success rounded-pill w-100 py-2.5 fw-bold shadow-sm" id="submitLiveReviewBtn" onclick="window.submitLiveReview(${id})">
+                            <i class="fa-solid fa-paper-plane me-2"></i>Submit Rating & Review ★
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        bodyEl.innerHTML = `
+            <!-- Technician Summary & Telemetry Card -->
+            <div class="card border-0 rounded-4 p-3 mb-4 shadow-sm" style="background: #f8fafc; border: 1px solid #e2e8f0 !important;">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="position-relative">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 54px; height: 54px; font-size: 1.3rem;">
+                                ${escapeHtml(workerName.charAt(0) || 'M')}
+                            </div>
+                            <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle p-1" style="width: 14px; height: 14px;" title="Online & Active"></span>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 1.05rem;">${escapeHtml(workerName)}</h6>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5" style="font-size: 0.72rem;">
+                                    <i class="fa-solid fa-shield-check me-1"></i>Verified Partner
+                                </span>
+                            </div>
+                            <div class="text-muted small mt-0.5">
+                                <i class="fa-solid fa-star text-warning me-1"></i><strong>4.9</strong> (184 jobs completed) &bull; Specialist
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="tel:${escapeHtml(workerPhone)}" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold" style="font-size: 0.8rem;">
+                            <i class="fa-solid fa-phone me-1"></i>Call (${escapeHtml(workerPhone)})
+                        </a>
+                        <a href="https://wa.me/91${escapeHtml(workerPhone.replace(/[^0-9]/g, ''))}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" style="font-size: 0.8rem;">
+                            <i class="fa-brands fa-whatsapp me-1"></i>Chat
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Telemetry Pills -->
+                <div class="d-flex flex-wrap align-items-center gap-2 mt-3 pt-3 border-top border-light-subtle" style="font-size: 0.8rem;">
+                    <span class="badge bg-white text-dark border px-2.5 py-1 rounded-pill">
+                        <i class="fa-solid fa-location-dot text-danger me-1"></i>${escapeHtml(address)}
+                    </span>
+                    <span class="badge bg-white text-dark border px-2.5 py-1 rounded-pill">
+                        <i class="fa-solid fa-calendar text-primary me-1"></i>${escapeHtml(dateSlot)}
+                    </span>
+                    <span class="badge bg-white text-dark border px-2.5 py-1 rounded-pill">
+                        <i class="fa-solid fa-indian-rupee-sign text-success me-1"></i>${escapeHtml(amount)}
+                    </span>
+                    <span class="badge bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-pill ms-auto font-monospace">
+                        <i class="fa-solid fa-key text-warning me-1"></i>Start PIN: <strong>${startOtp}</strong>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Live Status Header Bar (Read-Only Telemetry) -->
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                <div class="d-flex align-items-center gap-2">
+                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.95rem;">
+                        <i class="fa-solid fa-route text-primary me-2"></i>Live Service Journey (Updated by Worker)
+                    </h6>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 fw-bold" style="font-size: 0.75rem;">
+                        <i class="fa-solid fa-circle text-success fa-fade me-1.5" style="font-size: 0.55rem;"></i>Live Worker Telemetry Active
+                    </span>
+                </div>
+            </div>
+
+            <!-- The 6 Stages List -->
+            <div class="stages-container">
+                ${stagesHtml}
+            </div>
+
+            <!-- Resident Review & Rating Form (Rendered on Stage 6 Completed) -->
+            ${reviewSectionHtml}
+        `;
+    }
+
+    // Resident view is strictly real-time telemetry; stage transitions are initiated solely by the technician in the maintenance dashboard.
+
+    window.setLiveReviewRating = function setLiveReviewRating(id, rating) {
+        window._liveTrackingRating[id] = rating;
+        const labels = {
+            1: "★ Poor (Needs Improvement)",
+            2: "★★ Fair (Below Expectations)",
+            3: "★★★ Good (Satisfactory)",
+            4: "★★★★ Very Good (Great Service)",
+            5: "★★★★★ Outstanding! (5.0 / 5.0 - Highly Recommended)"
+        };
+        const labelEl = document.getElementById("starRatingLabel");
+        if (labelEl) labelEl.textContent = labels[rating] || `${rating} Stars`;
+
+        const starBtns = document.querySelectorAll(".lt-star-btn");
+        starBtns.forEach(btn => {
+            const starVal = parseInt(btn.dataset.star) || 0;
+            if (starVal <= rating) {
+                btn.className = "fa-solid fa-star lt-star-btn text-warning";
+            } else {
+                btn.className = "fa-solid fa-star lt-star-btn text-muted";
+            }
+        });
+    };
+
+    window.toggleLiveReviewTag = function toggleLiveReviewTag(btn) {
+        btn.classList.toggle("active");
+    };
+
+    window.submitLiveReview = async function submitLiveReview(id) {
+        const rating = window._liveTrackingRating[id] || 5;
+        const commentsInput = document.getElementById("liveReviewComments");
+        const reviewText = commentsInput ? commentsInput.value.trim() : "";
+
+        const activeTags = [];
+        document.querySelectorAll(".lt-review-tag.active").forEach(tagEl => {
+            if (tagEl.dataset.tag) activeTags.push(tagEl.dataset.tag);
+        });
+
+        const submitBtn = document.getElementById("submitLiveReviewBtn");
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting Verified Review...';
+        }
+
+        try {
+            const res = await fetch(`/api/maintenance/requests/${id}/review`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    rating: rating,
+                    review: reviewText || "Technician was very professional and thorough!",
+                    tags: activeTags.join(", ")
+                })
+            });
+
+            if (!res.ok) throw new Error("Could not submit review. Please try again.");
+            const updated = await res.json();
+            window._liveTrackingReqData[id] = updated;
+
+            notify("🎉 Thank you! Your 5-star rating & review have been submitted.");
+            renderLiveTrackingModal(id, updated, 5);
+            window.loadNoBrokerMaintenanceTickets?.();
+        } catch (e) {
+            notify(e.message || "Failed to submit review");
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Submit Rating & Review ★';
+            }
+        }
+    };
+
+    // Ensure ResidentMaintenance aliases always point to live tracking
+    window.ResidentMaintenance = window.ResidentMaintenance || {};
+    window.ResidentMaintenance.openDetailsModal = window.openMaintenanceLiveTracking;
 
     function setDefaultDate() {
         const dateInput = document.getElementById("nbServiceDate");

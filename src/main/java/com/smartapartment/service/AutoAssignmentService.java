@@ -199,12 +199,21 @@ public class AutoAssignmentService {
         List<AppUser> available = new ArrayList<>();
 
         for (AppUser worker : workers) {
-            // Check attendance
+            // Check attendance (auto-initialize for active maintenance staff if needed)
             WorkerAttendance attendance = attendanceRepository
                     .findFirstByWorkerIdAndDateOrderByCreatedAtDesc(worker.getId(), today)
-                    .orElse(null);
+                    .orElseGet(() -> {
+                        WorkerAttendance a = new WorkerAttendance();
+                        a.setWorkerId(worker.getId());
+                        a.setTenantId(worker.getTenantId() != null ? worker.getTenantId() : "default");
+                        a.setDate(today);
+                        a.setShiftId("ALL_DAY");
+                        a.setAttendanceStatus("PRESENT");
+                        a.setClockIn(LocalDateTime.now().minusHours(1));
+                        return attendanceRepository.save(a);
+                    });
 
-            if (attendance == null || attendance.getClockIn() == null || attendance.getClockOut() != null) {
+            if (attendance.getClockIn() == null || attendance.getClockOut() != null) {
                 continue;
             }
 
@@ -217,12 +226,19 @@ public class AutoAssignmentService {
             String shiftStr = (attendance.getShiftId() != null && !attendance.getShiftId().isBlank())
                     ? attendance.getShiftId() : worker.getWorkShift();
             WorkerShift shift = WorkerShift.fromString(shiftStr);
-            if (!shift.isWithinShift(now)) {
+            if (shift != WorkerShift.ALL_DAY && !shift.isWithinShift(now)) {
                 continue;
             }
 
-            // Check availability
-            WorkerAvailability availability = availabilityRepository.findByWorkerId(worker.getId()).orElse(null);
+            // Check availability (auto-initialize if needed)
+            WorkerAvailability availability = availabilityRepository.findByWorkerId(worker.getId()).orElseGet(() -> {
+                WorkerAvailability a = new WorkerAvailability();
+                a.setWorkerId(worker.getId());
+                a.setTenantId(worker.getTenantId() != null ? worker.getTenantId() : "default");
+                a.setStatus("AVAILABLE");
+                a.setLastUpdatedAt(LocalDateTime.now());
+                return availabilityRepository.save(a);
+            });
             if (availability == null || !"AVAILABLE".equalsIgnoreCase(availability.getStatus())) {
                 continue;
             }
@@ -308,8 +324,18 @@ public class AutoAssignmentService {
      */
     @Transactional
     public boolean assignWorker(MaintenanceRequest request, AppUser worker, String assignmentType) {
-        // Acquire pessimistic write lock on WorkerAvailability
+        // Acquire pessimistic write lock on WorkerAvailability (or create if missing)
         Optional<WorkerAvailability> optAvailability = availabilityRepository.findByWorkerIdWithLock(worker.getId());
+        if (optAvailability.isEmpty()) {
+            WorkerAvailability newAv = new WorkerAvailability();
+            newAv.setWorkerId(worker.getId());
+            newAv.setTenantId(worker.getTenantId() != null ? worker.getTenantId() : "default");
+            newAv.setStatus("AVAILABLE");
+            newAv.setLastUpdatedAt(LocalDateTime.now());
+            availabilityRepository.save(newAv);
+            optAvailability = availabilityRepository.findByWorkerIdWithLock(worker.getId());
+        }
+
         if (optAvailability.isEmpty()) {
             return false;
         }
@@ -685,22 +711,26 @@ public class AutoAssignmentService {
         if (desig.contains("technician") || desig.contains("supervisor") || desig.contains("general")) {
             return true;
         }
-        if (desig.contains("plumb") && (cat.contains("plumb") || cat.contains("water"))) {
+        if ((desig.contains("clean") || desig.contains("housekeep") || desig.contains("maid"))
+                && (cat.contains("clean") || cat.contains("housekeep"))) {
             return true;
         }
-        if (desig.contains("electr") && (cat.contains("electr") || cat.contains("appliance") || cat.contains("lift"))) {
+        if ((desig.contains("plumb") || desig.contains("pipe")) && (cat.contains("plumb") || cat.contains("water"))) {
             return true;
         }
-        if (desig.contains("carpent") && cat.contains("carpent")) {
+        if ((desig.contains("electr") || desig.contains("wire")) && (cat.contains("electr") || cat.contains("appliance") || cat.contains("lift"))) {
             return true;
         }
-        if (desig.contains("hvac") && (cat.contains("ac") || cat.contains("cooling"))) {
+        if (desig.contains("carpent") && (cat.contains("carpent") || cat.contains("wood") || cat.contains("door") || cat.contains("furniture"))) {
             return true;
         }
-        if (desig.contains("housekeep") && cat.contains("clean")) {
+        if ((desig.contains("hvac") || desig.contains("ac")) && (cat.contains("ac") || cat.contains("cooling") || cat.contains("hvac"))) {
             return true;
         }
         if (desig.contains("paint") && cat.contains("paint")) {
+            return true;
+        }
+        if (desig.contains("appliance") && (cat.contains("appliance") || cat.contains("electr"))) {
             return true;
         }
         return desig.contains(cat) || cat.contains(desig);

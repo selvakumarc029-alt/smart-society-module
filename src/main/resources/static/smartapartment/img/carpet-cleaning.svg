@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="carpetBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8dec8"/>
+      <stop offset="50%" stop-color="#ddcfb7"/>
+      <stop offset="100%" stop-color="#cbbba0"/>
+    </linearGradient>
+
+    <linearGradient id="cleanedTrack" x1="0" y1="0" x2="0.8" y2="0.8">
+      <stop offset="0%" stop-color="#f5efe6"/>
+      <stop offset="60%" stop-color="#eae0cf"/>
+      <stop offset="100%" stop-color="#dfd3be"/>
+    </linearGradient>
+
+    <linearGradient id="wandChrome" x1="0" y1="0" x2="1" y2="0.5">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="30%" stop-color="#f8fafc"/>
+      <stop offset="70%" stop-color="#cbd5e1"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+
+    <linearGradient id="headPlastic" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <linearGradient id="swivelJoint" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="50%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+
+    <filter id="carpetShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="4" dy="12" stdDeviation="10" flood-opacity="0.35"/>
+    </filter>
+
+    <!-- Carpet Texture Pattern -->
+    <pattern id="carpetTexture" width="16" height="16" patternUnits="userSpaceOnUse">
+      <circle cx="4" cy="4" r="1.2" fill="#bba98e" opacity="0.35"/>
+      <circle cx="12" cy="4" r="1.4" fill="#a89578" opacity="0.4"/>
+      <circle cx="8" cy="10" r="1.3" fill="#ffffff" opacity="0.45"/>
+      <circle cx="2" cy="14" r="1.2" fill="#8f7c60" opacity="0.3"/>
+      <circle cx="14" cy="13" r="1.4" fill="#cfbfab" opacity="0.5"/>
+      <line x1="3" y1="2" x2="5" y2="6" stroke="#b09e84" stroke-width="0.8" opacity="0.4"/>
+      <line x1="11" y1="9" x2="13" y2="13" stroke="#ffffff" stroke-width="0.7" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base Carpet -->
+  <rect width="400" height="400" fill="url(#carpetBg)"/>
+  <rect width="400" height="400" fill="url(#carpetTexture)"/>
+
+  <!-- Cleaned Path Stripe Across Carpet (Perspective) -->
+  <path d="M120 400 L 260 400 L 380 0 L 290 0 Z" fill="url(#cleanedTrack)" opacity="0.9"/>
+  <path d="M120 400 L 260 400 L 380 0 L 290 0 Z" fill="url(#carpetTexture)" opacity="0.4"/>
+
+  <!-- Vacuum Track Lines / Groom Marks -->
+  <g stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.4">
+    <line x1="160" y1="380" x2="310" y2="30"/>
+    <line x1="190" y1="390" x2="330" y2="40"/>
+    <line x1="220" y1="385" x2="350" y2="60"/>
+  </g>
+
+  <!-- Vacuum Floor Tool / Nozzle & Wand Assembly (Diagonal Top-Left to Center-Right) -->
+  <g transform="translate(245, 235) rotate(-35)" filter="url(#carpetShadow)">
+    <!-- Chrome Extension Wand Tube -->
+    <rect x="-14" y="-230" width="28" height="190" rx="14" fill="url(#wandChrome)"/>
+    <!-- Tube Collar & Lock Ring -->
+    <rect x="-17" y="-70" width="34" height="14" rx="4" fill="#334155"/>
+    <rect x="-16" y="-68" width="32" height="4" rx="1" fill="#64748b"/>
+    <rect x="-15" y="-56" width="30" height="12" rx="3" fill="#1e293b"/>
+
+    <!-- Swivel Neck / Pivot Joint -->
+    <path d="M-18 -44 L 18 -44 L 24 -10 L -24 -10 Z" fill="url(#swivelJoint)"/>
+    <ellipse cx="0" cy="-10" rx="24" ry="12" fill="#0f172a"/>
+
+    <!-- Main Floor Nozzle Head Base -->
+    <path d="M-95 0 L 95 0 L 105 55 L -105 55 Z" fill="url(#headPlastic)"/>
+
+    <!-- Beveled Top Surface of Nozzle -->
+    <path d="M-85 6 L 85 6 L 95 44 L -95 44 Z" fill="#334155" opacity="0.6"/>
+
+    <!-- Rocker Foot Pedal Switch on Nozzle (Bristle Extender) -->
+    <rect x="42" y="10" width="28" height="18" rx="3" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+    <line x1="47" y1="16" x2="65" y2="16" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="47" y1="21" x2="65" y2="21" stroke="#94a3b8" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- Front Bumper Strip -->
+    <rect x="-106" y="50" width="212" height="8" rx="3" fill="#020617"/>
+    <!-- Front Roller Gliders / Squeegee Indicator -->
+    <line x1="-95" y1="56" x2="95" y2="56" stroke="#475569" stroke-width="2"/>
+
+    <!-- Suction Air Flow Indicator Glow / Clean Sparkles -->
+    <circle cx="-60" cy="30" r="1.5" fill="#ffffff" opacity="0.6"/>
+    <circle cx="0" cy="35" r="1.8" fill="#ffffff" opacity="0.6"/>
+  </g>
+
+  <!-- Clean Gleam Stars on Clean Track -->
+  <g fill="#ffffff" opacity="0.8">
+    <path d="M300 120 L 303 128 L 311 131 L 303 134 L 300 142 L 297 134 L 289 131 L 297 128 Z"/>
+    <path d="M230 200 L 232 205 L 237 207 L 232 209 L 230 214 L 228 209 L 223 207 L 228 205 Z" opacity="0.6"/>
+    <circle cx="330" cy="180" r="2.5"/>
+    <circle cx="210" cy="270" r="3"/>
+  </g>
+</svg>

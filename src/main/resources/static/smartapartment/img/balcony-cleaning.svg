@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="60%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+
+    <linearGradient id="balconyFloor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="50%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#cbd5e1"/>
+    </linearGradient>
+
+    <linearGradient id="curtainGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="30%" stop-color="#d97706"/>
+      <stop offset="60%" stop-color="#92400e"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </linearGradient>
+
+    <linearGradient id="railingChrome" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="40%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+
+    <filter id="balconyShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="6" stdDeviation="6" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Clear Sky Outside Balcony -->
+  <rect width="400" height="260" fill="url(#skyGrad)"/>
+
+  <!-- Distant City Skyline / Trees -->
+  <path d="M120 180 L140 160 L160 175 L190 150 L220 170 L250 145 L290 175 L330 155 L380 170 L400 165 L400 220 L120 220 Z" fill="#94a3b8" opacity="0.3"/>
+
+  <!-- Balcony Floor Slab (Perspective) -->
+  <polygon points="0,260 400,260 400,400 0,400" fill="url(#balconyFloor)"/>
+
+  <!-- Floor Tile Grout Lines -->
+  <g stroke="#94a3b8" stroke-width="1.2" opacity="0.6">
+    <line x1="80" y1="260" x2="40" y2="400"/>
+    <line x1="180" y1="260" x2="160" y2="400"/>
+    <line x1="280" y1="260" x2="280" y2="400"/>
+    <line x1="370" y1="260" x2="390" y2="400"/>
+    <line x1="0" y1="320" x2="400" y2="320"/>
+  </g>
+
+  <!-- Balcony Parapet Wall & Stainless Railing -->
+  <rect x="80" y="210" width="320" height="50" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <!-- Railing Posts & Horizontal Bars -->
+  <rect x="80" y="140" width="320" height="8" rx="2" fill="url(#railingChrome)"/>
+  <rect x="80" y="175" width="320" height="6" rx="2" fill="url(#railingChrome)"/>
+  <line x1="130" y1="140" x2="130" y2="210" stroke="#94a3b8" stroke-width="6"/>
+  <line x1="210" y1="140" x2="210" y2="210" stroke="#94a3b8" stroke-width="6"/>
+  <line x1="290" y1="140" x2="290" y2="210" stroke="#94a3b8" stroke-width="6"/>
+  <line x1="370" y1="140" x2="370" y2="210" stroke="#94a3b8" stroke-width="6"/>
+
+  <!-- Small Plant Pot on Railing Wall -->
+  <g transform="translate(370, 185)">
+    <polygon points="0,25 3,12 21,12 24,25" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>
+    <circle cx="12" cy="8" r="6" fill="#16a34a"/>
+    <circle cx="7" cy="4" r="4" fill="#22c55e"/>
+    <circle cx="17" cy="5" r="4" fill="#4ade80"/>
+  </g>
+
+  <!-- Golden Brown Balcony Curtain / Blinds on Left -->
+  <g transform="translate(0, 0)" filter="url(#balconyShadow)">
+    <path d="M0 0 L85 0 L80 320 C60 310, 40 330, 20 315 L0 320 Z" fill="url(#curtainGrad)"/>
+    <!-- Fold Highlights -->
+    <path d="M22 0 L25 316" stroke="#fbbf24" stroke-width="2" opacity="0.5"/>
+    <path d="M52 0 L50 314" stroke="#fbbf24" stroke-width="2" opacity="0.5"/>
+    <path d="M38 0 L36 318" stroke="#78350f" stroke-width="3" opacity="0.6"/>
+    <path d="M68 0 L66 315" stroke="#78350f" stroke-width="3" opacity="0.6"/>
+  </g>
+
+  <!-- Broom Leaning Against Wall on Right -->
+  <g transform="translate(325, 190) rotate(14)" filter="url(#balconyShadow)">
+    <!-- Wooden / Bamboo Handle -->
+    <rect x="-3" y="0" width="6" height="180" rx="3" fill="#d97706" stroke="#92400e" stroke-width="1"/>
+    <!-- Bristle Head / Sweep -->
+    <path d="M-15 180 L15 180 L22 215 L-22 215 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="1.2"/>
+    <line x1="-10" y1="185" x2="-14" y2="212" stroke="#a16207" stroke-width="1"/>
+    <line x1="0" y1="185" x2="0" y2="214" stroke="#a16207" stroke-width="1"/>
+    <line x1="10" y1="185" x2="14" y2="212" stroke="#a16207" stroke-width="1"/>
+    <!-- Collar Band -->
+    <rect x="-12" y="176" width="24" height="6" rx="1" fill="#dc2626"/>
+  </g>
+
+  <!-- Clean Sunlight Glare / Sparkles -->
+  <circle cx="210" cy="340" r="2.5" fill="#ffffff" opacity="0.9"/>
+  <circle cx="280" cy="360" r="3" fill="#ffffff" opacity="0.8"/>
+  <circle cx="150" cy="350" r="2" fill="#ffffff" opacity="0.8"/>
+</svg>

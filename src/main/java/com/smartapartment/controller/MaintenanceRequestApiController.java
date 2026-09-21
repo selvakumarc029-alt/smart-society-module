@@ -168,4 +168,32 @@ public class MaintenanceRequestApiController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to process image file");
         }
     }
+
+    public record StageUpdateRequest(String stage, String notes) {}
+    public record ServiceReviewRequest(Integer rating, String review, String tags) {}
+
+    @PostMapping("/{id}/stage")
+    public ResponseEntity<MaintenanceRequestResponseDto> updateStage(
+            @PathVariable Long id,
+            @RequestBody(required = false) StageUpdateRequest dto,
+            HttpSession session) {
+        AppUser user = resolveActiveUser(session);
+        String stage = dto != null ? dto.stage() : "ACCEPTED";
+        String notes = dto != null ? dto.notes() : null;
+        MaintenanceRequestResponseDto updated = requestService.updateStage(id, stage, notes, user);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/{id}/review")
+    public ResponseEntity<MaintenanceRequestResponseDto> submitReview(
+            @PathVariable Long id,
+            @RequestBody(required = false) ServiceReviewRequest dto,
+            HttpSession session) {
+        AppUser user = resolveActiveUser(session);
+        Integer rating = dto != null ? dto.rating() : 5;
+        String review = dto != null ? dto.review() : "Great service";
+        String tags = dto != null ? dto.tags() : "";
+        MaintenanceRequestResponseDto updated = requestService.submitReview(id, rating, review, tags, user);
+        return ResponseEntity.ok(updated);
+    }
 }

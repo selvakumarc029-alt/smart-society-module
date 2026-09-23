@@ -59,24 +59,40 @@ public class DataLoader {
             String residentEmail = environment.getProperty("SEED_RESIDENT_EMAIL", "resident@smartapartment");
             String residentPassword = environment.getProperty("SEED_RESIDENT_PASSWORD", "resident123");
 
-            users.findByEmail("superadmin@smartapartment").orElseGet(() -> {
+            users.findByEmail("superadmin@smartapartment").ifPresentOrElse(superAdmin -> {
+                superAdmin.setTenantId("platform");
+                superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
+                superAdmin.setStatus("ACTIVE");
+                superAdmin.setAccountLocked(false);
+                users.save(superAdmin);
+            }, () -> {
                 AppUser superAdmin = new AppUser();
                 superAdmin.setTenantId("platform");
                 superAdmin.setFullName("Platform Super Admin");
                 superAdmin.setEmail("superadmin@smartapartment");
                 superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
                 superAdmin.setRole(UserRole.SUPER_ADMIN);
-                return users.save(superAdmin);
+                superAdmin.setStatus("ACTIVE");
+                superAdmin.setAccountLocked(false);
+                users.save(superAdmin);
             });
 
-            users.findByEmail("superadmin@smartsociety").orElseGet(() -> {
+            users.findByEmail("superadmin@smartsociety").ifPresentOrElse(superAdmin -> {
+                superAdmin.setTenantId("platform");
+                superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
+                superAdmin.setStatus("ACTIVE");
+                superAdmin.setAccountLocked(false);
+                users.save(superAdmin);
+            }, () -> {
                 AppUser superAdmin = new AppUser();
                 superAdmin.setTenantId("platform");
                 superAdmin.setFullName("Platform Super Admin");
                 superAdmin.setEmail("superadmin@smartsociety");
                 superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
                 superAdmin.setRole(UserRole.SUPER_ADMIN);
-                return users.save(superAdmin);
+                superAdmin.setStatus("ACTIVE");
+                superAdmin.setAccountLocked(false);
+                users.save(superAdmin);
             });
 
             ensurePlan(plans, "Free", "FREE", BigDecimal.ZERO, 50, 150, false, false, false);
@@ -100,28 +116,22 @@ public class DataLoader {
                 return plans.save(plan);
             });
 
-            tenants.findByCode("green-heights").orElseGet(() -> {
+            Tenant greenHeights = tenants.findByCode("green-heights").orElseGet(() -> {
                 Tenant tenant = new Tenant();
                 tenant.setTenantId("green-heights");
                 tenant.setCode("green-heights");
-                tenant.setSocietyName("Green Heights Apartment");
-                tenant.setContactEmail("admin@greenheights.com");
-                tenant.setPhone("9876543210");
-                tenant.setAddress("Main Road");
-                tenant.setCity("Chennai");
-                tenant.setApproved(true);
-                return tenants.save(tenant);
+                return tenant;
             });
+            greenHeights.setSocietyName("Green Heights Apartment");
+            greenHeights.setContactEmail("admin@greenheights.com");
+            greenHeights.setPhone("9876543210");
+            greenHeights.setAddress("Main Road");
+            greenHeights.setCity("Chennai");
+            greenHeights.setApproved(true);
+            tenants.save(greenHeights);
 
-            AppUser residentUser = users.findByEmail(residentEmail).orElseGet(() -> {
-                AppUser user = new AppUser();
-                user.setTenantId("green-heights");
-                user.setFullName("Demo Resident");
-                user.setEmail(residentEmail);
-                user.setPasswordHash(encoder.encode(residentPassword));
-                user.setRole(UserRole.RESIDENT);
-                return users.save(user);
-            });
+            AppUser residentUser = createDemoUser(users, encoder, "green-heights", "Demo Resident",
+                    residentEmail, residentPassword, UserRole.RESIDENT);
 
             if (seedDemo) {
                 // Seed @smartapartment domain accounts (matching login page buttons)
@@ -468,15 +478,19 @@ public class DataLoader {
     private static AppUser createDemoUser(AppUserRepository users, PasswordEncoder encoder,
                                           String tenantId, String name, String email,
                                           String password, UserRole role) {
-        return users.findByEmail(email).orElseGet(() -> {
-            AppUser user = new AppUser();
-            user.setTenantId(tenantId);
-            user.setFullName(name);
-            user.setEmail(email);
-            user.setPasswordHash(encoder.encode(password));
-            user.setRole(role);
-            return users.save(user);
+        AppUser user = users.findByEmail(email).orElseGet(() -> {
+            AppUser u = new AppUser();
+            u.setEmail(email);
+            return u;
         });
+        user.setTenantId(tenantId);
+        user.setFullName(name);
+        user.setPasswordHash(encoder.encode(password));
+        user.setRole(role);
+        user.setStatus("ACTIVE");
+        user.setAccountLocked(false);
+        user.setAccessRevokedAt(null);
+        return users.save(user);
     }
 
     private static void ensurePlan(SubscriptionPlanRepository plans, String name, String code,

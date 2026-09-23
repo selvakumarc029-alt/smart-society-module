@@ -2456,11 +2456,23 @@
                     <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-danger px-3 py-2 rounded-pill fw-bold text-uppercase" style="font-size: 0.78rem;">
-                                    <i class="fa-solid fa-location-dot me-1"></i> Bangalore ▾
-                                </span>
+                                <div class="dropdown position-relative d-inline-block" id="custCityDropdownContainer">
+                                    <button class="btn btn-danger rounded-pill px-3 py-1.5 fw-bold text-uppercase dropdown-toggle d-flex align-items-center gap-1 shadow-sm" type="button" id="custCityDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" onclick="toggleCustCityDropdown(event)" style="font-size: 0.78rem; border: none; letter-spacing: 0.3px; cursor: pointer;">
+                                        <i class="fa-solid fa-location-dot me-1"></i> <span id="custCurrentCityLabel">Bangalore</span>
+                                    </button>
+                                    <ul class="dropdown-menu shadow-lg border-0 rounded-4 py-2 mt-2" id="custCityDropdownMenu" aria-labelledby="custCityDropdownBtn" style="font-size: 0.85rem; min-width: 185px; z-index: 1060; border: 1px solid #e2e8f0 !important;">
+                                        <li><h6 class="dropdown-header text-uppercase fw-bold text-muted" style="font-size: 0.68rem; letter-spacing: 0.5px;">Select Service City</h6></li>
+                                        <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3 fw-semibold active" onclick="selectCustServiceCity('Bangalore')"><span>Bangalore</span> <i class="fa-solid fa-check small cust-city-check"></i></button></li>
+                                        <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3" onclick="selectCustServiceCity('Mumbai')"><span>Mumbai</span> <i class="fa-solid fa-check small cust-city-check d-none"></i></button></li>
+                                        <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3" onclick="selectCustServiceCity('Delhi NCR')"><span>Delhi NCR</span> <i class="fa-solid fa-check small cust-city-check d-none"></i></button></li>
+                                        <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3" onclick="selectCustServiceCity('Hyderabad')"><span>Hyderabad</span> <i class="fa-solid fa-check small cust-city-check d-none"></i></button></li>
+                                        <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3" onclick="selectCustServiceCity('Chennai')"><span>Chennai</span> <i class="fa-solid fa-check small cust-city-check d-none"></i></button></li>
+                                        <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3" onclick="selectCustServiceCity('Pune')"><span>Pune</span> <i class="fa-solid fa-check small cust-city-check d-none"></i></button></li>
+                                        <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3" onclick="selectCustServiceCity('Kolkata')"><span>Kolkata</span> <i class="fa-solid fa-check small cust-city-check d-none"></i></button></li>
+                                    </ul>
+                                </div>
                                 <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.15rem; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                    NoBroker Home Services
+                                    Home Services
                                 </h4>
                             </div>
                             <div class="flex-grow-1 mx-lg-3" style="max-width: 520px;">
@@ -3128,5 +3140,74 @@
 
     <script src="/shared/js/dashboard-system.js?v=20260916-universal-sidebar-v3"></script>
     <script src="/shared/js/home-services-dashboard.js?v=20260921-worker-telemetry-v3"></script>
+<script>
+    function toggleCustCityDropdown(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const menu = document.getElementById('custCityDropdownMenu');
+        const btn = document.getElementById('custCityDropdownBtn');
+        if (!menu) return;
+        const isShown = menu.classList.contains('show');
+        if (isShown) {
+            menu.classList.remove('show');
+            btn?.classList.remove('show');
+            btn?.setAttribute('aria-expanded', 'false');
+        } else {
+            menu.classList.add('show');
+            btn?.classList.add('show');
+            btn?.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    function selectCustServiceCity(cityName) {
+        const label = document.getElementById('custCurrentCityLabel');
+        if (label) label.textContent = cityName;
+        
+        const menu = document.getElementById('custCityDropdownMenu');
+        if (menu) {
+            menu.querySelectorAll('.dropdown-item').forEach(item => {
+                const itemSpan = item.querySelector('span');
+                const itemText = (itemSpan ? itemSpan.textContent : item.textContent).trim();
+                const isMatch = itemText.toLowerCase() === cityName.toLowerCase();
+                item.classList.toggle('active', isMatch);
+                item.classList.toggle('fw-semibold', isMatch);
+                const check = item.querySelector('.cust-city-check');
+                if (check) check.classList.toggle('d-none', !isMatch);
+            });
+            menu.classList.remove('show');
+        }
+        const btn = document.getElementById('custCityDropdownBtn');
+        if (btn) {
+            btn.classList.remove('show');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+        
+        try {
+            localStorage.setItem('smart_apartment_selected_city', cityName);
+        } catch(e) {}
+    }
+
+    document.addEventListener('click', function(e) {
+        const container = document.getElementById('custCityDropdownContainer');
+        const menu = document.getElementById('custCityDropdownMenu');
+        const btn = document.getElementById('custCityDropdownBtn');
+        if (container && !container.contains(e.target)) {
+            menu?.classList.remove('show');
+            btn?.classList.remove('show');
+            btn?.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const savedCity = localStorage.getItem('smart_apartment_selected_city');
+            if (savedCity) {
+                selectCustServiceCity(savedCity);
+            }
+        } catch(e) {}
+    });
+</script>
 </body>
 </html>

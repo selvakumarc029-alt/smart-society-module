@@ -451,7 +451,7 @@ async function submitDashboardCredentials() {
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok) {
-            showToast(data.message || "Invalid username or password");
+            showToast(data.message || data.error || "Invalid username or password");
             if (submitDashboardLogin) {
                 submitDashboardLogin.disabled = false;
                 submitDashboardLogin.removeAttribute("aria-busy");

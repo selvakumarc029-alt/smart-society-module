@@ -100,12 +100,29 @@
         const tomorrowBtn = $('mwDateTomorrowBtn');
         const dateInput = $('mwPreferredDateInput');
         if (todayBtn && tomorrowBtn && dateInput) {
-            const todayStr = new Date().toISOString().split('T')[0];
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            const padZero = (n) => String(n).padStart(2, '0');
+            const formatLocalDate = (d) => `${d.getFullYear()}-${padZero(d.getMonth() + 1)}-${padZero(d.getDate())}`;
+            const today = new Date();
+            const todayStr = formatLocalDate(today);
+            const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+            const tomorrowStr = formatLocalDate(tomorrow);
+            // 15 days window from today: e.g. 1st -> 1..15; 2nd -> 2..16 (+14 days)
+            const maxBookingDate = formatLocalDate(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 14));
 
             dateInput.value = todayStr;
+            dateInput.min = todayStr;
+            dateInput.max = maxBookingDate;
+
+            dateInput.addEventListener('change', () => {
+                if (dateInput.value < todayStr) {
+                    alert('Past dates cannot be selected.');
+                    dateInput.value = todayStr;
+                } else if (dateInput.value > maxBookingDate) {
+                    alert(`Booking is only available within 15 days from today (${todayStr} to ${maxBookingDate}).`);
+                    dateInput.value = maxBookingDate;
+                }
+            });
+
             todayBtn.addEventListener('click', () => { dateInput.value = todayStr; todayBtn.classList.add('btn-primary'); todayBtn.classList.remove('btn-outline-primary'); tomorrowBtn.classList.remove('btn-primary'); tomorrowBtn.classList.add('btn-outline-primary'); });
             tomorrowBtn.addEventListener('click', () => { dateInput.value = tomorrowStr; tomorrowBtn.classList.add('btn-primary'); tomorrowBtn.classList.remove('btn-outline-primary'); todayBtn.classList.remove('btn-primary'); todayBtn.classList.add('btn-outline-primary'); });
         }
@@ -206,6 +223,26 @@
             if (!desc) {
                 alert('Please describe your maintenance problem before proceeding.');
                 $('mwProblemDescription')?.focus();
+                return;
+            }
+        }
+
+        // Validation for step 4
+        if (step > 4 && state.currentStep === 4) {
+            const dateInput = $('mwPreferredDateInput');
+            const dateVal = dateInput?.value;
+            const padZero = (n) => String(n).padStart(2, '0');
+            const formatLocalDate = (d) => `${d.getFullYear()}-${padZero(d.getMonth() + 1)}-${padZero(d.getDate())}`;
+            const today = formatLocalDate(new Date());
+            const maxDate = formatLocalDate(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 14));
+            if (!dateVal || dateVal < today) {
+                alert('Please select today or a future date for your maintenance booking.');
+                dateInput?.focus();
+                return;
+            }
+            if (dateVal > maxDate) {
+                alert(`Booking is only allowed within 15 days from today (${today} to ${maxDate}).`);
+                dateInput?.focus();
                 return;
             }
         }

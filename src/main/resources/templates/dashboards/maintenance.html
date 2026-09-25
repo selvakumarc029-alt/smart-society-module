@@ -1735,7 +1735,7 @@
                 <a href="#overview" class="nav-link btn btn-link text-start text-decoration-none active" data-panel="overview"><i class="fa-solid fa-house me-2"></i> Overview</a>
 
                 <div class="px-3 pb-1 pt-3 text-uppercase fw-bold small text-white-50" style="letter-spacing: 0.08em; font-size: 0.68rem;">Track 1: Tickets (Non-Emergency)</div>
-                <a href="#manager-operations" class="nav-link btn btn-link text-start text-decoration-none" data-panel="manager-operations"><i class="fa-solid fa-gauge-high me-2"></i> Operations Dashboard <span class="badge bg-danger rounded-pill float-end ms-auto" id="mgr-live-beacon">LIVE</span></a>
+                <a href="#manager-operations" class="nav-link btn btn-link text-start text-decoration-none" data-panel="manager-operations"><i class="fa-solid fa-gauge-high me-2"></i> Operations Dashboard <span class="badge bg-danger rounded-pill float-end ms-auto" id="mgr-sidebar-live-beacon">LIVE</span></a>
                 <a href="#resident-requests" class="nav-link btn btn-link text-start text-decoration-none" data-panel="resident-requests"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Resident Service Requests <span class="badge bg-primary rounded-pill float-end ms-auto" id="sidebarResidentReqBadge">0</span></a>
                 <a href="#tasks" class="nav-link btn btn-link text-start text-decoration-none" data-panel="tasks"><i class="fa-solid fa-clipboard-list me-2"></i> My Assigned Tasks</a>
                 <a href="#complaints" class="nav-link btn btn-link text-start text-decoration-none" data-panel="complaints"><i class="fa-solid fa-ticket me-2"></i> Open Ticket Pool</a>
@@ -3135,6 +3135,7 @@
                                         <td>Basement Parking B2</td>
                                         <td>Electrical</td>
                                         <td>2026-08-04</td>
+                                        <td><span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill"><i class="fa-regular fa-clock me-1"></i>Manual Queue</span></td>
                                         <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-claim-action="ticket">Claim Ticket</button></td>
                                     </tr>
                                     <tr>
@@ -3143,6 +3144,7 @@
                                         <td>Main Security Gate</td>
                                         <td>Telecom / Wiring</td>
                                         <td>2026-08-04</td>
+                                        <td><span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill"><i class="fa-regular fa-clock me-1"></i>Manual Queue</span></td>
                                         <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-claim-action="ticket">Claim Ticket</button></td>
                                     </tr>
                                 </tbody>
@@ -8148,7 +8150,106 @@
                     }
                     return;
                 }
+
+                // Asset Preventive Maintenance Log Service Action
+                const serviceLogBtn = e.target.closest('[data-action="service-log"]');
+                if (serviceLogBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    const row = serviceLogBtn.closest('tr');
+                    const assetName = row ? row.cells[0]?.textContent?.trim() : "Asset";
+                    const todayStr = new Date().toISOString().split('T')[0];
+                    const dueDate = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                    if (row && row.cells.length >= 5) {
+                        row.cells[3].textContent = todayStr;
+                        row.cells[4].innerHTML = `<strong class="text-success">${dueDate} (Healthy)</strong>`;
+                    }
+                    serviceLogBtn.outerHTML = `<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-circle-check me-1"></i>Service Logged</span>`;
+                    if (window.showToast) window.showToast(`Preventive service logged for ${assetName}. Next due: ${dueDate}`, "success");
+                    return;
+                }
+
+                // Technician Profile Save Action
+                const profileSaveBtn = e.target.closest('[data-action="save"]');
+                if (profileSaveBtn && profileSaveBtn.closest('[data-view="profile"]')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    const name = document.getElementById('techName')?.value?.trim() || "Ramesh Kumar";
+                    const skill = document.getElementById('techSkill')?.value?.trim() || "Senior Plumber & Pipe Fitter";
+                    const shift = document.getElementById('techShift')?.value?.trim() || "Morning Shift (07:00 AM - 04:00 PM)";
+                    const phone = document.getElementById('techPhone')?.value?.trim() || "+91 98441 22334";
+                    const availability = document.getElementById('techAvailability')?.value || "Available on duty";
+                    const backup = document.getElementById('techBackup')?.value?.trim() || "";
+                    const serviceArea = document.getElementById('techServiceArea')?.value?.trim() || "";
+                    const notes = document.getElementById('techNotes')?.value?.trim() || "";
+
+                    const profileData = { name, skill, shift, phone, availability, backup, serviceArea, notes, updatedAt: new Date().toISOString() };
+                    try {
+                        localStorage.setItem('smart_maintenance_tech_profile', JSON.stringify(profileData));
+                    } catch(err) {}
+
+                    const originalHtml = profileSaveBtn.innerHTML;
+                    profileSaveBtn.disabled = true;
+                    profileSaveBtn.innerHTML = `<i class="fa-solid fa-check me-2"></i>Profile Saved!`;
+                    profileSaveBtn.classList.remove('btn-primary');
+                    profileSaveBtn.classList.add('btn-success');
+
+                    if (window.showToast) window.showToast(`Technician profile for ${name} saved successfully!`, "success");
+
+                    setTimeout(() => {
+                        if (profileSaveBtn && profileSaveBtn.isConnected) {
+                            profileSaveBtn.disabled = false;
+                            profileSaveBtn.innerHTML = originalHtml;
+                            profileSaveBtn.classList.remove('btn-success');
+                            profileSaveBtn.classList.add('btn-primary');
+                        }
+                    }, 2000);
+                    return;
+                }
+
+                // Copy Worker Login Action
+                const copyLoginBtn = e.target.closest('.copy-worker-login');
+                if (copyLoginBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    const email = copyLoginBtn.dataset.email || "worker@smartsociety.com";
+                    const creds = `Login: ${email}\nPassword: Password@123\nURL: ${window.location.origin}/login`;
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(creds).then(() => {
+                            if (window.showToast) window.showToast(`Login credentials for ${email} copied to clipboard!`, "success");
+                        }).catch(() => {
+                            prompt("Copy worker login:", creds);
+                        });
+                    } else {
+                        prompt("Copy worker login:", creds);
+                    }
+                    const origHtml = copyLoginBtn.innerHTML;
+                    copyLoginBtn.innerHTML = `<i class="fa-solid fa-check me-1 text-success"></i>Copied!`;
+                    setTimeout(() => {
+                        if (copyLoginBtn && copyLoginBtn.isConnected) copyLoginBtn.innerHTML = origHtml;
+                    }, 2000);
+                    return;
+                }
             }, true);
+
+            // Hydrate technician profile from localStorage if previously saved
+            try {
+                const savedProf = localStorage.getItem('smart_maintenance_tech_profile');
+                if (savedProf) {
+                    const p = JSON.parse(savedProf);
+                    if (p.name && document.getElementById('techName')) document.getElementById('techName').value = p.name;
+                    if (p.skill && document.getElementById('techSkill')) document.getElementById('techSkill').value = p.skill;
+                    if (p.shift && document.getElementById('techShift')) document.getElementById('techShift').value = p.shift;
+                    if (p.phone && document.getElementById('techPhone')) document.getElementById('techPhone').value = p.phone;
+                    if (p.availability && document.getElementById('techAvailability')) document.getElementById('techAvailability').value = p.availability;
+                    if (p.backup && document.getElementById('techBackup')) document.getElementById('techBackup').value = p.backup;
+                    if (p.serviceArea && document.getElementById('techServiceArea')) document.getElementById('techServiceArea').value = p.serviceArea;
+                    if (p.notes && document.getElementById('techNotes')) document.getElementById('techNotes').value = p.notes;
+                }
+            } catch(e) {}
 
             window.addEventListener('hashchange', () => {
                 const panel = location.hash ? location.hash.substring(1) : "";

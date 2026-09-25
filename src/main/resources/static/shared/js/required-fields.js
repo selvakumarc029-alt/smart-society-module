@@ -43,6 +43,9 @@
 
         const titleSpan = label.querySelector(":scope > span:not(.required-star)") || label.querySelector("span:not(.required-star)");
         if (titleSpan) {
+            if (titleSpan.textContent.trim().endsWith("*")) {
+                titleSpan.textContent = titleSpan.textContent.trim().replace(/\s*\*+$/, "");
+            }
             titleSpan.appendChild(star);
         } else {
             const textNode = [...label.childNodes].find(n => n.nodeType === Node.TEXT_NODE && n.textContent.trim());

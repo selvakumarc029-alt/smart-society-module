@@ -205,7 +205,7 @@ function setupDetailedProfileSettings() {
         <form id="dashboardProfileForm" class="profile-settings__section">
             <div class="profile-settings__section-title"><span class="profile-settings__icon-box"><i class="fa-solid fa-address-card"></i></span><div><h3>Personal information</h3><p>These details identify you to the people and workflows you manage.</p></div></div>
             <div class="profile-form-grid">
-                <label><span>Full name *</span><input id="profileFullName" autocomplete="name" maxlength="120" required></label>
+                <label><span>Full name</span><input id="profileFullName" autocomplete="name" maxlength="120" required></label>
                 <label><span>Email address</span><input id="profileEmail" type="email" readonly><small>Your login email is protected from profile edits.</small></label>
                 <label><span>Phone number</span><input id="profilePhone" type="tel" autocomplete="tel" maxlength="30" placeholder="Add contact number"></label>
                 <label><span>Designation / responsibility</span><input id="profileDesignation" maxlength="100" placeholder="Add your designation"></label>
@@ -696,6 +696,9 @@ async function loadSocietyBackendData() {
             r.appendChild(td); return r;
         });
         fill('table[data-table="complaints"],table[data-table="maintenance-complaints"]', complaints, (x,c,s,table) => {
+            if (dashboardRole === "resident") {
+                return buildResidentComplaintRow(x);
+            }
             const r=document.createElement("tr");
             r.dataset.recordId=x.id;
             const closed=["RESOLVED","CLOSED"].includes(x.status);
@@ -709,12 +712,10 @@ async function loadSocietyBackendData() {
                 const logged=x.incidentAt||x.createdAt;c(r,logged?new Date(logged).toLocaleString("en-IN"):"—");
             }else{
                 c(r,x.title);
-                if(dashboardRole==="resident"){c(r,x.category);s(r,x.status);}
-                else{c(r,x.unitNo);c(r,x.assignedTo||"Unassigned");s(r,x.status);}
+                c(r,x.unitNo);c(r,x.assignedTo||"Unassigned");s(r,x.status);
             }
             const td=document.createElement("td");
-            if(dashboardRole==="resident")td.textContent="Admin controlled";
-            else if(closed){const badge=document.createElement("span");badge.className="badge bg-success-subtle text-success-emphasis";badge.textContent=x.status;td.appendChild(badge);}
+            if(closed){const badge=document.createElement("span");badge.className="badge bg-success-subtle text-success-emphasis";badge.textContent=x.status;td.appendChild(badge);}
             else if(dashboardRole==="maintenance"){
                 const assignment=document.createElement("small");assignment.className="d-block mb-2 text-muted";assignment.textContent=x.assignedTo?`Assigned to ${x.assignedTo}`:"Unassigned ticket";td.appendChild(assignment);
                 const b=document.createElement("button");b.type="button";b.className="btn btn-sm btn-primary";b.dataset.backendAction=x.status==="IN_PROGRESS"?"complaint-resolve":"complaint-start";b.textContent=x.status==="IN_PROGRESS"?"Mark Fixed":"Claim & Start";td.appendChild(b);
@@ -739,6 +740,7 @@ async function loadSocietyBackendData() {
         window.societyApartments = apartments;
         renderAmenityBookingDesk(amenityItems, bookingItems, residents);
         renderAnnouncements(noticeItems);
+        renderSharedComplaintsToTables();
         if (subscription) renderSocietySubscription(subscription);
         const setOverviewQuick = (id, count, label) => { const node = document.getElementById(id); if (node) node.textContent = `${count} ${label}`; };
         setOverviewQuick("overviewVisitorRecords", visitors.length, `visitor record${visitors.length === 1 ? "" : "s"}`);
@@ -1849,7 +1851,41 @@ function pushResidentInboxItem(item) {
 
 function sharedComplaints() {
     try {
-        return JSON.parse(localStorage.getItem("smartapartment-shared-complaints:v1") || "[]");
+        const stored = localStorage.getItem("smartapartment-shared-complaints:v1");
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+        const defaults = [
+            {
+                id: "complaint-102",
+                ticketNo: "T-102",
+                title: "Bathroom Water Leakage",
+                category: "Plumbing",
+                subcategory: "Pipe Leakage",
+                priority: "HIGH",
+                assignedTo: "Ramesh (Plumber)",
+                createdAt: "2026-08-03",
+                status: "In Progress",
+                location: "Flat A-101",
+                description: "Water leaking under the bathroom washbasin"
+            },
+            {
+                id: "complaint-088",
+                ticketNo: "T-088",
+                title: "Balcony Switchboard Fault",
+                category: "Electrical",
+                subcategory: "Wiring",
+                priority: "NORMAL",
+                assignedTo: "Suresh (Electrician)",
+                createdAt: "2026-07-28",
+                status: "Resolved",
+                location: "Flat A-101",
+                description: "Switch sparking during heavy monsoon rains"
+            }
+        ];
+        localStorage.setItem("smartapartment-shared-complaints:v1", JSON.stringify(defaults));
+        return defaults;
     } catch {
         return [];
     }
@@ -1867,10 +1903,15 @@ function persistSharedComplaint(values) {
     const staffEntry = values[8] || "No";
     const attachment = values[9] || "";
     const description = values[10] || "No extra details";
-    const nowStr = new Date().toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+    const nowStr = new Date().toLocaleDateString("en-IN", { day: '2-digit', month: 'short', year: 'numeric' });
+
+    const items = sharedComplaints();
+    const nextNum = items.length > 0 ? items.length + 101 : 101;
+    const ticketNo = `T-${nextNum}`;
 
     const newRecord = {
         id: `complaint-${Date.now()}`,
+        ticketNo: ticketNo,
         title,
         category,
         subcategory,
@@ -1884,15 +1925,170 @@ function persistSharedComplaint(values) {
         description,
         status: "Open",
         createdAt: nowStr,
-        flat: "A-101",
-        resident: "Kavya N"
+        flat: location || "A-101",
+        resident: "Kavya N",
+        assignedTo: category === "Plumbing" ? "Ramesh (Plumber)" : category === "Electrical" ? "Suresh (Electrician)" : ""
     };
 
-    const items = sharedComplaints();
     items.unshift(newRecord);
     localStorage.setItem("smartapartment-shared-complaints:v1", JSON.stringify(items.slice(0, 100)));
     renderSharedComplaintsToTables();
 }
+
+function buildResidentComplaintRow(item) {
+    const tr = document.createElement("tr");
+    tr.dataset.recordId = item.id;
+
+    let ticketNo = item.ticketNo;
+    if (!ticketNo) {
+        if (String(item.id).startsWith("T-")) {
+            ticketNo = item.id;
+        } else if (String(item.id).includes("-")) {
+            const digits = String(item.id).replace(/\D/g, "");
+            ticketNo = "T-" + (digits.slice(-3) || "105");
+        } else {
+            ticketNo = "T-" + String(item.id).padStart(3, "0");
+        }
+    }
+    if (!ticketNo.startsWith("#") && !ticketNo.startsWith("T-")) {
+        ticketNo = "T-" + ticketNo;
+    }
+
+    const priorityStr = String(item.priority || "NORMAL").toUpperCase();
+    const isUrgent = priorityStr === "URGENT" || priorityStr === "EMERGENCY" || priorityStr === "HIGH";
+    
+    const catIcons = {
+        "Plumbing": "fa-wrench text-primary",
+        "Electrical": "fa-bolt text-warning",
+        "Lift / Elevator": "fa-elevator text-info",
+        "Security": "fa-shield text-danger",
+        "Cleaning": "fa-broom text-success",
+        "Carpentry": "fa-hammer text-secondary",
+        "Pest Control": "fa-bug text-warning",
+        "Water Supply": "fa-faucet text-primary",
+        "Power Supply": "fa-plug text-danger",
+        "Common Area": "fa-building text-info",
+        "Parking": "fa-square-parking text-secondary"
+    };
+    const iconClass = catIcons[item.category] || "fa-screwdriver-wrench text-secondary";
+    const assigned = item.assignedTo || item.staff || (item.category === "Plumbing" ? "Ramesh (Plumber)" : item.category === "Electrical" ? "Suresh (Electrician)" : null);
+    
+    let createdDate = "Today";
+    if (item.createdAt) {
+        if (item.createdAt.includes(",")) {
+            createdDate = item.createdAt.split(",")[0].trim();
+        } else if (item.createdAt.includes("-")) {
+            createdDate = item.createdAt.slice(0, 10);
+        } else {
+            createdDate = item.createdAt;
+        }
+    } else if (item.incidentAt) {
+        createdDate = item.incidentAt.slice(0, 10);
+    }
+
+    const rawStatus = String(item.status || "Open").toUpperCase();
+    const isClosed = rawStatus === "RESOLVED" || rawStatus === "CLOSED";
+    const isInProgress = rawStatus.includes("PROGRESS");
+    const statusLabel = isClosed ? (rawStatus === "RESOLVED" ? "Resolved" : "Closed") : (isInProgress ? "In Progress" : "Open");
+    const statusBadgeClass = isClosed ? "status-resolved" : (isInProgress ? "status-progress" : "status-open");
+    const dotColor = isClosed ? "dot-resolved" : (isInProgress ? "dot-progress" : "dot-open");
+
+    const description = item.description || item.details || "";
+    const subTitle = (description && description !== item.title) ? 
+        (description.length > 45 ? description.substring(0, 45) + '…' : description) : 
+        (item.subcategory || item.location || 'Flat A-101');
+
+    tr.innerHTML = 
+        `<td>` +
+            `<div class="d-flex align-items-center gap-2">` +
+                `<span class="ticket-id-tag font-monospace">${escapeAttribute(ticketNo.startsWith("#") ? ticketNo : "#" + ticketNo)}</span>` +
+                (isUrgent ? `<span class="badge-priority-urgent">${escapeAttribute(priorityStr)}</span>` : "") +
+            `</div>` +
+        `</td>` +
+        `<td>` +
+            `<div class="ticket-title-text">${escapeAttribute(item.title)}</div>` +
+            `<div class="ticket-desc-text">${escapeAttribute(subTitle)}</div>` +
+        `</td>` +
+        `<td>` +
+            `<span class="ticket-cat-badge"><i class="fa-solid ${iconClass} me-1.5"></i>${escapeAttribute(item.category || "General")}</span>` +
+        `</td>` +
+        `<td>` +
+            (assigned ? 
+                `<div class="d-inline-flex align-items-center gap-2"><span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span><span class="staff-name-text">${escapeAttribute(assigned)}</span></div>` :
+                `<span class="badge-auto-assigning"><i class="fa-solid fa-clock-rotate-left me-1"></i>Auto-Assigning</span>`) +
+        `</td>` +
+        `<td>` +
+            `<span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1.5"></i>${escapeAttribute(createdDate)}</span>` +
+        `</td>` +
+        `<td>` +
+            `<span class="badge status-pill ${statusBadgeClass} status" data-status="${statusLabel}"><span class="status-dot ${dotColor}"></span>${statusLabel}</span>` +
+        `</td>` +
+        `<td>` +
+            (isClosed ? 
+                `<span class="badge-ticket-closed"><i class="fa-solid fa-check-double text-success me-1"></i>Closed</span>` :
+                `<button type="button" class="btn btn-sm btn-resolve-ticket" data-action="close" data-ticket-id="${escapeAttribute(item.id)}" onclick="window.resolveResidentComplaintRow(this, '${escapeAttribute(item.id)}')"><i class="fa-solid fa-check me-1.5"></i>Mark Resolved</button>`) +
+        `</td>`;
+    return tr;
+}
+
+window.resolveResidentComplaintRow = function(btn, id) {
+    const row = btn.closest("tr");
+    if (!row) return;
+
+    if (row.cells.length >= 7) {
+        // Status cell is index 5
+        row.cells[5].innerHTML = `<span class="badge status-pill status-resolved status" data-status="Resolved"><span class="status-dot dot-resolved"></span>Resolved</span>`;
+        // Action cell is index 6
+        row.cells[6].innerHTML = `<span class="badge-ticket-closed"><i class="fa-solid fa-check-double text-success me-1"></i>Closed</span>`;
+    }
+
+    try {
+        const items = JSON.parse(localStorage.getItem("smartapartment-shared-complaints:v1") || "[]");
+        const found = items.find(it => String(it.id) === String(id));
+        if (found) {
+            found.status = "Resolved";
+            localStorage.setItem("smartapartment-shared-complaints:v1", JSON.stringify(items));
+        }
+    } catch (_) {}
+
+    if (typeof window.updateResidentComplaintStats === "function") {
+        window.updateResidentComplaintStats();
+    }
+    if (typeof showToast === "function") {
+        showToast("✓ Ticket marked as resolved. Thank you!");
+    }
+};
+
+window.updateResidentComplaintStats = function() {
+    const table = document.querySelector('table[data-table="complaints"]');
+    if (!table) return;
+    const rows = [...table.querySelectorAll('tbody tr')].filter(r => !r.classList.contains('dashboard-empty-row'));
+    
+    let openCount = 0;
+    let progressCount = 0;
+    let resolvedCount = 0;
+
+    rows.forEach(r => {
+        const statusEl = r.querySelector('.status') || (r.cells.length >= 6 ? r.cells[5] : null);
+        const st = (statusEl ? statusEl.textContent.trim().toUpperCase() : "");
+        if (st.includes("RESOLVED") || st.includes("CLOSED")) {
+            resolvedCount++;
+        } else if (st.includes("PROGRESS")) {
+            progressCount++;
+        } else {
+            openCount++;
+        }
+    });
+
+    const openEl = document.getElementById("statOpenTickets");
+    if (openEl) openEl.textContent = String(openCount).padStart(2, "0");
+
+    const progEl = document.getElementById("statProgressTickets");
+    if (progEl) progEl.textContent = String(progressCount).padStart(2, "0");
+
+    const resEl = document.getElementById("statResolvedTickets");
+    if (resEl) resEl.textContent = String(resolvedCount).padStart(2, "0");
+};
 
 function renderSharedComplaintsToTables() {
     const items = sharedComplaints();
@@ -1902,33 +2098,55 @@ function renderSharedComplaintsToTables() {
         const tbody = table.querySelector("tbody");
         if (!tbody) return;
 
+        // Remove the empty row since items exist
+        const emptyRow = tbody.querySelector(".dashboard-empty-row");
+        if (emptyRow && items.length > 0) {
+            emptyRow.remove();
+        }
+
         items.forEach(item => {
-            if (tbody.querySelector(`tr[data-record-id="${item.id}"]`)) return;
-            const tr = document.createElement("tr");
-            tr.dataset.recordId = item.id;
+            const existingRow = tbody.querySelector(`tr[data-record-id="${item.id}"]`);
+            if (existingRow) {
+                if (dashboardRole === "resident" && existingRow.cells.length !== 7) {
+                    existingRow.replaceWith(buildResidentComplaintRow(item));
+                }
+                return;
+            }
 
             if (dashboardRole === "resident") {
-                tr.innerHTML = `<td><strong>${escapeAttribute(item.title)}</strong><br><small class="text-muted">${escapeAttribute(item.category)}</small></td>` +
-                               `<td>${escapeAttribute(item.category)}</td>` +
-                               `<td>${escapeAttribute(item.location)}</td>` +
-                               `<td><span class="badge bg-${item.priority === "URGENT" || item.priority === "HIGH" ? "danger" : "info"}">${escapeAttribute(item.priority)}</span></td>` +
-                               `<td><span class="badge bg-danger status open">${escapeAttribute(item.status)}</span></td>`;
+                tbody.prepend(buildResidentComplaintRow(item));
             } else if (dashboardRole === "maintenance") {
+                const tr = document.createElement("tr");
+                tr.dataset.recordId = item.id;
                 tr.innerHTML = `<td><strong>${escapeAttribute(item.title)}</strong><br><small class="text-muted">${escapeAttribute(item.resident)} · ${escapeAttribute(item.flat)}</small></td>` +
                                `<td>${escapeAttribute(item.location)}</td>` +
                                `<td><span class="badge bg-${item.priority === "URGENT" || item.priority === "HIGH" ? "danger" : "info"}">${escapeAttribute(item.priority)}</span></td>` +
                                `<td><span class="badge bg-danger status open">${escapeAttribute(item.status)}</span></td>` +
                                `<td><button class="btn btn-sm btn-primary" data-action="assign">Taken</button></td>`;
+                tbody.prepend(tr);
             } else {
+                const tr = document.createElement("tr");
+                tr.dataset.recordId = item.id;
                 tr.innerHTML = `<td><strong>${escapeAttribute(item.title)}</strong><br><small class="text-muted">${escapeAttribute(item.description.substring(0, 45))}${item.description.length > 45 ? "..." : ""}</small></td>` +
                                `<td>${escapeAttribute(item.flat || item.location)}</td>` +
                                `<td>${escapeAttribute(item.category)}</td>` +
                                `<td><span class="badge bg-danger status open">${escapeAttribute(item.status)}</span></td>` +
                                `<td><button class="btn btn-sm btn-primary" data-action="assign">Assign</button> <button class="btn btn-sm btn-outline-danger" data-action="close">Close Ticket</button></td>`;
+                tbody.prepend(tr);
             }
-            tbody.prepend(tr);
         });
+
+        if (dashboardRole === "resident") {
+            const nonEmptyRows = [...tbody.querySelectorAll("tr")].filter(r => !r.classList.contains("dashboard-empty-row"));
+            if (nonEmptyRows.length === 0) {
+                tbody.innerHTML = `<tr class="dashboard-empty-row"><td colspan="7" class="text-center text-muted py-5"><i class="fa-solid fa-clipboard-check d-block fs-3 mb-2 text-primary opacity-50"></i>No active complaints or repair tickets. Click "+ Raise Ticket" to submit one.</td></tr>`;
+            }
+        }
     });
+
+    if (dashboardRole === "resident" && typeof window.updateResidentComplaintStats === "function") {
+        window.updateResidentComplaintStats();
+    }
 }
 
 function residentPaymentProofs() {
@@ -3038,10 +3256,499 @@ function addResidentComplaint(values) {
     tbody.prepend(row);
 }
 
+/* ==========================================================================
+   INNOVATIVE RESIDENT AMENITY BOOKING STUDIO SYSTEM
+   15-Day Booking Horizon, Real-time Boarding Pass Ticket, Interactive Steppers
+   ========================================================================== */
+let activeAmenityBooking = null;
+
+const AMENITY_CONFIGS = {
+    gym: {
+        id: "gym",
+        name: "Fitness Center / Gym",
+        sub: "Resident Wellness Hub · Level 2",
+        badge: "Instant Resident Access",
+        icon: "fa-dumbbell",
+        gradient: "linear-gradient(135deg, #1d4ed8, #06b6d4)",
+        icoBg: "#eff6ff",
+        icoColor: "#2563eb",
+        feeText: "Free (Complimentary)",
+        feeAmount: 0,
+        depositAmount: 0,
+        hours: "6:00 AM - 10:00 PM",
+        capacity: "Max 15 people",
+        defaultGuests: 1,
+        maxGuests: 4,
+        defaultVehicles: 0,
+        maxVehicles: 2,
+        slots: [
+            { id: "g1", name: "Early Birds", time: "06:00 AM - 07:30 AM", start: "06:00", end: "07:30", badge: "High Availability" },
+            { id: "g2", name: "Morning Prime", time: "07:30 AM - 09:00 AM", start: "07:30", end: "09:00", badge: "Peak Popular" },
+            { id: "g3", name: "Midday Boost", time: "11:00 AM - 12:30 PM", start: "11:00", end: "12:30", badge: "Quiet Session" },
+            { id: "g4", name: "Evening Power", time: "05:00 PM - 06:30 PM", start: "17:00", end: "18:30", badge: "Fast Filling" },
+            { id: "g5", name: "Sunset Burn", time: "06:30 PM - 08:00 PM", start: "18:30", end: "20:00", badge: "Peak Popular" },
+            { id: "g6", name: "Night Session", time: "08:00 PM - 09:30 PM", start: "20:00", end: "21:30", badge: "Quiet Session" }
+        ],
+        purposes: [
+            { label: "Daily Workout", icon: "🏋️" },
+            { label: "Cardio & HIIT", icon: "🏃" },
+            { label: "Yoga & Stretching", icon: "🧘" },
+            { label: "Personal Training", icon: "🤝" },
+            { label: "Strength Conditioning", icon: "💪" }
+        ],
+        guestPresets: [1, 2, 3, 4],
+        vehiclePresets: [0, 1]
+    },
+    clubhouse: {
+        id: "clubhouse",
+        name: "Party Hall / Clubhouse",
+        sub: "Private Celebrations & Banquets · Wing C",
+        badge: "Events & Functions",
+        icon: "fa-champagne-glasses",
+        gradient: "linear-gradient(135deg, #7c3aed, #ec4899)",
+        icoBg: "#faf5ff",
+        icoColor: "#7c3aed",
+        feeText: "Rs. 2,500 / day",
+        feeAmount: 2500,
+        depositAmount: 1000,
+        hours: "10:00 AM - 11:00 PM",
+        capacity: "Max 120 guests",
+        defaultGuests: 25,
+        maxGuests: 120,
+        defaultVehicles: 2,
+        maxVehicles: 20,
+        slots: [
+            { id: "c1", name: "Day Session", time: "10:00 AM - 03:00 PM", start: "10:00", end: "15:00", badge: "5 Hours" },
+            { id: "c2", name: "Evening Gala", time: "05:00 PM - 11:00 PM", start: "17:00", end: "23:00", badge: "6 Hours Prime" },
+            { id: "c3", name: "Full Day Exclusive", time: "10:00 AM - 11:00 PM", start: "10:00", end: "23:00", badge: "All-Day Access" }
+        ],
+        purposes: [
+            { label: "Birthday Party", icon: "🎂" },
+            { label: "Family Reception", icon: "💍" },
+            { label: "Community Get-Together", icon: "🎉" },
+            { label: "Society Committee Meeting", icon: "👥" },
+            { label: "Cultural Event / Pooja", icon: "🪔" }
+        ],
+        guestPresets: [15, 25, 50, 100],
+        vehiclePresets: [1, 2, 4, 8]
+    },
+    parking: {
+        id: "parking",
+        name: "Visitor Parking Slot",
+        sub: "Covered Bay B-04 · Gate 1 Boom Barrier",
+        badge: "Guest Vehicle Access",
+        icon: "fa-square-parking",
+        gradient: "linear-gradient(135deg, #059669, #0d9488)",
+        icoBg: "#ecfdf5",
+        icoColor: "#059669",
+        feeText: "Complimentary Guest Pass",
+        feeAmount: 0,
+        depositAmount: 0,
+        hours: "24x7 Visitor Bay",
+        capacity: "Slot B-04 (4 Free)",
+        defaultGuests: 1,
+        maxGuests: 8,
+        defaultVehicles: 1,
+        maxVehicles: 4,
+        slots: [
+            { id: "p1", name: "Short Visit", time: "2 Hours Stay", start: "10:00", end: "12:00", badge: "Quick Stay" },
+            { id: "p2", name: "Extended Visit", time: "4 Hours Stay", start: "10:00", end: "14:00", badge: "Half Day" },
+            { id: "p3", name: "Overnight Pass", time: "07:00 PM - 08:00 AM", start: "19:00", end: "08:00", badge: "Night Bay Pass" },
+            { id: "p4", name: "Full 24-Hour Stay", time: "24 Hours Pass", start: "09:00", end: "09:00", badge: "All Day" }
+        ],
+        purposes: [
+            { label: "Family Guest", icon: "👨‍👩‍👦" },
+            { label: "Delivery / Moving Van", icon: "📦" },
+            { label: "Business Client", icon: "💼" },
+            { label: "Cab / Chauffeur Wait", icon: "🚕" }
+        ],
+        guestPresets: [1, 2, 4, 6],
+        vehiclePresets: [1, 2, 3, 4]
+    }
+};
+
+function getAmenityConfig(button) {
+    const raw = String(button.dataset.amenityName || button.closest(".card, .amenity-booking-card")?.querySelector("h5, h4, h3")?.textContent || "").toLowerCase();
+    if (raw.includes("gym") || raw.includes("fitness")) return AMENITY_CONFIGS.gym;
+    if (raw.includes("clubhouse") || raw.includes("party") || raw.includes("hall")) return AMENITY_CONFIGS.clubhouse;
+    if (raw.includes("parking")) return AMENITY_CONFIGS.parking;
+    return AMENITY_CONFIGS.gym;
+}
+
+function openResidentAmenityBookingModal(button) {
+    const config = getAmenityConfig(button);
+    const modal = document.getElementById("residentAmenityBookingModal");
+    if (!modal) return;
+
+    // Reset views
+    const mainView = document.getElementById("amenityModalMainView");
+    if (mainView) mainView.style.display = "grid";
+    const successView = document.getElementById("amenityModalSuccessView");
+    if (successView) successView.style.display = "none";
+
+    // Set Theme & Identity
+    const headIcon = document.getElementById("amenityHeadIcon");
+    if (headIcon) {
+        headIcon.style.background = config.gradient;
+        headIcon.innerHTML = `<i class="fa-solid ${config.icon}"></i>`;
+    }
+    const headBadge = document.getElementById("amenityHeadBadge");
+    if (headBadge) headBadge.innerHTML = `<i class="fa-solid fa-bolt text-warning"></i> <span>${config.badge}</span>`;
+    document.getElementById("amenityHeadTitle").textContent = config.name;
+    document.getElementById("amenityHeadSub").textContent = config.sub;
+
+    document.getElementById("ticketAmenityName").textContent = config.name;
+    document.getElementById("ticketAmenityLoc").textContent = config.sub;
+    const ticketIco = document.getElementById("ticketAmenityIco");
+    if (ticketIco) {
+        ticketIco.style.background = config.icoBg;
+        ticketIco.style.color = config.icoColor;
+        ticketIco.innerHTML = `<i class="fa-solid ${config.icon}"></i>`;
+    }
+
+    document.getElementById("amenityOperatingHoursLabel").textContent = config.hours;
+    document.getElementById("amenityCapacityHint").textContent = config.capacity;
+
+    // Generate 15-day Horizon
+    const days = [];
+    const now = new Date();
+    for (let i = 0; i < 15; i++) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        const iso = `${yyyy}-${mm}-${dd}`;
+        const dayLabel = i === 0 ? "Today" : i === 1 ? "Tomorrow" : d.toLocaleDateString("en-US", { weekday: "short" });
+        const monthLabel = d.toLocaleDateString("en-US", { month: "short" });
+        days.push({ iso, dayLabel, dayNum: d.getDate(), monthLabel, isToday: i === 0 });
+    }
+
+    // Set manual date input min/max for strictly 15 days
+    const manualDateInput = document.getElementById("amenityManualDateInput");
+    if (manualDateInput) {
+        manualDateInput.min = days[0].iso;
+        manualDateInput.max = days[14].iso;
+        manualDateInput.value = days[0].iso;
+    }
+    const windowBadge = document.getElementById("amenityDateWindowBadge");
+    if (windowBadge) windowBadge.textContent = `${days[0].dayNum} ${days[0].monthLabel} - ${days[14].dayNum} ${days[14].monthLabel} (15 Days)`;
+
+    // Render 15 Date Chips
+    const dateStrip = document.getElementById("amenityDateStrip");
+    if (dateStrip) {
+        dateStrip.innerHTML = days.map((day, idx) => `
+            <div class="amenity-date-chip ${idx === 0 ? 'active' : ''}" data-date="${day.iso}" onclick="window.selectAmenityDateChip('${day.iso}', this)">
+                ${day.isToday ? '<span class="chip-today-tag">NOW</span>' : ''}
+                <span class="chip-day">${day.dayLabel}</span>
+                <span class="chip-num">${day.dayNum}</span>
+                <span class="chip-month">${day.monthLabel}</span>
+            </div>
+        `).join("");
+    }
+
+    // Render Slots Grid
+    const slotGrid = document.getElementById("amenitySlotsGrid");
+    if (slotGrid) {
+        slotGrid.innerHTML = config.slots.map((slot, idx) => `
+            <button type="button" class="amenity-slot-pill ${idx === 0 ? 'active' : ''}" data-slot-id="${slot.id}" data-start="${slot.start}" data-end="${slot.end}" data-time="${slot.time}" onclick="window.selectAmenitySlotPill(this)">
+                <span class="slot-name">${slot.name}</span>
+                <span class="slot-time">${slot.time}</span>
+                <span class="slot-badge">${slot.badge}</span>
+            </button>
+        `).join("");
+    }
+
+    // Render Stepper presets
+    const guestChips = document.getElementById("stepperGuestChips");
+    if (guestChips) {
+        guestChips.innerHTML = config.guestPresets.map((val, idx) => `
+            <button type="button" class="stepper-chip ${idx === 0 ? 'active' : ''}" onclick="window.setAmenityPresetCount('guest', ${val})">${val} ${val === 1 ? 'Person' : 'People'}</button>
+        `).join("");
+    }
+
+    const vehicleChips = document.getElementById("stepperVehicleChips");
+    if (vehicleChips) {
+        vehicleChips.innerHTML = config.vehiclePresets.map((val, idx) => `
+            <button type="button" class="stepper-chip ${idx === 0 ? 'active' : ''}" onclick="window.setAmenityPresetCount('vehicle', ${val})">${val} ${val === 1 ? 'Car' : 'Cars'}</button>
+        `).join("");
+    }
+
+    // Render Purpose Chips
+    const purposeWrap = document.getElementById("amenityPurposeChips");
+    if (purposeWrap) {
+        purposeWrap.innerHTML = config.purposes.map((p, idx) => `
+            <button type="button" class="purpose-chip ${idx === 0 ? 'active' : ''}" onclick="window.selectAmenityPurposeChip('${p.label}', this)">
+                <span>${p.icon}</span> <span>${p.label}</span>
+            </button>
+        `).join("");
+    }
+
+    // Reset Custom Slot Toggle
+    const customToggle = document.getElementById("amenityCustomSlotToggle");
+    if (customToggle) customToggle.checked = false;
+    const customRow = document.getElementById("amenityCustomTimeRow");
+    if (customRow) customRow.style.display = "none";
+    document.getElementById("amenityCustomStart").value = config.slots[0].start;
+    document.getElementById("amenityCustomEnd").value = config.slots[0].end;
+
+    // Reset initial field values
+    document.getElementById("stepperGuestVal").textContent = config.defaultGuests;
+    document.getElementById("stepperGuestBadge").textContent = `${config.defaultGuests} ${config.defaultGuests === 1 ? 'Person' : 'Guests'}`;
+    document.getElementById("stepperVehicleVal").textContent = config.defaultVehicles;
+    document.getElementById("stepperVehicleBadge").textContent = `${config.defaultVehicles} ${config.defaultVehicles === 1 ? 'Car' : 'Cars'}`;
+    document.getElementById("amenityPurposeField").value = config.purposes[0].label;
+    document.getElementById("amenityNotesField").value = "";
+
+    // Generate fresh barcode
+    const barcodeId = `RES-2026-${config.id.toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    document.getElementById("ticketBarcodeId").textContent = barcodeId;
+
+    // Save active state
+    activeAmenityBooking = {
+        button,
+        config,
+        date: days[0].iso,
+        dateFormatted: `${days[0].dayLabel}, ${days[0].dayNum} ${days[0].monthLabel} 2026`,
+        startTime: config.slots[0].start,
+        endTime: config.slots[0].end,
+        slotLabel: config.slots[0].time,
+        guests: config.defaultGuests,
+        vehicles: config.defaultVehicles,
+        purpose: config.purposes[0].label,
+        barcodeId
+    };
+
+    updateAmenityLiveTicket();
+    modal.classList.remove("hidden");
+}
+
+window.selectAmenityDateChip = function(isoDate, el) {
+    document.querySelectorAll(".amenity-date-chip").forEach(c => c.classList.remove("active"));
+    el.classList.add("active");
+    const manual = document.getElementById("amenityManualDateInput");
+    if (manual) manual.value = isoDate;
+    if (activeAmenityBooking) {
+        activeAmenityBooking.date = isoDate;
+        const d = new Date(isoDate + "T00:00:00");
+        activeAmenityBooking.dateFormatted = d.toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+        updateAmenityLiveTicket();
+    }
+};
+
+window.handleAmenityDateInputChange = function(isoDate) {
+    if (!isoDate || !activeAmenityBooking) return;
+    const chips = document.querySelectorAll(".amenity-date-chip");
+    chips.forEach(c => {
+        c.classList.toggle("active", c.dataset.date === isoDate);
+        if (c.dataset.date === isoDate) {
+            c.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        }
+    });
+    activeAmenityBooking.date = isoDate;
+    const d = new Date(isoDate + "T00:00:00");
+    activeAmenityBooking.dateFormatted = d.toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+    updateAmenityLiveTicket();
+};
+
+window.selectAmenitySlotPill = function(pill) {
+    document.querySelectorAll(".amenity-slot-pill").forEach(p => p.classList.remove("active"));
+    pill.classList.add("active");
+    if (activeAmenityBooking) {
+        activeAmenityBooking.startTime = pill.dataset.start;
+        activeAmenityBooking.endTime = pill.dataset.end;
+        activeAmenityBooking.slotLabel = pill.dataset.time;
+        updateAmenityLiveTicket();
+    }
+};
+
+window.toggleAmenityCustomSlot = function(show) {
+    const row = document.getElementById("amenityCustomTimeRow");
+    if (row) row.style.display = show ? "flex" : "none";
+    if (show) {
+        document.querySelectorAll(".amenity-slot-pill").forEach(p => p.classList.remove("active"));
+        window.updateAmenityCustomTimes();
+    } else {
+        const first = document.querySelector(".amenity-slot-pill");
+        if (first) first.click();
+    }
+};
+
+window.updateAmenityCustomTimes = function() {
+    const s = document.getElementById("amenityCustomStart").value || "09:00";
+    const e = document.getElementById("amenityCustomEnd").value || "11:00";
+    if (activeAmenityBooking) {
+        activeAmenityBooking.startTime = s;
+        activeAmenityBooking.endTime = e;
+        activeAmenityBooking.slotLabel = `${s} - ${e} (Custom)`;
+        updateAmenityLiveTicket();
+    }
+};
+
+window.stepAmenityCount = function(type, delta) {
+    if (!activeAmenityBooking) return;
+    const cfg = activeAmenityBooking.config;
+    if (type === "guest") {
+        let count = (activeAmenityBooking.guests || 1) + delta;
+        if (count < 1) count = 1;
+        if (count > (cfg.maxGuests || 100)) count = cfg.maxGuests;
+        activeAmenityBooking.guests = count;
+        document.getElementById("stepperGuestVal").textContent = count;
+        document.getElementById("stepperGuestBadge").textContent = `${count} ${count === 1 ? 'Person' : 'Guests'}`;
+        document.querySelectorAll("#stepperGuestChips .stepper-chip").forEach(c => {
+            c.classList.toggle("active", Number(c.textContent.trim().split(" ")[0]) === count);
+        });
+    } else if (type === "vehicle") {
+        let count = (activeAmenityBooking.vehicles || 0) + delta;
+        if (count < 0) count = 0;
+        if (count > (cfg.maxVehicles || 20)) count = cfg.maxVehicles;
+        activeAmenityBooking.vehicles = count;
+        document.getElementById("stepperVehicleVal").textContent = count;
+        document.getElementById("stepperVehicleBadge").textContent = `${count} ${count === 1 ? 'Car' : 'Cars'}`;
+        document.querySelectorAll("#stepperVehicleChips .stepper-chip").forEach(c => {
+            c.classList.toggle("active", Number(c.textContent.trim().split(" ")[0]) === count);
+        });
+    }
+    updateAmenityLiveTicket();
+};
+
+window.setAmenityPresetCount = function(type, val) {
+    if (!activeAmenityBooking) return;
+    if (type === "guest") {
+        activeAmenityBooking.guests = val;
+        document.getElementById("stepperGuestVal").textContent = val;
+        document.getElementById("stepperGuestBadge").textContent = `${val} ${val === 1 ? 'Person' : 'Guests'}`;
+        document.querySelectorAll("#stepperGuestChips .stepper-chip").forEach(c => {
+            c.classList.toggle("active", Number(c.textContent.trim().split(" ")[0]) === val);
+        });
+    } else if (type === "vehicle") {
+        activeAmenityBooking.vehicles = val;
+        document.getElementById("stepperVehicleVal").textContent = val;
+        document.getElementById("stepperVehicleBadge").textContent = `${val} ${val === 1 ? 'Car' : 'Cars'}`;
+        document.querySelectorAll("#stepperVehicleChips .stepper-chip").forEach(c => {
+            c.classList.toggle("active", Number(c.textContent.trim().split(" ")[0]) === val);
+        });
+    }
+    updateAmenityLiveTicket();
+};
+
+window.selectAmenityPurposeChip = function(text, el) {
+    document.querySelectorAll(".purpose-chip").forEach(c => c.classList.remove("active"));
+    el.classList.add("active");
+    const input = document.getElementById("amenityPurposeField");
+    if (input) input.value = text;
+    if (activeAmenityBooking) {
+        activeAmenityBooking.purpose = text;
+        updateAmenityLiveTicket();
+    }
+};
+
+window.updateAmenityLiveTicket = function() {
+    if (!activeAmenityBooking) return;
+    const cfg = activeAmenityBooking.config;
+    document.getElementById("ticketDateVal").textContent = activeAmenityBooking.dateFormatted || activeAmenityBooking.date;
+    document.getElementById("ticketTimeVal").textContent = activeAmenityBooking.slotLabel || "Preferred Slot";
+    document.getElementById("ticketPassesVal").textContent = `${activeAmenityBooking.guests || 1} ${activeAmenityBooking.guests === 1 ? 'Guest' : 'Guests'}`;
+    document.getElementById("ticketVehiclesVal").textContent = `${activeAmenityBooking.vehicles || 0} ${activeAmenityBooking.vehicles === 1 ? 'Vehicle' : 'Vehicles'}`;
+
+    document.getElementById("ticketFeeRow").textContent = cfg.feeAmount > 0 ? `₹${cfg.feeAmount.toLocaleString('en-IN')}` : "Free (Complimentary)";
+    const depositRow = document.getElementById("ticketDepositRow");
+    if (depositRow) {
+        depositRow.style.display = cfg.depositAmount > 0 ? "flex" : "none";
+        document.getElementById("ticketDepositVal").textContent = `₹${cfg.depositAmount.toLocaleString('en-IN')}`;
+    }
+
+    const total = (cfg.feeAmount || 0) + (cfg.depositAmount || 0);
+    document.getElementById("ticketTotalAmount").textContent = total > 0 ? `₹${total.toLocaleString('en-IN')}` : "₹0";
+};
+
+window.closeResidentAmenityBookingModal = function() {
+    document.getElementById("residentAmenityBookingModal")?.classList.add("hidden");
+    activeAmenityBooking = null;
+};
+
+window.submitInnovativeAmenityBooking = async function() {
+    if (!activeAmenityBooking) return;
+    const btn = document.getElementById("btnConfirmAmenityBooking");
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i> Confirming Pass...`;
+    }
+
+    const { button, config, date, startTime, endTime, guests, vehicles, barcodeId } = activeAmenityBooking;
+    const purpose = document.getElementById("amenityPurposeField").value.trim() || activeAmenityBooking.purpose || "Personal use";
+    const phone = document.getElementById("amenityPhoneField").value.trim() || "+91 98440 22010";
+    const notes = document.getElementById("amenityNotesField").value.trim() || "";
+
+    const values = [date, startTime, endTime, String(guests), String(vehicles), purpose, phone, notes];
+
+    try {
+        const amenityObj = residentAmenityForButton(button);
+        if (amenityObj && amenityObj.id) {
+            await mutateSociety("society/bookings", "POST", {
+                amenityId: Number(amenityObj.id),
+                startTime: `${date}T${startTime}`,
+                endTime: `${date}T${endTime}`,
+                expectedGuests: Number(guests || 1),
+                vehicleCount: Number(vehicles || 0),
+                eventPurpose: purpose,
+                contactNumber: phone,
+                specialInstructions: notes
+            }).catch(() => null);
+        }
+    } catch (e) {}
+
+    // Update UI card & Dashboard stat
+    const bookingResult = updateResidentAmenityBooking(button, values);
+    pushResidentInboxItem({
+        type: "Amenity Request",
+        title: config.name,
+        details: `${date} ${activeAmenityBooking.slotLabel} | ${guests} guest(s) | ${purpose}`
+    });
+    persistDashboardState();
+    showToast(`✓ ${config.name} reservation confirmed!`);
+
+    // Flip to digital pass screen
+    document.getElementById("amenityModalMainView").style.display = "none";
+    const successView = document.getElementById("amenityModalSuccessView");
+    if (successView) {
+        successView.style.display = "flex";
+        document.getElementById("successPassAmenity").textContent = config.name;
+        document.getElementById("successPassSlot").textContent = `${activeAmenityBooking.dateFormatted || date} · ${activeAmenityBooking.slotLabel}`;
+        document.getElementById("successPassRef").textContent = `#${barcodeId}`;
+        document.getElementById("successPassAccess").textContent = `${guests} Resident Pass${guests > 1 ? 'es' : ''} · ${vehicles} Vehicle${vehicles > 1 ? 's' : ''}`;
+    }
+
+    if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-circle-check"></i> Confirm & Generate Pass`;
+    }
+};
+
+window.downloadAmenityPassReceipt = function() {
+    if (!activeAmenityBooking) return;
+    const { config, dateFormatted, slotLabel, guests, vehicles, barcodeId } = activeAmenityBooking;
+    const text = `=====================================================
+SMARTAPARTMENT RESIDENT AMENITY DIGITAL GATE PASS
+=====================================================
+Pass Reference ID : ${barcodeId}
+Amenity Reserved  : ${config.name} (${config.sub})
+Booking Schedule  : ${dateFormatted} · ${slotLabel}
+Authorized Passes : ${guests} Guest(s)
+Registered Vehicles: ${vehicles} Vehicle(s)
+Flat / Unit       : Unit A-101
+Payment / Fee     : ${config.feeText}
+Status            : CONFIRMED & ACTIVE (Gate Security Synced)
+Security Support  : +91 98440 22010 (Gate Guard)
+Issued At         : ${new Date().toLocaleString()}
+=====================================================
+Please display this digital ticket or barcode at the security entrance.`;
+    downloadText(`Amenity-Pass-${barcodeId}.txt`, text);
+};
+
 function updateResidentAmenityBooking(button, values) {
-    const card = button.closest(".card");
+    const card = button.closest(".amenity-booking-card, .card");
     if (!card) return;
-    const amenity = button.dataset.amenityName || card.querySelector("h3, h4")?.textContent.trim() || "Amenity";
+    const amenity = button.dataset.amenityName || card.querySelector("h3, h4, h5")?.textContent.trim() || "Amenity";
     const date = values[0] || "Today";
     const time = [values[1], values[2]].filter(Boolean).join(" - ") || "Preferred slot";
     const guests = values[3] ? `${values[3]} guest(s)` : "Resident";
@@ -3057,6 +3764,16 @@ function updateResidentAmenityBooking(button, values) {
         <p><strong>${escapeAttribute(date)} - ${escapeAttribute(time)}</strong></p>
         <p>${escapeAttribute(guests)} | ${escapeAttribute(purpose)}</p>`;
     updateRowAction(button, "Requested", "book", true);
+
+    try {
+        const statsUpcoming = document.querySelector('[data-view="amenities"] .stats .card strong');
+        if (statsUpcoming) {
+            statsUpcoming.textContent = amenity;
+            const sub = statsUpcoming.nextElementSibling;
+            if (sub) sub.textContent = `${date}, ${time.split(" - ")[0] || "5:00 PM"}`;
+        }
+    } catch (e) {}
+
     return { amenity, date, time, guests, purpose };
 }
 
@@ -3343,6 +4060,10 @@ function actionConfig(action, button) {
 function openActionModal(action, button) {
     if (dashboardRole === "resident" && action === "pay") {
         openResidentPaymentModal(button);
+        return;
+    }
+    if (dashboardRole === "resident" && action === "book") {
+        openResidentAmenityBookingModal(button);
         return;
     }
     if (dashboardRole === "accountant" && action === "pay" && button.closest('[data-table="billing"]')) {

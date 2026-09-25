@@ -4167,6 +4167,31 @@ window.closeSubServicesModal = function closeSubServicesModal() {
     let _pgCurrentSlot = "MORNING";
     let _pgSelectedBank = "HDFC Bank";
 
+    function getPgBookingDateRange(daysSpan = 15) {
+        const pad = (n) => String(n).padStart(2, '0');
+        const fmt = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        const today = new Date();
+        const minStr = fmt(today);
+        // 15 days window: if today is 1st -> 1..15; if today is 2nd -> 2..16 (+14 days)
+        const maxDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + (daysSpan - 1));
+        const maxStr = fmt(maxDate);
+        const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        const defStr = fmt(tomorrow <= maxDate ? tomorrow : today);
+        return { minStr, maxStr, defStr };
+    }
+
+    window.validatePgServiceDate = function validatePgServiceDate(input) {
+        if (!input || !input.value) return;
+        const range = getPgBookingDateRange(15);
+        if (input.value < range.minStr) {
+            notify("Past dates cannot be selected. Please select today or a date within the next 15 days.");
+            input.value = range.minStr;
+        } else if (input.value > range.maxStr) {
+            notify(`Booking is only available for 15 days from today (between ${range.minStr} and ${range.maxStr}).`);
+            input.value = range.maxStr;
+        }
+    };
+
     window.openPaymentGateway = function openPaymentGateway(order) {
         if (!order) return;
         _pgOrderState = { ...order };
@@ -4265,7 +4290,9 @@ window.closeSubServicesModal = function closeSubServicesModal() {
         const defaultName = document.getElementById("nbCustomerName")?.value || (isCustomer ? "PropertyDirect Customer" : "Resident");
         const defaultPhone = document.getElementById("nbCustomerPhone")?.value || "9876543210";
         const defaultAddress = document.getElementById("nbAddress")?.value || (isCustomer ? "Flat 402, Tower B, Palm Heights" : "A-101, SmartSociety Palms");
-        const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+        
+        // 15 days window: if today is 1st -> 1 to 15; if today is 2nd -> 2 to 16 (+14 days)
+        const dateRange = getPgBookingDateRange(15);
 
         const gridEl = document.getElementById("subserviceGrid");
         if (!gridEl) return;
@@ -4294,8 +4321,12 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
                     <div class="pg-inputs-grid">
                         <div class="pg-input-group">
-                            <label class="pg-input-label" for="pgServiceDate">Preferred Service Date</label>
-                            <input type="date" class="pg-input" id="pgServiceDate" value="${tomorrow}" min="${new Date().toISOString().split('T')[0]}" />
+                            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px;">
+                                <label class="pg-input-label" for="pgServiceDate" style="margin-bottom: 0;">Preferred Service Date</label>
+                                <span style="font-size: 0.72rem; color: #059669; font-weight: 700;"><i class="fa-solid fa-calendar-check"></i> Next 15 days only</span>
+                            </div>
+                            <input type="date" class="pg-input" id="pgServiceDate" value="${dateRange.defStr}" min="${dateRange.minStr}" max="${dateRange.maxStr}" onchange="window.validatePgServiceDate(this)" oninput="window.validatePgServiceDate(this)" />
+                            <small style="display: block; font-size: 0.72rem; color: #64748b; margin-top: 3px;">Bookings open for 15 days (${dateRange.minStr} to ${dateRange.maxStr})</small>
                         </div>
                         <div class="pg-input-group">
                             <label class="pg-input-label" for="pgCustomerPhone">Mobile Number (10 Digits)</label>
@@ -4742,7 +4773,19 @@ window.closeSubServicesModal = function closeSubServicesModal() {
         const phone = (phoneInput?.value || "").trim();
         const name = (nameInput?.value || "").trim() || "Resident";
         const address = (addressInput?.value || "").trim() || "Resident Apartment";
-        const date = dateInput?.value || new Date().toISOString().split('T')[0];
+        const dateRange = getPgBookingDateRange(15);
+        const date = dateInput?.value;
+
+        if (!date || date < dateRange.minStr) {
+            notify("Please select today or a future service date within the allowed 15 days.");
+            dateInput?.focus();
+            return;
+        }
+        if (date > dateRange.maxStr) {
+            notify(`Service booking is restricted to 15 days from today (between ${dateRange.minStr} and ${dateRange.maxStr}).`);
+            dateInput?.focus();
+            return;
+        }
 
         if (!/^[6-9]\d{9}$/.test(phone)) {
             notify("Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.");

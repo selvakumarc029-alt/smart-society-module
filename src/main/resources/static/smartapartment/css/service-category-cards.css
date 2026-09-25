@@ -62,6 +62,7 @@ body.app-dashboard .dash-main .dash-panel .service-category-card:hover {
     width: 44px !important;
     height: 44px !important;
     flex-shrink: 0 !important;
+    overflow: visible !important;
 }
 
 /* Circular Icon Container */
@@ -83,21 +84,29 @@ body.app-dashboard .dash-main .dash-panel .service-category-card:hover {
 }
 
 /* Pill Badges - Anchored directly to top-right shoulder of circle */
-.service-icon-wrapper .service-cat-badge {
+.service-icon-wrapper .service-cat-badge,
+.service-cat-badge {
     position: absolute !important;
     top: -5px !important;
     left: calc(100% - 12px) !important;
     right: auto !important;
-    font-size: 0.6rem !important;
+    width: max-content !important;
+    min-width: max-content !important;
+    max-width: max-content !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.62rem !important;
     font-weight: 700 !important;
-    padding: 1.5px 6px !important;
+    padding: 3px 9px !important;
     border-radius: 9999px !important;
-    letter-spacing: 0.1px !important;
+    letter-spacing: 0.15px !important;
     white-space: nowrap !important;
     line-height: 1.2 !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
     z-index: 5 !important;
     pointer-events: none !important;
+    box-sizing: border-box !important;
 }
 
 /* Distinct Category Colors (Circles & Badges) */

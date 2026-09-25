@@ -236,9 +236,17 @@
 
         const dateInput = document.getElementById('reqPreferredDate');
         if (dateInput) {
-            const today = new Date().toISOString().split('T')[0];
+            const padZero = (n) => String(n).padStart(2, '0');
+            const formatLocalDate = (d) => `${d.getFullYear()}-${padZero(d.getMonth() + 1)}-${padZero(d.getDate())}`;
+            const today = formatLocalDate(new Date());
+            const maxDate = formatLocalDate(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 14));
             dateInput.value = today;
             dateInput.min = today;
+            dateInput.max = maxDate;
+            dateInput.addEventListener('change', () => {
+                if (dateInput.value < today) dateInput.value = today;
+                if (dateInput.value > maxDate) dateInput.value = maxDate;
+            });
         }
 
         const imgPreview = document.getElementById('reqImagePreview');
@@ -283,6 +291,16 @@
         if (!title || title.trim() === '') errors.push('Problem Title is required.');
         if (!description || description.trim() === '') errors.push('Description is required.');
         if (!priority || priority.trim() === '') errors.push('Priority is required.');
+
+        if (preferredDate) {
+            const padZero = (n) => String(n).padStart(2, '0');
+            const formatLocalDate = (d) => `${d.getFullYear()}-${padZero(d.getMonth() + 1)}-${padZero(d.getDate())}`;
+            const today = formatLocalDate(new Date());
+            const maxDate = formatLocalDate(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 14));
+            if (preferredDate < today || preferredDate > maxDate) {
+                errors.push(`Preferred date must be within 15 days from today (${today} to ${maxDate}).`);
+            }
+        }
 
         if (errors.length > 0) {
             if (alertEl) {

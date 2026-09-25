@@ -76,10 +76,1022 @@
             pointer-events: auto !important;
             cursor: pointer !important;
         }
+
+        /* ================================================================
+           PREMIUM HELPDESK & REPAIR TICKETS SECTION DESIGN & TYPOGRAPHY
+           ================================================================ */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap');
+
+        /* KPI Stat Cards */
+        [data-view="complaints"] .complaints-stats {
+            margin-bottom: 1.5rem !important;
+        }
+        [data-view="complaints"] .complaint-stat-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 16px !important;
+            padding: 1.15rem 1.25rem !important;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04) !important;
+            transition: all 0.2s ease !important;
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+        }
+        [data-view="complaints"] .complaint-stat-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+            border-color: #cbd5e1 !important;
+        }
+        [data-view="complaints"] .complaint-stat-card .stat-label {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.06em !important;
+            text-transform: uppercase !important;
+            color: #64748b !important;
+        }
+        [data-view="complaints"] .complaint-stat-card .stat-icon-wrapper {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.88rem;
+        }
+        [data-view="complaints"] .stat-icon-amber { background: #fef3c7; color: #d97706; }
+        [data-view="complaints"] .stat-icon-blue { background: #eff6ff; color: #2563eb; }
+        [data-view="complaints"] .stat-icon-green { background: #dcfce7; color: #16a34a; }
+        [data-view="complaints"] .stat-icon-rose { background: #ffe4e6; color: #e11d48; }
+
+        [data-view="complaints"] .complaint-stat-card .stat-number {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 1.75rem !important;
+            font-weight: 800 !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.03em !important;
+            display: block !important;
+            margin-top: 0.35rem !important;
+        }
+        [data-view="complaints"] .complaint-stat-card .stat-subtitle {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.76rem !important;
+            color: #94a3b8 !important;
+            font-weight: 500 !important;
+            display: block !important;
+            margin-top: 0.35rem !important;
+        }
+
+        /* Card Container */
+        body[data-dashboard-role="resident"] [data-view="complaints"] .complaints-card,
+        body.dashboard-body .dashboard-container [data-view="complaints"] .complaints-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+            overflow: hidden !important;
+        }
+
+        /* Card Header */
+        body[data-dashboard-role="resident"] [data-view="complaints"] .complaints-card .card-header,
+        body.dashboard-body .dashboard-container [data-view="complaints"] .complaints-card .card-header {
+            background: #ffffff !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            padding: 1.25rem 1.5rem !important;
+            border-radius: 18px 18px 0 0 !important;
+        }
+        [data-view="complaints"] .complaints-header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 1px solid #bfdbfe;
+            flex-shrink: 0;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] .complaints-card h4.section-title,
+        body.dashboard-body .main-content [data-view="complaints"] h4.section-title {
+            color: #0f172a !important;
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 1.25rem !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.02em !important;
+        }
+        [data-view="complaints"] .section-subtitle {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.8125rem !important;
+            color: #64748b !important;
+            font-weight: 500 !important;
+            margin-top: 2px !important;
+        }
+        [data-view="complaints"] .btn-raise-ticket {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.01em !important;
+            padding: 0.55rem 1.35rem !important;
+            border-radius: 50px !important;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+            border: none !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3) !important;
+            transition: all 0.2s ease !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        [data-view="complaints"] .btn-raise-ticket:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4) !important;
+        }
+
+        /* Table Design */
+        body[data-dashboard-role="resident"] [data-view="complaints"] .table-responsive {
+            padding: 0 !important;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] table.complaints-table,
+        body.dashboard-body .dashboard-container [data-view="complaints"] table.complaints-table {
+            margin-bottom: 0 !important;
+            width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] table.complaints-table thead,
+        body.dashboard-body .dashboard-container [data-view="complaints"] table.complaints-table thead {
+            background: #f8fafc !important;
+            border-bottom: 1.5px solid #e2e8f0 !important;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] table.complaints-table thead th,
+        body.dashboard-body .dashboard-container [data-view="complaints"] table.complaints-table thead th {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.06em !important;
+            text-transform: uppercase !important;
+            color: #64748b !important;
+            padding: 13px 18px !important;
+            border: none !important;
+            white-space: nowrap !important;
+            background: #f8fafc !important;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] table.complaints-table tbody tr,
+        body.dashboard-body .dashboard-container [data-view="complaints"] table.complaints-table tbody tr {
+            border-bottom: 1px solid #f1f5f9 !important;
+            transition: background-color 0.15s ease !important;
+            background: #ffffff !important;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] table.complaints-table tbody tr:hover,
+        body.dashboard-body .dashboard-container [data-view="complaints"] table.complaints-table tbody tr:hover {
+            background-color: #f8fafc !important;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] table.complaints-table tbody tr:last-child {
+            border-bottom: none !important;
+        }
+        body[data-dashboard-role="resident"] [data-view="complaints"] table.complaints-table tbody td,
+        body.dashboard-body .dashboard-container [data-view="complaints"] table.complaints-table tbody td {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.85rem !important;
+            color: #334155 !important;
+            padding: 15px 18px !important;
+            vertical-align: middle !important;
+            border: none !important;
+        }
+
+        /* Specific Cell Elements */
+        .ticket-id-tag {
+            font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace !important;
+            font-size: 0.8rem !important;
+            font-weight: 700 !important;
+            color: #1d4ed8 !important;
+            background: #eff6ff !important;
+            border: 1px solid #bfdbfe !important;
+            padding: 3px 8px !important;
+            border-radius: 6px !important;
+            display: inline-block !important;
+            letter-spacing: -0.01em !important;
+        }
+        .badge-priority-urgent {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.65rem !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.04em !important;
+            background: #fee2e2 !important;
+            color: #dc2626 !important;
+            border: 1px solid #fca5a5 !important;
+            padding: 2px 7px !important;
+            border-radius: 50px !important;
+            display: inline-block !important;
+        }
+        .ticket-title-text {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 700 !important;
+            color: #0f172a !important;
+            font-size: 0.9rem !important;
+            line-height: 1.3 !important;
+        }
+        .ticket-desc-text {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-size: 0.78rem !important;
+            color: #64748b !important;
+            font-weight: 400 !important;
+            margin-top: 3px !important;
+            line-height: 1.3 !important;
+        }
+        .ticket-cat-badge {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            padding: 4px 11px !important;
+            border-radius: 50px !important;
+            font-size: 0.78rem !important;
+            font-weight: 600 !important;
+            background: #f1f5f9 !important;
+            color: #334155 !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        .staff-avatar-mini {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            flex-shrink: 0;
+            border: 1px solid #e2e8f0;
+        }
+        .staff-name-text {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 600 !important;
+            color: #1e293b !important;
+            font-size: 0.84rem !important;
+        }
+        .badge-auto-assigning {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            background: #fef3c7 !important;
+            color: #92400e !important;
+            border: 1px solid #fde68a !important;
+            border-radius: 50px !important;
+            padding: 4px 10px !important;
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        .ticket-date {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            color: #64748b !important;
+            font-size: 0.82rem !important;
+            font-weight: 500 !important;
+            white-space: nowrap !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+
+        /* Status Pills */
+        .status-pill {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 5px 12px !important;
+            border-radius: 50px !important;
+            font-size: 0.78rem !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.01em !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+        }
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-pill.status-open {
+            background: #fef2f2 !important;
+            color: #b91c1c !important;
+            border: 1px solid #fecaca !important;
+        }
+        .status-pill.status-open .dot-open {
+            background: #ef4444;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+        }
+        .status-pill.status-progress {
+            background: #fffbeb !important;
+            color: #b45309 !important;
+            border: 1px solid #fde68a !important;
+        }
+        .status-pill.status-progress .dot-progress {
+            background: #f59e0b;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+        }
+        .status-pill.status-resolved {
+            background: #f0fdf4 !important;
+            color: #15803d !important;
+            border: 1px solid #bbf7d0 !important;
+        }
+        .status-pill.status-resolved .dot-resolved {
+            background: #22c55e;
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+        }
+        .status-pill.status-closed {
+            background: #f8fafc !important;
+            color: #475569 !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        .status-pill.status-closed .dot-closed {
+            background: #94a3b8;
+        }
+
+        /* Action Buttons */
+        .btn-resolve-ticket {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            background: #10b981 !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 50px !important;
+            padding: 5px 14px !important;
+            font-weight: 700 !important;
+            font-size: 0.78rem !important;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+        }
+        .btn-resolve-ticket:hover {
+            background: #059669 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35) !important;
+            color: #ffffff !important;
+        }
+        .badge-ticket-closed {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            background: #f8fafc !important;
+            color: #64748b !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 50px !important;
+            padding: 4px 12px !important;
+            font-size: 0.78rem !important;
+            font-weight: 700 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        /* ==========================================================================
+           INNOVATIVE RESIDENT AMENITY BOOKING STUDIO & PASS STYLES
+           ========================================================================== */
+        .resident-amenity-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1060;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.25rem;
+            opacity: 1;
+            transition: opacity 0.25s ease;
+        }
+        .resident-amenity-backdrop.hidden {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .resident-amenity-dialog {
+            background: #ffffff;
+            width: 100%;
+            max-width: 980px;
+            max-height: 92vh;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            animation: amenityZoomIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes amenityZoomIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Modal Header */
+        .amenity-modal-head {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 1.25rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        .amenity-head-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            color: #ffffff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        }
+        .amenity-head-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(4px);
+            margin-bottom: 4px;
+        }
+        .amenity-head-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin: 0;
+            color: #ffffff;
+            letter-spacing: -0.01em;
+        }
+        .amenity-head-sub {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+        .amenity-modal-close {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+        .amenity-modal-close:hover {
+            background: rgba(239, 68, 68, 0.85);
+            color: #ffffff;
+            border-color: #ef4444;
+            transform: scale(1.05);
+        }
+
+        /* Modal Body Split Layout */
+        .amenity-modal-main {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            overflow-y: auto;
+            max-height: calc(92vh - 90px);
+        }
+        @media (max-width: 860px) {
+            .amenity-modal-main { grid-template-columns: 1fr; }
+        }
+
+        .amenity-modal-controls {
+            padding: 1.5rem 1.75rem;
+            background: #ffffff;
+            border-right: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            gap: 1.35rem;
+        }
+        .amenity-modal-sidebar {
+            padding: 1.5rem 1.75rem;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Section Heads */
+        .amenity-step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+        .amenity-step-badge {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .amenity-step-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-left: 8px;
+            flex-grow: 1;
+        }
+        .amenity-step-meta {
+            font-size: 0.74rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        /* 15-Day Date Strip */
+        .amenity-date-strip {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scroll-behavior: smooth;
+        }
+        .amenity-date-strip::-webkit-scrollbar {
+            height: 5px;
+        }
+        .amenity-date-strip::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .amenity-date-chip {
+            flex: 0 0 74px;
+            padding: 8px 6px;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+            position: relative;
+        }
+        .amenity-date-chip:hover {
+            border-color: #93c5fd;
+            background: #f8fafc;
+            transform: translateY(-2px);
+        }
+        .amenity-date-chip.active {
+            background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+            border-color: #1d4ed8 !important;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35) !important;
+            transform: translateY(-2px);
+        }
+        .amenity-date-chip .chip-day {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+        .amenity-date-chip .chip-num {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.15;
+            margin: 2px 0;
+        }
+        .amenity-date-chip .chip-month {
+            font-size: 0.66rem;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+        .amenity-date-chip.active .chip-day,
+        .amenity-date-chip.active .chip-num,
+        .amenity-date-chip.active .chip-month {
+            color: #ffffff !important;
+        }
+        .amenity-date-chip .chip-today-tag {
+            position: absolute;
+            top: -6px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 0.58rem;
+            font-weight: 800;
+            padding: 1px 5px;
+            border-radius: 10px;
+            letter-spacing: 0.02em;
+        }
+
+        /* Manual Date input row */
+        .amenity-date-manual {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 10px;
+        }
+        .amenity-date-manual input[type="date"] {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #1e293b;
+            background: #ffffff;
+        }
+
+        /* Slot Cards Grid */
+        .amenity-slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
+        }
+        .amenity-slot-pill {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 8px 10px;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: left;
+        }
+        .amenity-slot-pill:hover {
+            border-color: #93c5fd;
+            background: #f8fafc;
+        }
+        .amenity-slot-pill.active {
+            border-color: #2563eb !important;
+            background: #eff6ff !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15) !important;
+        }
+        .amenity-slot-pill .slot-name {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .amenity-slot-pill .slot-time {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #2563eb;
+        }
+        .amenity-slot-pill .slot-badge {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .amenity-slot-pill.active .slot-name {
+            color: #1d4ed8;
+        }
+
+        /* Steppers */
+        .stepper-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .stepper-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .stepper-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .stepper-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 2px 0;
+        }
+        .stepper-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #0f172a;
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .stepper-btn:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+        .stepper-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            min-width: 36px;
+            text-align: center;
+        }
+        .stepper-chips {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .stepper-chip {
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #475569;
+            font-size: 0.68rem;
+            font-weight: 600;
+            padding: 2px 7px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .stepper-chip:hover, .stepper-chip.active {
+            background: #0f172a;
+            color: #ffffff;
+            border-color: #0f172a;
+        }
+
+        /* Purpose Chips */
+        .purpose-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .purpose-chip {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 5px 12px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 0.76rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+        .purpose-chip:hover {
+            border-color: #93c5fd;
+            background: #eff6ff;
+            color: #1d4ed8;
+        }
+        .purpose-chip.active {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border-color: #2563eb !important;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+        }
+
+        /* Digital Boarding Pass Ticket */
+        .amenity-ticket-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .ticket-strip {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 10px 14px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .ticket-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+        .ticket-amenity-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .ticket-amenity-ico {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .ticket-amenity-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+        }
+        .ticket-amenity-loc {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* Perforated Divider */
+        .ticket-notch-divider {
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 18px;
+            margin: 0 -1.25rem;
+        }
+        .ticket-notch-left, .ticket-notch-right {
+            width: 14px;
+            height: 18px;
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            position: absolute;
+            top: 0;
+            z-index: 2;
+        }
+        .ticket-notch-left {
+            left: -1px;
+            border-radius: 0 14px 14px 0;
+            border-left: none;
+        }
+        .ticket-notch-right {
+            right: -1px;
+            border-radius: 14px 0 0 14px;
+            border-right: none;
+        }
+        .ticket-dashed-line {
+            width: 100%;
+            border-top: 2px dashed #cbd5e1;
+            margin: 0 18px;
+        }
+
+        /* Ticket Details Grid */
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 10px;
+        }
+        .ticket-cell-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #64748b;
+            letter-spacing: 0.04em;
+            display: block;
+        }
+        .ticket-cell-val {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #0f172a;
+            display: block;
+            margin-top: 1px;
+        }
+
+        /* Ticket Pricing */
+        .ticket-pricing {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 0.8rem;
+        }
+        .ticket-pricing-row {
+            display: flex;
+            justify-content: space-between;
+            color: #64748b;
+        }
+        .ticket-pricing-total {
+            margin-top: 6px;
+            padding-top: 8px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Barcode Area */
+        .ticket-barcode-box {
+            text-align: center;
+            padding: 6px 0;
+        }
+        .ticket-barcode {
+            height: 28px;
+            background: repeating-linear-gradient(
+                90deg,
+                #0f172a 0px,
+                #0f172a 2px,
+                transparent 2px,
+                transparent 4px,
+                #0f172a 4px,
+                #0f172a 7px,
+                transparent 7px,
+                transparent 9px
+            );
+            border-radius: 3px;
+            opacity: 0.85;
+            margin-bottom: 4px;
+        }
+        .ticket-barcode-num {
+            font-family: monospace;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #475569;
+            letter-spacing: 0.15em;
+        }
+
+        /* Confirm Button */
+        .btn-confirm-booking {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            padding: 13px 20px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-confirm-booking:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(37, 99, 235, 0.45);
+            color: #ffffff;
+        }
+
+        /* Success Pass Card */
+        .amenity-success-card {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .amenity-success-ico {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #16a34a;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 8px rgba(34, 197, 94, 0.15);
+            animation: pulseSuccess 1.5s infinite;
+        }
+        @keyframes pulseSuccess {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.35); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(34, 197, 94, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
     </style>
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
-    <link rel="stylesheet" href="/smartapartment/css/maintenance-workflow.css?v=20260918-v1">
-    <link rel="stylesheet" href="/smartapartment/css/service-category-cards.css?v=20260921-payment-v3">
+    <link rel="stylesheet" href="/smartapartment/css/maintenance-workflow.css?v=20260925-badge-pill-fix-v1">
+    <link rel="stylesheet" href="/smartapartment/css/service-category-cards.css?v=20260925-badge-pill-fix-v1">
     <div class="dashboard-layout">
         
         <!-- Sidebar Navigation -->
@@ -661,7 +1673,7 @@
                                     <div class="service-icon-circle service-circle-rose">
                                         <i class="fa-solid fa-shield-virus"></i>
                                     </div>
-                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-rose">Herbal & Safe</span>
+                                    <span class="badge rounded-pill fw-bold service-cat-badge badge-discount-rose">Herbal&nbsp;&amp;&nbsp;Safe</span>
                                 </div>
                                 <h6 class="fw-bold service-card-title">Pest Control</h6>
                                 <span class="service-card-subtitle">Cockroach, Termite & Bed Bug Treatment</span>
@@ -673,40 +1685,136 @@
 
                 <!-- Complaints Section -->
                 <section class="d-none animate__animated animate__fadeIn" data-view="complaints">
-                    <div class="row g-4 mb-4 stats">
-                        <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Open tickets</span><strong class="fs-2 fw-bold text-warning mt-2 d-block">01</strong><span class="small text-muted d-block mt-1">Technician assigned</span></article></div>
-                        <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">In progress</span><strong class="fs-2 fw-bold text-primary mt-2 d-block">01</strong><span class="small text-muted d-block mt-1">Plumbing repair</span></article></div>
-                        <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Resolved this month</span><strong class="fs-2 fw-bold text-success mt-2 d-block">03</strong><span class="small text-muted d-block mt-1">Closed with your confirmation</span></article></div>
-                        <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Target response</span><strong class="fs-2 fw-bold text-danger mt-2 d-block">24 hrs</strong><span class="small text-muted d-block mt-1">For standard issues</span></article></div>
+                    <div class="row g-4 mb-4 stats complaints-stats">
+                        <div class="col-md-3">
+                            <article class="complaint-stat-card">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="stat-label">Open Tickets</span>
+                                    <span class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-clock"></i></span>
+                                </div>
+                                <strong class="stat-number text-warning" id="statOpenTickets">01</strong>
+                                <span class="stat-subtitle">Technician assigned</span>
+                            </article>
+                        </div>
+                        <div class="col-md-3">
+                            <article class="complaint-stat-card">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="stat-label">In Progress</span>
+                                    <span class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                                </div>
+                                <strong class="stat-number text-primary" id="statProgressTickets">01</strong>
+                                <span class="stat-subtitle">Plumbing repair</span>
+                            </article>
+                        </div>
+                        <div class="col-md-3">
+                            <article class="complaint-stat-card">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="stat-label">Resolved</span>
+                                    <span class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-circle-check"></i></span>
+                                </div>
+                                <strong class="stat-number text-success" id="statResolvedTickets">01</strong>
+                                <span class="stat-subtitle">Closed with confirmation</span>
+                            </article>
+                        </div>
+                        <div class="col-md-3">
+                            <article class="complaint-stat-card">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="stat-label">Target SLA</span>
+                                    <span class="stat-icon-wrapper stat-icon-rose"><i class="fa-solid fa-bolt"></i></span>
+                                </div>
+                                <strong class="stat-number text-danger">24 hrs</strong>
+                                <span class="stat-subtitle">For standard repairs</span>
+                            </article>
+                        </div>
                     </div>
-                    <div class="card shadow-sm border-0 rounded-4">
+
+                    <div class="card complaints-card shadow-sm border-0 rounded-4">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <h4 class="fw-bold mb-0">Helpdesk & Repair Tickets</h4>
-                            <button class="btn btn-primary rounded-pill px-4 shadow-sm" data-action="add" data-table="complaints"><i class="fa-solid fa-plus me-2"></i>Raise Ticket</button>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="complaints-header-icon">
+                                    <i class="fa-solid fa-headset"></i>
+                                </div>
+                                <div>
+                                    <h4 class="section-title fw-bold mb-0">Helpdesk & Repair Tickets</h4>
+                                    <p class="section-subtitle text-muted small mb-0">Track maintenance requests, repairs and issue resolution</p>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-raise-ticket rounded-pill px-4 shadow-sm" data-action="add" data-table="complaints">
+                                <i class="fa-solid fa-plus me-2"></i>Raise Ticket
+                            </button>
                         </div>
                         <div class="card-body px-4 pb-4 table-responsive">
-                            <table class="table table-hover align-middle" data-table="complaints">
-                                <thead class="table-light">
-                                    <tr><th>Ticket ID</th><th>Issue Title</th><th>Category</th><th>Assigned Staff</th><th>Created Date</th><th>Status</th><th>Action</th></tr>
+                            <table class="table table-hover align-middle complaints-table" data-table="complaints">
+                                <thead>
+                                    <tr>
+                                        <th>Ticket ID</th>
+                                        <th>Issue Title</th>
+                                        <th>Category</th>
+                                        <th>Assigned Staff</th>
+                                        <th>Created Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><strong>T-102</strong></td>
-                                        <td>Bathroom Water Leakage</td>
-                                        <td>Plumbing</td>
-                                        <td>Ramesh (Plumber)</td>
-                                        <td>2026-08-03</td>
-                                        <td><span class="badge bg-warning text-dark">In Progress</span></td>
-                                        <td><button class="btn btn-success btn-sm rounded-pill px-3" data-action="close"><i class="fa-solid fa-check me-1"></i> Mark Resolved</button></td>
+                                    <tr data-record-id="complaint-102">
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="ticket-id-tag font-monospace">#T-102</span>
+                                                <span class="badge-priority-urgent">HIGH</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="ticket-title-text">Bathroom Water Leakage</div>
+                                            <div class="ticket-desc-text">Water leaking under the bathroom washbasin</div>
+                                        </td>
+                                        <td>
+                                            <span class="ticket-cat-badge"><i class="fa-solid fa-wrench text-primary me-1.5"></i>Plumbing</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-inline-flex align-items-center gap-2">
+                                                <span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span>
+                                                <span class="staff-name-text">Ramesh (Plumber)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1.5"></i>2026-08-03</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge status-pill status-progress status" data-status="In Progress"><span class="status-dot dot-progress"></span>In Progress</span>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-resolve-ticket" data-action="close" data-ticket-id="complaint-102" onclick="window.resolveResidentComplaintRow(this, 'complaint-102')"><i class="fa-solid fa-check me-1.5"></i>Mark Resolved</button>
+                                        </td>
                                     </tr>
-                                    <tr>
-                                        <td><strong>T-088</strong></td>
-                                        <td>Balcony Switchboard Fault</td>
-                                        <td>Electrical</td>
-                                        <td>Suresh (Electrician)</td>
-                                        <td>2026-07-28</td>
-                                        <td><span class="badge bg-secondary">Resolved</span></td>
-                                        <td><span class="text-muted small">Closed</span></td>
+                                    <tr data-record-id="complaint-088">
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="ticket-id-tag font-monospace">#T-088</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="ticket-title-text">Balcony Switchboard Fault</div>
+                                            <div class="ticket-desc-text">Switch sparking during heavy monsoon rains</div>
+                                        </td>
+                                        <td>
+                                            <span class="ticket-cat-badge"><i class="fa-solid fa-bolt text-warning me-1.5"></i>Electrical</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-inline-flex align-items-center gap-2">
+                                                <span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span>
+                                                <span class="staff-name-text">Suresh (Electrician)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1.5"></i>2026-07-28</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge status-pill status-resolved status" data-status="Resolved"><span class="status-dot dot-resolved"></span>Resolved</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge-ticket-closed"><i class="fa-solid fa-check-double text-success me-1"></i>Closed</span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1630,14 +2738,310 @@
                 <span class="small text-muted"><i class="fa-solid fa-circle-check text-success me-1"></i> Live Webhook & SSE Synchronized</span>
                 <button type="button" class="btn btn-dark rounded-pill px-4" onclick="closeMaintenanceLiveTracker()">Close Tracker</button>
             </div>
+    <!-- Dedicated Innovative Amenity Booking Studio Modal -->
+    <div id="residentAmenityBookingModal" class="resident-amenity-backdrop hidden" onclick="if(event.target === this) closeResidentAmenityBookingModal()">
+        <div class="resident-amenity-dialog" onclick="event.stopPropagation()">
+            <!-- Header with Dynamic Amenity Theme -->
+            <div class="amenity-modal-head" id="amenityModalHead">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="amenity-head-icon" id="amenityHeadIcon" style="background: linear-gradient(135deg, #1d4ed8, #06b6d4);">
+                        <i class="fa-solid fa-dumbbell"></i>
+                    </div>
+                    <div>
+                        <div class="amenity-head-badge" id="amenityHeadBadge">
+                            <i class="fa-solid fa-bolt text-warning"></i> <span>Instant Resident Access</span>
+                        </div>
+                        <h3 class="amenity-head-title" id="amenityHeadTitle">Fitness Center / Gym</h3>
+                        <p class="amenity-head-sub" id="amenityHeadSub">Resident Wellness Hub · Level 2</p>
+                    </div>
+                </div>
+                <button type="button" class="amenity-modal-close" onclick="closeResidentAmenityBookingModal()" aria-label="Close modal">&times;</button>
+            </div>
+
+            <!-- Booking Studio Body (Split 2-Column: Left Controls, Right Boarding Pass) -->
+            <div class="amenity-modal-main" id="amenityModalMainView">
+                <!-- Left Controls Column -->
+                <div class="amenity-modal-controls">
+                    <!-- Step 1: 15-Day Smart Calendar Horizon -->
+                    <div>
+                        <div class="amenity-step-header">
+                            <span class="amenity-step-badge"><i class="fa-regular fa-calendar-check me-1"></i> Step 1</span>
+                            <span class="amenity-step-title">Select Booking Date</span>
+                            <span class="amenity-step-meta text-primary fw-semibold"><i class="fa-solid fa-calendar-days me-1"></i>15-Day Horizon</span>
+                        </div>
+                        <div class="amenity-date-strip" id="amenityDateStrip">
+                            <!-- Injected 15 interactive date chips -->
+                        </div>
+                        <div class="amenity-date-manual">
+                            <label for="amenityManualDateInput" class="small text-muted fw-semibold mb-0">Or pick date directly:</label>
+                            <input type="date" id="amenityManualDateInput" onchange="window.handleAmenityDateInputChange(this.value)">
+                            <span class="badge bg-light text-secondary border small" id="amenityDateWindowBadge">15-day limit</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Preferred Slot -->
+                    <div>
+                        <div class="amenity-step-header">
+                            <span class="amenity-step-badge"><i class="fa-regular fa-clock me-1"></i> Step 2</span>
+                            <span class="amenity-step-title">Choose Preferred Time Slot</span>
+                            <span class="amenity-step-meta" id="amenityOperatingHoursLabel">6:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="amenity-slot-grid" id="amenitySlotsGrid">
+                            <!-- Injected slot pills -->
+                        </div>
+                        <!-- Custom time slot toggle -->
+                        <div class="mt-2 pt-1">
+                            <div class="form-check form-switch d-flex align-items-center gap-2">
+                                <input class="form-check-input" type="checkbox" id="amenityCustomSlotToggle" onchange="window.toggleAmenityCustomSlot(this.checked)">
+                                <label class="form-check-label small fw-semibold text-secondary" for="amenityCustomSlotToggle">Specify custom start & end time</label>
+                            </div>
+                            <div class="row g-2 mt-1" id="amenityCustomTimeRow" style="display: none;">
+                                <div class="col-6">
+                                    <label class="small text-muted mb-1">Start Time</label>
+                                    <input type="time" id="amenityCustomStart" class="form-control form-control-sm" onchange="window.updateAmenityCustomTimes()">
+                                </div>
+                                <div class="col-6">
+                                    <label class="small text-muted mb-1">End Time</label>
+                                    <input type="time" id="amenityCustomEnd" class="form-control form-control-sm" onchange="window.updateAmenityCustomTimes()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Attendees & Passes -->
+                    <div>
+                        <div class="amenity-step-header">
+                            <span class="amenity-step-badge"><i class="fa-solid fa-users me-1"></i> Step 3</span>
+                            <span class="amenity-step-title">Attendees & Vehicles</span>
+                            <span class="amenity-step-meta" id="amenityCapacityHint">Max 15 people</span>
+                        </div>
+                        <div class="row g-2">
+                            <!-- Guests Stepper -->
+                            <div class="col-sm-6">
+                                <div class="stepper-box">
+                                    <div class="stepper-header">
+                                        <span class="stepper-title"><i class="fa-solid fa-user-group text-primary"></i> Guests</span>
+                                        <span class="badge bg-primary-subtle text-primary border rounded-pill px-2 py-0" id="stepperGuestBadge">1 Person</span>
+                                    </div>
+                                    <div class="stepper-controls">
+                                        <button type="button" class="stepper-btn" onclick="window.stepAmenityCount('guest', -1)"><i class="fa-solid fa-minus"></i></button>
+                                        <span class="stepper-val" id="stepperGuestVal">1</span>
+                                        <button type="button" class="stepper-btn" onclick="window.stepAmenityCount('guest', 1)"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                    <div class="stepper-chips" id="stepperGuestChips">
+                                        <!-- Injected preset guest chips -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Vehicles Stepper -->
+                            <div class="col-sm-6">
+                                <div class="stepper-box">
+                                    <div class="stepper-header">
+                                        <span class="stepper-title"><i class="fa-solid fa-car text-success"></i> Vehicles</span>
+                                        <span class="badge bg-success-subtle text-success border rounded-pill px-2 py-0" id="stepperVehicleBadge">0 Vehicle</span>
+                                    </div>
+                                    <div class="stepper-controls">
+                                        <button type="button" class="stepper-btn" onclick="window.stepAmenityCount('vehicle', -1)"><i class="fa-solid fa-minus"></i></button>
+                                        <span class="stepper-val" id="stepperVehicleVal">0</span>
+                                        <button type="button" class="stepper-btn" onclick="window.stepAmenityCount('vehicle', 1)"><i class="fa-solid fa-plus"></i></button>
+                                    </div>
+                                    <div class="stepper-chips" id="stepperVehicleChips">
+                                        <!-- Injected preset vehicle chips -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Purpose & Contact -->
+                    <div>
+                        <div class="amenity-step-header">
+                            <span class="amenity-step-badge"><i class="fa-solid fa-bullhorn me-1"></i> Step 4</span>
+                            <span class="amenity-step-title">Occasion & Contact</span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="small text-muted fw-semibold mb-1 d-block">Quick Select Purpose / Vibe:</label>
+                            <div class="purpose-chips-wrap" id="amenityPurposeChips">
+                                <!-- Injected purpose chips -->
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <input type="text" id="amenityPurposeField" class="form-control form-control-sm" placeholder="Purpose or session focus..." oninput="window.updateAmenityLiveTicket()">
+                        </div>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <label class="small text-muted fw-semibold mb-1">Contact Mobile *</label>
+                                <input type="tel" id="amenityPhoneField" class="form-control form-control-sm" value="+91 98440 22010" required oninput="window.updateAmenityLiveTicket()">
+                            </div>
+                            <div class="col-6">
+                                <label class="small text-muted fw-semibold mb-1">Unit / Flat</label>
+                                <input type="text" id="amenityUnitField" class="form-control form-control-sm bg-light" value="Unit A-101" readonly>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="small text-muted fw-semibold mb-1 d-flex justify-content-between">
+                                <span>Special Setup or Access Notes</span>
+                                <span class="text-secondary small fw-normal">Optional</span>
+                            </label>
+                            <textarea id="amenityNotesField" class="form-control form-control-sm" rows="2" placeholder="e.g. Sound system activation, guest gate entry pre-clearance..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar: Live Digital Boarding Pass -->
+                <div class="amenity-modal-sidebar">
+                    <div class="amenity-ticket-card">
+                        <!-- Top Strip -->
+                        <div class="ticket-strip">
+                            <span><i class="fa-solid fa-bolt text-warning me-1"></i> SMARTRESIDENT DIGITAL PASS</span>
+                            <span class="badge bg-success border-0 px-2 py-1"><i class="fa-solid fa-shield-check me-1"></i> VERIFIED</span>
+                        </div>
+
+                        <!-- Ticket Body -->
+                        <div class="ticket-body">
+                            <div class="ticket-amenity-row">
+                                <div class="ticket-amenity-ico" id="ticketAmenityIco">
+                                    <i class="fa-solid fa-dumbbell"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <h5 class="ticket-amenity-name" id="ticketAmenityName">Fitness Center / Gym</h5>
+                                    <p class="ticket-amenity-loc" id="ticketAmenityLoc">Resident Wellness Hub · Level 2</p>
+                                </div>
+                            </div>
+
+                            <!-- Notched Perforated Divider -->
+                            <div class="ticket-notch-divider">
+                                <div class="ticket-notch-left"></div>
+                                <div class="ticket-dashed-line"></div>
+                                <div class="ticket-notch-right"></div>
+                            </div>
+
+                            <!-- Ticket Key-Value Grid -->
+                            <div class="ticket-grid">
+                                <div>
+                                    <span class="ticket-cell-label"><i class="fa-regular fa-calendar text-primary me-1"></i> Date</span>
+                                    <strong class="ticket-cell-val" id="ticketDateVal">Today, 25 Sep 2026</strong>
+                                </div>
+                                <div>
+                                    <span class="ticket-cell-label"><i class="fa-regular fa-clock text-primary me-1"></i> Time Slot</span>
+                                    <strong class="ticket-cell-val" id="ticketTimeVal">06:00 AM - 07:30 AM</strong>
+                                </div>
+                                <div>
+                                    <span class="ticket-cell-label"><i class="fa-solid fa-user-group text-primary me-1"></i> Passes</span>
+                                    <strong class="ticket-cell-val" id="ticketPassesVal">1 Guest</strong>
+                                </div>
+                                <div>
+                                    <span class="ticket-cell-label"><i class="fa-solid fa-car text-primary me-1"></i> Vehicles</span>
+                                    <strong class="ticket-cell-val" id="ticketVehiclesVal">0 Vehicle</strong>
+                                </div>
+                            </div>
+
+                            <!-- Pricing -->
+                            <div class="ticket-pricing">
+                                <div class="ticket-pricing-row">
+                                    <span>Booking Fee:</span>
+                                    <strong class="text-dark" id="ticketFeeRow">Free (Complimentary)</strong>
+                                </div>
+                                <div class="ticket-pricing-row">
+                                    <span>Maintenance & Sanitization:</span>
+                                    <span class="text-success fw-bold">₹0 (Covered)</span>
+                                </div>
+                                <div class="ticket-pricing-row" id="ticketDepositRow" style="display: none;">
+                                    <span>Refundable Security Deposit:</span>
+                                    <strong class="text-warning-emphasis" id="ticketDepositVal">₹1,000</strong>
+                                </div>
+                                <div class="ticket-pricing-total">
+                                    <div>
+                                        <small class="text-muted text-uppercase fw-bold d-block" style="font-size:0.65rem;">Total Payable</small>
+                                        <span class="fs-4 fw-extrabold text-primary" id="ticketTotalAmount">₹0</span>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1" id="ticketGateBadge">
+                                        <i class="fa-solid fa-circle-check me-1"></i> Pre-Approved
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Barcode -->
+                            <div class="ticket-barcode-box">
+                                <div class="ticket-barcode"></div>
+                                <div class="ticket-barcode-num" id="ticketBarcodeId">SMART-RES-2026-9842</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Action Button -->
+                    <div class="mt-3">
+                        <button type="button" class="btn-confirm-booking" id="btnConfirmAmenityBooking" onclick="window.submitInnovativeAmenityBooking()">
+                            <i class="fa-solid fa-circle-check"></i> Confirm & Generate Pass
+                        </button>
+                        <p class="text-center text-muted small mt-2 mb-0" style="font-size:0.72rem;">
+                            <i class="fa-solid fa-shield-halved text-success me-1"></i> Instant Gate Sync · Cancel free up to 2h prior
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Success Pass Screen (Hidden initially) -->
+            <div id="amenityModalSuccessView" class="amenity-success-card" style="display: none;">
+                <div class="amenity-success-ico">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <div>
+                    <h4 class="fw-bold text-dark mb-1">Amenity Reservation Confirmed!</h4>
+                    <p class="text-muted small mb-0">Your digital resident booking pass has been generated & synced with Gate Security.</p>
+                </div>
+
+                <!-- Digital Pass Receipt Box -->
+                <div class="amenity-ticket-card w-100" style="max-width: 500px; text-align: left;">
+                    <div class="ticket-strip">
+                        <span><i class="fa-solid fa-qrcode me-1"></i> DIGITAL RESIDENT GATE PASS</span>
+                        <span class="badge bg-success"><i class="fa-solid fa-check-double me-1"></i> ACTIVE</span>
+                    </div>
+                    <div class="ticket-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h5 class="fw-bold mb-0 text-dark" id="successPassAmenity">Fitness Center / Gym</h5>
+                                <span class="small text-muted" id="successPassSlot">Today · 06:00 AM - 07:30 AM</span>
+                            </div>
+                            <div class="p-2 border rounded-3 bg-light text-center" style="width: 70px; height: 70px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fa-solid fa-qrcode fa-3x text-dark"></i>
+                            </div>
+                        </div>
+                        <div class="p-2 bg-light rounded-3 small">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Pass Ref ID:</span>
+                                <strong class="font-monospace" id="successPassRef">#RES-2026-AMN-9842</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted">Resident Flat:</span>
+                                <strong>Unit A-101</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Entry Access:</span>
+                                <strong id="successPassAccess">1 Resident Pass · 0 Vehicle</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-center flex-wrap mt-2">
+                    <button type="button" class="btn btn-outline-primary rounded-pill px-4 fw-bold" onclick="window.downloadAmenityPassReceipt()">
+                        <i class="fa-solid fa-download me-1"></i> Download Pass
+                    </button>
+                    <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" onclick="closeResidentAmenityBookingModal()">
+                        <i class="fa-solid fa-check me-1"></i> Done & View
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
 <script src="/shared/js/common-maintenance.js?v=20260917-progress-v1"></script>
-<script src="/shared/js/home-services-dashboard.js?v=20260921-worker-telemetry-v3"></script>
+<script src="/shared/js/home-services-dashboard.js?v=20260925-15day-window-v1"></script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
 <script src="/smartapartment/js/resident-gate-approvals.js?v=20260916-multigate-v1"></script>
-<script src="/smartapartment/js/maintenance-workflow.js?v=20260918-v1"></script>
+<script src="/smartapartment/js/maintenance-workflow.js?v=20260925-15day-window-v1"></script>
 <script>
     function toggleCityDropdown(event) {
         if (event) {

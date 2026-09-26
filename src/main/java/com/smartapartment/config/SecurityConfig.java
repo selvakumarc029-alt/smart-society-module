@@ -50,6 +50,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/common-maintenance/**").permitAll()
                         .requestMatchers("/api/maintenance/**").permitAll()
                         .requestMatchers("/api/workflows/**").permitAll()
+                        .requestMatchers("/api/home-services/**").permitAll()
+                        .requestMatchers("/api/admin/home-services/**").permitAll()
                         .requestMatchers("/api/billing/**").hasAnyRole("SOCIETY_ADMIN", "ACCOUNTANT")
                         .requestMatchers("/api/society/**").authenticated()
                         .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "SOCIETY_ADMIN")

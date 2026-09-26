@@ -27,6 +27,8 @@ const titles = {
     assets: "Assets and Preventive Maintenance",
     "audit-logs": "Granular Audit Trail",
     services: "NoBroker Carpentry & Home Services",
+    "home-services": "Home Services & Pricing Catalog",
+    "service-pricing": "Home Services & Pricing Catalog",
     maintenance: "Maintenance / Service Requests"
 };
 const securityPanelTitles = {
@@ -1656,10 +1658,16 @@ function showActionReceipt({ title, lines }) {
 }
 
 function openPanel(panel, updateHistory = true) {
-    const selectedView = document.querySelector(`[data-view="${panel}"]`);
+    if (!panel) panel = "overview";
+    if (panel === "service-pricing" || panel === "home-services") {
+        panel = "home-services";
+    }
+    const selectedView = document.querySelector(`[data-view="${panel}"]`)
+        || (panel === "home-services" ? document.querySelector('[data-view="service-pricing"], #home-services-panel, #service-pricing-panel') : null);
     if (!selectedView) return;
     document.querySelectorAll("[data-panel]").forEach(button => {
-        const active = button.dataset.panel === panel;
+        const btnPanel = button.dataset.panel;
+        const active = btnPanel === panel || ((panel === "home-services" || panel === "service-pricing") && (btnPanel === "home-services" || btnPanel === "service-pricing"));
         button.classList.toggle("active", active);
         button.setAttribute("aria-selected", String(active));
     });
@@ -1679,6 +1687,9 @@ function openPanel(panel, updateHistory = true) {
         ? (securityPanelTitles[panel] || "Security Dashboard")
         : (titles[panel] || "Dashboard");
     if (updateHistory && location.hash !== `#${panel}`) history.pushState(null, "", `#${panel}`);
+    if ((panel === "home-services" || panel === "service-pricing") && typeof window.loadAdminPackages === "function") {
+        window.loadAdminPackages();
+    }
     selectedView.focus({ preventScroll: true });
 }
 

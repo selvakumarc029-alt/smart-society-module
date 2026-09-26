@@ -6123,7 +6123,220 @@ window.closeSubServicesModal = function closeSubServicesModal() {
         }
     });
 
+    async function syncDynamicPackagesFromBackend() {
+        try {
+            const res = await fetch("/api/home-services/packages", { credentials: "same-origin" });
+            if (!res.ok) return;
+            const backendPackages = await res.json();
+            if (!Array.isArray(backendPackages) || !backendPackages.length) return;
+
+            const norm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+
+            // 1. Update designationPackages
+            backendPackages.forEach(pkg => {
+                if (pkg.active === false) return;
+                const desigKey = pkg.designation;
+                if (!desigKey) return;
+
+                if (!designationPackages[desigKey]) {
+                    designationPackages[desigKey] = [];
+                }
+
+                const targetList = designationPackages[desigKey];
+                let existing = targetList.find(p => norm(p.name) === norm(pkg.packageName) || p.name === pkg.packageName || p.name?.trim().toLowerCase() === pkg.packageName?.trim().toLowerCase());
+
+                const numPrice = Number(pkg.price);
+                let featuresList = [];
+                if (Array.isArray(pkg.features)) {
+                    featuresList = pkg.features;
+                } else if (typeof pkg.features === "string") {
+                    if (pkg.features.startsWith("[")) {
+                        try { featuresList = JSON.parse(pkg.features); } catch(e) {}
+                    }
+                    if (!featuresList.length) {
+                        featuresList = pkg.features.split("\n").map(s => s.trim()).filter(Boolean);
+                    }
+                }
+
+                if (existing) {
+                    existing.price = numPrice;
+                    if (pkg.rating) existing.rating = pkg.rating;
+                    if (pkg.reviews) existing.reviews = pkg.reviews;
+                    if (pkg.duration) existing.duration = pkg.duration;
+                    if (pkg.optionsCount) existing.optionsCount = pkg.optionsCount;
+                    if (pkg.badge) existing.badge = pkg.badge;
+                    if (pkg.pricePrefix) existing.pricePrefix = pkg.pricePrefix;
+                    if (featuresList.length) existing.features = featuresList;
+                    if (existing.detailedBreakdown) {
+                        existing.detailedBreakdown.priceLabel = `₹${numPrice.toLocaleString('en-IN')}${pkg.pricePrefix ? ' ' + pkg.pricePrefix : ' (All-Inclusive)'}`;
+                    }
+                } else {
+                    targetList.push({
+                        name: pkg.packageName,
+                        rating: pkg.rating || "4.7",
+                        reviews: pkg.reviews || "10K+",
+                        duration: pkg.duration || "2 - 4 hrs",
+                        price: numPrice,
+                        badge: pkg.badge,
+                        pricePrefix: pkg.pricePrefix,
+                        optionsCount: pkg.optionsCount || "3 options",
+                        features: featuresList.length ? featuresList : [
+                            `Comprehensive execution of ${pkg.designation}`,
+                            "Verified, background-checked professional dispatch",
+                            "High-grade equipment and specialized materials",
+                            "Post-service inspection and quality guarantee"
+                        ],
+                        detailedBreakdown: {
+                            priceLabel: `₹${numPrice.toLocaleString('en-IN')} (All-Inclusive)`,
+                            guarantee: "30 Days Service Support • Eco-Friendly Materials"
+                        }
+                    });
+                }
+            });
+
+            // 2. Synchronize designation aliases
+            const aliasPairs = [
+                ["Empty Kitchen Cleaning", "Empty Kitchen"],
+                ["Occupied Kitchen Cleaning", "Occupied Kitchen"],
+                ["Deep Bathroom Cleaning", "Bathroom Cleaning"]
+            ];
+            aliasPairs.forEach(([a, b]) => {
+                if (designationPackages[a] && !designationPackages[b]) {
+                    designationPackages[b] = designationPackages[a];
+                } else if (designationPackages[b] && !designationPackages[a]) {
+                    designationPackages[a] = designationPackages[b];
+                } else if (designationPackages[a] && designationPackages[b]) {
+                    designationPackages[b] = designationPackages[a];
+                }
+            });
+
+            // 3. Compute lowest starting prices per designation
+            const minPricesByDesignation = {};
+            backendPackages.forEach(p => {
+                if (p.active === false) return;
+                const pr = Number(p.price);
+                if (!pr || pr <= 0) return;
+                const d = p.designation;
+                if (!minPricesByDesignation[d] || pr < minPricesByDesignation[d]) minPricesByDesignation[d] = pr;
+                const clean = d.replace(/ Cleaning$/i, "");
+                if (!minPricesByDesignation[clean] || pr < minPricesByDesignation[clean]) minPricesByDesignation[clean] = pr;
+                const withCln = clean + " Cleaning";
+                if (!minPricesByDesignation[withCln] || pr < minPricesByDesignation[withCln]) minPricesByDesignation[withCln] = pr;
+            });
+
+            // 4. Update subServiceDesignations starting prices
+            if (typeof subServiceDesignations === "object") {
+                Object.values(subServiceDesignations).forEach(dList => {
+                    if (Array.isArray(dList)) {
+                        dList.forEach(item => {
+                            const matched = minPricesByDesignation[item.name] || minPricesByDesignation[item.name + " Cleaning"] || minPricesByDesignation[item.name.replace(/ Cleaning$/i, "")];
+                            if (matched && matched > 0) {
+                                item.price = matched;
+                            }
+                        });
+                    }
+                });
+            }
+
+            // 5. Update categorySubServices starting prices
+            if (typeof categorySubServices === "object") {
+                Object.values(categorySubServices).forEach(subList => {
+                    if (Array.isArray(subList)) {
+                        subList.forEach(item => {
+                            const desigs = (typeof subServiceDesignations === "object") ? subServiceDesignations[item.name] : null;
+                            if (Array.isArray(desigs) && desigs.length) {
+                                const valid = desigs.map(d => Number(d.price)).filter(pr => pr > 0);
+                                if (valid.length) item.price = Math.min(...valid);
+                            } else {
+                                const matching = backendPackages.filter(p => p.active !== false && (norm(p.subService) === norm(item.name) || p.subService === item.name));
+                                if (matching.length) {
+                                    const valid = matching.map(p => Number(p.price)).filter(pr => pr > 0);
+                                    if (valid.length) item.price = Math.min(...valid);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            // 6. Live DOM synchronizations (instant visual update without page refresh)
+            // (a) Package Cards in open modal
+            document.querySelectorAll("#subserviceGrid .package-card").forEach(card => {
+                const title = card.querySelector(".package-card-title")?.textContent?.trim();
+                if (!title) return;
+                const match = backendPackages.find(p => p.active !== false && (norm(p.packageName) === norm(title) || p.packageName === title));
+                if (match) {
+                    const priceEl = card.querySelector(".package-price");
+                    if (priceEl) {
+                        priceEl.innerHTML = `${match.pricePrefix ? `<span style="font-size: 0.82rem; font-weight: 500; color: #64748b; margin-right: 4px;">${escapeHtml(match.pricePrefix)}</span>` : ""}₹${Number(match.price).toLocaleString('en-IN')}`;
+                    }
+                    const detailPriceEl = card.querySelector(".package-details-price-tag");
+                    if (detailPriceEl) {
+                        detailPriceEl.textContent = `₹${Number(match.price).toLocaleString('en-IN')}`;
+                    }
+                }
+            });
+
+            // (b) Active selected package & summary panel
+            if (_currentSelectedPackage) {
+                const match = backendPackages.find(p => p.active !== false && (norm(p.packageName) === norm(_currentSelectedPackage.name) || p.packageName === _currentSelectedPackage.name));
+                if (match) {
+                    _currentSelectedPackage.price = Number(match.price);
+                    const summaryPriceEl = document.getElementById("summarySelectedPrice");
+                    if (summaryPriceEl) {
+                        summaryPriceEl.textContent = `₹${Number(match.price).toLocaleString('en-IN')}`;
+                    }
+                }
+            }
+
+            // (c) Designation items grid
+            document.querySelectorAll("#subserviceGrid .designation-item").forEach(item => {
+                const label = item.querySelector(".designation-label")?.textContent?.trim();
+                if (label) {
+                    const matched = minPricesByDesignation[label] || minPricesByDesignation[label + " Cleaning"] || minPricesByDesignation[label.replace(/ Cleaning$/i, "")];
+                    if (matched && matched > 0) {
+                        const priceEl = item.querySelector(".designation-price");
+                        if (priceEl) priceEl.textContent = `Starts ₹${matched.toLocaleString('en-IN')}`;
+                    }
+                }
+            });
+
+            // (d) Subservice items grid
+            document.querySelectorAll("#subserviceGrid .subservice-item").forEach(item => {
+                const label = item.querySelector(".subservice-title")?.textContent?.trim();
+                if (label) {
+                    const matched = minPricesByDesignation[label];
+                    if (matched && matched > 0) {
+                        const priceEl = item.querySelector(".subservice-price");
+                        if (priceEl) priceEl.textContent = `Starts ₹${matched.toLocaleString('en-IN')}`;
+                    }
+                }
+            });
+
+            // (e) Update booking dropdowns and checkout forms if loaded
+            if (typeof upsertServiceOptions === "function") {
+                upsertServiceOptions();
+            }
+        } catch (err) {
+            console.warn("Notice: Dynamic home services pricing sync deferred:", err);
+        }
+    }
+
+    window.syncHomeServicesPricing = syncDynamicPackagesFromBackend;
+
+    // Real-time synchronization when admin edits prices in another tab or window
+    window.addEventListener("storage", (e) => {
+        if (e.key === "smartapartment_pricing_sync") {
+            syncDynamicPackagesFromBackend();
+        }
+    });
+
+    window.addEventListener("home-services:pricing-updated", () => {
+        syncDynamicPackagesFromBackend();
+    });
+
     document.addEventListener("DOMContentLoaded", () => {
+        syncDynamicPackagesFromBackend();
         enhanceSection();
         repairLegacyNoBrokerIcons();
         setDefaultDate();
@@ -6136,6 +6349,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
     });
 
     if (document.readyState !== "loading") {
+        syncDynamicPackagesFromBackend();
         enhanceSection();
         repairLegacyNoBrokerIcons();
         setDefaultDate();

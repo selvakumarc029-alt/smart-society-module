@@ -129,6 +129,7 @@
                 <a href="#privacy-data" class="nav-link btn btn-link text-start text-decoration-none" data-panel="privacy-data" onclick="openPanel('privacy-data'); return false;"><i class="fa-solid fa-database me-2"></i> Database & Privacy</a>
                 <a href="#finance-setup" class="nav-link btn btn-link text-start text-decoration-none" data-panel="finance-setup" onclick="openPanel('finance-setup'); return false;"><i class="fa-solid fa-receipt me-2"></i> Subscription Payments</a>
                 <a href="#service-requests" class="nav-link btn btn-link text-start text-decoration-none" data-panel="service-requests" onclick="openPanel('service-requests'); return false;"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Service Requests</a>
+                <a href="#home-services" class="nav-link btn btn-link text-start text-decoration-none" data-panel="home-services" id="sidebarSuperadminHomeServicesLink" onclick="forceOpenPanel('home-services'); return false;"><i class="fa-solid fa-broom me-2 text-warning"></i> Home Services & Pricing</a>
                 <a href="/dashboards/maintenance" class="nav-link btn btn-link text-start text-decoration-none text-warning fw-semibold" id="sidebarMaintenanceOpsLink"><i class="fa-solid fa-truck-fast me-2"></i> Maintenance Operations <span class="badge bg-warning text-dark rounded-pill ms-auto" style="font-size: 0.65rem;">Stage 5</span></a>
                 <a href="#settings" class="nav-link btn btn-link text-start text-decoration-none" data-panel="settings" onclick="openPanel('settings'); return false;"><i class="fa-solid fa-gear me-2"></i> Settings</a>
             </nav>
@@ -537,6 +538,177 @@
                     </div>
                 </section>
 
+                <!-- Home Services & Pricing CRUD Management Panel -->
+                <section class="d-none animate__animated animate__fadeIn" data-view="home-services" id="home-services-panel" data-alt-view="service-pricing">
+                    <style>
+                        .pricing-amount-pill {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 2px;
+                            background: #f1f5f9;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 9999px;
+                            padding: 3px 12px;
+                            font-weight: 700;
+                            color: #0f172a;
+                            font-size: 0.95rem;
+                        }
+                        .pricing-amount-pill .currency-symbol {
+                            color: #0284c7;
+                            font-size: 0.85rem;
+                            font-weight: 800;
+                        }
+                        .btn-xs {
+                            padding: 2px 7px;
+                            font-size: 0.75rem;
+                            line-height: 1.2;
+                        }
+                        #adminPricingTable tr:hover {
+                            background-color: #f8fafc;
+                        }
+                    </style>
+
+                    <!-- Top Summary Stats Row -->
+                    <div class="row g-4 mb-4 stats">
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-box-archive text-primary"></i> Active Packages
+                                </span>
+                                <strong class="fs-2 fw-bold text-dark mt-2 d-block" id="statTotalPackages">0</strong>
+                                <small class="text-muted mt-1">Across all categories</small>
+                            </article>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-layer-group text-info"></i> Categories
+                                </span>
+                                <strong class="fs-2 fw-bold text-primary mt-2 d-block" id="statCoveredCategories">0</strong>
+                                <small class="text-muted mt-1">Clean, Repair, Appliances &amp; more</small>
+                            </article>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-tag text-success"></i> Min Package Price
+                                </span>
+                                <strong class="fs-2 fw-bold text-success mt-2 d-block" id="statMinPrice">₹0</strong>
+                                <small class="text-muted mt-1">Entry-level services</small>
+                            </article>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-gem text-warning"></i> Max Package Price
+                                </span>
+                                <strong class="fs-2 fw-bold text-warning-emphasis mt-2 d-block" id="statMaxPrice" style="color: #d97706 !important;">₹0</strong>
+                                <small class="text-muted mt-1">Full apartment / premium plans</small>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- Main Pricing Catalog Card -->
+                    <div class="card shadow-sm border rounded-4 mb-4 overflow-hidden">
+                        <div class="card-header bg-white border-bottom pt-4 pb-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div style="flex: 1 1 480px;">
+                                <h4 class="fw-bold mb-1 d-flex align-items-center gap-2 flex-wrap">
+                                    <i class="fa-solid fa-screwdriver-wrench text-primary"></i> Home Services &amp; Pricing Catalog
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fw-semibold px-2.5 py-1" style="font-size: 0.72rem;">
+                                        <i class="fa-solid fa-bolt me-1"></i> Live Real-Time Sync
+                                    </span>
+                                </h4>
+                                <p class="text-muted small mb-0 mt-1" style="max-width: 820px; line-height: 1.45;">
+                                    Control live pricing for all home service packages. Changes save directly to the database and sync instantly to resident &amp; customer booking catalogs.
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 0 0 auto;">
+                                <button type="button" class="catalog-btn-refresh shadow-xs" onclick="window.loadAdminPackages()" title="Refresh live catalog">
+                                    <i class="fa-solid fa-rotate"></i> Refresh
+                                </button>
+                                <button type="button" class="catalog-btn-reseed shadow-xs" onclick="window.resetToDefaultPricingCatalog()" title="Reset / seed missing default packages">
+                                    <i class="fa-solid fa-arrow-rotate-left"></i> Re-seed Defaults
+                                </button>
+                                <button type="button" class="catalog-btn-add shadow-xs" onclick="window.openAddPackageModal()">
+                                    <i class="fa-solid fa-plus"></i> Add New Package
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Filter Toolbar -->
+                        <div class="catalog-filter-bar">
+                            <div class="catalog-search-wrapper">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="pricingSearchInput" placeholder="Search packages, services, prices..." oninput="window.filterPricingTable()">
+                            </div>
+                            <div class="catalog-select-wrapper">
+                                <select id="pricingCategoryFilter" onchange="window.filterPricingTable()">
+                                    <option value="ALL">All Categories</option>
+                                </select>
+                            </div>
+                            <div class="catalog-select-wrapper">
+                                <select id="pricingSortSelect" onchange="window.filterPricingTable()">
+                                    <option value="DEFAULT">Default Ordering</option>
+                                    <option value="PRICE_ASC">Price: Low to High</option>
+                                    <option value="PRICE_DESC">Price: High to Low</option>
+                                    <option value="NAME_ASC">Package Name (A-Z)</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1 shadow-xs" onclick="window.resetPricingFilter()" title="Clear filters" style="height: 38px; border-radius: 10px; font-size: 0.82rem; font-weight: 600; padding: 0 14px; background: #ffffff;">
+                                <i class="fa-solid fa-xmark"></i> Clear
+                            </button>
+
+                            <!-- View Mode Switcher: Cards vs Table -->
+                            <div class="catalog-view-switcher" role="group" aria-label="View toggle">
+                                <button type="button" id="pricingViewCardsBtn" class="catalog-view-btn active" onclick="window.setPricingViewMode('cards')" title="Card View">
+                                    <i class="fa-solid fa-border-all"></i> Cards
+                                </button>
+                                <button type="button" id="pricingViewTableBtn" class="catalog-view-btn" onclick="window.setPricingViewMode('table')" title="Table View">
+                                    <i class="fa-solid fa-table-list"></i> Table
+                                </button>
+                            </div>
+
+                            <div class="ms-auto">
+                                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill fw-semibold shadow-xs" id="pricingFilteredCount" style="font-size: 0.78rem;">
+                                    Loading packages...
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card View Container (Default Active) -->
+                        <div id="adminPricingCardView" class="catalog-card-grid">
+                            <div class="text-center py-5" style="grid-column: 1 / -1;">
+                                <div class="spinner-border text-primary" role="status"></div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing Table Container (Toggled) -->
+                        <div class="table-responsive" id="adminPricingTableView" style="display: none;">
+                            <table class="table table-hover align-middle mb-0" id="adminPricingTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;" class="text-center">ID</th>
+                                        <th style="width: 180px;">Service / Category</th>
+                                        <th style="width: 170px;">Designation / Type</th>
+                                        <th style="width: 210px;">Package Name</th>
+                                        <th style="width: 170px;">Live Price (₹)</th>
+                                        <th>Features &amp; Scope</th>
+                                        <th style="width: 100px;" class="text-center">Status</th>
+                                        <th style="width: 140px;" class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminPricingTableBody">
+                                    <tr>
+                                        <td colspan="8" class="text-center py-5">
+                                            <div class="spinner-border text-primary" role="status"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </main>
     </div>
@@ -939,18 +1111,121 @@
         </div></div>
     </div>
 
-    <div class="modal fade" id="privacyReviewModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content border-0 shadow-lg rounded-4"><div class="modal-header text-white border-0" style="background:linear-gradient(135deg,#2856e8,#503ee7)"><div><div class="small text-white-50 text-uppercase fw-bold">Privacy and compliance decision</div><h5 class="modal-title fw-bold mb-0">Complete data-request review</h5></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-privacy-close aria-label="Close"></button></div><form id="privacyReviewForm"><input type="hidden" id="privacyRequestId"><div class="modal-body p-4"><div class="alert alert-warning small"><i class="fa-solid fa-triangle-exclamation me-2"></i>Record the identity check, legal basis, processing method and evidence before completing this request.</div><div class="row g-3"><div class="col-12"><label class="form-label fw-bold small">Request</label><input class="form-control" id="privacyRequestSummary" disabled></div><div class="col-md-6"><label class="form-label fw-bold small">Decision *</label><select class="form-select" id="privacyDecision" required><option value="approve">Approve and process request</option><option value="reject">Reject request</option><option value="hold">Place on compliance hold</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Reviewer name *</label><input class="form-control" id="privacyReviewer" required maxlength="100"></div><div class="col-md-6"><label class="form-label fw-bold small">Identity verification *</label><select class="form-select" id="privacyIdentityCheck" required><option>Verified against account and registered contact</option><option>Government ID verified</option><option>Society administrator confirmation</option><option>Verification pending</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Processing method *</label><select class="form-select" id="privacyProcessingMethod" required><option>Permanent deletion</option><option>Anonymization</option><option>Data export</option><option>Restriction of processing</option><option>No processing - rejected</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Legal basis / policy *</label><input class="form-control" id="privacyLegalBasis" required maxlength="180" placeholder="Consent withdrawal, retention policy, statutory hold"></div><div class="col-md-6"><label class="form-label fw-bold small">Effective date and time *</label><input class="form-control" id="privacyEffectiveAt" type="datetime-local" required></div><div class="col-md-6"><label class="form-label fw-bold small">Evidence / ticket reference</label><input class="form-control" id="privacyEvidence" maxlength="180"></div><div class="col-md-6"><label class="form-label fw-bold small">Retention action</label><select class="form-select" id="privacyRetentionAction"><option>Delete eligible records and preserve mandatory audit data</option><option>Anonymize all non-statutory records</option><option>Preserve under legal hold</option></select></div><div class="col-12"><label class="form-label fw-bold small">Detailed review note *</label><textarea class="form-control" id="privacyDecisionNote" rows="4" required minlength="15" maxlength="2000" placeholder="Reason, verification performed, affected data, exceptions and follow-up owner"></textarea></div></div></div><div class="modal-footer border-0 px-4 pb-4"><button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" data-privacy-close>Cancel</button><button type="submit" class="btn btn-primary px-4">Save Complete Decision</button></div></form></div></div></div>
+    <div class="modal fade hidden" id="privacyReviewModal" tabindex="-1" aria-hidden="true" style="display: none !important;"><div class="modal-dialog modal-dialog-centered modal-lg"><div class="modal-content border-0 shadow-lg rounded-4"><div class="modal-header text-white border-0" style="background:linear-gradient(135deg,#2856e8,#503ee7)"><div><div class="small text-white-50 text-uppercase fw-bold">Privacy and compliance decision</div><h5 class="modal-title fw-bold mb-0">Complete data-request review</h5></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-privacy-close aria-label="Close"></button></div><form id="privacyReviewForm"><input type="hidden" id="privacyRequestId"><div class="modal-body p-4"><div class="alert alert-warning small"><i class="fa-solid fa-triangle-exclamation me-2"></i>Record the identity check, legal basis, processing method and evidence before completing this request.</div><div class="row g-3"><div class="col-12"><label class="form-label fw-bold small">Request</label><input class="form-control" id="privacyRequestSummary" disabled></div><div class="col-md-6"><label class="form-label fw-bold small">Decision *</label><select class="form-select" id="privacyDecision" required><option value="approve">Approve and process request</option><option value="reject">Reject request</option><option value="hold">Place on compliance hold</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Reviewer name *</label><input class="form-control" id="privacyReviewer" required maxlength="100"></div><div class="col-md-6"><label class="form-label fw-bold small">Identity verification *</label><select class="form-select" id="privacyIdentityCheck" required><option>Verified against account and registered contact</option><option>Government ID verified</option><option>Society administrator confirmation</option><option>Verification pending</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Processing method *</label><select class="form-select" id="privacyProcessingMethod" required><option>Permanent deletion</option><option>Anonymization</option><option>Data export</option><option>Restriction of processing</option><option>No processing - rejected</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Legal basis / policy *</label><input class="form-control" id="privacyLegalBasis" required maxlength="180" placeholder="Consent withdrawal, retention policy, statutory hold"></div><div class="col-md-6"><label class="form-label fw-bold small">Effective date and time *</label><input class="form-control" id="privacyEffectiveAt" type="datetime-local" required></div><div class="col-md-6"><label class="form-label fw-bold small">Evidence / ticket reference</label><input class="form-control" id="privacyEvidence" maxlength="180"></div><div class="col-md-6"><label class="form-label fw-bold small">Retention action</label><select class="form-select" id="privacyRetentionAction"><option>Delete eligible records and preserve mandatory audit data</option><option>Anonymize all non-statutory records</option><option>Preserve under legal hold</option></select></div><div class="col-12"><label class="form-label fw-bold small">Detailed review note *</label><textarea class="form-control" id="privacyDecisionNote" rows="4" required minlength="15" maxlength="2000" placeholder="Reason, verification performed, affected data, exceptions and follow-up owner"></textarea></div></div></div><div class="modal-footer border-0 px-4 pb-4"><button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" data-privacy-close>Cancel</button><button type="submit" class="btn btn-primary px-4">Save Complete Decision</button></div></form></div></div></div>
 
-    <div class="modal fade" id="gatewayConfigModal" tabindex="-1" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow-lg rounded-4"><div class="modal-header text-white border-0" style="background:linear-gradient(135deg,#2856e8,#503ee7)"><div><div class="small text-white-50 text-uppercase fw-bold">Finance configuration</div><h5 class="modal-title fw-bold mb-0">Configure payment gateway</h5></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-gateway-close aria-label="Close"></button></div><form id="gatewayConfigForm"><input type="hidden" id="gatewayConfigId"><div class="modal-body p-4"><div class="row g-3"><div class="col-md-6"><label class="form-label fw-bold small">Gateway</label><input class="form-control" id="gatewayProvider" required></div><div class="col-md-6"><label class="form-label fw-bold small">Environment</label><select class="form-select" id="gatewayEnvironment"><option>Sandbox</option><option>Production</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Merchant ID</label><input class="form-control" id="gatewayMerchantId" required></div><div class="col-md-6"><label class="form-label fw-bold small">Transaction fee</label><input class="form-control" id="gatewayFee" placeholder="e.g. 2.0%"></div><div class="col-12"><label class="form-label fw-bold small">API key <span class="text-muted fw-normal">(only enter to change)</span></label><input class="form-control" id="gatewayApiKey" type="password"></div></div><div class="form-check form-switch mt-4"><input class="form-check-input" id="gatewayInvoicing" type="checkbox"><label class="form-check-label" for="gatewayInvoicing">Enable digital invoicing</label></div><div class="form-check form-switch mt-2"><input class="form-check-input" id="gatewayActive" type="checkbox"><label class="form-check-label" for="gatewayActive">Activate this gateway</label></div></div><div class="modal-footer border-0 px-4 pb-4"><button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal" data-gateway-close>Cancel</button><button type="submit" class="btn btn-primary rounded-pill px-4">Save Gateway</button></div></form></div></div></div>
+    <div class="modal fade hidden" id="gatewayConfigModal" tabindex="-1" aria-hidden="true" style="display: none !important;"><div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow-lg rounded-4"><div class="modal-header text-white border-0" style="background:linear-gradient(135deg,#2856e8,#503ee7)"><div><div class="small text-white-50 text-uppercase fw-bold">Finance configuration</div><h5 class="modal-title fw-bold mb-0">Configure payment gateway</h5></div><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-gateway-close aria-label="Close"></button></div><form id="gatewayConfigForm"><input type="hidden" id="gatewayConfigId"><div class="modal-body p-4"><div class="row g-3"><div class="col-md-6"><label class="form-label fw-bold small">Gateway</label><input class="form-control" id="gatewayProvider" required></div><div class="col-md-6"><label class="form-label fw-bold small">Environment</label><select class="form-select" id="gatewayEnvironment"><option>Sandbox</option><option>Production</option></select></div><div class="col-md-6"><label class="form-label fw-bold small">Merchant ID</label><input class="form-control" id="gatewayMerchantId" required></div><div class="col-md-6"><label class="form-label fw-bold small">Transaction fee</label><input class="form-control" id="gatewayFee" placeholder="e.g. 2.0%"></div><div class="col-12"><label class="form-label fw-bold small">API key <span class="text-muted fw-normal">(only enter to change)</span></label><input class="form-control" id="gatewayApiKey" type="password"></div></div><div class="form-check form-switch mt-4"><input class="form-check-input" id="gatewayInvoicing" type="checkbox"><label class="form-check-label" for="gatewayInvoicing">Enable digital invoicing</label></div><div class="form-check form-switch mt-2"><input class="form-check-input" id="gatewayActive" type="checkbox"><label class="form-check-label" for="gatewayActive">Activate this gateway</label></div></div><div class="modal-footer border-0 px-4 pb-4"><button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal" data-gateway-close>Cancel</button><button type="submit" class="btn btn-primary rounded-pill px-4">Save Gateway</button></div></form></div></div></div>
 
-    
+    <!-- Add / Edit Service Package Modal -->
+    <div class="modal fade hidden" id="homeServicePackageModal" tabindex="-1" aria-labelledby="modalPackageTitle" aria-hidden="true" style="display: none !important; z-index: 1065;">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header border-bottom px-4 pt-4 pb-3">
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="modalPackageTitle">Add Service Package</h5>
+                        <p class="text-muted small mb-0">Changes save directly to the database and sync instantly to resident & customer dashboards.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 py-3">
+                    <form id="modalPackageForm" onsubmit="event.preventDefault(); window.savePackageModal();">
+                        <input type="hidden" id="modalPackageId">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted mb-1">Category <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="modalCategory" list="categorySuggestionsSuperadmin" placeholder="e.g. Home Cleaning, Plumbing, Electrical" required>
+                                <datalist id="categorySuggestionsSuperadmin">
+                                    <option value="Home Cleaning">
+                                    <option value="Plumbing">
+                                    <option value="Electrical">
+                                    <option value="Carpentry">
+                                    <option value="Appliance Repair">
+                                    <option value="Pest Control">
+                                    <option value="Painting">
+                                    <option value="Packers & Movers">
+                                </datalist>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted mb-1">Sub-Service Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="modalSubService" placeholder="e.g. Full House Cleaning, Deep Kitchen Cleaning" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted mb-1">Designation / Apartment Variant <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="modalDesignation" placeholder="e.g. Furnished Apartment, Unfurnished Apartment, Occupied Kitchen" required>
+                                <div class="form-text small text-muted">Used by frontend to group options (e.g. "Furnished Apartment").</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold text-muted mb-1">Package Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="modalPackageName" placeholder="e.g. Essential ★, Premium 💎, Elite 👑" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted mb-1">Price (₹ INR) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text fw-bold text-primary">₹</span>
+                                    <input type="number" class="form-control fw-bold" id="modalPrice" placeholder="3069" min="0" step="1" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted mb-1">Price Prefix (Optional)</label>
+                                <input type="text" class="form-control" id="modalPricePrefix" placeholder="e.g. Starts at, Flat">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold text-muted mb-1">Badge (Optional)</label>
+                                <input type="text" class="form-control" id="modalBadge" placeholder="e.g. MOST POPULAR, ECO-SAFE">
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-muted mb-1">Rating</label>
+                                <input type="text" class="form-control" id="modalRating" placeholder="4.7" value="4.7">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-muted mb-1">Reviews Count</label>
+                                <input type="text" class="form-control" id="modalReviews" placeholder="38.2K+" value="10K+">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-muted mb-1">Duration</label>
+                                <input type="text" class="form-control" id="modalDuration" placeholder="4 hrs" value="4 hrs">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-muted mb-1">Options Label</label>
+                                <input type="text" class="form-control" id="modalOptionsCount" placeholder="5 options" value="5 options">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-muted mb-1">Package Features & Inclusions (One feature per line)</label>
+                                <textarea class="form-control" id="modalFeatures" rows="4" placeholder="Bathroom & kitchen deep cleaning&#10;Machine floor cleaning&#10;Cobweb & fan dusting&#10;Balcony & utility area cleaning&#10;Furniture dusting"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input" type="checkbox" id="modalActive" checked>
+                                    <label class="form-check-label fw-semibold" for="modalActive">Active in Customer & Resident Catalog</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top px-4 py-3 bg-light d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" id="btnSavePackageModal" onclick="window.savePackageModal()">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Save Package
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div th:replace="~{fragments/layout :: scripts}"></div>
     <!-- Make sure dashboard.js functions map correctly - keeping old dashboard CSS around for things not overwritten -->    <script>
         const dashboardTitles = {
             overview: "Overview", monitoring: "Apartment Command Watch", "audit-logs": "Granular Audit Logs",
             societies: "Societies", subscriptions: "Subscriptions", users: "Users", analytics: "Analytics",
             "access-roles": "Roles & Access", "privacy-data": "Database & Privacy",
-            "finance-setup": "Subscription Payments", "service-requests": "Service & Maintenance Requests", settings: "Settings"
+            "finance-setup": "Subscription Payments", "service-requests": "Service & Maintenance Requests",
+            "home-services": "Home Services & Pricing Catalog", "service-pricing": "Home Services & Pricing Catalog",
+            settings: "Settings"
         };
         
         let allSmartSocietyServiceRequests = [];
@@ -1106,6 +1381,10 @@
 
             if (panel === "service-requests") {
                 loadSmartSocietySuperAdminServiceRequests();
+            }
+
+            if ((panel === "home-services" || panel === "service-pricing") && typeof window.loadAdminPackages === "function") {
+                window.loadAdminPackages();
             }
 
             // Overview-only platform identity and communication controls.
@@ -1773,5 +2052,6 @@
         });
     </script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
+<script src="/smartapartment/js/home-services-pricing-admin.js"></script>
 </body>
 </html>

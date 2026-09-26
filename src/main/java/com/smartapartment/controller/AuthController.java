@@ -238,6 +238,7 @@ public class AuthController {
                 session.setAttribute("dashboard:smartapartment:" + dashboardRole, Boolean.TRUE);
                 if (isSuperAdmin) {
                     session.setAttribute("dashboard:smartapartment:maintenance", Boolean.TRUE);
+                    session.setAttribute("dashboard:smartapartment:admin", Boolean.TRUE);
                     session.setAttribute("dashboard:propertydirect:superadmin", Boolean.TRUE);
                 }
 

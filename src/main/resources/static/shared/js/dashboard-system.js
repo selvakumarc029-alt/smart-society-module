@@ -38,6 +38,23 @@
                 min-width: 0 !important;
                 margin: 0 !important;
             }
+            .modal:not(.show):not(.active),
+            .modal.hidden,
+            #homeServicePackageModal:not(.show),
+            #partnerAdminEditorModal:not(.show),
+            #gatewayConfigModal:not(.show),
+            #bookingDetailsDrawerOverlay:not(.open) {
+                display: none !important;
+                pointer-events: none !important;
+                visibility: hidden !important;
+                z-index: -9999 !important;
+            }
+            .modal.show {
+                display: block !important;
+                pointer-events: auto !important;
+                visibility: visible !important;
+                z-index: 1065 !important;
+            }
             @media (min-width: 901px) {
                 body.dashboard-body,
                 body.app-dashboard {
@@ -452,6 +469,21 @@
     document.querySelectorAll("[data-panel]").forEach(button => {
         panelObserver.observe(button, { attributes: true, attributeFilter: ["class"] });
     });
+
+    function setupSidebarWheelScroll() {
+        document.querySelectorAll('.sidebar, #sidebar, .dash-sidebar, .vendor-sidebar, .agent-sidebar').forEach(sidebarEl => {
+            const navEl = sidebarEl.querySelector('.sidebar-nav, nav, .agent-nav, .vendor-nav, #sidebarNav');
+            if (!navEl) return;
+            sidebarEl.addEventListener('wheel', (e) => {
+                if (e.ctrlKey || e.shiftKey) return;
+                if (!navEl.contains(e.target)) {
+                    navEl.scrollTop += e.deltaY;
+                }
+            }, { passive: true });
+        });
+    }
+    setupSidebarWheelScroll();
+    document.addEventListener("DOMContentLoaded", setupSidebarWheelScroll);
 
     window.addEventListener("resize", () => {
         if (window.innerWidth > 900) {

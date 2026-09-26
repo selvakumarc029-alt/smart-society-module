@@ -94,12 +94,164 @@
             100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
         }
         /* Step 7: Unassigned / Failed Assignment Queue Styling */
-        #unassignedActionQueueContainer {
-            border: 1.5px solid rgba(220, 38, 38, 0.35) !important;
-            box-shadow: 0 6px 18px rgba(220, 38, 38, 0.08) !important;
+        #unassignedActionQueueContainer,
+        body.dashboard-body .dashboard-container [data-view] #unassignedActionQueueContainer.card,
+        body.dashboard-body .card#unassignedActionQueueContainer {
+            padding: 0 !important;
+            margin: 0 0 1.5rem 0 !important;
+            border: 1.5px solid rgba(220, 38, 38, 0.45) !important;
+            border-radius: 16px !important;
+            overflow: hidden !important;
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.08) !important;
+            background: #ffffff !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
         }
-        #unassignedQueueHeader {
-            background: linear-gradient(135deg, #b91c1c, #991b1b) !important;
+        #unassignedQueueHeader,
+        body.dashboard-body .dashboard-container [data-view] #unassignedActionQueueContainer .card-header,
+        body.dashboard-body #unassignedActionQueueContainer .card-header {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%) !important;
+            padding: 1.1rem 1.5rem !important;
+            margin: 0 !important;
+            border: 0 !important;
+            border-top-left-radius: 14px !important;
+            border-top-right-radius: 14px !important;
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 1rem !important;
+            flex-wrap: wrap !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+        }
+        #unassignedActionQueueContainer h5,
+        #unassignedQueueHeader h5,
+        body.dashboard-body .main-content #unassignedQueueHeader :is(h1, h2, h3, h4, h5, h6) {
+            color: #ffffff !important;
+            font-size: 0.98rem !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.01em !important;
+            line-height: 1.25 !important;
+            margin: 0 !important;
+        }
+        #unassignedQueueHeader .text-white-50 {
+            color: rgba(255, 255, 255, 0.88) !important;
+            font-size: 0.78rem !important;
+            line-height: 1.35 !important;
+        }
+        #unassignedQueueCountBadge {
+            background: #ffffff !important;
+            color: #dc2626 !important;
+            font-size: 0.74rem !important;
+            font-weight: 700 !important;
+            padding: 0.22rem 0.65rem !important;
+            border-radius: 999px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        #unassignedQueueHeader .rounded-circle {
+            flex-shrink: 0 !important;
+            width: 40px !important;
+            height: 40px !important;
+            background: #ffffff !important;
+            color: #dc2626 !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        #unassignedQueueHeader .rounded-circle i {
+            color: #dc2626 !important;
+            font-size: 1.15rem !important;
+        }
+        #unassignedQueueHeader .btn,
+        #unassignedQueueHeader button {
+            background: rgba(255, 255, 255, 0.18) !important;
+            border: 1px solid rgba(255, 255, 255, 0.45) !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+            font-size: 0.8rem !important;
+            padding: 0.45rem 1rem !important;
+            border-radius: 999px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            backdrop-filter: blur(6px) !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15) !important;
+        }
+        #unassignedQueueHeader .btn:hover,
+        #unassignedQueueHeader button:hover {
+            background: #ffffff !important;
+            border-color: #ffffff !important;
+            color: #b91c1c !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22) !important;
+        }
+        #unassignedActionQueueContainer .card-body,
+        body.dashboard-body .dashboard-container [data-view] #unassignedActionQueueContainer .card-body {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            border: 0 !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        #unassignedZeroStateBanner {
+            padding: 1.1rem 1.5rem !important;
+            margin: 0 !important;
+            border: 0 !important;
+            border-top: 1px solid rgba(16, 185, 129, 0.25) !important;
+            background: #ecfdf5 !important;
+            color: #065f46 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            font-size: 0.88rem !important;
+            border-bottom-left-radius: 14px !important;
+            border-bottom-right-radius: 14px !important;
+        }
+        #unassignedZeroStateBanner.d-none {
+            display: none !important;
+        }
+        #unassignedAlertBanner {
+            padding: 0.85rem 1.5rem !important;
+            margin: 0 !important;
+            background: #fffbeb !important;
+            color: #92400e !important;
+            border: 0 !important;
+            border-bottom: 1px solid #fef3c7 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            flex-wrap: wrap !important;
+            gap: 8px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        #unassignedAlertBanner.d-none {
+            display: none !important;
+        }
+        #unassignedTableWrapper {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            border: 0 !important;
+            background: #ffffff !important;
+        }
+        #unassignedTableWrapper.d-none {
+            display: none !important;
+        }
+        #unassignedActionTable {
+            margin-bottom: 0 !important;
+            width: 100% !important;
+            border-collapse: collapse !important;
         }
         .unassigned-incident-row:hover {
             background-color: #fff1f2 !important;
@@ -287,11 +439,15 @@
             z-index: 10600;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
+            display: none;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         #bookingDetailsDrawerOverlay.open {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
+            display: block;
         }
         #bookingDetailsDrawer {
             position: fixed;
@@ -569,17 +725,19 @@
         /* Sidebar Header */
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-header,
         .sidebar .sidebar-header {
-            flex: 0 0 72px !important;
-            height: 72px !important;
-            min-height: 72px !important;
-            max-height: 72px !important;
+            position: relative !important;
+            z-index: 20 !important;
+            background: #0f172a !important;
+            flex: 0 0 var(--maintenance-topbar-height, 70px) !important;
+            height: var(--maintenance-topbar-height, 70px) !important;
+            min-height: var(--maintenance-topbar-height, 70px) !important;
+            max-height: var(--maintenance-topbar-height, 70px) !important;
             padding: 0 1.25rem !important;
             display: flex !important;
             align-items: center !important;
             gap: 0.75rem !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
             box-sizing: border-box !important;
-            background: transparent !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-header h4,
         .sidebar .sidebar-header h4 {
@@ -614,19 +772,24 @@
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-nav,
         .sidebar .sidebar-nav {
             flex: 1 1 auto !important;
+            min-height: 0 !important;
+            height: auto !important;
             overflow-y: auto !important;
-            overscroll-behavior: contain !important;
+            overflow-x: hidden !important;
+            overscroll-behavior-y: contain !important;
             padding: 0.85rem 0.75rem !important;
             display: flex !important;
             flex-direction: column !important;
             gap: 0.25rem !important;
             margin: 0 !important;
+            scrollbar-width: thin !important;
+            scrollbar-color: rgba(255, 255, 255, 0.35) transparent !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-nav::-webkit-scrollbar {
-            width: 5px;
+            width: 6px;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-nav::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 999px;
         }
 
@@ -673,9 +836,10 @@
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-footer,
         .sidebar .sidebar-footer {
             flex: 0 0 auto !important;
+            margin-top: auto !important;
             padding: 0.85rem 1rem !important;
             border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-            background: transparent !important;
+            background: #0f172a !important;
         }
 
         /* Hide close button on desktop */
@@ -707,10 +871,11 @@
         /* Topbar Alignment */
         body.dashboard-body[data-dashboard-role="maintenance"] .topbar,
         .topbar {
-            min-height: 64px !important;
-            height: auto !important;
-            max-height: none !important;
-            padding: 10px 1.5rem !important;
+            flex: 0 0 var(--maintenance-topbar-height, 70px) !important;
+            min-height: var(--maintenance-topbar-height, 70px) !important;
+            height: var(--maintenance-topbar-height, 70px) !important;
+            max-height: var(--maintenance-topbar-height, 70px) !important;
+            padding: 0 1.5rem !important;
             display: flex !important;
             align-items: center !important;
             justify-content: space-between !important;
@@ -944,7 +1109,8 @@
         body.dashboard-body[data-dashboard-role="maintenance"] {
             overflow: hidden !important;
             --maintenance-sidebar-width: 325px;
-            --maintenance-topbar-height: 92px;
+            --maintenance-topbar-height: 70px;
+            --dashboard-topbar-height: 70px !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .dashboard-layout {
             display: flex !important;
@@ -994,6 +1160,9 @@
             border: 0 !important;
             overflow: hidden !important;
         }
+        body.dashboard-body[data-dashboard-role="maintenance"] #sidebar > .sidebar-header,
+        body.dashboard-body[data-dashboard-role="maintenance"] #sidebar .sidebar-header,
+        body.dashboard-body[data-dashboard-role="maintenance"] .sidebar .sidebar-header,
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-header {
             flex: 0 0 var(--maintenance-topbar-height) !important;
             height: var(--maintenance-topbar-height) !important;
@@ -1001,11 +1170,11 @@
             max-height: var(--maintenance-topbar-height) !important;
             width: 100% !important;
             margin: 0 !important;
-            padding: 0 26px !important;
+            padding: 0 24px !important;
             display: flex !important;
             align-items: center !important;
             justify-content: flex-start !important;
-            gap: 14px !important;
+            gap: 12px !important;
             border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
             box-sizing: border-box !important;
         }
@@ -1019,20 +1188,24 @@
             max-width: 210px !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-home-mark {
-            flex: 0 0 44px !important;
-            width: 44px !important;
-            height: 44px !important;
-            min-width: 44px !important;
-            border-radius: 13px !important;
+            flex: 0 0 40px !important;
+            width: 40px !important;
+            height: 40px !important;
+            min-width: 40px !important;
+            border-radius: 11px !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-nav {
             flex: 1 1 auto !important;
             width: 100% !important;
             min-height: 0 !important;
+            height: auto !important;
             margin: 0 !important;
             padding: 16px 20px 10px !important;
             overflow-x: hidden !important;
             overflow-y: auto !important;
+            overscroll-behavior-y: contain !important;
+            scrollbar-width: thin !important;
+            scrollbar-color: rgba(255, 255, 255, 0.35) transparent !important;
             display: flex !important;
             flex-direction: column !important;
             gap: 5px !important;
@@ -1070,13 +1243,15 @@
             display: none !important;
             content: none !important;
         }
+        body.dashboard-body[data-dashboard-role="maintenance"] :is(.topbar, .header),
         body.dashboard-body[data-dashboard-role="maintenance"] .topbar {
             position: sticky !important;
             top: 0 !important;
             width: 100% !important;
-            min-height: 64px !important;
-            height: 64px !important;
-            max-height: 64px !important;
+            flex: 0 0 var(--maintenance-topbar-height) !important;
+            min-height: var(--maintenance-topbar-height) !important;
+            height: var(--maintenance-topbar-height) !important;
+            max-height: var(--maintenance-topbar-height) !important;
             padding: 0 24px !important;
             display: flex !important;
             align-items: center !important;
@@ -1254,52 +1429,51 @@
         /* ==========================================================================
            LIVE EMERGENCY FEED: PRECISION ALIGNMENT & CONTROL SYSTEM
            ========================================================================== */
-        #dispatchLegendsContainer {
-            background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 12px !important;
-            padding: 14px 18px !important;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
-            margin-bottom: 16px !important;
-        }
-        #dispatchLegendsContainer .legend-row {
-            display: flex !important;
-            align-items: flex-start !important;
-            gap: 16px !important;
-        }
-        #dispatchLegendsContainer .legend-row:not(:last-child) {
-            padding-bottom: 12px !important;
-            margin-bottom: 12px !important;
-            border-bottom: 1px solid #f1f5f9 !important;
-        }
-        #dispatchLegendsContainer .legend-label {
-            min-width: 155px !important;
-            max-width: 155px !important;
-            flex-shrink: 0 !important;
+        #liveEmergencyFeedTitle {
+            color: #0f172a !important;
+            font-size: 1.25rem !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.01em !important;
             display: inline-flex !important;
             align-items: center !important;
-            gap: 6px !important;
-            font-size: 0.70rem !important;
-            font-weight: 700 !important;
-            text-transform: uppercase !important;
-            letter-spacing: 0.05em !important;
-            color: #475569 !important;
-            padding-top: 4px !important;
+            gap: 8px !important;
         }
-        #dispatchLegendsContainer .legend-badges {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            align-items: center !important;
-            gap: 6px 8px !important;
-            flex-grow: 1 !important;
+
+        #btnToggleLegendCollapse {
+            transition: all 0.15s ease !important;
+            background: #ffffff !important;
+        }
+        #btnToggleLegendCollapse:hover {
+            background: #f8fafc !important;
+            border-color: #94a3b8 !important;
+            color: #0f172a !important;
+        }
+        #btnToggleLegendCollapse:not(.collapsed) #legendChevronIcon,
+        #btnToggleLegendCollapse[aria-expanded="true"] #legendChevronIcon {
+            transform: rotate(180deg) !important;
+        }
+
+        #dispatchLegendsContainer {
+            transition: all 0.25s ease-in-out !important;
+        }
+        #dispatchLegendsContainer .border-end-lg {
+            border-right: 1px solid #f1f5f9;
+        }
+        @media (max-width: 991.98px) {
+            #dispatchLegendsContainer .border-end-lg {
+                border-right: none;
+                border-bottom: 1px solid #f1f5f9;
+                padding-bottom: 1rem;
+                margin-bottom: 0.5rem;
+            }
         }
         #dispatchLegendsContainer .legend-badge {
             display: inline-flex !important;
             align-items: center !important;
             gap: 5px !important;
-            padding: 4px 10px !important;
+            padding: 3px 9px !important;
             border-radius: 999px !important;
-            font-size: 0.70rem !important;
+            font-size: 0.68rem !important;
             font-weight: 600 !important;
             line-height: 1.2 !important;
             white-space: nowrap !important;
@@ -1308,7 +1482,80 @@
         }
         #dispatchLegendsContainer .legend-badge:hover {
             transform: translateY(-1px) !important;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        /* Curated, Dignified Badge Palette */
+        .legend-badge-searching {
+            background-color: #fefce8 !important;
+            color: #854d0e !important;
+            border-color: #fef08a !important;
+        }
+        .legend-badge-awaiting {
+            background-color: #fff7ed !important;
+            color: #9a3412 !important;
+            border-color: #fed7aa !important;
+        }
+        .legend-badge-accepted {
+            background-color: #ecfeff !important;
+            color: #0e7490 !important;
+            border-color: #a5f3fc !important;
+        }
+        .legend-badge-enroute {
+            background-color: #eff6ff !important;
+            color: #1d4ed8 !important;
+            border-color: #bfdbfe !important;
+        }
+        .legend-badge-onsite {
+            background-color: #f5f3ff !important;
+            color: #6d28d9 !important;
+            border-color: #ddd6fe !important;
+        }
+        .legend-badge-photo {
+            background-color: #f0fdfa !important;
+            color: #0f766e !important;
+            border-color: #99f6e4 !important;
+        }
+        .legend-badge-inprog {
+            background-color: #eef2ff !important;
+            color: #4338ca !important;
+            border-color: #c7d2fe !important;
+        }
+        .legend-badge-completed {
+            background-color: #f0fdf4 !important;
+            color: #15803d !important;
+            border-color: #bbf7d0 !important;
+        }
+        .legend-badge-failed {
+            background-color: #f8fafc !important;
+            color: #475569 !important;
+            border-color: #cbd5e1 !important;
+        }
+        .legend-badge-escalated {
+            background-color: #fef2f2 !important;
+            color: #b91c1c !important;
+            border-color: #fca5a5 !important;
+        }
+
+        .legend-sla-within {
+            background-color: #f0fdf4 !important;
+            color: #15803d !important;
+            border-color: #bbf7d0 !important;
+        }
+        .legend-sla-approaching {
+            background-color: #fffbeb !important;
+            color: #b45309 !important;
+            border-color: #fde68a !important;
+        }
+        .legend-sla-breached {
+            background-color: #fef2f2 !important;
+            color: #dc2626 !important;
+            border-color: #fca5a5 !important;
+        }
+        .legend-sla-met {
+            background-color: #ecfdf5 !important;
+            color: #065f46 !important;
+            border-color: #a7f3d0 !important;
         }
 
         /* Dispatch List Toolbar: Laser-aligned input, select, and counter */
@@ -1337,6 +1584,7 @@
             border-left: none !important;
             border-top-right-radius: 8px !important;
             border-bottom-right-radius: 8px !important;
+            background: #ffffff !important;
         }
         #dispatchListToolbar .form-control:focus {
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
@@ -1355,10 +1603,10 @@
             display: inline-flex !important;
             align-items: center !important;
             gap: 6px !important;
-            padding: 0 16px !important;
+            padding: 0 14px !important;
             background: #ffffff !important;
             border: 1px solid #e2e8f0 !important;
-            border-radius: 999px !important;
+            border-radius: 8px !important;
             color: #475569 !important;
             font-size: 0.78rem !important;
             font-weight: 600 !important;
@@ -1375,10 +1623,11 @@
             display: inline-flex !important;
             align-items: center !important;
             gap: 2px !important;
+            height: 36px !important;
         }
         #dispatchViewSwitcher .btn {
-            height: 32px !important;
-            padding: 0 14px !important;
+            height: 30px !important;
+            padding: 0 13px !important;
             font-size: 0.78rem !important;
             font-weight: 600 !important;
             display: inline-flex !important;
@@ -1388,14 +1637,24 @@
             border: none !important;
         }
         #btnRefreshOperations {
-            height: 38px !important;
+            height: 36px !important;
             padding: 0 16px !important;
-            font-size: 0.82rem !important;
+            font-size: 0.80rem !important;
             font-weight: 600 !important;
             display: inline-flex !important;
             align-items: center !important;
             gap: 6px !important;
             border-radius: 999px !important;
+            background: #2563eb !important;
+            border: 1px solid #1d4ed8 !important;
+            color: #ffffff !important;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.25) !important;
+            transition: all 0.15s ease !important;
+        }
+        #btnRefreshOperations:hover {
+            background: #1d4ed8 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 3px 6px rgba(37, 99, 235, 0.3) !important;
         }
 
         /* Live Emergency Feed Streamlined Table Styling & Sticky Actions */
@@ -1423,6 +1682,59 @@
         }
         #liveDispatchTable tbody tr:hover td.col-emg-actions {
             background: #f8fafc;
+        }
+
+        /* Empty State Table Handling: Centered across visible width without awkward horizontal clipping */
+        #liveDispatchTable.is-empty {
+            width: 100% !important;
+            min-width: 100% !important;
+            table-layout: fixed !important;
+        }
+        #liveDispatchTable.is-empty thead {
+            display: none !important;
+        }
+        #liveDispatchTable.is-empty tbody,
+        #liveDispatchTable.is-empty tbody tr,
+        #liveDispatchTable.is-empty tbody td {
+            display: block !important;
+            width: 100% !important;
+            padding: 0 !important;
+            border: none !important;
+        }
+        .dispatch-empty-card-wrapper {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding: 2.5rem 1rem !important;
+            box-sizing: border-box !important;
+        }
+        .empty-state-card {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 2.5rem 2rem !important;
+            text-align: center !important;
+            background: #f8fafc !important;
+            border-radius: 14px !important;
+            border: 1px dashed #cbd5e1 !important;
+            margin: 0 auto !important;
+            max-width: 480px !important;
+            width: 100% !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+        }
+        .empty-state-icon {
+            width: 52px !important;
+            height: 52px !important;
+            border-radius: 50% !important;
+            background: #f1f5f9 !important;
+            color: #64748b !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1.35rem !important;
+            margin-bottom: 0.85rem !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .dashboard-container {
             width: 100% !important;
@@ -1755,7 +2067,8 @@
                     <span class="badge bg-info rounded-pill float-end ms-auto" id="sidebarHubsBadge" style="display:none;">0</span>
                 </a>
 
-                <div class="px-3 pb-1 pt-3 text-uppercase fw-bold small text-white-50" style="letter-spacing: 0.08em; font-size: 0.68rem;" th:if="${maintenanceSuperAdmin}">Administration</div>
+                <div class="px-3 pb-1 pt-3 text-uppercase fw-bold small text-white-50" style="letter-spacing: 0.08em; font-size: 0.68rem;">Catalog & Administration</div>
+                <a href="#service-pricing" class="nav-link btn btn-link text-start text-decoration-none" data-panel="service-pricing" id="sidebarPricingLink"><i class="fa-solid fa-tags me-2 text-warning"></i> Service Packages & Pricing</a>
                 <a href="#workers" class="nav-link btn btn-link text-start text-decoration-none" data-panel="workers" th:if="${maintenanceSuperAdmin}"><i class="fa-solid fa-users-gear me-2"></i> Maintenance Workers</a>
                 <a href="/dashboards/superadmin" class="nav-link btn btn-link text-start text-decoration-none text-warning fw-semibold" th:if="${maintenanceSuperAdmin}"><i class="fa-solid fa-arrow-left me-2"></i> Super Admin Console</a>
                 <a href="#profile" class="nav-link btn btn-link text-start text-decoration-none" data-panel="profile"><i class="fa-solid fa-user-gear me-2"></i> Worker Profile</a>
@@ -3285,18 +3598,18 @@
                     </div>
 
                     <!-- Step 7: Highly Visible Unassigned / Failed Assignment Queue (Prominent Admin Action Hub) -->
-                    <div class="card border-0 rounded-4 shadow-sm mb-4 overflow-hidden" id="unassignedActionQueueContainer">
-                        <div class="card-header text-white py-3 px-4 d-flex flex-wrap justify-content-between align-items-center gap-2" id="unassignedQueueHeader">
+                    <div class="card border-0 rounded-4 shadow-sm mb-4 overflow-hidden" id="unassignedActionQueueContainer" style="padding: 0 !important;">
+                        <div class="card-header text-white py-3 px-4 d-flex flex-wrap justify-content-between align-items-center gap-2" id="unassignedQueueHeader" style="margin: 0 !important; width: 100% !important;">
                             <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle bg-white text-danger d-flex align-items-center justify-content-center fw-bold shadow-xs" style="width: 38px; height: 38px; font-size: 1.15rem;">
-                                    <i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i>
+                                <div class="rounded-circle bg-white text-danger d-flex align-items-center justify-content-center fw-bold shadow-xs flex-shrink-0" style="width: 40px; height: 40px; font-size: 1.15rem;">
+                                    <i class="fa-solid fa-triangle-exclamation fa-beat-fade" style="color: #dc2626 !important;"></i>
                                 </div>
                                 <div>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <h5 class="mb-0 fw-bold text-white fs-6">URGENT ACTION QUEUE: Unassigned &amp; Failed Emergency Dispatches</h5>
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <h5 class="mb-0 fw-bold fs-6" style="color: #ffffff !important;">URGENT ACTION QUEUE: Unassigned &amp; Failed Emergency Dispatches</h5>
                                         <span class="badge bg-white text-danger fw-bold rounded-pill px-2.5 py-0.5" id="unassignedQueueCountBadge">0 Pending</span>
                                     </div>
-                                    <div class="text-white-50 small mt-0.5" style="font-size: 0.76rem;">
+                                    <div class="small mt-0.5" style="color: rgba(255, 255, 255, 0.88) !important; font-size: 0.77rem;">
                                         Requires immediate admin manual partner assignment. No search through routine bookings required.
                                     </div>
                                 </div>
@@ -3308,9 +3621,9 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0">
+                        <div class="card-body p-0" style="padding: 0 !important; margin: 0 !important;">
                             <!-- Zero-state when all emergencies are assigned -->
-                            <div id="unassignedZeroStateBanner" class="p-3 text-center bg-success-subtle text-success-emphasis d-none">
+                            <div id="unassignedZeroStateBanner" class="p-3 text-center bg-success-subtle text-success-emphasis d-none" style="margin: 0 !important; width: 100% !important;">
                                 <i class="fa-solid fa-circle-check me-1.5 text-success"></i>
                                 <strong class="small">Queue Clear:</strong>
                                 <span class="small">All active emergency requests have assigned service partners. No unassigned bookings pending action.</span>
@@ -3356,8 +3669,8 @@
                             <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
                                 <div>
                                     <div class="d-flex align-items-center gap-2">
-                                        <h4 class="fw-bold mb-0 text-dark" style="letter-spacing: -0.01em;">Live Emergency Feed</h4>
-                                        <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 fw-bold" id="liveBookingsBadgeCount" style="font-size: 0.72rem; line-height: 1;">0 Active</span>
+                                        <h4 class="fw-bold mb-0" id="liveEmergencyFeedTitle"><i class="fa-solid fa-tower-broadcast text-primary me-1"></i>Live Emergency Feed</h4>
+                                        <span class="badge rounded-pill px-2.5 py-1 fw-bold text-secondary bg-light border" id="liveBookingsBadgeCount" style="font-size: 0.72rem; line-height: 1;">0 Active</span>
                                     </div>
                                     <p class="text-muted mb-0 small mt-1">Live dispatch pipeline, partner assignments, geofence radius tracking, and SLA urgency monitoring.</p>
                                 </div>
@@ -3378,41 +3691,68 @@
                                 </div>
                             </div>
 
-                            <!-- Structured Operations Reference Console (Status Indicators + SLA Rules) -->
-                            <div class="shadow-xs" id="dispatchLegendsContainer">
-                                <!-- Row 1: Status Indicators -->
-                                <div class="legend-row">
-                                    <div class="legend-label">
-                                        <i class="fa-solid fa-tags text-primary"></i>
-                                        <span>Status Indicators:</span>
-                                    </div>
-                                    <div class="legend-badges" id="emergencyStatusLegend">
-                                        <span class="legend-badge" style="background-color: #fef9c3; border-color: #fde047 !important; color: #854d0e;"><i class="fa-solid fa-magnifying-glass text-warning-emphasis"></i>Searching Partner</span>
-                                        <span class="legend-badge" style="background-color: #ffedd5; border-color: #fed7aa !important; color: #9a3412;"><i class="fa-solid fa-hourglass-half"></i>Awaiting Acceptance</span>
-                                        <span class="legend-badge" style="background-color: #cffafe; border-color: #a5f3fc !important; color: #155e75;"><i class="fa-solid fa-user-check"></i>Accepted</span>
-                                        <span class="legend-badge" style="background-color: #2563eb; color: #ffffff;"><i class="fa-solid fa-truck-fast"></i>En Route</span>
-                                        <span class="legend-badge" style="background-color: #4f46e5; color: #ffffff;"><i class="fa-solid fa-location-dot"></i>On Site</span>
-                                        <span class="legend-badge" style="background-color: #0d9488; color: #ffffff;"><i class="fa-solid fa-camera"></i>Before Photo Uploaded</span>
-                                        <span class="legend-badge" style="background-color: #1d4ed8; color: #ffffff;"><i class="fa-solid fa-screwdriver-wrench"></i>In Progress</span>
-                                        <span class="legend-badge" style="background-color: #16a34a; color: #ffffff;"><i class="fa-solid fa-circle-check"></i>Completed</span>
-                                        <span class="legend-badge" style="background-color: #334155; color: #ffffff;"><i class="fa-solid fa-triangle-exclamation text-warning"></i>Failed Assignment</span>
-                                        <span class="legend-badge" style="background-color: #fde68a; border-color: #f59e0b !important; color: #78350f;"><i class="fa-solid fa-hourglass-half"></i>SLA Risk</span>
-                                        <span class="legend-badge" style="background-color: #dc2626; color: #ffffff;"><i class="fa-solid fa-triangle-exclamation"></i>SLA Breached</span>
-                                        <span class="legend-badge dispatch-alert-pulse" style="background-color: #991b1b; color: #ffffff;"><i class="fa-solid fa-bell"></i>Dispatch Escalated</span>
-                                    </div>
+                            <!-- Operations Reference Guide Strip & Accordion Toggle -->
+                            <div class="d-flex flex-wrap align-items-center justify-content-between p-2.5 px-3 mb-2.5 rounded-3 border bg-light bg-opacity-50" style="border-color: #e2e8f0 !important;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle" style="width: 24px; height: 24px;">
+                                        <i class="fa-solid fa-circle-info" style="font-size: 0.76rem;"></i>
+                                    </span>
+                                    <span class="fw-bold text-dark small" style="letter-spacing: -0.01em;">Operations Reference Guide:</span>
+                                    <span class="text-muted small d-none d-sm-inline">Dispatch lifecycle pipeline &amp; 30-minute SLA urgency rules</span>
                                 </div>
+                                <button type="button" class="btn btn-sm btn-white border rounded-pill py-1 px-3 d-inline-flex align-items-center gap-1.5 shadow-xs collapsed" data-bs-toggle="collapse" data-bs-target="#dispatchLegendsContainer" aria-expanded="false" id="btnToggleLegendCollapse" style="font-size: 0.74rem; font-weight: 600; color: #475569;">
+                                    <i class="fa-solid fa-sliders text-primary"></i>
+                                    <span>Toggle Reference Guide</span>
+                                    <i class="fa-solid fa-chevron-down ms-0.5 text-muted" id="legendChevronIcon" style="font-size: 0.65rem; transition: transform 0.2s ease;"></i>
+                                </button>
+                            </div>
 
-                                <!-- Row 2: SLA Urgency Rules -->
-                                <div class="legend-row">
-                                    <div class="legend-label">
-                                        <i class="fa-solid fa-stopwatch text-danger"></i>
-                                        <span>SLA Rules (30m):</span>
-                                    </div>
-                                    <div class="legend-badges" id="slaUrgencyLegend">
-                                        <span class="legend-badge" style="background-color: #ecfdf5; border-color: #a7f3d0 !important; color: #065f46;" data-sla-guide="within"><i class="fa-solid fa-clock-rotate-left"></i>Within SLA (&gt;10m remaining)</span>
-                                        <span class="legend-badge" style="background-color: #fffbeb; border-color: #fde68a !important; color: #92400e;" data-sla-guide="approaching"><i class="fa-solid fa-triangle-exclamation text-warning-emphasis"></i>Approaching SLA Breach (&le;10m remaining)</span>
-                                        <span class="legend-badge" style="background-color: #fef2f2; border-color: #fca5a5 !important; color: #991b1b;" data-sla-guide="breached"><i class="fa-solid fa-circle-exclamation"></i>SLA Breached (Overdue)</span>
-                                        <span class="legend-badge" style="background-color: #f0fdf4; border-color: #bbf7d0 !important; color: #15803d;" data-sla-guide="met"><i class="fa-solid fa-circle-check"></i>Within SLA (Arrived On-Time)</span>
+                            <!-- Structured Operations Reference Console (Collapsible, Ordered, Decent Grid) -->
+                            <div class="collapse mb-3" id="dispatchLegendsContainer">
+                                <div class="p-3 bg-white rounded-3 border shadow-xs" style="border-color: #e2e8f0 !important;">
+                                    <div class="row g-3">
+                                        <!-- Column 1: Dispatch Lifecycle Pipeline (Sequential Order) -->
+                                        <div class="col-lg-7 border-end-lg">
+                                            <div class="d-flex align-items-center gap-1.5 mb-2 pb-1 border-bottom" style="border-color: #f1f5f9 !important;">
+                                                <i class="fa-solid fa-route text-primary" style="font-size: 0.8rem;"></i>
+                                                <span class="fw-bold text-secondary text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">Dispatch Lifecycle (Sequential Order)</span>
+                                            </div>
+                                            <div class="d-flex flex-wrap align-items-center gap-1.5" id="emergencyStatusLegend">
+                                                <span class="legend-badge legend-badge-searching" title="1. Searching Partner"><i class="fa-solid fa-magnifying-glass"></i>1. Searching</span>
+                                                <i class="fa-solid fa-angle-right text-muted opacity-50" style="font-size: 0.65rem;"></i>
+                                                <span class="legend-badge legend-badge-awaiting" title="2. Awaiting Acceptance"><i class="fa-solid fa-hourglass-half"></i>2. Awaiting</span>
+                                                <i class="fa-solid fa-angle-right text-muted opacity-50" style="font-size: 0.65rem;"></i>
+                                                <span class="legend-badge legend-badge-accepted" title="3. Partner Accepted"><i class="fa-solid fa-user-check"></i>3. Accepted</span>
+                                                <i class="fa-solid fa-angle-right text-muted opacity-50" style="font-size: 0.65rem;"></i>
+                                                <span class="legend-badge legend-badge-enroute" title="4. En Route to Location"><i class="fa-solid fa-truck-fast"></i>4. En Route</span>
+                                                <i class="fa-solid fa-angle-right text-muted opacity-50" style="font-size: 0.65rem;"></i>
+                                                <span class="legend-badge legend-badge-onsite" title="5. Reached Location"><i class="fa-solid fa-location-dot"></i>5. On Site</span>
+                                                <i class="fa-solid fa-angle-right text-muted opacity-50" style="font-size: 0.65rem;"></i>
+                                                <span class="legend-badge legend-badge-photo" title="6. Before Photo Uploaded"><i class="fa-solid fa-camera"></i>6. Photo Verified</span>
+                                                <i class="fa-solid fa-angle-right text-muted opacity-50" style="font-size: 0.65rem;"></i>
+                                                <span class="legend-badge legend-badge-inprog" title="7. Repair In Progress"><i class="fa-solid fa-screwdriver-wrench"></i>7. In Progress</span>
+                                                <i class="fa-solid fa-angle-right text-muted opacity-50" style="font-size: 0.65rem;"></i>
+                                                <span class="legend-badge legend-badge-completed" title="8. Completed"><i class="fa-solid fa-circle-check"></i>8. Completed</span>
+                                                <div class="w-100 my-0.5"></div>
+                                                <span class="text-muted fw-semibold me-1" style="font-size: 0.68rem;">Exceptions:</span>
+                                                <span class="legend-badge legend-badge-failed" title="Assignment Failed"><i class="fa-solid fa-triangle-exclamation text-warning"></i>Failed Assignment</span>
+                                                <span class="legend-badge legend-badge-escalated dispatch-alert-pulse" title="Dispatch Escalated"><i class="fa-solid fa-bell"></i>Dispatch Escalated</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Column 2: SLA Response Protocol (30-Minute Urgency) -->
+                                        <div class="col-lg-5">
+                                            <div class="d-flex align-items-center gap-1.5 mb-2 pb-1 border-bottom" style="border-color: #f1f5f9 !important;">
+                                                <i class="fa-solid fa-stopwatch text-danger" style="font-size: 0.8rem;"></i>
+                                                <span class="fw-bold text-secondary text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.05em;">SLA Urgency Rules (30m Target)</span>
+                                            </div>
+                                            <div class="d-flex flex-wrap align-items-center gap-1.5" id="slaUrgencyLegend">
+                                                <span class="legend-badge legend-sla-within" data-sla-guide="within" title="Within SLA (>10m remaining)"><i class="fa-solid fa-clock-rotate-left"></i>Within SLA (&gt;10m left)</span>
+                                                <span class="legend-badge legend-sla-approaching" data-sla-guide="approaching" title="Approaching SLA Breach (≤10m remaining)"><i class="fa-solid fa-triangle-exclamation"></i>Approaching Breach (&le;10m)</span>
+                                                <span class="legend-badge legend-sla-breached" data-sla-guide="breached" title="SLA Breached (Overdue)"><i class="fa-solid fa-circle-exclamation"></i>SLA Breached (Overdue)</span>
+                                                <span class="legend-badge legend-sla-met" data-sla-guide="met" title="Within SLA (Arrived On-Time)"><i class="fa-solid fa-circle-check"></i>Arrived On-Time</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -3447,7 +3787,7 @@
                                 <div class="col-md-3 d-flex justify-content-md-end align-items-center">
                                     <span class="count-pill">
                                         <i class="fa-solid fa-list-ol text-primary"></i>
-                                        <span id="liveBookingsFilteredCount">Showing all bookings</span>
+                                        <span id="liveBookingsFilteredCount">Showing 0 of 0 bookings</span>
                                     </span>
                                 </div>
                             </div>
@@ -3456,7 +3796,7 @@
                         <!-- 1. List / Grid View -->
                         <div id="dispatchListView">
                             <div class="card-body px-4 pb-4 table-responsive">
-                                <table class="table table-hover align-middle text-nowrap" id="liveDispatchTable">
+                                <table class="table table-hover align-middle text-nowrap is-empty" id="liveDispatchTable">
                                     <thead class="table-light">
                                         <tr>
                                             <th scope="col">Emergency Booking ID</th>
@@ -3476,13 +3816,15 @@
                                     </thead>
                                     <tbody id="dispatchBookingsBody">
                                         <tr>
-                                            <td colspan="13" class="text-center py-5">
-                                                <div class="d-flex flex-column align-items-center justify-content-center py-3" role="status" aria-live="polite">
-                                                    <div class="spinner-border text-primary mb-2" role="status" style="width: 2rem; height: 2rem;">
-                                                        <span class="visually-hidden">Loading emergency operations view...</span>
+                                            <td colspan="13" class="text-center p-0 border-0">
+                                                <div class="dispatch-empty-card-wrapper">
+                                                    <div class="d-flex flex-column align-items-center justify-content-center py-4" role="status" aria-live="polite">
+                                                        <div class="spinner-border text-primary mb-2" role="status" style="width: 2rem; height: 2rem;">
+                                                            <span class="visually-hidden">Loading emergency operations view...</span>
+                                                        </div>
+                                                        <div class="fw-semibold text-dark small mt-1">Loading emergency operations view...</div>
+                                                        <div class="text-muted small" style="font-size: 0.72rem;">Synchronizing live incidents, partner telemetry and SLA timers</div>
                                                     </div>
-                                                    <div class="fw-semibold text-dark small mt-1">Loading emergency operations view...</div>
-                                                    <div class="text-muted small" style="font-size: 0.72rem;">Synchronizing live incidents, partner telemetry and SLA timers</div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -4076,6 +4418,279 @@
                     <div class="row g-4"><div class="col-lg-7"><div class="card shadow-sm border-0 rounded-4 h-100"><div class="card-header bg-transparent border-0 pt-4 px-4"><h4 class="fw-bold mb-1">Skills and compliance register</h4><p class="text-muted mb-0">Visible qualifications used when assigning specialised maintenance work.</p></div><div class="card-body px-4 pb-4"><div class="row g-3"><div class="col-md-6"><div class="border rounded-3 p-3 h-100"><strong class="d-block">Plumbing & leak isolation</strong><span class="small text-success">Qualified · Refresher due Mar 2027</span></div></div><div class="col-md-6"><div class="border rounded-3 p-3 h-100"><strong class="d-block">Water-pump operation</strong><span class="small text-success">Qualified · Annual check complete</span></div></div><div class="col-md-6"><div class="border rounded-3 p-3 h-100"><strong class="d-block">Work-at-height awareness</strong><span class="small text-warning">Valid · Review due Dec 2026</span></div></div><div class="col-md-6"><div class="border rounded-3 p-3 h-100"><strong class="d-block">Electrical escalation protocol</strong><span class="small text-primary">Authorised to isolate and escalate</span></div></div></div></div></div></div><div class="col-lg-5"><div class="card shadow-sm border-0 rounded-4 h-100"><div class="card-header bg-transparent border-0 pt-4 px-4"><h4 class="fw-bold mb-1">Today’s duty handover</h4><p class="text-muted mb-0">Information the next shift needs before you sign out.</p></div><div class="card-body px-4 pb-4"><div class="d-grid gap-3 small"><div class="d-flex justify-content-between border-bottom pb-2"><span>Pending ticket update</span><strong class="text-danger">T-102 water leakage</strong></div><div class="d-flex justify-content-between border-bottom pb-2"><span>Scheduled vendor visit</span><strong class="text-primary">Lift #1 · 02:00 PM</strong></div><div class="d-flex justify-content-between border-bottom pb-2"><span>Parts handover</span><strong class="text-warning">Fan capacitor pending</strong></div><div class="d-flex justify-content-between"><span>Next shift lead</span><strong>Arun Kumar · 04:00 PM</strong></div></div><button type="button" class="btn btn-outline-primary rounded-pill w-100 mt-4" data-panel="tasks"><i class="fa-solid fa-list-check me-2"></i>Review handover tasks</button></div></div></div></div>
                 </section>
 
+                <!-- Service Packages & Pricing CRUD Management Panel -->
+                <section class="d-none animate__animated animate__fadeIn" data-view="service-pricing" id="service-pricing-panel">
+                    <style>
+                        .pricing-amount-pill {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 2px;
+                            background: #f1f5f9;
+                            border: 1px solid #cbd5e1;
+                            border-radius: 9999px;
+                            padding: 3px 12px;
+                            font-weight: 700;
+                            color: #0f172a;
+                            font-size: 0.95rem;
+                        }
+                        .pricing-amount-pill .currency-symbol {
+                            color: #0284c7;
+                            font-size: 0.85rem;
+                            font-weight: 800;
+                        }
+                        .btn-xs {
+                            padding: 2px 7px;
+                            font-size: 0.75rem;
+                            line-height: 1.2;
+                        }
+                        #adminPricingTable tr:hover {
+                            background-color: #f8fafc;
+                        }
+                    </style>
+
+                    <!-- Top Summary Stats Row -->
+                    <div class="row g-4 mb-4 stats">
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-box-archive text-primary"></i> Active Packages
+                                </span>
+                                <strong class="fs-2 fw-bold text-dark mt-2 d-block" id="statTotalPackages">0</strong>
+                                <small class="text-muted mt-1">Across all categories</small>
+                            </article>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-layer-group text-info"></i> Categories
+                                </span>
+                                <strong class="fs-2 fw-bold text-primary mt-2 d-block" id="statCoveredCategories">0</strong>
+                                <small class="text-muted mt-1">Clean, Repair, Appliances &amp; more</small>
+                            </article>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-tag text-success"></i> Min Package Price
+                                </span>
+                                <strong class="fs-2 fw-bold text-success mt-2 d-block" id="statMinPrice">₹0</strong>
+                                <small class="text-muted mt-1">Entry-level services</small>
+                            </article>
+                        </div>
+                        <div class="col-xl-3 col-md-6">
+                            <article class="card">
+                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-gem text-warning"></i> Max Package Price
+                                </span>
+                                <strong class="fs-2 fw-bold text-warning-emphasis mt-2 d-block" id="statMaxPrice" style="color: #d97706 !important;">₹0</strong>
+                                <small class="text-muted mt-1">Full apartment / premium plans</small>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- Main Pricing Catalog Card -->
+                    <div class="card shadow-sm border rounded-4 mb-4 overflow-hidden">
+                        <div class="card-header bg-white border-bottom pt-4 pb-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div style="flex: 1 1 480px;">
+                                <h4 class="fw-bold mb-1 d-flex align-items-center gap-2 flex-wrap">
+                                    <i class="fa-solid fa-screwdriver-wrench text-primary"></i> Home Services &amp; Pricing Catalog
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fw-semibold px-2.5 py-1" style="font-size: 0.72rem;">
+                                        <i class="fa-solid fa-bolt me-1"></i> Live Real-Time Sync
+                                    </span>
+                                </h4>
+                                <p class="text-muted small mb-0 mt-1" style="max-width: 820px; line-height: 1.45;">
+                                    Control live pricing for all home service packages. Changes save directly to the database and sync instantly to resident &amp; customer booking catalogs.
+                                </p>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 0 0 auto;">
+                                <button type="button" class="catalog-btn-refresh shadow-xs" onclick="window.loadAdminPackages()" title="Refresh live catalog">
+                                    <i class="fa-solid fa-rotate"></i> Refresh
+                                </button>
+                                <button type="button" class="catalog-btn-reseed shadow-xs" onclick="window.resetToDefaultPricingCatalog()" title="Reset / seed missing default packages">
+                                    <i class="fa-solid fa-arrow-rotate-left"></i> Re-seed Defaults
+                                </button>
+                                <button type="button" class="catalog-btn-add shadow-xs" onclick="window.openAddPackageModal()">
+                                    <i class="fa-solid fa-plus"></i> Add New Package
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Filter Toolbar -->
+                        <div class="catalog-filter-bar">
+                            <div class="catalog-search-wrapper">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="pricingSearchInput" placeholder="Search packages, services, prices..." oninput="window.filterPricingTable()">
+                            </div>
+                            <div class="catalog-select-wrapper">
+                                <select id="pricingCategoryFilter" onchange="window.filterPricingTable()">
+                                    <option value="ALL">All Categories</option>
+                                </select>
+                            </div>
+                            <div class="catalog-select-wrapper">
+                                <select id="pricingSortSelect" onchange="window.filterPricingTable()">
+                                    <option value="DEFAULT">Default Ordering</option>
+                                    <option value="PRICE_ASC">Price: Low to High</option>
+                                    <option value="PRICE_DESC">Price: High to Low</option>
+                                    <option value="NAME_ASC">Package Name (A-Z)</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1 shadow-xs" onclick="window.resetPricingFilter()" title="Clear filters" style="height: 38px; border-radius: 10px; font-size: 0.82rem; font-weight: 600; padding: 0 14px; background: #ffffff;">
+                                 <i class="fa-solid fa-xmark"></i> Clear
+                            </button>
+
+                            <!-- View Mode Switcher: Cards vs Table -->
+                            <div class="catalog-view-switcher" role="group" aria-label="View toggle">
+                                <button type="button" id="pricingViewCardsBtn" class="catalog-view-btn active" onclick="window.setPricingViewMode('cards')" title="Card View">
+                                    <i class="fa-solid fa-border-all"></i> Cards
+                                </button>
+                                <button type="button" id="pricingViewTableBtn" class="catalog-view-btn" onclick="window.setPricingViewMode('table')" title="Table View">
+                                    <i class="fa-solid fa-table-list"></i> Table
+                                </button>
+                            </div>
+
+                            <div class="ms-auto">
+                                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill fw-semibold shadow-xs" id="pricingFilteredCount" style="font-size: 0.78rem;">
+                                    Loading packages...
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card View Container (Default Active) -->
+                        <div id="adminPricingCardView" class="catalog-card-grid">
+                            <div class="text-center py-5" style="grid-column: 1 / -1;">
+                                <div class="spinner-border text-primary" role="status"></div>
+                            </div>
+                        </div>
+
+                        <!-- Pricing Table Container (Toggled) -->
+                        <div class="table-responsive" id="adminPricingTableView" style="display: none;">
+                            <table class="table table-hover align-middle mb-0" id="adminPricingTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 60px;" class="text-center">ID</th>
+                                        <th style="width: 180px;">Service / Category</th>
+                                        <th style="width: 170px;">Designation / Type</th>
+                                        <th style="width: 210px;">Package Name</th>
+                                        <th style="width: 170px;">Live Price (₹)</th>
+                                        <th>Features &amp; Scope</th>
+                                        <th style="width: 100px;" class="text-center">Status</th>
+                                        <th style="width: 140px;" class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminPricingTableBody">
+                                    <tr>
+                                        <td colspan="8" class="text-center py-5">
+                                            <div class="spinner-border text-primary" role="status"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Add / Edit Service Package Modal -->
+                <div class="modal fade hidden" id="homeServicePackageModal" tabindex="-1" aria-labelledby="modalPackageTitle" aria-hidden="true" style="display: none !important; z-index: 1065;">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content rounded-4 border-0 shadow-lg">
+                            <div class="modal-header border-bottom px-4 pt-4 pb-3">
+                                <div>
+                                    <h5 class="modal-title fw-bold text-dark mb-0" id="modalPackageTitle">Add Service Package</h5>
+                                    <p class="text-muted small mb-0">Changes save directly to the database and sync instantly to resident & customer dashboards.</p>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body px-4 py-3">
+                                <form id="modalPackageForm" onsubmit="event.preventDefault(); window.savePackageModal();">
+                                    <input type="hidden" id="modalPackageId">
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-muted mb-1">Category <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="modalCategory" list="categorySuggestions" placeholder="e.g. Home Cleaning, Plumbing, Electrical" required>
+                                            <datalist id="categorySuggestions">
+                                                <option value="Home Cleaning">
+                                                <option value="Plumbing">
+                                                <option value="Electrical">
+                                                <option value="Carpentry">
+                                                <option value="Appliance Repair">
+                                                <option value="Pest Control">
+                                                <option value="Painting">
+                                                <option value="Packers & Movers">
+                                            </datalist>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-muted mb-1">Sub-Service Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="modalSubService" placeholder="e.g. Full House Cleaning, Deep Kitchen Cleaning" required>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-muted mb-1">Designation / Apartment Variant <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="modalDesignation" placeholder="e.g. Furnished Apartment, Unfurnished Apartment, Occupied Kitchen" required>
+                                            <div class="form-text small text-muted">Used by the frontend to group options (e.g. "Furnished Apartment").</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label small fw-bold text-muted mb-1">Package Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="modalPackageName" placeholder="e.g. Essential ★, Premium 💎, Elite 👑" required>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold text-muted mb-1">Price (₹ INR) <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text fw-bold text-primary">₹</span>
+                                                <input type="number" class="form-control fw-bold" id="modalPrice" placeholder="3069" min="0" step="1" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold text-muted mb-1">Price Prefix (Optional)</label>
+                                            <input type="text" class="form-control" id="modalPricePrefix" placeholder="e.g. Starts at, Flat">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label small fw-bold text-muted mb-1">Badge (Optional)</label>
+                                            <input type="text" class="form-control" id="modalBadge" placeholder="e.g. MOST POPULAR, ECO-SAFE">
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold text-muted mb-1">Rating</label>
+                                            <input type="text" class="form-control" id="modalRating" placeholder="4.7" value="4.7">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold text-muted mb-1">Reviews Count</label>
+                                            <input type="text" class="form-control" id="modalReviews" placeholder="38.2K+" value="10K+">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold text-muted mb-1">Duration</label>
+                                            <input type="text" class="form-control" id="modalDuration" placeholder="4 hrs" value="4 hrs">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label small fw-bold text-muted mb-1">Options Label</label>
+                                            <input type="text" class="form-control" id="modalOptionsCount" placeholder="5 options" value="5 options">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label small fw-bold text-muted mb-1">Package Features & Inclusions (One feature per line)</label>
+                                            <textarea class="form-control" id="modalFeatures" rows="4" placeholder="Bathroom & kitchen deep cleaning&#10;Machine floor cleaning&#10;Cobweb & fan dusting&#10;Balcony & utility area cleaning&#10;Furniture dusting"></textarea>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="form-check form-switch mt-2">
+                                                <input class="form-check-input" type="checkbox" id="modalActive" checked>
+                                                <label class="form-check-label fw-semibold" for="modalActive">Active in Customer & Resident Catalog</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer border-top px-4 py-3 bg-light d-flex justify-content-between">
+                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" id="btnSavePackageModal" onclick="window.savePackageModal()">
+                                    <i class="fa-solid fa-floppy-disk me-1"></i> Save Package
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
@@ -4256,7 +4871,8 @@
             dispatch: "On-Demand Emergency Dispatch",
             partners: "Maintenance Partner Master Roster",
             hubs: "Maintenance Hub Master Management",
-            workers: "Maintenance Worker Management", assets: "Assets & Preventive Servicing", profile: "Worker Profile"
+            workers: "Maintenance Worker Management", assets: "Assets & Preventive Servicing", profile: "Worker Profile",
+            "service-pricing": "Home Services & Package Pricing Catalog"
         };
         const canManageMaintenanceWorkers = document.body.dataset.maintenanceSuperadmin === "true";
         if (!canManageMaintenanceWorkers) {
@@ -4355,6 +4971,9 @@
             }
             if (panel === "hubs" && typeof window.loadHubMasterTable === "function") {
                 window.loadHubMasterTable();
+            }
+            if (panel === "service-pricing" && typeof window.loadAdminPackages === "function") {
+                window.loadAdminPackages();
             }
         };
 
@@ -4557,7 +5176,14 @@
 
                 // Update the Live Bookings Active badge in header
                 const liveBadgeCount = document.getElementById("liveBookingsBadgeCount");
-                if (liveBadgeCount) liveBadgeCount.textContent = `${liveEmergencies.length} Active`;
+                if (liveBadgeCount) {
+                    liveBadgeCount.textContent = `${liveEmergencies.length} Active`;
+                    if (liveEmergencies.length > 0) {
+                        liveBadgeCount.className = "badge rounded-pill px-2.5 py-1 fw-bold bg-danger text-white shadow-xs";
+                    } else {
+                        liveBadgeCount.className = "badge rounded-pill px-2.5 py-1 fw-bold text-secondary bg-light border";
+                    }
+                }
 
                 window.filterDispatchTable();
                 if (typeof window.renderUnassignedEmergencyQueue === "function") {
@@ -4570,14 +5196,18 @@
                     window.renderMapIncidentsSideRail();
                 }
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="13" class="text-center py-5">
-                    <div class="empty-state-card border-warning-subtle bg-warning-subtle bg-opacity-10 py-4">
-                        <div class="empty-state-icon text-warning bg-white shadow-xs"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                        <h6 class="fw-bold text-dark mb-1">Unable to Load Live Emergency Operations</h6>
-                        <p class="text-muted small mb-3">Unable to load live emergency operations data. Please check connection and try again.</p>
-                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" onclick="window.loadDispatchBookings()">
-                            <i class="fa-solid fa-rotate me-1"></i>Retry
-                        </button>
+                const tableEl = document.getElementById("liveDispatchTable");
+                if (tableEl) tableEl.classList.add("is-empty");
+                tbody.innerHTML = `<tr><td colspan="13" class="text-center p-0 border-0">
+                    <div class="dispatch-empty-card-wrapper">
+                        <div class="empty-state-card border-warning-subtle bg-warning-subtle bg-opacity-10 py-4">
+                            <div class="empty-state-icon text-warning bg-white shadow-xs"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <h6 class="fw-bold text-dark mb-1">Unable to Load Live Emergency Operations</h6>
+                            <p class="text-muted small mb-3">Unable to load live emergency operations data. Please check connection and try again.</p>
+                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" onclick="window.loadDispatchBookings()">
+                                <i class="fa-solid fa-rotate me-1"></i>Retry
+                            </button>
+                        </div>
                     </div>
                 </td></tr>`;
             }
@@ -5316,19 +5946,25 @@
                 countEl.textContent = `Showing ${filtered.length} of ${all.length} bookings`;
             }
 
+            const tableEl = document.getElementById("liveDispatchTable");
             if (!filtered || filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="13" class="text-center py-5">
-                    <div class="empty-state-card shadow-xs">
-                        <div class="empty-state-icon"><i class="fa-solid fa-truck-fast"></i></div>
-                        <h6 class="fw-bold text-dark mb-1">No Emergency Dispatch Bookings Found</h6>
-                        <p class="text-muted small mb-3">No emergency dispatch bookings currently match your criteria.</p>
-                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-xs" onclick="document.getElementById('liveBookingsSearchInput').value=''; document.getElementById('liveBookingsStatusFilter').value='ALL'; window.filterDispatchTable();">
-                            <i class="fa-solid fa-rotate-left me-1"></i>Reset Filter
-                        </button>
+                if (tableEl) tableEl.classList.add("is-empty");
+                tbody.innerHTML = `<tr><td colspan="13" class="text-center p-0 border-0">
+                    <div class="dispatch-empty-card-wrapper">
+                        <div class="empty-state-card shadow-xs">
+                            <div class="empty-state-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                            <h6 class="fw-bold text-dark mb-1">No Emergency Dispatch Bookings Found</h6>
+                            <p class="text-muted small mb-3">No emergency dispatch bookings currently match your criteria.</p>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-xs" onclick="document.getElementById('liveBookingsSearchInput').value=''; document.getElementById('liveBookingsStatusFilter').value='ALL'; window.filterDispatchTable();">
+                                <i class="fa-solid fa-rotate-left me-1"></i>Reset Filter
+                            </button>
+                        </div>
                     </div>
                 </td></tr>`;
                 return;
             }
+
+            if (tableEl) tableEl.classList.remove("is-empty");
 
             tbody.innerHTML = filtered.map(b => {
                 const distanceStr = b.distance || (b.distanceKm != null ? `${b.distanceKm} km` : 'Hub area');
@@ -8722,5 +9358,6 @@
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
 <script src="/smartapartment/js/worker-attendance-module.js?v=20260919-v1"></script>
 <script src="/smartapartment/js/maintenance-manager-dashboard.js?v=20260919-v1"></script>
+<script src="/smartapartment/js/home-services-pricing-admin.js"></script>
 </body>
 </html>

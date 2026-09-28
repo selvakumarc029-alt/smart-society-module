@@ -452,7 +452,7 @@
     document.addEventListener('submit', async function (event) {
         var form = event.target;
         if (!form || !form.closest('body[data-platform="propertydirect"], body.app-dashboard[data-platform="propertydirect"]')) return;
-        if (form.id === 'pdDashboardActionForm' || form.dataset.propertyApiForm === 'true') return;
+        if (form.id === 'pdDashboardActionForm' || form.id === 'postApartmentForm' || form.dataset.propertyApiForm === 'true' || form.querySelector('[data-property-api-action]') || event.submitter?.matches('[data-property-api-action]')) return;
         if (form.matches('.pd-auth-card form, #pdLoginForm, #pdSignupForm')) return;
         if (form.dataset.pdNativeSubmit === 'true') return;
         event.preventDefault();

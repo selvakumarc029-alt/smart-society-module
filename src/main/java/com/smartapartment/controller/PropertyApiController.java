@@ -67,7 +67,35 @@ public class PropertyApiController{
  @GetMapping("/admin/listings") public List<PropertyListing>adminListings(@RequestParam(defaultValue="PENDING")String verificationStatus,HttpSession s){administrator(s);return listings.findByVerificationStatusOrderByCreatedAtDesc(verificationStatus.toUpperCase(Locale.ROOT));}
  @DeleteMapping("/listings/{id}") @Transactional public void delete(@PathVariable Long id,HttpSession s){PropertyListing l=listings.findByIdAndCustomerId(id,customer(s)).orElseThrow(()->new IllegalArgumentException("Listing was not found"));l.setStatus("INACTIVE");listings.save(l);}
  @PatchMapping("/listings/{id}/resubmit") public PropertyListing resubmit(@PathVariable Long id,@Valid @RequestBody ListingRequest request,HttpSession session){return resubmitApi(id,request,session);}
- @PostMapping("/enquiries") @Transactional public Map<String,Object> enquire(@Valid @RequestBody EnquiryRequest r,HttpSession s){customer(s);publicListing(r.listingId());PropertyEnquiry e=new PropertyEnquiry();e.setTenantId("propertydirect");e.setCustomerId((Long)s.getAttribute("propertydirect:customerId"));e.setListingId(r.listingId());e.setName(r.name());e.setPhone(r.phone());e.setEmail(r.email());e.setEnquiryType(r.type());e.setMessage(r.message());e=enquiries.save(e);return Map.of("id",e.getId(),"message","Enquiry submitted");}
+ @PostMapping("/enquiries") @Transactional public Map<String,Object> enquire(@Valid @RequestBody EnquiryRequest r,HttpSession s){
+  customer(s);
+  PropertyListing l=publicListing(r.listingId());
+  PropertyEnquiry e=new PropertyEnquiry();
+  e.setTenantId("propertydirect");
+  e.setCustomerId((Long)s.getAttribute("propertydirect:customerId"));
+  e.setListingId(r.listingId());
+  e.setName(r.name());
+  e.setPhone(r.phone());
+  e.setEmail(r.email());
+  e.setEnquiryType(r.type());
+  e.setMessage(r.message());
+  e=enquiries.save(e);
+  boolean ownerNotified=false;
+  String delivery="OWNER_INBOX";
+  if(l.getCustomerId()!=null){
+   PropertyCustomer owner=customers.findById(l.getCustomerId()).orElse(null);
+   if(owner!=null&&!blank(owner.getEmail())){
+    Map<String,Object> mailRes=mailService.sendPropertyEnquiryNotification(
+      owner.getName(),owner.getEmail(),l.getTitle(),
+      r.name(),r.email(),r.phone(),r.type(),r.message(),
+      e.getId(),l.getApartmentCode()
+    );
+    ownerNotified=Boolean.TRUE.equals(mailRes.get("sent"));
+    delivery=ownerNotified?"EMAIL_SENT":"OWNER_INBOX";
+   }
+  }
+  return Map.of("id",e.getId(),"message","Enquiry submitted","ownerNotified",ownerNotified,"delivery",delivery);
+ }
  @PostMapping("/contact-messages") @Transactional public Map<String,Object> contact(@Valid @RequestBody ContactMessageRequest r,HttpSession s){PropertyEnquiry e=new PropertyEnquiry();e.setTenantId("propertydirect");e.setCustomerId((Long)s.getAttribute("propertydirect:customerId"));e.setName((r.firstName().trim()+" "+r.lastName().trim()).trim());e.setPhone(r.phone().trim());e.setEmail(r.email().trim().toLowerCase(Locale.ROOT));e.setEnquiryType("PLATFORM_CONTACT");e.setMessage(r.message().trim());e=enquiries.save(e);Map<String,Object>delivery=mailService.sendPropertyDirectContactNotification(e.getName(),e.getEmail(),e.getPhone(),e.getMessage(),e.getId());boolean emailSent=Boolean.TRUE.equals(delivery.get("sent"));return Map.of("id",e.getId(),"emailSent",emailSent,"delivery",emailSent?"EMAIL_SENT":"ADMIN_INBOX","message",emailSent?"Your message was received and PropertyDirect support has been notified.":"Your message was received by PropertyDirect support and added to the Super Admin inbox.");}
  @GetMapping("/admin/contact-messages") public List<Map<String,Object>>contactMessages(HttpSession s){administrator(s);return enquiries.findByEnquiryTypeOrderByCreatedAtDesc("PLATFORM_CONTACT").stream().map(e->{Map<String,Object>m=new LinkedHashMap<>();m.put("id",e.getId());m.put("name",text(e.getName(),"Website visitor"));m.put("email",text(e.getEmail(),"—"));m.put("phone",text(e.getPhone(),"—"));m.put("message",text(e.getMessage(),"—"));m.put("createdAt",e.getCreatedAt()==null?"":e.getCreatedAt().toString());return m;}).toList();}
  @GetMapping("/saved") public List<SavedProperty> saved(HttpSession s){return saved.findByCustomerIdOrderByCreatedAtDesc(customer(s));}
@@ -75,11 +103,134 @@ public class PropertyApiController{
  @DeleteMapping("/saved/{listingId}") @Transactional public void unsave(@PathVariable Long listingId,HttpSession s){saved.findByCustomerIdAndListingId(customer(s),listingId).ifPresent(saved::delete);}
  @GetMapping("/saved-searches") public List<SavedSearch> searches(HttpSession s){return searches.findByCustomerIdOrderByCreatedAtDesc(customer(s));}
  @PostMapping("/saved-searches") @Transactional public SavedSearch search(@Valid @RequestBody SavedSearchRequest r,HttpSession s){SavedSearch x=new SavedSearch();x.setTenantId("propertydirect");x.setCustomerId(customer(s));x.setName(r.name());x.setCity(r.city());x.setLocality(r.locality());x.setListingType(r.type());x.setBhk(r.bhk());x.setMinPrice(r.minPrice());x.setMaxPrice(r.maxPrice());x.setAlertsEnabled(r.alertsEnabled());return searches.save(x);}
+ @GetMapping("/saved-searches/{id}/matches") public Map<String,Object> savedSearchMatches(@PathVariable Long id,HttpSession s){
+  long customerId=customer(s);
+  SavedSearch search=searches.findByIdAndCustomerId(id,customerId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Saved search not found"));
+  List<PropertyListing> matched=listings.findByStatusAndVerificationStatusInOrderByCreatedAtDesc("ACTIVE",List.of("APPROVED","VERIFIED")).stream().filter(l->matchesSavedSearch(search,l)).toList();
+  return Map.of("searchId",id,"searchName",search.getName(),"matchCount",matched.size(),"matches",matched);
+ }
  @GetMapping("/visits") public List<PropertyVisit> visits(HttpSession s){return visits.findByCustomerIdOrderByScheduledAtDesc(customer(s));}
- @PostMapping("/visits") @Transactional public PropertyVisit visit(@Valid @RequestBody VisitRequest r,HttpSession s){PropertyListing l=publicListing(r.listingId());PropertyVisit v=new PropertyVisit();v.setTenantId("propertydirect");v.setCustomerId(customer(s));v.setListing(l);v.setScheduledAt(r.scheduledAt());v.setVisitStatus("REQUESTED");v.setNotes(r.notes());return visits.save(v);}
+ @PostMapping("/visits") @Transactional public PropertyVisit visit(@Valid @RequestBody VisitRequest r,HttpSession s){
+  PropertyListing l=publicListing(r.listingId());
+  PropertyVisit v=new PropertyVisit();
+  v.setTenantId("propertydirect");
+  v.setCustomerId(customer(s));
+  v.setListing(l);
+  v.setScheduledAt(r.scheduledAt());
+  v.setVisitStatus("REQUESTED");
+  v.setNotes(r.notes());
+  v=visits.save(v);
+  if(l.getCustomerId()!=null){
+   PropertyCustomer owner=customers.findById(l.getCustomerId()).orElse(null);
+   if(owner!=null&&!blank(owner.getEmail())){
+    PropertyCustomer buyer=customers.findById(v.getCustomerId()).orElse(null);
+    mailService.sendPropertyVisitRequestedNotification(
+      owner.getName(),owner.getEmail(),l.getTitle(),
+      buyer!=null?buyer.getName():"Customer",
+      buyer!=null?buyer.getPhone():"",
+      buyer!=null?buyer.getEmail():"",
+      v.getScheduledAt().toString(),v.getNotes(),v.getId(),l.getApartmentCode()
+    );
+   }
+  }
+  return v;
+ }
+ @GetMapping("/owner/visits") public List<Map<String,Object>> ownerVisits(HttpSession s){
+  long ownerId=vendor(s);
+  return visits.findByListingOwnerIdOrderByScheduledAtDesc(ownerId).stream().map(v->{
+   Map<String,Object> m=new LinkedHashMap<>();
+   m.put("id",v.getId());
+   m.put("listingId",v.getListing()!=null?v.getListing().getId():null);
+   m.put("listingTitle",v.getListing()!=null?v.getListing().getTitle():"Property Listing");
+   m.put("apartmentCode",v.getListing()!=null?v.getListing().getApartmentCode():"");
+   m.put("locality",v.getListing()!=null?v.getListing().getLocality():"");
+   m.put("city",v.getListing()!=null?v.getListing().getCity():"");
+   m.put("scheduledAt",v.getScheduledAt()!=null?v.getScheduledAt().toString():"");
+   m.put("visitStatus",v.getVisitStatus());
+   m.put("notes",v.getNotes());
+   PropertyCustomer buyer=customers.findById(v.getCustomerId()).orElse(null);
+   m.put("visitorName",buyer!=null?buyer.getName():"Customer");
+   m.put("visitorPhone",buyer!=null?buyer.getPhone():"—");
+   m.put("visitorEmail",buyer!=null?buyer.getEmail():"—");
+   return m;
+  }).toList();
+ }
+ @PatchMapping("/visits/{id}/status") @Transactional public Map<String,Object> updateVisitStatus(@PathVariable Long id,@Valid @RequestBody VisitStatusRequest request,HttpSession s){
+  long ownerId=vendor(s);
+  PropertyVisit v=visits.findByIdAndListingOwnerId(id,ownerId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Visit request was not found for your property"));
+  String status=request.status().trim().toUpperCase(Locale.ROOT);
+  if(!Set.of("CONFIRMED","CANCELLED","COMPLETED").contains(status))throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Status must be CONFIRMED, CANCELLED, or COMPLETED");
+  v.setVisitStatus(status);
+  if(!blank(request.notes())){
+   v.setNotes(blank(v.getNotes())?request.notes().trim():v.getNotes()+"\nOwner Note: "+request.notes().trim());
+  }
+  v=visits.save(v);
+  PropertyCustomer buyer=customers.findById(v.getCustomerId()).orElse(null);
+  if(buyer!=null&&!blank(buyer.getEmail())){
+   mailService.sendPropertyVisitStatusNotification(
+     buyer.getName(),buyer.getEmail(),
+     v.getListing()!=null?v.getListing().getTitle():"Property Listing",
+     status,v.getScheduledAt()!=null?v.getScheduledAt().toString():"",
+     request.notes(),v.getId()
+   );
+  }
+  return Map.of("id",v.getId(),"visitStatus",v.getVisitStatus(),"message","Visit request marked as "+status);
+ }
  @GetMapping("/services") public List<PropertyServiceRequest> services(HttpSession s){return services.findByCustomerIdOrderByCreatedAtDesc(customer(s));}
  @PostMapping("/services") @Transactional public PropertyServiceRequest service(@Valid @RequestBody ServiceRequest r,HttpSession s){long customerId=customer(s);PropertyCustomer requester=customers.findById(customerId).orElse(null);PropertyServiceRequest x=new PropertyServiceRequest();x.setTenantId("propertydirect");x.setCustomerId(customerId);x.setListingId(r.listingId());x.setServiceType(r.serviceType());x.setPreferredAt(r.preferredAt());x.setDetails(r.details());x.setRequestStatus("REQUESTED");x=services.save(x);maintenanceService.create(new CommonMaintenanceService.CreateTicketRequest("propertydirect",r.listingId()==null?"PROPERTYDIRECT_GENERAL_SERVICE":"PROPERTY_LISTING",r.listingId(),customerId,requester==null?null:requester.getName(),requester==null?null:requester.getPhone(),requester==null?null:requester.getEmail(),r.serviceType(),"PropertyDirect service","Standard service request",null,null,"PropertyDirect maintenance request",r.details(),null,null,"MEDIUM",r.preferredAt(),null,null,null,"External vendor team",null,null,"PD-SVC-"+x.getId(),null,null,null));return x;}
- @PatchMapping("/listings/{id}/verification") @Transactional public PropertyListing verify(@PathVariable Long id,@Valid @RequestBody ModerationRequest request,HttpSession s){superadministrator(s);PropertyListing l=listings.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Listing was not found"));String decision=request.decision().trim().toUpperCase(Locale.ROOT);if(!Set.of("APPROVED","REJECTED","CHANGES_REQUESTED").contains(decision))throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Decision must be APPROVED, REJECTED or CHANGES_REQUESTED");if(!"APPROVED".equals(decision)&&blank(request.note()))throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"A review note is required when rejecting or requesting changes");l.setVerificationStatus(decision);l.setStatus("APPROVED".equals(decision)?"ACTIVE":"REJECTED".equals(decision)?"REJECTED":"PENDING_APPROVAL");l.setReviewedBy(text(request.reviewer(),"PropertyDirect Super Admin"));l.setReviewedAt(LocalDateTime.now());l.setReviewNote(blank(request.note())?null:request.note().trim());l.setRejectionReason("REJECTED".equals(decision)?request.note().trim():null);return listings.save(l);}
+ @PatchMapping("/listings/{id}/verification") @Transactional public PropertyListing verify(@PathVariable Long id,@Valid @RequestBody ModerationRequest request,HttpSession s){
+  superadministrator(s);
+  PropertyListing l=listings.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Listing was not found"));
+  String decision=request.decision().trim().toUpperCase(Locale.ROOT);
+  if(!Set.of("APPROVED","REJECTED","CHANGES_REQUESTED").contains(decision))throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Decision must be APPROVED, REJECTED or CHANGES_REQUESTED");
+  if(!"APPROVED".equals(decision)&&blank(request.note()))throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"A review note is required when rejecting or requesting changes");
+  l.setVerificationStatus(decision);
+  l.setStatus("APPROVED".equals(decision)?"ACTIVE":"REJECTED".equals(decision)?"REJECTED":"PENDING_APPROVAL");
+  l.setReviewedBy(text(request.reviewer(),"PropertyDirect Super Admin"));
+  l.setReviewedAt(LocalDateTime.now());
+  l.setReviewNote(blank(request.note())?null:request.note().trim());
+  l.setRejectionReason("REJECTED".equals(decision)?request.note().trim():null);
+  l=listings.save(l);
+  if("APPROVED".equals(decision)){
+   dispatchSavedSearchAlerts(l);
+  }
+  return l;
+ }
+ public int dispatchSavedSearchAlerts(PropertyListing listing){
+  if(listing==null||!"ACTIVE".equalsIgnoreCase(listing.getStatus())||(!"APPROVED".equalsIgnoreCase(listing.getVerificationStatus())&&!"VERIFIED".equalsIgnoreCase(listing.getVerificationStatus()))){
+   return 0;
+  }
+  List<SavedSearch> activeSearches=searches.findByAlertsEnabledTrue();
+  int dispatched=0;
+  for(SavedSearch search:activeSearches){
+   if(listing.getCustomerId()!=null&&listing.getCustomerId().equals(search.getCustomerId()))continue;
+   if(!matchesSavedSearch(search,listing))continue;
+   PropertyCustomer subscriber=customers.findById(search.getCustomerId()).orElse(null);
+   if(subscriber==null||blank(subscriber.getEmail()))continue;
+   String priceStr=listing.getPrice()!=null?"₹ "+listing.getPrice().toPlainString():"Price on Request";
+   String locationStr=(blank(listing.getLocality())?"":listing.getLocality()+", ")+text(listing.getCity(),"");
+   mailService.sendSavedSearchMatchAlert(
+     subscriber.getName(),subscriber.getEmail(),search.getName(),
+     listing.getTitle(),locationStr,priceStr,
+     text(listing.getBhk(),"Standard"),text(listing.getPropertyType(),"Apartment"),listing.getId()
+   );
+   dispatched++;
+  }
+  return dispatched;
+ }
+ private boolean matchesSavedSearch(SavedSearch s,PropertyListing l){
+  if(!blank(s.getCity())&&!eq(s.getCity(),l.getCity()))return false;
+  if(!blank(s.getLocality())){
+   String loc=s.getLocality().toLowerCase(Locale.ROOT);
+   boolean matches=contains(l.getLocality(),loc)||contains(l.getSociety(),loc)||contains(l.getAddress(),loc);
+   if(!matches)return false;
+  }
+  if(!blank(s.getListingType())&&!eq(s.getListingType(),l.getListingType()))return false;
+  if(!blank(s.getBhk())&&!eq(s.getBhk(),l.getBhk()))return false;
+  if(s.getMinPrice()!=null&&l.getPrice()!=null&&l.getPrice().compareTo(s.getMinPrice())<0)return false;
+  if(s.getMaxPrice()!=null&&l.getPrice()!=null&&l.getPrice().compareTo(s.getMaxPrice())>0)return false;
+  return true;
+ }
  private long customer(HttpSession s){Object id=s.getAttribute("propertydirect:customerId");if(id instanceof Long value)return value;Authentication auth=SecurityContextHolder.getContext().getAuthentication();if(auth!=null&&auth.isAuthenticated()&&hasRole(auth,"CUSTOMER"))return customers.findByEmailIgnoreCase(auth.getName()).map(PropertyCustomer::getId).orElseThrow(()->new ResponseStatusException(HttpStatus.UNAUTHORIZED,"PropertyDirect customer account was not found"));throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"PropertyDirect customer login is required");}
  private long vendor(HttpSession s){if(!Boolean.TRUE.equals(s.getAttribute("dashboard:propertydirect:vendor"))&&!Boolean.TRUE.equals(s.getAttribute("dashboard:propertydirect:agent"))&&!Boolean.TRUE.equals(s.getAttribute("dashboard:propertydirect:admin")))throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only PropertyDirect vendors, agents, or property admins can submit property listings");Object id=s.getAttribute("propertydirect:customerId");if(id instanceof Long value)return value;throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Property seller account is unavailable");}
  private PropertyListing publicListing(Long id){return listings.findById(id).filter(x->"ACTIVE".equals(x.getStatus())&&Set.of("APPROVED","VERIFIED").contains(x.getVerificationStatus())).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Approved listing was not found"));}
@@ -94,6 +245,7 @@ public class PropertyApiController{
  public record ContactMessageRequest(@NotBlank @Size(max=60) String firstName,@NotBlank @Size(max=60) String lastName,@Email @NotBlank @Size(max=160) String email,@NotBlank @Pattern(regexp="^[0-9+() -]{7,20}$",message="Enter a valid phone number") String phone,@NotBlank @Size(min=10,max=2000) String message){}
  public record SavedSearchRequest(@NotBlank String name,String city,String locality,String type,String bhk,@PositiveOrZero BigDecimal minPrice,@PositiveOrZero BigDecimal maxPrice,boolean alertsEnabled){}
  public record VisitRequest(@NotNull Long listingId,@NotNull@Future LocalDateTime scheduledAt,String notes){}
+ public record VisitStatusRequest(@NotBlank String status,String notes){}
  public record ServiceRequest(Long listingId,@NotBlank String serviceType,@NotNull@Future LocalDateTime preferredAt,String details){}
  public record ModerationRequest(@NotBlank String decision,@Size(max=2000)String note,@Size(max=120)String reviewer){}
  public record AdminCustomerCreateRequest(@NotBlank @Size(max=120)String name,@Email @NotBlank @Size(max=160)String email,@NotBlank @Size(max=40)String phone,@Size(max=160)String username,@Size(max=30)String role,@Size(max=30)String status,@NotBlank @Size(min=6,max=72)String password){}

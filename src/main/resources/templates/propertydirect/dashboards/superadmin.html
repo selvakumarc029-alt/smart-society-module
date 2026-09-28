@@ -1425,6 +1425,7 @@
     <link rel="stylesheet" href="/propertydirect/css/smartsociety-brand.css?v=20260903-premium-v3">
     <link rel="stylesheet" href="/shared/css/required-fields.css?v=20260826-v2">
     <link rel="stylesheet" href="/propertydirect/css/dashboard-responsive.css?v=20260912-global-alignment-v3">
+    <link rel="stylesheet" href="/propertydirect/css/dashboard-polish.css?v=20260928-visual-v2">
     <link rel="stylesheet" href="/propertydirect/css/superadmin-premium.css?v=20260908-attached-header-v1">
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
 </head>
@@ -1648,12 +1649,12 @@
                     <strong>14,210</strong>
                     <span class="stat-trend up">↑ Live Public Search</span>
                 </article>
-                <article>
+                <article style="cursor: pointer;" onclick="switchTab('customers')" title="Click to view Pending Approvals queue">
                     <div class="stat-card-top">
                         <span>Pending Properties</span>
                         <div class="stat-icon-badge"></div>
                     </div>
-                    <strong id="superadminPendingMetric">84</strong>
+                    <strong id="superadminPendingMetric">0</strong>
                     <span class="stat-trend neutral">Awaiting Admin Approval</span>
                 </article>
                 <article>
@@ -3042,7 +3043,8 @@
 
                 <!-- Card 3: Pending Review Queue -->
                 <article
-                    style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 14px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02); display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+                    style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 10px 14px; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.02); display: flex; flex-direction: column; gap: 6px; min-width: 0; cursor: pointer;"
+                    onclick="filterPropertyMgmtByPending()" title="Click to view Pending Review listings">
                     <div class="stat-card-top"
                         style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                         <span
@@ -3059,8 +3061,8 @@
                     </div>
                     <div
                         style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 2px; min-width: 0;">
-                        <strong
-                            style="font-size: 1.2rem; font-weight: 800; color: #0f172a; line-height: 1.1; margin: 0;">84</strong>
+                        <strong id="propertyMgmtPendingCount"
+                            style="font-size: 1.2rem; font-weight: 800; color: #0f172a; line-height: 1.1; margin: 0;">0</strong>
                         <span class="stat-trend up"
                             style="font-size: 0.68rem; font-weight: 700; background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 6px; border: 1px solid #fde68a; white-space: nowrap; flex-shrink: 0;">Moderation</span>
                     </div>
@@ -3212,49 +3214,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div>
-                                        <strong class="prop-title" style="color: #0f172a;">2 BHK Modern Rental
-                                            Apartment</strong><br>
-                                        <small style="color: #64748b;"><code class="prop-id"
-                                                style="background: #eff6ff; color: #1d4ed8; padding: 2px 6px; border-radius: 4px; font-weight: 700;">#PD-3104</code>
-                                            · Whitefield, Bangalore</small>
-                                    </div>
-                                </td>
-                                <td><strong style="color: #0f172a;">Rohan Mehta</strong><br><small
-                                        style="color: #b45309; font-weight: 700;">Owner (Direct Seller)</small></td>
-                                <td><strong style="color: #2563eb; font-size: 0.95rem; font-weight: 800;">₹38,000 /
-                                        mo</strong></td>
-                                <td>
-                                    <select class="prop-tier-select" onchange="changePropertyTier(this, 'PD-3104')"
-                                        style="height: 30px; padding: 0 8px; border-radius: 6px; font-weight: 800; font-size: 0.78rem; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: pointer; white-space: nowrap !important;">
-                                        <option value="Standard" selected>Standard</option>
-                                        <option value="Featured">Featured</option>
-                                        <option value="Premium">Premium</option>
-                                    </select>
-                                </td>
-                                <td><span class="status pending prop-status"
-                                        style="background: #fef3c7; color: #b45309; font-weight: 800; white-space: nowrap !important;">Pending
-                                        Approval</span></td>
-                                <td style="text-align: left;">
-                                    <div
-                                        style="display: flex; gap: 6px; justify-content: flex-start; align-items: center; white-space: nowrap !important;">
-                                        <button type="button"
-                                            style="height: 30px; padding: 0 14px; font-size: 0.78rem; font-weight: 800; border-radius: 6px; background: linear-gradient(135deg, #1e3a8a, #2563eb); color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;"
-                                            onclick="approvePropertyListing(this, 'PD-3104')">Approve</button>
-                                        <button type="button"
-                                            style="height: 30px; padding: 0 14px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #0f172a; color: #ffffff; border: 1px solid #cbd5e1; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;"
-                                            onclick="rejectPropertyListing(this, 'PD-3104')">Reject</button>
-                                        <button type="button"
-                                            style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;"
-                                            onclick="openEditPropertyModal('2 BHK Modern Rental Apartment', 'PD-3104', '38,000 / mo', this)">Edit</button>
-                                        <button type="button"
-                                            style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #ffffff; color: #b45309; border: 1px solid #fde68a; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;"
-                                            onclick="deletePropertyListing(this, 'PD-3104')">Delete</button>
-                                    </div>
-                                </td>
-                            </tr>
+
                             <tr>
                                 <td>
                                     <div>
@@ -3410,6 +3370,43 @@
 
         <!--  PROPERTY APPROVAL SYSTEM PANEL -->
         <section class="dash-panel hidden" data-view="customers">
+            <!-- 4 Top Metric Cards (Synchronized with Backend Moderation API) -->
+            <div class="dash-grid"
+                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 24px;">
+                <article style="padding: 16px;">
+                    <div class="stat-card-top">
+                        <span>Total Properties</span>
+                        <div class="stat-icon-badge"></div>
+                    </div>
+                    <strong id="totalPropertyCount">0</strong>
+                    <span class="stat-trend neutral">All Submissions</span>
+                </article>
+                <article style="padding: 16px;">
+                    <div class="stat-card-top">
+                        <span>Pending Approvals</span>
+                        <div class="stat-icon-badge"></div>
+                    </div>
+                    <strong id="pendingPropertyCount">0</strong>
+                    <span class="stat-trend warning">Waiting for Review</span>
+                </article>
+                <article style="padding: 16px;">
+                    <div class="stat-card-top">
+                        <span>Approved Listings</span>
+                        <div class="stat-icon-badge"></div>
+                    </div>
+                    <strong id="approvedPropertyCount">0</strong>
+                    <span class="stat-trend up">Live on Marketplace</span>
+                </article>
+                <article style="padding: 16px;">
+                    <div class="stat-card-top">
+                        <span>Registered Users</span>
+                        <div class="stat-icon-badge"></div>
+                    </div>
+                    <strong id="registeredCustomerCount">0</strong>
+                    <span class="stat-trend neutral">Platform Customers</span>
+                </article>
+            </div>
+
             <!-- Search & Filters Toolbar -->
             <div
                 style="display: flex; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 20px; background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; flex-wrap: wrap;">
@@ -3425,16 +3422,19 @@
                         onchange="filterPropertyApprovalTable()">
                         <option value="">All Submitter Roles</option>
                         <option value="AGENT">Verified Agent</option>
-                        <option value="OWNER">Direct Owner</option>
+                        <option value="OWNER">Direct Owner / Vendor</option>
                     </select>
                     <select id="approvalMgmtStatusFilter"
                         style="padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;"
                         onchange="filterPropertyApprovalTable()">
                         <option value="">All Queue Statuses</option>
-                        <option value="Pending">Pending Review</option>
+                        <option value="Pending" selected>Pending Review</option>
                         <option value="Approved">Approved & Published</option>
+                        <option value="Rejected">Rejected</option>
                     </select>
-                    <button class="primary small" style="background: #64748b;"
+                    <button class="primary small" style="background: #2563eb;" type="button"
+                        data-property-api-action="refresh-governance">Refresh</button>
+                    <button class="primary small" style="background: #64748b;" type="button"
                         onclick="document.getElementById('approvalMgmtSearchInput').value=''; document.getElementById('approvalMgmtRoleFilter').value=''; document.getElementById('approvalMgmtStatusFilter').value=''; filterPropertyApprovalTable();">Reset</button>
                 </div>
             </div>
@@ -3445,13 +3445,13 @@
                 <table id="approvalMgmtTable"
                     style="width: 100% !important; border-collapse: collapse !important; margin: 0 !important;">
                     <colgroup>
-                        <col style="width: 20%;">
+                        <col style="width: 22%;">
                         <col style="width: 14%;">
                         <col style="width: 13%;">
-                        <col style="width: 12%;">
-                        <col style="width: 9%;">
-                        <col style="width: 12%;">
-                        <col style="width: 20%;">
+                        <col style="width: 13%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 18%;">
                     </colgroup>
                     <thead>
                         <tr>
@@ -3464,163 +3464,10 @@
                             <th style="text-align: right;">Super Admin Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="propertyApprovalRows">
                         <tr>
-                            <td>
-                                <div>
-                                    <strong style="color: #0f172a;">Prestige Palms 3 BHK Villa</strong><br>
-                                    <small style="color: #64748b;"><code
-                                            style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">#PD-8492</code>
-                                        · Anna Nagar</small>
-                                </div>
-                            </td>
-                            <td>
-                                <strong>Rajesh Verma</strong><br>
-                                <span class="status active"
-                                    style="background: #eff6ff; color: #1d4ed8; font-size: 0.75rem; padding: 2px 6px; white-space: nowrap !important;">
-                                    Agent (Verified RERA)</span>
-                            </td>
-                            <td>Anna Nagar, Chennai<br><strong style="color: #16a34a; font-size: 0.95rem;">₹1.45
-                                    Cr</strong></td>
-                            <td>14 Photos · 1,850 sqft<br><small style="color: #64748b;">3 BHK · 3 Baths · East
-                                    Facing</small></td>
-                            <td>Today, 10:30 AM</td>
-                            <td style="white-space: nowrap !important;"><span class="status pending"
-                                    style="background: #fef3c7; color: #92400e; font-weight: 800; white-space: nowrap !important; display: inline-block !important;">
-                                    Pending
-                                    Review</span></td>
-                            <td style="text-align: right; white-space: nowrap !important;">
-                                <div
-                                    style="display: flex; gap: 4px; justify-content: flex-end; align-items: center; white-space: nowrap !important;">
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #2563eb; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="approveQueueProperty(this, 'PD-8492')">
-                                        Approve</button>
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #ef4444; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="rejectQueueProperty(this, 'PD-8492')">
-                                        Reject</button>
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #0f172a; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="inspectQueueProperty(this, 'PD-8492', 'Prestige Palms 3 BHK Villa', 'Rajesh Verma (Agent Verified RERA)')">
-                                        Inspect</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>
-                                    <strong style="color: #0f172a;">Green Acres Independent House</strong><br>
-                                    <small style="color: #64748b;"><code
-                                            style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">#PD-3104</code>
-                                        · Whitefield</small>
-                                </div>
-                            </td>
-                            <td>
-                                <strong>Rohan Mehta</strong><br>
-                                <span class="status active"
-                                    style="background: #f0fdf4; color: #166534; font-size: 0.75rem; padding: 2px 6px; white-space: nowrap !important;">
-                                    Owner (Aadhaar Verified)</span>
-                            </td>
-                            <td>Whitefield, Bangalore<br><strong style="color: #0284c7; font-size: 0.95rem;">₹38,000
-                                    / mo</strong></td>
-                            <td>10 Photos · 1,200 sqft<br><small style="color: #64748b;">2 BHK · 2 Baths · North
-                                    Facing</small></td>
-                            <td>Today, 09:15 AM</td>
-                            <td style="white-space: nowrap !important;"><span class="status pending"
-                                    style="background: #fef3c7; color: #92400e; font-weight: 800; white-space: nowrap !important; display: inline-block !important;">
-                                    Pending
-                                    Review</span></td>
-                            <td style="text-align: right; white-space: nowrap !important;">
-                                <div
-                                    style="display: flex; gap: 4px; justify-content: flex-end; align-items: center; white-space: nowrap !important;">
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #2563eb; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="approveQueueProperty(this, 'PD-3104')"> Approve</button>
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #ef4444; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="rejectQueueProperty(this, 'PD-3104')"> Reject</button>
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #0f172a; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="inspectQueueProperty(this, 'PD-3104', 'Green Acres Independent House', 'Rohan Mehta (Owner Aadhaar Verified)')">
-                                        Inspect</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>
-                                    <strong style="color: #0f172a;">DLF Cybercity Office Suite</strong><br>
-                                    <small style="color: #64748b;"><code
-                                            style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">#PD-5591</code>
-                                        · Gachibowli</small>
-                                </div>
-                            </td>
-                            <td>
-                                <strong>Priya Sharma</strong><br>
-                                <span class="status active"
-                                    style="background: #eff6ff; color: #1d4ed8; font-size: 0.75rem; padding: 2px 6px; white-space: nowrap !important;">
-                                    Agent (Commercial Broker)</span>
-                            </td>
-                            <td>Gachibowli, Hyderabad<br><strong style="color: #16a34a; font-size: 0.95rem;">₹2.10
-                                    Cr</strong></td>
-                            <td>18 Photos · 3,400 sqft<br><small style="color: #64748b;">Commercial Office · 4
-                                    Parking</small></td>
-                            <td>Today, 08:45 AM</td>
-                            <td style="white-space: nowrap !important;"><span class="status pending"
-                                    style="background: #fef3c7; color: #92400e; font-weight: 800; white-space: nowrap !important; display: inline-block !important;">
-                                    Pending
-                                    Review</span></td>
-                            <td style="text-align: right; white-space: nowrap !important;">
-                                <div
-                                    style="display: flex; gap: 4px; justify-content: flex-end; align-items: center; white-space: nowrap !important;">
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #2563eb; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="approveQueueProperty(this, 'PD-5591')"> Approve</button>
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #ef4444; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="rejectQueueProperty(this, 'PD-5591')"> Reject</button>
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #0f172a; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="inspectQueueProperty(this, 'PD-5591', 'DLF Cybercity Office Suite', 'Priya Sharma (Agent Commercial Broker)')">
-                                        Inspect</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>
-                                    <strong style="color: #0f172a;">Ocean View Beach Villa</strong><br>
-                                    <small style="color: #64748b;"><code
-                                            style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">#PD-1102</code>
-                                        · ECR Chennai</small>
-                                </div>
-                            </td>
-                            <td>
-                                <strong>Karan Malhotra</strong><br>
-                                <span class="status active"
-                                    style="background: #f0fdf4; color: #166534; font-size: 0.75rem; padding: 2px 6px; white-space: nowrap !important;">
-                                    Direct Owner</span>
-                            </td>
-                            <td>ECR, Chennai<br><strong style="color: #16a34a; font-size: 0.95rem;">₹3.50
-                                    Cr</strong></td>
-                            <td>22 Photos · 4,200 sqft<br><small style="color: #64748b;">4 BHK · Private Pool ·
-                                    Gated</small></td>
-                            <td>Yesterday, 04:20 PM</td>
-                            <td style="white-space: nowrap !important;"><span class="status active"
-                                    style="background: #dcfce7; color: #166534; font-weight: 800; white-space: nowrap !important; display: inline-block !important;">
-                                    Approved &
-                                    Published</span></td>
-                            <td style="text-align: right; white-space: nowrap !important;">
-                                <div
-                                    style="display: flex; gap: 4px; justify-content: flex-end; align-items: center; white-space: nowrap !important;">
-                                    <span
-                                        style="color: #166534; font-weight: 700; font-size: 0.76rem; padding: 4px 8px; background: #dcfce7; border-radius: 6px; white-space: nowrap !important;">
-                                        Live on Site</span>
-                                    <button
-                                        style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; cursor: pointer; white-space: nowrap !important;"
-                                        onclick="unpublishQueueProperty(this, 'PD-1102')">Unpublish</button>
-                                </div>
+                            <td colspan="7" style="text-align: center; padding: 36px; color: #64748b;">
+                                Loading approval queue from moderation API...
                             </td>
                         </tr>
                     </tbody>
@@ -3630,20 +3477,46 @@
             <!-- Table Footer / Pagination -->
             <div
                 style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 14px; font-size: 0.84rem; color: #64748b;">
-                <span>Showing <strong>1 to 4</strong> of <strong>4 pending approval items</strong> in queue</span>
-                <div style="display: flex; gap: 6px;">
-                    <button disabled
-                        style="padding: 6px 12px; font-size: 0.8rem; background: #f1f5f9; color: #94a3b8; border: 1px solid #cbd5e1; border-radius: 6px;">‹
-                        Previous</button>
-                    <button
-                        style="padding: 6px 12px; font-size: 0.8rem; background: #2563eb; color: #ffffff; border: none; border-radius: 6px; font-weight: 700;">1</button>
-                    <button
-                        style="padding: 6px 12px; font-size: 0.8rem; background: #ffffff; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 6px;"
-                        onclick="alert('Next Page')">Next ›</button>
+                <span id="approvalQueueSummary">Loading queue summary...</span>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <span id="approvalTableState" style="margin-right: 12px; font-weight: 700; color: #0f172a;"></span>
+                    <button class="primary small" type="button" style="background: #10b981;" onclick="batchApproveAllQueue()">Batch Approve All</button>
                 </div>
             </div>
-            </div>
         </section>
+
+        <!-- Property Review Modal Window for Super Admin Moderation -->
+        <div class="property-review-modal hidden" id="propertyReviewModal" data-property-review>
+            <div class="property-review-dialog">
+                <button class="property-review-close" type="button" data-property-api-action="close-property-review" onclick="closePropertyReview()" aria-label="Close">×</button>
+                <div class="property-review-gallery">
+                    <img id="propertyReviewMainImage" alt="Property Preview" src="/favicon.svg">
+                    <div id="propertyReviewThumbs"></div>
+                </div>
+                <div class="property-review-content">
+                    <span class="status pending" id="propertyReviewStatusBadge">Pending Approval</span>
+                    <h3 id="propertyReviewTitle">Property Review</h3>
+                    <p id="propertyReviewOwner" style="color: #64748b; font-size: 0.85rem; margin: 0;"></p>
+                    <div class="property-review-specs" id="propertyReviewSpecs"></div>
+                    <section>
+                        <h4 style="margin: 0 0 4px 0; font-size: 0.85rem; font-weight: 800; color: #1e293b;">Description</h4>
+                        <p id="propertyReviewDescription" style="margin: 0; font-size: 0.84rem; color: #475569; line-height: 1.45;">No description supplied.</p>
+                    </section>
+                    <section>
+                        <h4 style="margin: 0 0 4px 0; font-size: 0.85rem; font-weight: 800; color: #1e293b;">Location</h4>
+                        <p id="propertyReviewLocation" style="margin: 0; font-size: 0.84rem; color: #475569; line-height: 1.45;"></p>
+                    </section>
+                    <label class="approval-review-note" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem; font-weight: 700; color: #334155;">
+                        Review / Rejection Reason
+                        <textarea rows="3" maxlength="2000" id="propertyReviewNoteInput" data-review-note placeholder="Required when rejecting the property submission"></textarea>
+                    </label>
+                    <div class="property-review-actions" style="display: flex; gap: 12px; margin-top: 8px;">
+                        <button class="primary" type="button" data-property-api-action="approve-property" style="flex: 1; padding: 12px 18px; border-radius: 12px; background: #10b981; color: #fff; border: 0; font-weight: 700; cursor: pointer;">Approve Property</button>
+                        <button type="button" data-property-api-action="reject-property" style="flex: 1; padding: 12px 18px; border-radius: 12px; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; font-weight: 700; cursor: pointer;">Reject Property</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- 6. Reported Fake Properties Governance Panel -->
         <section class="dash-panel hidden" data-view="reported-properties">
@@ -6949,6 +6822,18 @@
                 }
             }
 
+            window.switchTab = switchTab;
+            window.filterPropertyMgmtByPending = function () {
+                switchTab('property-mgmt');
+                var sel = document.getElementById('propertyMgmtStatusFilter');
+                if (sel) {
+                    sel.value = 'Pending';
+                    if (typeof filterPropertyMgmtTable === 'function') {
+                        filterPropertyMgmtTable();
+                    }
+                }
+            };
+
             document.addEventListener("click", function (e) {
                 var target = e.target.closest("[data-panel]");
                 if (target) {
@@ -8188,61 +8073,12 @@
             showToast("✓ Promotion tier for #" + propId + " changed to " + newTier);
         }
 
-        function approvePropertyListing(btn, propId) {
-            saveInventoryState(propId, { approved: true, rejected: false, hidden: false, sold: false });
-            var tr = btn.closest("tr");
-            if (tr) {
-                var statusSpan = tr.querySelector(".prop-status");
-                if (statusSpan) {
-                    statusSpan.innerText = "Published";
-                    statusSpan.className = "status active prop-status";
-                    statusSpan.style.background = "#eff6ff";
-                    statusSpan.style.color = "#1d4ed8";
-                    statusSpan.style.fontWeight = "800";
-                }
-                var actionsCell = tr.querySelector("td:last-child div");
-                if (actionsCell) {
-                    var titleEl = tr.querySelector(".prop-title");
-                    var title = titleEl ? titleEl.innerText.trim() : "Property Listing";
-                    var priceTd = tr.children[2];
-                    var price = priceTd ? priceTd.innerText.trim().replace(/^₹\s*/, '') : '38,000 / mo';
-
-                    actionsCell.parentElement.style.textAlign = "left";
-                    actionsCell.style.display = "flex";
-                    actionsCell.style.justifyContent = "flex-start";
-                    actionsCell.style.gap = "6px";
-                    actionsCell.innerHTML = `
-                        <button type="button" style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;" onclick="openEditPropertyModal('${title.replace(/'/g, "\\'")}', '${propId}', '${price.replace(/'/g, "\\'")}', this)">Edit</button>
-                        <button type="button" style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #fffbeb; color: #b45309; border: 1px solid #fcd34d; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;" onclick="togglePropertySold(this, '${propId}')">Mark Sold</button>
-                        <button type="button" style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;" onclick="togglePropertyHide(this, '${propId}')">Hide</button>
-                        <button type="button" style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #ffffff; color: #b45309; border: 1px solid #fde68a; cursor: pointer; white-space: nowrap !important; display: inline-flex; align-items: center; justify-content: center;" onclick="deletePropertyListing(this, '${propId}')">Delete</button>
-                    `;
-                }
-            }
-            showToast("✓ Property Listing #" + propId + " Approved & Published live!");
+        async function approvePropertyListing(btn, propId) {
+            return approveQueueProperty(btn, propId);
         }
 
-        function rejectPropertyListing(btn, propId) {
-            saveInventoryState(propId, { rejected: true, approved: false, hidden: false, sold: false });
-            var tr = btn.closest("tr");
-            if (tr) {
-                var statusSpan = tr.querySelector(".prop-status");
-                if (statusSpan) {
-                    statusSpan.innerText = "Rejected";
-                    statusSpan.className = "status pending prop-status";
-                    statusSpan.style.background = "#fef3c7";
-                    statusSpan.style.color = "#b45309";
-                    statusSpan.style.fontWeight = "800";
-                }
-                var actionsCell = tr.querySelector("td:last-child div");
-                if (actionsCell) {
-                    actionsCell.innerHTML = `
-                        <button type="button" style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: pointer;" onclick="relistProperty(this, '${propId}')">Re-list</button>
-                        <button type="button" style="height: 30px; padding: 0 12px; font-size: 0.78rem; font-weight: 700; border-radius: 6px; background: #ffffff; color: #b45309; border: 1px solid #fde68a; cursor: pointer;" onclick="deletePropertyListing(this, '${propId}')">Delete</button>
-                    `;
-                }
-            }
-            showToast("✓ Property Listing #" + propId + " Rejected.");
+        async function rejectPropertyListing(btn, propId) {
+            return rejectQueueProperty(btn, propId);
         }
 
         // Inventory persistence state map with normalized key support
@@ -8779,154 +8615,122 @@
             }
         }
 
-        // Property Approval System Queue Handler Engine
-        function approveQueueProperty(btn, propId) {
-            var tr = btn.closest("tr");
-            if (!tr) return;
-
-            var statusTd = tr.children[5];
-            var actionTd = tr.children[6];
-
-            if (statusTd) {
-                statusTd.innerHTML = '<span class="status active" style="background: #dcfce7; color: #166534; font-weight: 800; white-space: nowrap !important; display: inline-block !important;">Approved & Published</span>';
+        // Property Approval System Queue Handler Engine (API-Connected)
+        async function approveQueueProperty(btn, propId) {
+            var cleanId = String(propId).replace(/^PD-|^PDT-/, "");
+            try {
+                if (btn) btn.disabled = true;
+                var res = await fetch("/api/admin/properties/" + cleanId + "/status", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    body: JSON.stringify({ status: "APPROVED", rejectionReason: "" })
+                });
+                if (!res.ok) {
+                    var data = await res.json().catch(function () { return {}; });
+                    throw new Error(data.message || data.error || "Approval failed");
+                }
+                showToast("✓ Listing #" + propId + " Approved & Published to Marketplace!");
+                if (window.PropertyDirectMarketWorkflows) {
+                    await window.PropertyDirectMarketWorkflows.loadSuperadminGovernance();
+                } else if (typeof loadSuperadminGovernance === "function") {
+                    await loadSuperadminGovernance();
+                }
+            } catch (err) {
+                showToast("✕ " + err.message);
+            } finally {
+                if (btn) btn.disabled = false;
             }
-            if (actionTd) {
-                actionTd.innerHTML = '<div style="display: flex; gap: 4px; justify-content: flex-end; align-items: center; white-space: nowrap !important;"><span style="color: #166534; font-weight: 700; font-size: 0.76rem; padding: 4px 8px; background: #dcfce7; border-radius: 6px; white-space: nowrap !important;">Live on Site</span><button style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; cursor: pointer; white-space: nowrap !important;" onclick="unpublishQueueProperty(this, \'' + propId + '\')">Unpublish</button></div>';
-            }
-
-            saveApprovalQueueState(propId, "Approved");
-            updateApprovalMetrics();
-            showToast("✓ Listing #" + propId + " Approved & Published to Marketplace!");
         }
 
-        function rejectQueueProperty(btn, propId) {
-            var tr = btn.closest("tr");
-            if (!tr) return;
-
-            var statusTd = tr.children[5];
-            var actionTd = tr.children[6];
-
-            if (statusTd) {
-                statusTd.innerHTML = '<span class="status rejected" style="background: #fee2e2; color: #991b1b; font-weight: 800; white-space: nowrap !important; display: inline-block !important;">Rejected & Purged</span>';
+        async function rejectQueueProperty(btn, propId) {
+            var cleanId = String(propId).replace(/^PD-|^PDT-/, "");
+            var reason = prompt("Please provide a rejection reason for listing #" + propId + ":");
+            if (reason === null) return;
+            if (!reason.trim()) {
+                alert("Rejection reason is required.");
+                return;
             }
-            if (actionTd) {
-                actionTd.innerHTML = '<div style="display: flex; gap: 4px; justify-content: flex-end; align-items: center; white-space: nowrap !important;"><span style="color: #991b1b; font-weight: 700; font-size: 0.76rem; padding: 4px 8px; background: #fee2e2; border-radius: 6px; white-space: nowrap !important;">Rejected</span><button style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; cursor: pointer; white-space: nowrap !important;" onclick="relistQueueProperty(this, \'' + propId + '\')">Re-list</button></div>';
+            try {
+                if (btn) btn.disabled = true;
+                var res = await fetch("/api/admin/properties/" + cleanId + "/status", {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                    body: JSON.stringify({ status: "REJECTED", rejectionReason: reason.trim() })
+                });
+                if (!res.ok) {
+                    var data = await res.json().catch(function () { return {}; });
+                    throw new Error(data.message || data.error || "Rejection failed");
+                }
+                showToast("✕ Listing #" + propId + " Rejected & Submitter Notified!");
+                if (window.PropertyDirectMarketWorkflows) {
+                    await window.PropertyDirectMarketWorkflows.loadSuperadminGovernance();
+                } else if (typeof loadSuperadminGovernance === "function") {
+                    await loadSuperadminGovernance();
+                }
+            } catch (err) {
+                showToast("✕ " + err.message);
+            } finally {
+                if (btn) btn.disabled = false;
             }
-
-            saveApprovalQueueState(propId, "Rejected");
-            updateApprovalMetrics();
-            showToast("✕ Listing #" + propId + " Rejected & Submitter Notified!");
         }
 
-        function unpublishQueueProperty(btn, propId) {
-            var tr = btn.closest("tr");
-            if (!tr) return;
-
-            var statusTd = tr.children[5];
-            var actionTd = tr.children[6];
-
-            if (statusTd) {
-                statusTd.innerHTML = '<span class="status pending" style="background: #fef3c7; color: #92400e; font-weight: 800; white-space: nowrap !important; display: inline-block !important;">Pending Review</span>';
+        function inspectQueueProperty(btn, propId) {
+            var cleanId = String(propId).replace(/^PD-|^PDT-/, "");
+            if (window.PropertyDirectMarketWorkflows) {
+                window.PropertyDirectMarketWorkflows.openPropertyReview(cleanId);
+            } else if (typeof openPropertyReview === "function") {
+                openPropertyReview(cleanId);
+            } else {
+                showToast("Inspecting #" + propId);
             }
-            if (actionTd) {
-                actionTd.innerHTML = '<div style="display: flex; gap: 4px; justify-content: flex-end; align-items: center; white-space: nowrap !important;"><button style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #2563eb; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;" onclick="approveQueueProperty(this, \'' + propId + '\')">Approve</button><button style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #ef4444; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;" onclick="rejectQueueProperty(this, \'' + propId + '\')">Reject</button><button style="padding: 5px 8px; font-size: 0.76rem; font-weight: 700; border-radius: 6px; background: #0f172a; color: #ffffff; border: none; cursor: pointer; white-space: nowrap !important;" onclick="inspectQueueProperty(this, \'' + propId + '\')">Inspect</button></div>';
+        }
+
+        function closePropertyReview() {
+            if (window.PropertyDirectMarketWorkflows) {
+                window.PropertyDirectMarketWorkflows.closePropertyReview();
+            } else {
+                var modal = document.getElementById("propertyReviewModal");
+                if (modal) modal.classList.add("hidden");
+                document.body.classList.remove("modal-open");
             }
-
-            saveApprovalQueueState(propId, "Pending");
-            updateApprovalMetrics();
-            showToast("✓ Listing #" + propId + " Un-published & Moved to Review Queue");
         }
 
-        function relistQueueProperty(btn, propId) {
-            unpublishQueueProperty(btn, propId);
-            showToast("✓ Listing #" + propId + " Re-listed for Moderation Review!");
-        }
+        async function batchApproveAllQueue() {
+            var buttons = Array.from(document.querySelectorAll("#propertyApprovalRows tr")).map(function (tr) {
+                return tr.querySelector('[data-property-api-action="approve-property"]');
+            }).filter(Boolean);
 
-        function inspectQueueProperty(btn, propId, title, submitter) {
-            var tr = btn ? btn.closest("tr") : null;
-            var name = title || (tr ? tr.querySelector("strong").innerText : "Property Listing");
-            var sub = submitter || (tr ? tr.children[1].innerText.replace(/\n/g, " · ") : "Registered Submitter");
-
-            showToast("Inspecting #" + propId + ": " + name + " (" + sub + ")");
-        }
-
-        function batchApproveAllQueue() {
-            var buttons = document.querySelectorAll("#approvalMgmtTable button");
+            if (!buttons.length) {
+                showToast("No pending listings to approve in queue.");
+                return;
+            }
+            if (!confirm("Are you sure you want to batch approve " + buttons.length + " pending listings?")) {
+                return;
+            }
             var count = 0;
-            buttons.forEach(function (b) {
-                if (b.innerText.trim() === "Approve") {
-                    b.click();
-                    count++;
+            for (var btn of buttons) {
+                var id = btn.dataset.listingId;
+                if (id) {
+                    try {
+                        var res = await fetch("/api/admin/properties/" + id + "/status", {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                            body: JSON.stringify({ status: "APPROVED", rejectionReason: "" })
+                        });
+                        if (res.ok) count++;
+                    } catch (e) {}
                 }
-            });
-            showToast("✓ All " + (count || 4) + " Pending Listings Batch Approved & Published!");
-        }
-
-        function saveApprovalQueueState(propId, state) {
-            try {
-                var queue = JSON.parse(localStorage.getItem("pd_approval_queue_states") || "{}");
-                queue[propId] = state;
-                localStorage.setItem("pd_approval_queue_states", JSON.stringify(queue));
-            } catch (e) { }
-        }
-
-        function updateApprovalMetrics() {
-            try {
-                var queue = JSON.parse(localStorage.getItem("pd_approval_queue_states") || "{}");
-                var pendingCount = 4;
-                var approvedCount = 28;
-                var rejectedCount = 3;
-
-                for (var k in queue) {
-                    if (queue[k] === "Approved") {
-                        pendingCount = Math.max(0, pendingCount - 1);
-                        approvedCount++;
-                    } else if (queue[k] === "Rejected") {
-                        pendingCount = Math.max(0, pendingCount - 1);
-                        rejectedCount++;
-                    }
-                }
-
-                var pEl = document.getElementById("queuePendingMetric");
-                var aEl = document.getElementById("queueApprovedMetric");
-                var rEl = document.getElementById("queueRejectedMetric");
-                if (pEl) pEl.innerText = pendingCount + " Pending";
-                if (aEl) aEl.innerText = approvedCount + " Listings";
-                if (rEl) rEl.innerText = rejectedCount + " Purged";
-            } catch (e) { }
-        }
-
-        function applySavedApprovalStates() {
-            try {
-                var queue = JSON.parse(localStorage.getItem("pd_approval_queue_states") || "{}");
-                for (var propId in queue) {
-                    var state = queue[propId];
-                    var codeEls = document.querySelectorAll("#approvalMgmtTable code");
-                    codeEls.forEach(function (c) {
-                        if (c.innerText.trim().replace("#", "") === propId) {
-                            var tr = c.closest("tr");
-                            if (!tr) return;
-                            var btn = tr.querySelector("button");
-                            if (!btn) return;
-                            if (state === "Approved" && tr.children[5].innerText.includes("Pending")) {
-                                approveQueueProperty(btn, propId);
-                            } else if (state === "Rejected" && tr.children[5].innerText.includes("Pending")) {
-                                rejectQueueProperty(btn, propId);
-                            }
-                        }
-                    });
-                }
-            } catch (e) { }
+            }
+            showToast("✓ Batch approved " + count + " listings!");
+            if (window.PropertyDirectMarketWorkflows) {
+                await window.PropertyDirectMarketWorkflows.loadSuperadminGovernance();
+            }
         }
 
         document.addEventListener("DOMContentLoaded", function () {
             applySavedInventoryStates();
-            applySavedApprovalStates();
-            updateApprovalMetrics();
         });
         applySavedInventoryStates();
-        applySavedApprovalStates();
-        updateApprovalMetrics();
 
         function showToast(msg) {
             var toast = document.createElement("div");
@@ -10214,6 +10018,7 @@
     </div>
     <script src="/shared/js/dashboard-system.js?v=20260916-universal-sidebar-v3"></script>
     <script src="/propertydirect/js/superadmin-actions.js?v=20260908-actions-v3"></script>
+    <script src="/propertydirect/js/market-workflows.js?v=20260928-property-workflow-v5"></script>
     <script src="/propertydirect/js/dashboard-controls.js?v=20260910-end-to-end-buttons-v1"></script>
 </body>
 

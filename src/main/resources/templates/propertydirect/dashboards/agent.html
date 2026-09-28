@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/shared/css/typography.css?v=20260818-readable-type-v1">
   <link rel="stylesheet" href="/shared/css/dashboard-system.css?v=20260916-universal-sidebar-v4">
   <link rel="stylesheet" href="/propertydirect/css/dashboard-responsive.css?v=20260912-global-alignment-v3">
+  <link rel="stylesheet" href="/propertydirect/css/dashboard-polish.css?v=20260928-visual-v2">
   <style>
     :root {
       --pd-navy: #0a1834;
@@ -482,6 +483,236 @@
         grid-template-columns: 1fr !important;
       }
     }
+
+    /* Property Form Styles */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .property-form-section {
+      grid-column: 1 / -1;
+      padding: 12px 16px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .property-form-section strong {
+      display: block;
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+    .property-form-section small {
+      color: #64748b;
+      font-size: 0.8rem;
+    }
+    .profile-wide {
+      grid-column: 1 / -1;
+    }
+    .property-photo-upload {
+      border: 2px dashed #cbd5e1;
+      border-radius: 14px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+    }
+    .property-photo-upload:hover, .property-photo-upload.is-dragging {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+    .property-photo-upload input[type="file"] {
+      display: none;
+    }
+    .property-photo-upload-content svg {
+      color: #3b82f6;
+      margin-bottom: 8px;
+    }
+    .property-photo-upload-content strong {
+      display: block;
+      color: #0f172a;
+      font-size: 0.95rem;
+    }
+    .property-photo-upload-content span {
+      color: #64748b;
+      font-size: 0.82rem;
+    }
+    .property-photo-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .property-photo-preview img {
+      width: 100%;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .property-submit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    #postApartmentForm label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #0f172a;
+    }
+    #postApartmentForm input[type="text"],
+    #postApartmentForm input[type="number"],
+    #postApartmentForm input[type="date"],
+    #postApartmentForm select,
+    #postApartmentForm textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-weight: 600;
+      font-family: inherit;
+      box-sizing: border-box;
+      background: #ffffff;
+    }
+    .pd-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .pd-modal-overlay.hidden {
+      display: none !important;
+    }
+    /* Property Review Modal */
+    .property-review-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .property-review-modal.hidden {
+      display: none !important;
+    }
+    .property-review-dialog {
+      background: #ffffff;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      border-radius: 18px;
+      overflow-y: auto;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);
+    }
+    .property-review-close {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      background: #f1f5f9;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .property-review-gallery {
+      background: #0f172a;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .property-review-gallery img#propertyReviewMainImage {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    #propertyReviewThumbs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+    }
+    #propertyReviewThumbs img {
+      width: 60px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+    #propertyReviewThumbs img:hover {
+      opacity: 1;
+    }
+    .property-review-content {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+    .property-review-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: #f8fafc;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+    }
+    .property-review-specs article {
+      display: flex;
+      flex-direction: column;
+    }
+    .property-review-specs span {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .property-review-specs strong {
+      color: #0f172a;
+    }
+    .property-review-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .property-review-actions button {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid #cbd5e1;
+    }
+    .property-review-actions button.primary {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+    }
   </style>
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
 </head>
@@ -501,6 +732,9 @@
           </button>
           <button data-panel="listings" onclick="switchTab('listings')">
             <span>PR</span> My Property Listings
+          </button>
+          <button data-panel="post-listing" onclick="switchTab('post-listing')">
+            <span>+</span> Post New Property
           </button>
           <button data-panel="leads" onclick="switchTab('leads')">
             <span>LD</span> Client Leads & Inquiries
@@ -536,7 +770,7 @@
         </div>
         <div style="display: flex; gap: 12px; align-items: center;">
           <span class="status-badge active" style="font-size: 0.8rem; padding: 6px 14px;">● Verified RERA Agent</span>
-          <button class="btn-primary" onclick="showAgentToast('New Property Listing Wizard opened.')">+ Add New Listing</button>
+          <button class="btn-primary" onclick="switchTab('post-listing')">+ Add New Listing</button>
         </div>
       </header>
 
@@ -545,15 +779,15 @@
         <div class="stats-grid">
           <div class="stat-card">
             <div class="label">Assigned Listings</div>
-            <div class="val">14</div>
+            <div class="val" data-stat="live">0</div>
           </div>
           <div class="stat-card">
             <div class="label">Client Leads</div>
-            <div class="val">38</div>
+            <div class="val" data-stat="leads">0</div>
           </div>
           <div class="stat-card">
-            <div class="label">Scheduled Tours</div>
-            <div class="val">6</div>
+            <div class="label">Pending Verification</div>
+            <div class="val" data-stat="pending" style="color: #d97706;">0</div>
           </div>
           <div class="stat-card">
             <div class="label">Total Commission Earned</div>
@@ -564,8 +798,14 @@
         <!-- Recent Client Enquiries Overview Card -->
         <div class="dash-card">
           <div class="card-head">
-            <h3>Recent Client Enquiries & Leads</h3>
-            <button class="btn-secondary" onclick="switchTab('leads')">View All Leads ›</button>
+            <div>
+              <h3>Recent Client Enquiries & Leads</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Live inquiries received from prospective property buyers and tenants</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-primary" style="padding: 8px 14px; font-size: 0.82rem;" onclick="openAgentLeadModal()">+ Record Lead</button>
+              <button class="btn-secondary" onclick="switchTab('leads')">View All Leads ›</button>
+            </div>
           </div>
           <table class="data-table">
             <thead>
@@ -573,36 +813,13 @@
                 <th>Lead Ref</th>
                 <th>Client Name & Contact</th>
                 <th>Interested Property</th>
-                <th>Budget Range</th>
+                <th>Inquiry Type / Budget</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><strong>#LD-9041</strong></td>
-                <td><strong>Rohan Sharma</strong><br><small style="color: #64748b;">+91 98112 34567 · rohan@gmail.com</small></td>
-                <td><strong>Prestige Green Gables (3 BHK)</strong><br><small style="color: #64748b;">Kadubeesanahalli, Bengaluru</small></td>
-                <td>₹1.65 Cr - ₹1.80 Cr</td>
-                <td><span class="status-badge pending">Tour Scheduled</span></td>
-                <td><button style="padding: 5px 12px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="callAgentLead('Rohan Sharma', '+91 98112 34567')">Call Lead</button></td>
-              </tr>
-              <tr>
-                <td><strong>#LD-9040</strong></td>
-                <td><strong>Priya Venkatesh</strong><br><small style="color: #64748b;">+91 98450 12345 · priya@tech.io</small></td>
-                <td><strong>Sobha Dream Acres (2 BHK)</strong><br><small style="color: #64748b;">Balagere, Panathur Road</small></td>
-                <td>₹95 Lakhs - ₹1.10 Cr</td>
-                <td><span class="status-badge active">Negotiation</span></td>
-                <td><button style="padding: 5px 12px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="callAgentLead('Priya Venkatesh', '+91 98450 12345')">Call Lead</button></td>
-              </tr>
-              <tr>
-                <td><strong>#LD-9039</strong></td>
-                <td><strong>Anil Kulkarni</strong><br><small style="color: #64748b;">+91 97312 88990 · anil.k@infra.com</small></td>
-                <td><strong>Brigade Utopia (3 BHK Luxury)</strong><br><small style="color: #64748b;">Varthur Road, Bengaluru</small></td>
-                <td>₹1.90 Cr</td>
-                <td><span class="status-badge closed">Deal Closed</span></td>
-                <td><button style="padding: 5px 12px; font-size: 0.78rem; background: #16a34a; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="showAgentToast('Commission Invoice #INV-8821 generated.')">View Invoice</button></td>
-              </tr>
+            <tbody id="agentOverviewLeadsBody">
+              <!-- Populated dynamically by market-workflows.js -->
             </tbody>
           </table>
         </div>
@@ -610,10 +827,32 @@
 
       <!-- Panel 2: Listings -->
       <section class="dash-panel hidden" data-view="listings">
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="label">Active Marketplace Listings</div>
+            <div class="val" data-stat="live" style="color: #16a34a;">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Pending Super Admin Review</div>
+            <div class="val" data-stat="pending" style="color: #d97706;">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Total Portfolio Value</div>
+            <div class="val" id="agentTotalValue">₹0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Average Market Price</div>
+            <div class="val" id="agentAvgPrice">₹0</div>
+          </div>
+        </div>
+
         <div class="dash-card">
           <div class="card-head">
-            <h3>PR Managed Property Listings</h3>
-            <button class="btn-primary" onclick="showAgentToast('New Property Listing Form opened.')">+ Create New Listing</button>
+            <div>
+              <h3>PR Managed Property Listings</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Directly wired to PropertyDirect listing creation and moderation review APIs</p>
+            </div>
+            <button class="btn-primary" onclick="switchTab('post-listing')">+ Create New Listing</button>
           </div>
           <table class="data-table">
             <thead>
@@ -622,41 +861,166 @@
                 <th>Title & Location</th>
                 <th>Type / BHK</th>
                 <th>Asking Price</th>
-                <th>RERA Approval</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>Moderation / RERA</th>
+                <th>Portal Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><strong>PD-PROP-1082</strong></td>
-                <td><strong>Prestige Green Gables</strong><br><small style="color: #64748b;">Kadubeesanahalli, Outer Ring Road</small></td>
-                <td>3 BHK Apartment</td>
-                <td>₹1.72 Cr</td>
-                <td><span style="color: #16a34a; font-weight: 700;">PRM/KA/RERA/1251</span></td>
-                <td><span class="status-badge active">● Live on Portal</span></td>
-                <td><button style="padding: 5px 10px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;" onclick="showAgentToast('Editing listing #PD-PROP-1082')">Edit</button></td>
-              </tr>
-              <tr>
-                <td><strong>PD-PROP-1081</strong></td>
-                <td><strong>Sobha Dream Acres</strong><br><small style="color: #64748b;">Balagere, Panathur Road</small></td>
-                <td>2 BHK Luxury</td>
-                <td>₹1.05 Cr</td>
-                <td><span style="color: #16a34a; font-weight: 700;">PRM/KA/RERA/0922</span></td>
-                <td><span class="status-badge active">● Live on Portal</span></td>
-                <td><button style="padding: 5px 10px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;" onclick="showAgentToast('Editing listing #PD-PROP-1081')">Edit</button></td>
-              </tr>
-              <tr>
-                <td><strong>PD-PROP-1079</strong></td>
-                <td><strong>Godrej Ananda</strong><br><small style="color: #64748b;">Aerospace Park, Bagalur</small></td>
-                <td>2 BHK Smart Home</td>
-                <td>₹68 Lakhs</td>
-                <td><span style="color: #16a34a; font-weight: 700;">PRM/KA/RERA/3041</span></td>
-                <td><span class="status-badge pending">● Under Review</span></td>
-                <td><button style="padding: 5px 10px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;" onclick="showAgentToast('Editing listing #PD-PROP-1079')">Edit</button></td>
-              </tr>
+            <tbody id="agentListingsBody">
+              <!-- Populated dynamically by market-workflows.js from /api/property/my-listings -->
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- Panel: Post Property Listing -->
+      <section class="dash-panel hidden" data-view="post-listing">
+        <div class="dash-card">
+          <div class="card-head">
+            <div>
+              <h3 id="agentFormTitle">Post New Property Listing</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Submit property details and photos directly to the PropertyDirect listing API for Super Admin moderation.</p>
+            </div>
+            <button class="btn-secondary" onclick="switchTab('listings')">← Back to Listings</button>
+          </div>
+
+          <form id="postApartmentForm" data-property-api-form="true">
+            <div class="form-grid">
+              <div class="property-form-section">
+                <strong>1. Basic Property Information</strong>
+                <small>Title, location, BHK configuration, and availability state</small>
+              </div>
+              <div>
+                <label>Property Title *</label>
+                <input type="text" name="title" required placeholder="e.g. Luxury 3 BHK in Prestige Shantiniketan">
+              </div>
+              <div>
+                <label>City *</label>
+                <input type="text" name="city" required value="Bengaluru">
+              </div>
+              <div>
+                <label>Locality / Society Name *</label>
+                <input type="text" name="locality" required placeholder="e.g. Whitefield / Brigade Metropolis">
+              </div>
+              <div>
+                <label>BHK Configuration *</label>
+                <select name="bhk" required>
+                  <option value="1 BHK">1 BHK</option>
+                  <option value="2 BHK" selected>2 BHK</option>
+                  <option value="3 BHK">3 BHK</option>
+                  <option value="4 BHK">4 BHK</option>
+                </select>
+              </div>
+
+              <div class="property-form-section">
+                <strong>2. Financial & Rental Terms</strong>
+                <small>Expected monthly rent or total sale price and security deposit</small>
+              </div>
+              <div>
+                <label>Listing Purpose *</label>
+                <select name="type" required>
+                  <option value="RENT">Rent</option>
+                  <option value="SALE">Sale</option>
+                </select>
+              </div>
+              <div>
+                <label>Property Type *</label>
+                <select name="propertyType" required>
+                  <option value="APARTMENT">Apartment</option>
+                  <option value="VILLA">Villa / Independent House</option>
+                  <option value="PENTHOUSE">Penthouse</option>
+                  <option value="PLOT">Residential Plot</option>
+                </select>
+              </div>
+              <div>
+                <label>Asking Rent / Price (₹) *</label>
+                <input type="number" name="price" required placeholder="e.g. 45000">
+              </div>
+              <div>
+                <label>Security Deposit (₹)</label>
+                <input type="number" name="deposit" placeholder="e.g. 200000">
+              </div>
+              <div>
+                <label>Maintenance Fee (₹/month)</label>
+                <input type="number" name="maintenance" placeholder="e.g. 3500">
+              </div>
+              <div>
+                <label>Super Built-up Area (sq ft)</label>
+                <input type="number" name="areaSqft" placeholder="e.g. 1450">
+              </div>
+              <div>
+                <label>Pincode *</label>
+                <input type="text" name="pincode" required pattern="[0-9]{6}" maxlength="6" value="560066" placeholder="6-digit pincode">
+              </div>
+              <div>
+                <label>Bathrooms *</label>
+                <input type="number" name="bathrooms" required min="1" max="10" value="2">
+              </div>
+              <div>
+                <label>Furnishing Status</label>
+                <select name="furnishing">
+                  <option value="Semi-Furnished" selected>Semi-Furnished</option>
+                  <option value="Fully Furnished">Fully Furnished</option>
+                  <option value="Unfurnished">Unfurnished</option>
+                </select>
+              </div>
+              <div>
+                <label>Reserved Parking</label>
+                <select name="parking">
+                  <option value="1 Covered Car Park" selected>1 Covered Car Park</option>
+                  <option value="2 Covered Car Parks">2 Covered Car Parks</option>
+                  <option value="Open Parking">Open Parking</option>
+                  <option value="No Parking">No Parking</option>
+                </select>
+              </div>
+
+              <div class="property-form-section">
+                <strong>3. Property Photos (Max 10 High Quality Photos) *</strong>
+                <small>Direct photos are uploaded to the PropertyDirect media store</small>
+              </div>
+              <div class="profile-wide">
+                <div class="property-photo-upload" id="photoDropzone" onclick="document.getElementById('propertyPhotoInput')?.click()">
+                  <input type="file" id="propertyPhotoInput" name="photos" multiple accept="image/*" required>
+                  <div class="property-photo-upload-content">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    <strong>Click or Drag Photos Here to Upload</strong>
+                    <span>Supports JPG, PNG, WEBP up to 10 photos total</span>
+                    <div id="propertyPhotoCount" style="margin-top: 6px; font-size: 0.85rem; font-weight: 600; color: #64748b;">No photos selected</div>
+                  </div>
+                </div>
+                <div class="property-photo-preview" id="propertyPhotoPreview"></div>
+              </div>
+
+              <div class="property-form-section">
+                <strong>4. Description & Key Amenities</strong>
+                <small>Highlights, proximity to tech parks, metro stations, and society features</small>
+              </div>
+              <div class="profile-wide">
+                <label>Property Description</label>
+                <textarea name="description" rows="3" placeholder="Describe the layout, facing, floor, ventilation, and landmark connectivity..."></textarea>
+              </div>
+              <div class="profile-wide" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
+                  <input type="checkbox" name="amenities" value="Gym" checked> 🏋️ Fitness Gym
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
+                  <input type="checkbox" name="amenities" value="Swimming Pool" checked> 🏊 Swimming Pool
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
+                  <input type="checkbox" name="amenities" value="Power Backup" checked> ⚡ Power Backup
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
+                  <input type="checkbox" name="amenities" value="Covered Parking" checked> 🚗 Covered Parking
+                </label>
+              </div>
+            </div>
+
+            <div class="property-submit-row">
+              <span id="propertySubmissionNotice" style="font-size: 0.84rem; color: #64748b;">⚠️ Submitted listings enter the Super Admin approval queue before going live.</span>
+              <span id="propertySubmissionSuccess" class="hidden" style="color: #16a34a; font-weight: 700; font-size: 0.88rem;"></span>
+              <button type="submit" class="btn-primary" data-property-api-action="publish-owner-listing">Submit Property for Approval</button>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -664,8 +1028,11 @@
       <section class="dash-panel hidden" data-view="leads">
         <div class="dash-card">
           <div class="card-head">
-            <h3>LD Client Leads & Inquiries</h3>
-            <button class="btn-primary" onclick="showAgentToast('Manual Lead Registration Form opened.')">+ Record New Lead</button>
+            <div>
+              <h3>LD Client Leads & Inquiries</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Directly connected to PropertyDirect property enquiry workflow APIs</p>
+            </div>
+            <button class="btn-primary" onclick="openAgentLeadModal()">+ Record New Lead</button>
           </div>
           <table class="data-table">
             <thead>
@@ -673,49 +1040,14 @@
                 <th>Lead Ref</th>
                 <th>Client Name & Contact</th>
                 <th>Interested Property</th>
-                <th>Budget Range</th>
-                <th>Assigned Date</th>
+                <th>Inquiry Type / Budget</th>
+                <th>Received Date</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><strong>#LD-9041</strong></td>
-                <td><strong>Rohan Sharma</strong><br><small style="color: #64748b;">+91 98112 34567 · rohan@gmail.com</small></td>
-                <td><strong>Prestige Green Gables (3 BHK)</strong><br><small style="color: #64748b;">Kadubeesanahalli, Bengaluru</small></td>
-                <td>₹1.65 Cr - ₹1.80 Cr</td>
-                <td>06 Sep 2026</td>
-                <td><span class="status-badge pending">Tour Scheduled</span></td>
-                <td><button style="padding: 5px 12px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="callAgentLead('Rohan Sharma', '+91 98112 34567')">Call Lead</button></td>
-              </tr>
-              <tr>
-                <td><strong>#LD-9040</strong></td>
-                <td><strong>Priya Venkatesh</strong><br><small style="color: #64748b;">+91 98450 12345 · priya@tech.io</small></td>
-                <td><strong>Sobha Dream Acres (2 BHK)</strong><br><small style="color: #64748b;">Balagere, Panathur Road</small></td>
-                <td>₹95 Lakhs - ₹1.10 Cr</td>
-                <td>05 Sep 2026</td>
-                <td><span class="status-badge active">Negotiation</span></td>
-                <td><button style="padding: 5px 12px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="callAgentLead('Priya Venkatesh', '+91 98450 12345')">Call Lead</button></td>
-              </tr>
-              <tr>
-                <td><strong>#LD-9039</strong></td>
-                <td><strong>Anil Kulkarni</strong><br><small style="color: #64748b;">+91 97312 88990 · anil.k@infra.com</small></td>
-                <td><strong>Brigade Utopia (3 BHK Luxury)</strong><br><small style="color: #64748b;">Varthur Road, Bengaluru</small></td>
-                <td>₹1.90 Cr</td>
-                <td>01 Sep 2026</td>
-                <td><span class="status-badge closed">Deal Closed</span></td>
-                <td><button style="padding: 5px 12px; font-size: 0.78rem; background: #16a34a; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="showAgentToast('Commission Invoice #INV-8821 generated.')">View Invoice</button></td>
-              </tr>
-              <tr>
-                <td><strong>#LD-9038</strong></td>
-                <td><strong>Kavita Nair</strong><br><small style="color: #64748b;">+91 96111 22334 · kavita.n@gmail.com</small></td>
-                <td><strong>Godrej Ananda (2 BHK)</strong><br><small style="color: #64748b;">Aerospace Park, Bagalur</small></td>
-                <td>₹65 Lakhs - ₹70 Lakhs</td>
-                <td>28 Aug 2026</td>
-                <td><span class="status-badge active">New Enquiry</span></td>
-                <td><button style="padding: 5px 12px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;" onclick="callAgentLead('Kavita Nair', '+91 96111 22334')">Call Lead</button></td>
-              </tr>
+            <tbody id="agentLeadsBody">
+              <!-- Populated dynamically by market-workflows.js -->
             </tbody>
           </table>
         </div>
@@ -725,37 +1057,25 @@
       <section class="dash-panel hidden" data-view="tours">
         <div class="dash-card">
           <div class="card-head">
-            <h3>TR Scheduled Site Visit Tours</h3>
-            <button class="btn-primary" onclick="showAgentToast('TR New Site Tour Booking Dialog Opened!')">+ Schedule Site Tour</button>
+            <div>
+              <h3>TR Scheduled Site Visit Tours & Requests</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Direct requests from buyers to visit your listed properties</p>
+            </div>
+            <button class="btn-primary" type="button" data-property-api-action="refresh-owner-visits">Refresh Visits</button>
           </div>
           <table class="data-table">
             <thead>
               <tr>
-                <th>Tour ID</th>
                 <th>Property</th>
-                <th>Client Name</th>
-                <th>Date & Time</th>
+                <th>Scheduled Date & Time</th>
+                <th>Visitor Name & Contact</th>
+                <th>Notes</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><strong>TOUR-4021</strong></td>
-                <td>Prestige Green Gables (3 BHK)</td>
-                <td>Rohan Sharma (+91 98112 34567)</td>
-                <td><strong>Tomorrow, 11:00 AM</strong></td>
-                <td><span class="status-badge pending">Confirmed</span></td>
-                <td><button style="padding: 5px 10px; font-size: 0.78rem; background: #16a34a; color: #fff; border: none; border-radius: 6px; cursor: pointer;" onclick="markAgentTourDone(this)">Mark Done</button></td>
-              </tr>
-              <tr>
-                <td><strong>TOUR-4020</strong></td>
-                <td>Sobha Dream Acres (2 BHK)</td>
-                <td>Priya Venkatesh (+91 98450 12345)</td>
-                <td><strong>08 Sep 2026, 03:30 PM</strong></td>
-                <td><span class="status-badge pending">Confirmed</span></td>
-                <td><button style="padding: 5px 10px; font-size: 0.78rem; background: #16a34a; color: #fff; border: none; border-radius: 6px; cursor: pointer;" onclick="markAgentTourDone(this)">Mark Done</button></td>
-              </tr>
+            <tbody id="agentVisitsBody">
+              <!-- Populated dynamically by market-workflows.js loadOwnerVisits() -->
             </tbody>
           </table>
         </div>
@@ -857,6 +1177,60 @@
     </main>
   </div>
 
+  <!-- Record Lead Modal -->
+  <div class="pd-modal-overlay hidden" id="recordLeadModal">
+    <div style="background: #ffffff; width: 100%; max-width: 560px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; font-family: 'Manrope', sans-serif;">
+      <div style="background: #0f172a; color: #ffffff; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #ffffff;">LD Record Client Enquiry / Lead</h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #94a3b8;">Create a new lead connected to the PropertyDirect enquiry API</p>
+        </div>
+        <button onclick="closeAgentLeadModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="agentRecordLeadForm" data-property-api-form="true" style="padding: 24px; display: grid; gap: 16px;">
+        <div>
+          <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Interested Property Listing *</label>
+          <select name="listingId" id="leadListingSelect" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+            <option value="">Select a property listing...</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Full Name *</label>
+            <input type="text" name="name" required placeholder="e.g. Ramesh Kumar" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Phone Number *</label>
+            <input type="tel" name="phone" required placeholder="e.g. +91 98450 12345" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Email *</label>
+            <input type="email" name="email" required placeholder="e.g. ramesh@example.com" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Inquiry Purpose *</label>
+            <select name="type" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+              <option value="PURCHASE">Purchase Inquiry</option>
+              <option value="RENTAL">Rental Inquiry</option>
+              <option value="SITE_VISIT">Site Visit Booking</option>
+              <option value="OFFER">Price Offer / Deal</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Requirements / Budget / Notes</label>
+          <textarea name="message" rows="3" placeholder="Budget range, desired possession date, specific unit preferences..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;"></textarea>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px;">
+          <button type="button" onclick="closeAgentLeadModal()" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary" data-property-api-action="record-agent-lead">Save & Submit Enquiry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="agentToast" style="position: fixed; bottom: 24px; right: 24px; background: #0f172a; color: #ffffff; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: none; z-index: 9999;"></div>
 
   <script>
@@ -867,6 +1241,14 @@
         toast.style.display = 'block';
         setTimeout(() => toast.style.display = 'none', 3000);
       }
+    }
+
+    function openAgentLeadModal() {
+      document.getElementById('recordLeadModal')?.classList.remove('hidden');
+    }
+
+    function closeAgentLeadModal() {
+      document.getElementById('recordLeadModal')?.classList.add('hidden');
     }
 
     function callAgentLead(name, phone) {
@@ -946,6 +1328,7 @@
       switchTab(tab);
     });
   </script>
+  <script src="/propertydirect/js/market-workflows.js?v=20260928-property-workflow-v5"></script>
   <script src="/propertydirect/js/dashboard-controls.js?v=20260910-end-to-end-buttons-v1"></script>
   <script src="/shared/js/dashboard-system.js?v=20260916-universal-sidebar-v4"></script>
 </body>

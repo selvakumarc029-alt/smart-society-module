@@ -314,6 +314,330 @@ public class MailService {
         return sb.toString();
     }
 
+    public Map<String, Object> sendNotificationEmail(String toEmail, String toName, String subject, String htmlBody, String textBody) {
+        if (!StringUtils.hasText(toEmail)) {
+            return Map.of("sent", false, "message", "Recipient email address is required.");
+        }
+        toEmail = toEmail.trim();
+
+        if (StringUtils.hasText(brevoApiKey)) {
+            try {
+                String senderEmail = StringUtils.hasText(fromAddress) && !fromAddress.endsWith(".local")
+                        ? fromAddress.trim()
+                        : "forgeindiaconnectfic@gmail.com";
+                String senderName = "PropertyDirect";
+
+                String jsonPayload = """
+                        {
+                          "sender": {"name": "%s", "email": "%s"},
+                          "to": [{"email": "%s", "name": "%s"}],
+                          "subject": "%s",
+                          "htmlContent": "%s",
+                          "textContent": "%s"
+                        }
+                        """.formatted(
+                        escapeJson(senderName),
+                        escapeJson(senderEmail),
+                        escapeJson(toEmail),
+                        escapeJson(safe(toName, "Customer")),
+                        escapeJson(subject),
+                        escapeJson(htmlBody),
+                        escapeJson(textBody)
+                );
+
+                HttpClient client = HttpClient.newBuilder()
+                        .connectTimeout(Duration.ofSeconds(10))
+                        .build();
+
+                HttpRequest httpRequest = HttpRequest.newBuilder()
+                        .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+                        .timeout(Duration.ofSeconds(15))
+                        .header("api-key", brevoApiKey)
+                        .header("Content-Type", "application/json")
+                        .header("Accept", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(jsonPayload, StandardCharsets.UTF_8))
+                        .build();
+
+                HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() >= 200 && response.statusCode() < 300) {
+                    log.info("Brevo API: Notification sent to {}", toEmail);
+                    return Map.of("sent", true, "message", "Notification email sent via Brevo to " + toEmail);
+                }
+                log.warn("Brevo API delivery failed with status {}: {}", response.statusCode(), response.body());
+            } catch (Exception ex) {
+                log.warn("Brevo delivery failed for {}: {}", toEmail, ex.getMessage());
+            }
+        }
+
+        if (StringUtils.hasText(mailHost) && mailSender != null) {
+            try {
+                SimpleMailMessage msg = new SimpleMailMessage();
+                msg.setFrom(fromAddress);
+                msg.setTo(toEmail);
+                msg.setSubject(subject);
+                msg.setText(textBody);
+                mailSender.send(msg);
+                log.info("SMTP: Notification sent to {}", toEmail);
+                return Map.of("sent", true, "message", "Notification email sent via SMTP to " + toEmail);
+            } catch (MailException ex) {
+                log.warn("SMTP delivery failed for {}: {}", toEmail, ex.getMessage());
+            }
+        }
+
+        log.info("[SIMULATED EMAIL DISPATCH] To: {} | Subject: {}\nBody: {}", toEmail, subject, textBody);
+        return Map.of("sent", false, "message", "Notification logged (mail sender not configured).");
+    }
+
+    public Map<String, Object> sendPropertyEnquiryNotification(
+            String ownerName, String ownerEmail, String propertyTitle,
+            String buyerName, String buyerEmail, String buyerPhone,
+            String enquiryType, String message, Long enquiryId, String apartmentCode) {
+        String subject = "[PropertyDirect] New inquiry on " + safe(propertyTitle, "your property") + " (" + safe(apartmentCode, "PD-" + enquiryId) + ")";
+        String textBody = """
+                Hello %s,
+
+                You have received a new inquiry on PropertyDirect for your listing: %s (%s).
+
+                Inquirer Details:
+                Name: %s
+                Phone: %s
+                Email: %s
+                Inquiry Type: %s
+
+                Message / Requirements:
+                %s
+
+                You can review and manage this lead directly in your PropertyDirect Dashboard.
+
+                Regards,
+                PropertyDirect Team
+                """.formatted(
+                safe(ownerName, "Property Owner"),
+                safe(propertyTitle, "Property Listing"),
+                safe(apartmentCode, "PD-" + enquiryId),
+                safe(buyerName, "Prospective Buyer"),
+                safe(buyerPhone, "Not provided"),
+                safe(buyerEmail, "Not provided"),
+                safe(enquiryType, "GENERAL"),
+                safe(message, "Interested in your property listing.")
+        );
+
+        String htmlBody = """
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <div style="background: #2563eb; color: #fff; padding: 16px; border-radius: 8px 8px 0 0; text-align: center;">
+                        <h2 style="margin: 0;">PropertyDirect</h2>
+                        <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.9;">New Property Lead Notification</p>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p>Hello <strong>%s</strong>,</p>
+                        <p>A customer has submitted a new inquiry for your listing <strong>%s</strong> (%s).</p>
+                        <div style="background: #f8fafc; border-left: 4px solid #2563eb; padding: 12px 16px; margin: 16px 0;">
+                            <p style="margin: 4px 0;"><strong>Name:</strong> %s</p>
+                            <p style="margin: 4px 0;"><strong>Phone:</strong> %s</p>
+                            <p style="margin: 4px 0;"><strong>Email:</strong> %s</p>
+                            <p style="margin: 4px 0;"><strong>Type:</strong> %s</p>
+                            <p style="margin: 8px 0 4px;"><strong>Message:</strong></p>
+                            <p style="margin: 0; color: #475569;">%s</p>
+                        </div>
+                        <p style="color: #64748b; font-size: 13px;">Manage this lead in your PropertyDirect Owner / Agent dashboard.</p>
+                    </div>
+                </div>
+                """.formatted(
+                safe(ownerName, "Property Owner"),
+                safe(propertyTitle, "Property Listing"),
+                safe(apartmentCode, "PD-" + enquiryId),
+                safe(buyerName, "Prospective Buyer"),
+                safe(buyerPhone, "Not provided"),
+                safe(buyerEmail, "Not provided"),
+                safe(enquiryType, "GENERAL"),
+                safe(message, "Interested in your property listing.")
+        );
+
+        return sendNotificationEmail(ownerEmail, ownerName, subject, htmlBody, textBody);
+    }
+
+    public Map<String, Object> sendPropertyVisitRequestedNotification(
+            String ownerName, String ownerEmail, String propertyTitle,
+            String visitorName, String visitorPhone, String visitorEmail,
+            String scheduledAt, String notes, Long visitId, String apartmentCode) {
+        String subject = "[PropertyDirect] Visit requested for " + safe(propertyTitle, "your property") + " on " + scheduledAt;
+        String textBody = """
+                Hello %s,
+
+                A site visit has been requested for your listing: %s (%s).
+
+                Visit Schedule: %s
+                Visitor Name: %s
+                Visitor Phone: %s
+                Visitor Email: %s
+
+                Notes / Preferred Time:
+                %s
+
+                Please log into your PropertyDirect dashboard to CONFIRM or RESCHEDULE this visit request.
+
+                Regards,
+                PropertyDirect Team
+                """.formatted(
+                safe(ownerName, "Property Owner"),
+                safe(propertyTitle, "Property Listing"),
+                safe(apartmentCode, "PD-" + visitId),
+                scheduledAt,
+                safe(visitorName, "Prospective Visitor"),
+                safe(visitorPhone, "Not provided"),
+                safe(visitorEmail, "Not provided"),
+                safe(notes, "No additional notes.")
+        );
+
+        String htmlBody = """
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <div style="background: #0f172a; color: #fff; padding: 16px; border-radius: 8px 8px 0 0; text-align: center;">
+                        <h2 style="margin: 0;">PropertyDirect</h2>
+                        <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.9;">Site Visit Request</p>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p>Hello <strong>%s</strong>,</p>
+                        <p>A customer has requested a site visit for <strong>%s</strong> (%s).</p>
+                        <div style="background: #f1f5f9; border-radius: 8px; padding: 14px; margin: 16px 0;">
+                            <p style="margin: 4px 0;"><strong>Scheduled Time:</strong> %s</p>
+                            <p style="margin: 4px 0;"><strong>Visitor:</strong> %s (%s, %s)</p>
+                            <p style="margin: 4px 0;"><strong>Notes:</strong> %s</p>
+                        </div>
+                        <p style="color: #475569;">Log in to your dashboard to <strong>Confirm</strong> or <strong>Cancel</strong> this appointment.</p>
+                    </div>
+                </div>
+                """.formatted(
+                safe(ownerName, "Property Owner"),
+                safe(propertyTitle, "Property Listing"),
+                safe(apartmentCode, "PD-" + visitId),
+                scheduledAt,
+                safe(visitorName, "Prospective Visitor"),
+                safe(visitorPhone, "Not provided"),
+                safe(visitorEmail, "Not provided"),
+                safe(notes, "No additional notes.")
+        );
+
+        return sendNotificationEmail(ownerEmail, ownerName, subject, htmlBody, textBody);
+    }
+
+    public Map<String, Object> sendPropertyVisitStatusNotification(
+            String visitorName, String visitorEmail, String propertyTitle,
+            String newStatus, String scheduledAt, String note, Long visitId) {
+        String subject = "[PropertyDirect] Your visit request for " + safe(propertyTitle, "the property") + " is now " + newStatus;
+        String textBody = """
+                Hello %s,
+
+                The status of your site visit request for %s (Visit #%s) has been updated:
+
+                New Status: %s
+                Scheduled Time: %s
+                Owner Note: %s
+
+                Thank you for using PropertyDirect.
+
+                Regards,
+                PropertyDirect Team
+                """.formatted(
+                safe(visitorName, "Customer"),
+                safe(propertyTitle, "the property"),
+                visitId,
+                newStatus,
+                safe(scheduledAt, "As requested"),
+                safe(note, "No extra note.")
+        );
+
+        String htmlBody = """
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <div style="background: %s; color: #fff; padding: 16px; border-radius: 8px 8px 0 0; text-align: center;">
+                        <h2 style="margin: 0;">PropertyDirect</h2>
+                        <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.9;">Visit Request Update</p>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p>Hello <strong>%s</strong>,</p>
+                        <p>Your visit request for <strong>%s</strong> has been updated to: <span style="font-weight: 700; color: %s;">%s</span></p>
+                        <div style="background: #f8fafc; border-radius: 8px; padding: 14px; margin: 16px 0;">
+                            <p style="margin: 4px 0;"><strong>Scheduled Time:</strong> %s</p>
+                            <p style="margin: 4px 0;"><strong>Owner Note:</strong> %s</p>
+                        </div>
+                    </div>
+                </div>
+                """.formatted(
+                "CONFIRMED".equalsIgnoreCase(newStatus) ? "#16a34a" : "CANCELLED".equalsIgnoreCase(newStatus) ? "#dc2626" : "#2563eb",
+                safe(visitorName, "Customer"),
+                safe(propertyTitle, "the property"),
+                "CONFIRMED".equalsIgnoreCase(newStatus) ? "#16a34a" : "#dc2626",
+                newStatus,
+                safe(scheduledAt, "As requested"),
+                safe(note, "No extra note.")
+        );
+
+        return sendNotificationEmail(visitorEmail, visitorName, subject, htmlBody, textBody);
+    }
+
+    public Map<String, Object> sendSavedSearchMatchAlert(
+            String customerName, String customerEmail, String searchName,
+            String propertyTitle, String location, String price,
+            String bhk, String propertyType, Long listingId) {
+        String subject = "[PropertyDirect] New Match: " + safe(propertyTitle, "Property") + " matches your search '" + safe(searchName, "Saved Search") + "'";
+        String textBody = """
+                Hello %s,
+
+                Good news! A new property matching your saved search criteria '%s' has just been published on PropertyDirect.
+
+                Property: %s
+                Location: %s
+                Type / BHK: %s (%s)
+                Price: %s
+                Reference: PDT-%04d
+
+                Log in to PropertyDirect to view full details and book a site visit!
+
+                Regards,
+                PropertyDirect Discovery Team
+                """.formatted(
+                safe(customerName, "Customer"),
+                safe(searchName, "Saved Search"),
+                safe(propertyTitle, "New Listing"),
+                safe(location, "Prime Location"),
+                safe(bhk, "Standard"),
+                safe(propertyType, "Apartment"),
+                safe(price, "Price upon request"),
+                listingId
+        );
+
+        String htmlBody = """
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
+                    <div style="background: #10b981; color: #fff; padding: 16px; border-radius: 8px 8px 0 0; text-align: center;">
+                        <h2 style="margin: 0;">PropertyDirect</h2>
+                        <p style="margin: 4px 0 0; font-size: 13px; opacity: 0.9;">New Saved Search Property Match</p>
+                    </div>
+                    <div style="padding: 20px;">
+                        <p>Hello <strong>%s</strong>,</p>
+                        <p>A new property matching your saved search criteria <strong>'%s'</strong> is now available:</p>
+                        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                            <h3 style="margin: 0 0 8px; color: #166534;">%s</h3>
+                            <p style="margin: 4px 0; color: #374151;"><strong>Location:</strong> %s</p>
+                            <p style="margin: 4px 0; color: #374151;"><strong>Configuration:</strong> %s · %s</p>
+                            <p style="margin: 4px 0; color: #15803d; font-size: 16px; font-weight: 700;">Price: %s</p>
+                            <p style="margin: 4px 0; color: #6b7280; font-size: 12px;">Reference: PDT-%04d</p>
+                        </div>
+                        <p style="color: #475569; font-size: 13px;">Visit the PropertyDirect marketplace to view photos and schedule a site visit.</p>
+                    </div>
+                </div>
+                """.formatted(
+                safe(customerName, "Customer"),
+                safe(searchName, "Saved Search"),
+                safe(propertyTitle, "New Listing"),
+                safe(location, "Prime Location"),
+                safe(bhk, "Standard"),
+                safe(propertyType, "Apartment"),
+                safe(price, "Price upon request"),
+                listingId
+        );
+
+        return sendNotificationEmail(customerEmail, customerName, subject, htmlBody, textBody);
+    }
+
     private static String safe(String value, String fallback) {
         return StringUtils.hasText(value) ? value.trim() : fallback;
     }

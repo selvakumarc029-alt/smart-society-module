@@ -1,0 +1,204 @@
+/* PropertyDirect dashboard type and layout finish. Loaded after the shared
+   dashboard styles so all role pages use one font and the same gutters. */
+/* Match Smart Society's shared Urbanist typography and indigo/cyan palette.
+   Apply the font to descendants too, so legacy inline Manrope declarations
+   cannot create a visibly different typeface on individual controls. */
+html body.app-dashboard[data-platform="propertydirect"],
+html body[data-dashboard-role="vendor"] {
+  --ds-blue: #6366f1;
+  --ds-blue-dark: #4f46e5;
+  --ds-sky: #06b6d4;
+  --ds-ink: #0f172a;
+  --ds-copy: #475569;
+  --ds-bg: #f8fafc;
+  --ds-line: rgba(226, 232, 240, .9);
+  --role-accent: #6366f1 !important;
+  --role-accent-dark: #4f46e5 !important;
+  --role-soft: rgba(99, 102, 241, .11) !important;
+  --pd-navy: #111a3a;
+  --pd-navy-light: #202b55;
+  --pd-blue: #6366f1;
+  --pd-blue-hover: #4f46e5;
+  --pd-gold: #06b6d4;
+  --pd-gold-soft: rgba(6, 182, 212, .12);
+  font-family: var(--app-font-family, "Urbanist", sans-serif) !important;
+  color: #17233d;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] *,
+html body.app-dashboard[data-platform="propertydirect"] *::before,
+html body.app-dashboard[data-platform="propertydirect"] *::after,
+html body[data-dashboard-role="vendor"] *,
+html body[data-dashboard-role="vendor"] *::before,
+html body[data-dashboard-role="vendor"] *::after {
+  font-family: var(--app-font-family, "Urbanist", sans-serif) !important;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(button, input, select, textarea, table),
+html body[data-dashboard-role="vendor"] :is(button, input, select, textarea, table) {
+  font-family: var(--app-font-family, "Urbanist", sans-serif) !important;
+  letter-spacing: .005em;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(h1, h2, h3, h4, h5, h6),
+html body[data-dashboard-role="vendor"] :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--app-font-family, "Urbanist", sans-serif) !important;
+  color: #172554;
+  line-height: 1.22;
+  letter-spacing: -.018em;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.btn-primary, .primary, .btn-main, button[type="submit"]),
+html body[data-dashboard-role="vendor"] :is(.btn-primary, .primary, .btn-main, button[type="submit"]) {
+  background: linear-gradient(135deg, #6366f1, #4f46e5 68%, #06b6d4) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, .2);
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.btn-primary, .primary, .btn-main, button[type="submit"]):hover,
+html body[data-dashboard-role="vendor"] :is(.btn-primary, .primary, .btn-main, button[type="submit"]):hover {
+  filter: brightness(1.04);
+  box-shadow: 0 10px 24px rgba(79, 70, 229, .28);
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-header, .agent-header, .vendor-top),
+html body[data-dashboard-role="vendor"] .vendor-top {
+  min-width: 0;
+  gap: 16px;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-header, .agent-header, .vendor-top) > :first-child,
+html body[data-dashboard-role="vendor"] .vendor-top > :first-child {
+  min-width: 0;
+  flex: 1 1 280px;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-header, .agent-header, .vendor-top),
+html body[data-dashboard-role="vendor"] .vendor-top {
+  background: rgba(255, 255, 255, .94);
+  border-bottom: 1px solid rgba(99, 102, 241, .1);
+  box-shadow: 0 8px 28px rgba(30, 41, 59, .045);
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card, .dash-grid > article, .vendor-card, .metric-card, .stats-card),
+html body[data-dashboard-role="vendor"] :is(.dash-card, .vendor-card, .metric-card, .stats-card) {
+  border-color: rgba(148, 163, 184, .2);
+  box-shadow: 0 12px 30px rgba(30, 41, 59, .065);
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-header, .agent-header, .vendor-top) :is(h1, h2, p),
+html body[data-dashboard-role="vendor"] .vendor-top :is(h1, h2, p) {
+  overflow-wrap: anywhere;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-panel, .vendor-panel) > :is(.dash-card, .dash-grid, .stats-grid),
+html body[data-dashboard-role="vendor"] .vendor-panel > :is(.dash-card, .dash-grid, .stats-grid) {
+  min-width: 0;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.form-grid, .property-form-grid),
+html body[data-dashboard-role="vendor"] :is(.form-grid, .property-form-grid) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.form-grid, .property-form-grid) > *,
+html body[data-dashboard-role="vendor"] :is(.form-grid, .property-form-grid) > * {
+  min-width: 0;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.form-grid, .property-form-grid) :is(input, select, textarea),
+html body[data-dashboard-role="vendor"] :is(.form-grid, .property-form-grid) :is(input, select, textarea) {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.form-actions, .property-submit-row, .modal-actions),
+html body[data-dashboard-role="vendor"] :is(.form-actions, .property-submit-row, .modal-actions) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dashboard-table-scroll, .table-responsive),
+html body[data-dashboard-role="vendor"] :is(.dashboard-table-scroll, .table-responsive) {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dashboard-table-scroll, .table-responsive) table,
+html body[data-dashboard-role="vendor"] :is(.dashboard-table-scroll, .table-responsive) table {
+  margin: 0;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.card-head, .header-actions, .page-actions),
+html body[data-dashboard-role="vendor"] :is(.card-head, .header-actions, .page-actions) {
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  /* The shared alignment layer docks the desktop sidebar at 300px. Restore a
+     full-width content column on mobile while the sidebar becomes a drawer. */
+  html body.app-dashboard[data-platform="propertydirect"] :is(main.dash-main, main.agent-main),
+  html body[data-dashboard-role="vendor"] main.vendor-main {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html body.app-dashboard[data-platform="propertydirect"] :is(.dash-header, .agent-header, .vendor-top),
+  html body[data-dashboard-role="vendor"] .vendor-top {
+    position: sticky;
+    top: 0;
+    min-height: 72px;
+    height: auto;
+    max-height: none;
+    padding: 12px 18px !important;
+    flex-wrap: wrap;
+  }
+
+  html body.app-dashboard[data-platform="propertydirect"] :is(.dash-panel, .vendor-panel),
+  html body[data-dashboard-role="vendor"] .vendor-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 18px 28px !important;
+  }
+
+  html body.app-dashboard[data-platform="propertydirect"] :is(.dash-grid, .stats-grid, .metric-grid),
+  html body[data-dashboard-role="vendor"] :is(.dash-grid, .stats-grid, .metric-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  html body.app-dashboard[data-platform="propertydirect"] :is(.form-grid, .property-form-grid),
+  html body[data-dashboard-role="vendor"] :is(.form-grid, .property-form-grid),
+  html body.app-dashboard[data-platform="propertydirect"] :is(.dash-grid, .stats-grid, .metric-grid),
+  html body[data-dashboard-role="vendor"] :is(.dash-grid, .stats-grid, .metric-grid) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body.app-dashboard[data-platform="propertydirect"] :is(.dash-header, .agent-header, .vendor-top),
+  html body[data-dashboard-role="vendor"] .vendor-top {
+    align-items: flex-start;
+  }
+
+  html body.app-dashboard[data-platform="propertydirect"] :is(.header-actions, .page-actions, .form-actions, .property-submit-row),
+  html body[data-dashboard-role="vendor"] :is(.header-actions, .page-actions, .form-actions, .property-submit-row) {
+    justify-content: flex-start;
+    width: 100%;
+  }
+}

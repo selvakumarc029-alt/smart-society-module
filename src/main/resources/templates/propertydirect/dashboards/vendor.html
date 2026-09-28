@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/shared/css/typography.css?v=20260818-readable-type-v1">
   <link rel="stylesheet" href="/shared/css/dashboard-system.css?v=20260916-universal-sidebar-v4">
   <link rel="stylesheet" href="/propertydirect/css/dashboard-responsive.css?v=20260912-global-alignment-v3">
+  <link rel="stylesheet" href="/propertydirect/css/dashboard-polish.css?v=20260928-visual-v2">
   <style>
     :root {
       --pd-navy: #0a1834;
@@ -719,6 +720,10 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
             Add Apartment
           </button>
+          <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="visits">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Site Visits
+          </button>
         </nav>
       </div>
       <div class="vendor-sidebar-footer">
@@ -852,7 +857,7 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="vendorListingsBody">
+              <tbody id="ownerListingsBody">
                 <tr>
                   <td><strong>Prestige High Line (2 BHK)</strong><br><small style="color: #64748b;">Outer Ring Road, Bengaluru</small></td>
                   <td>Apartment / Rent</td>
@@ -897,6 +902,32 @@
             </div>
           </div>
         </div>
+      <!-- VISITS PANEL -->
+      <section class="vendor-panel hidden" data-view="visits">
+        <div class="dash-card">
+          <div class="card-head">
+            <div>
+              <h2>Scheduled Site Visits</h2>
+              <p>Manage buyer and tenant site visits for your listed properties.</p>
+            </div>
+            <button type="button" class="primary small" data-property-api-action="refresh-owner-visits">Refresh Visits</button>
+          </div>
+          <div class="dashboard-table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Scheduled Time</th>
+                  <th>Visitor Name & Contact</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ownerVisitsBody"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- POST LISTING PANEL -->
@@ -908,7 +939,7 @@
               <p>Submit your property details and high-resolution photos for Super Admin verification.</p>
             </div>
           </div>
-          <form id="postApartmentForm">
+          <form id="postApartmentForm" data-property-api-form="true">
             <div class="form-grid">
               <div class="property-form-section">
                 <strong>1. Basic Property Information</strong>
@@ -942,7 +973,7 @@
               </div>
               <div>
                 <label>Listing Purpose *</label>
-                <select name="purpose" required>
+                <select name="type" required>
                   <option value="RENT">Rent</option>
                   <option value="SALE">Sale</option>
                 </select>
@@ -965,15 +996,16 @@
                 <small>Direct photos increase lead conversion by 3x</small>
               </div>
               <div class="profile-wide">
-                <div class="property-photo-upload" id="photoDropzone">
-                  <input type="file" id="propertyPhotoInput" multiple accept="image/*">
+                <div class="property-photo-upload" id="photoDropzone" onclick="document.getElementById('propertyPhotoInput')?.click()">
+                  <input type="file" id="propertyPhotoInput" name="photos" multiple accept="image/*">
                   <div class="property-photo-upload-content">
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
                     <strong>Click or Drag Photos Here to Upload</strong>
                     <span>Supports JPG, PNG, WEBP up to 10 photos total</span>
+                    <div id="propertyPhotoCount" style="margin-top: 6px; font-size: 0.85rem; font-weight: 600; color: #64748b;">No photos selected</div>
                   </div>
                 </div>
-                <div class="property-photo-preview" id="photoPreviewContainer"></div>
+                <div class="property-photo-preview" id="propertyPhotoPreview"></div>
               </div>
 
               <div class="property-form-section">
@@ -996,8 +1028,9 @@
             </div>
 
             <div class="property-submit-row">
-              <span>⚠️ Submitted listings require Super Admin approval before going live.</span>
-              <button type="submit" class="primary">Submit Property for Approval</button>
+              <span id="propertySubmissionNotice">⚠️ Submitted listings require Super Admin approval before going live.</span>
+              <span id="propertySubmissionSuccess" class="hidden" style="color: #16a34a; font-weight: 700;"></span>
+              <button type="submit" class="primary" data-property-api-action="publish-owner-listing">Submit Property for Approval</button>
             </div>
           </form>
         </div>
@@ -1176,7 +1209,7 @@
       window.location.href = 'mailto:' + email;
     }
   </script>
-  <script src="/propertydirect/js/market-workflows.js?v=20260905-vendor-only-v1"></script>
+  <script src="/propertydirect/js/market-workflows.js?v=20260928-property-workflow-v5"></script>
   <script src="/propertydirect/js/dashboard-controls.js?v=20260910-end-to-end-buttons-v1"></script>
   <script src="/shared/js/dashboard-system.js?v=20260916-universal-sidebar-v4"></script>
 </body>

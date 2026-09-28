@@ -916,29 +916,55 @@
             margin-bottom: 1.5rem !important;
             width: 100% !important;
         }
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
         body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
-        .stats.live-emergency-stats {
+        body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+        body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+        .stats.five,
+        .stats.live-emergency-stats,
+        #partnerSummaryCards,
+        #hubSummaryCards {
             display: grid !important;
             grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
             gap: 1.25rem !important;
             margin-bottom: 1.5rem !important;
             width: 100% !important;
         }
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
             body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
-            .stats.live-emergency-stats {
+            body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+            body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+            .stats.five,
+            .stats.live-emergency-stats,
+            #partnerSummaryCards,
+            #hubSummaryCards {
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
             }
         }
-        @media (max-width: 768px) {
+        @media (max-width: 991.98px) {
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
             body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
-            .stats.live-emergency-stats {
+            body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+            body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+            .stats.five,
+            .stats.live-emergency-stats,
+            #partnerSummaryCards,
+            #hubSummaryCards {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
         }
-        @media (max-width: 480px) {
+        @media (max-width: 575.98px) {
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats,
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
             body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
-            .stats.live-emergency-stats {
+            body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+            body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+            .stats,
+            .stats.five,
+            .stats.live-emergency-stats,
+            #partnerSummaryCards,
+            #hubSummaryCards {
                 grid-template-columns: 1fr !important;
             }
         }
@@ -1442,6 +1468,13 @@
         #btnToggleLegendCollapse {
             transition: all 0.15s ease !important;
             background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            height: 30px !important;
+            min-height: 30px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
         }
         #btnToggleLegendCollapse:hover {
             background: #f8fafc !important;
@@ -1564,48 +1597,91 @@
             border: 1px solid #e2e8f0 !important;
             border-radius: 12px !important;
             padding: 10px 14px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
             margin-bottom: 16px !important;
+            width: 100% !important;
         }
-        #dispatchListToolbar .input-group-text,
-        #dispatchListToolbar .form-control,
+        #dispatchListToolbar .input-group {
+            display: flex !important;
+            align-items: stretch !important;
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            overflow: hidden !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        #dispatchListToolbar .input-group:focus-within {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+        }
+        #dispatchListToolbar .input-group .input-group-text {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            background: transparent !important;
+            border: none !important;
+            color: #64748b !important;
+            padding: 0 8px 0 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 0 !important;
+            font-size: 0.84rem !important;
+        }
+        #dispatchListToolbar .input-group .form-control {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 12px 0 4px !important;
+            font-size: 0.84rem !important;
+            color: #1e293b !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        #dispatchListToolbar .input-group .form-control:focus {
+            box-shadow: none !important;
+            border: none !important;
+            outline: none !important;
+        }
         #dispatchListToolbar .form-select {
             height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
             font-size: 0.84rem !important;
-            border-color: #cbd5e1 !important;
-        }
-        #dispatchListToolbar .input-group-text {
-            background: #ffffff !important;
-            border-right: none !important;
-            color: #64748b !important;
-            border-top-left-radius: 8px !important;
-            border-bottom-left-radius: 8px !important;
-        }
-        #dispatchListToolbar .form-control {
-            border-left: none !important;
-            border-top-right-radius: 8px !important;
-            border-bottom-right-radius: 8px !important;
-            background: #ffffff !important;
-        }
-        #dispatchListToolbar .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
-            border-color: #3b82f6 !important;
-        }
-        #dispatchListToolbar .form-select {
+            border: 1px solid #cbd5e1 !important;
             border-radius: 8px !important;
             background-color: #ffffff !important;
+            color: #334155 !important;
+            font-weight: 500 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
         }
         #dispatchListToolbar .form-select:focus {
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
             border-color: #3b82f6 !important;
+            outline: none !important;
         }
         #dispatchListToolbar .count-pill {
             height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
             display: inline-flex !important;
             align-items: center !important;
             gap: 6px !important;
             padding: 0 14px !important;
             background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
+            border: 1px solid #cbd5e1 !important;
             border-radius: 8px !important;
             color: #475569 !important;
             font-size: 0.78rem !important;
@@ -1655,6 +1731,259 @@
             background: #1d4ed8 !important;
             transform: translateY(-1px) !important;
             box-shadow: 0 3px 6px rgba(37, 99, 235, 0.3) !important;
+        }
+
+        /* ==========================================================================
+           FRACTIONAL SPACING UTILITY CLASSES FOR BOOTSTRAP 5
+           Enables pixel-accurate spacing for badges, pill groups, cards, and icons
+           ========================================================================== */
+        .p-0\.5 { padding: 0.125rem !important; }
+        .p-1\.5 { padding: 0.375rem !important; }
+        .p-2\.5 { padding: 0.625rem !important; }
+        .p-3\.5 { padding: 1.25rem !important; }
+        .px-0\.5 { padding-left: 0.125rem !important; padding-right: 0.125rem !important; }
+        .px-1\.5 { padding-left: 0.375rem !important; padding-right: 0.375rem !important; }
+        .px-2\.5 { padding-left: 0.625rem !important; padding-right: 0.625rem !important; }
+        .px-3\.5 { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+        .py-0\.5 { padding-top: 0.125rem !important; padding-bottom: 0.125rem !important; }
+        .py-1\.5 { padding-top: 0.375rem !important; padding-bottom: 0.375rem !important; }
+        .py-2\.5 { padding-top: 0.625rem !important; padding-bottom: 0.625rem !important; }
+        .py-3\.5 { padding-top: 1.25rem !important; padding-bottom: 1.25rem !important; }
+        .m-0\.5 { margin: 0.125rem !important; }
+        .m-1\.5 { margin: 0.375rem !important; }
+        .m-2\.5 { margin: 0.625rem !important; }
+        .mt-0\.5 { margin-top: 0.125rem !important; }
+        .mt-1\.5 { margin-top: 0.375rem !important; }
+        .mt-2\.5 { margin-top: 0.625rem !important; }
+        .mb-0\.5 { margin-bottom: 0.125rem !important; }
+        .mb-1\.5 { margin-bottom: 0.375rem !important; }
+        .mb-2\.5 { margin-bottom: 0.625rem !important; }
+        .me-0\.5 { margin-right: 0.125rem !important; }
+        .me-1\.5 { margin-right: 0.375rem !important; }
+        .me-2\.5 { margin-right: 0.625rem !important; }
+        .ms-0\.5 { margin-left: 0.125rem !important; }
+        .ms-1\.5 { margin-left: 0.375rem !important; }
+        .ms-2\.5 { margin-left: 0.625rem !important; }
+        .gap-0\.5 { gap: 0.125rem !important; }
+        .gap-1\.5 { gap: 0.375rem !important; }
+        .gap-2\.5 { gap: 0.625rem !important; }
+        .gap-3\.5 { gap: 1.25rem !important; }
+        .g-0\.5 { --bs-gutter-x: 0.125rem; --bs-gutter-y: 0.125rem; }
+        .g-1\.5 { --bs-gutter-x: 0.375rem; --bs-gutter-y: 0.375rem; }
+        .g-2\.5 { --bs-gutter-x: 0.625rem; --bs-gutter-y: 0.625rem; }
+
+        /* ==========================================================================
+           STANDARDIZED DASHBOARD TOOLBAR CONTROLS & SEAMLESS INPUT GROUPS
+           Guarantees uniform 38px height, flawless border-radius, and seamless search
+           ========================================================================== */
+        #partnerFilterToolbar,
+        #hubFilterToolbar {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 1rem !important;
+            margin-bottom: 1.25rem !important;
+        }
+
+        #partnerFilterToolbar .input-group,
+        #hubFilterToolbar .input-group {
+            display: flex !important;
+            align-items: stretch !important;
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            overflow: hidden !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        #partnerFilterToolbar .input-group:focus-within,
+        #hubFilterToolbar .input-group:focus-within {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+        }
+        #partnerFilterToolbar .input-group .input-group-text,
+        #hubFilterToolbar .input-group .input-group-text {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            background: transparent !important;
+            border: none !important;
+            color: #64748b !important;
+            padding: 0 8px 0 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 0 !important;
+            font-size: 0.84rem !important;
+        }
+        #partnerFilterToolbar .input-group .form-control,
+        #hubFilterToolbar .input-group .form-control {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 12px 0 4px !important;
+            font-size: 0.84rem !important;
+            color: #1e293b !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        #partnerFilterToolbar .form-select,
+        #hubFilterToolbar .form-select {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            font-size: 0.84rem !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            background-color: #ffffff !important;
+            color: #334155 !important;
+            font-weight: 500 !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        #partnerFilterToolbar .form-select:focus,
+        #hubFilterToolbar .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+            border-color: #3b82f6 !important;
+            outline: none !important;
+        }
+
+        /* Resident Service Requests Search Pill & Filter Group */
+        #adminResidentRequestsSection .input-group {
+            display: flex !important;
+            align-items: stretch !important;
+            background: #f8fafc !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 999px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            overflow: hidden !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease !important;
+        }
+        #adminResidentRequestsSection .input-group:focus-within {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+            background: #ffffff !important;
+        }
+        #adminResidentRequestsSection .input-group .input-group-text {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            background: transparent !important;
+            border: none !important;
+            color: #64748b !important;
+            padding: 0 8px 0 14px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 0 !important;
+            font-size: 0.84rem !important;
+        }
+        #adminResidentRequestsSection .input-group .form-control {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 14px 0 4px !important;
+            font-size: 0.84rem !important;
+            color: #1e293b !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        #adminResidentFilterGroup {
+            height: 38px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+        #adminResidentFilterGroup .btn {
+            height: 30px !important;
+            font-size: 0.80rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        /* Manager Operations Live Queue Filters */
+        #maintenance-manager-operations-container .card-header .row.g-2 {
+            align-items: flex-end !important;
+        }
+        #maintenance-manager-operations-container .card-header .row.g-2 label {
+            display: block !important;
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.04em !important;
+            color: #64748b !important;
+            margin-bottom: 5px !important;
+            white-space: nowrap !important;
+        }
+        #maintenance-manager-operations-container .card-header .row.g-2 .form-select,
+        #maintenance-manager-operations-container .card-header .row.g-2 .form-control {
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            font-size: 0.84rem !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            background-color: #ffffff !important;
+            color: #334155 !important;
+            font-weight: 500 !important;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        #maintenance-manager-operations-container .card-header .row.g-2 .form-select:focus,
+        #maintenance-manager-operations-container .card-header .row.g-2 .form-control:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+            outline: none !important;
+        }
+
+        /* Floating label inputs perfection */
+        body.dashboard-body .dashboard-container [data-view] .form-floating > .form-control,
+        body.dashboard-body .dashboard-container [data-view] .form-floating > .form-select {
+            height: 58px !important;
+            min-height: 58px !important;
+            padding-top: 1.625rem !important;
+            padding-bottom: 0.625rem !important;
+            border-radius: 12px !important;
+            font-size: 0.92rem !important;
+        }
+        body.dashboard-body .dashboard-container [data-view] .form-floating > textarea.form-control {
+            min-height: 104px !important;
+            height: auto !important;
+        }
+        body.dashboard-body .dashboard-container [data-view] .form-floating > label {
+            padding: 1rem 0.75rem !important;
+            font-size: 0.85rem !important;
+            color: #64748b !important;
+        }
+
+        /* Metric KPI Card Generous Padding & Icon Alignment */
+        .metric-kpi-card {
+            padding: 1.25rem 1.4rem !important;
+        }
+
+        /* Worker attendance action buttons */
+        #workerAttendanceControlBar .btn {
+            height: 38px !important;
+            min-height: 38px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            font-size: 0.82rem !important;
         }
 
         /* Live Emergency Feed Streamlined Table Styling & Sticky Actions */
@@ -1833,7 +2162,8 @@
             border-color: rgba(255, 255, 255, 0.45) !important;
         }
 
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats {
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats,
+        .stats {
             display: grid !important;
             grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
             gap: 1.25rem !important;
@@ -1841,25 +2171,77 @@
             align-items: stretch !important;
             margin-bottom: 1.75rem !important;
         }
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
+        body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+        body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+        .stats.five,
+        .stats.live-emergency-stats,
+        #partnerSummaryCards,
+        #hubSummaryCards {
+            display: grid !important;
+            grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            gap: 1.25rem !important;
+            width: 100% !important;
+            align-items: stretch !important;
+            margin-bottom: 1.75rem !important;
+        }
+        @media (max-width: 1400px) {
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
+            body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+            body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+            .stats.five,
+            .stats.live-emergency-stats,
+            #partnerSummaryCards,
+            #hubSummaryCards {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            }
+        }
         @media (max-width: 1199.98px) {
-            body.dashboard-body[data-dashboard-role="maintenance"] .stats {
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats:not(.five):not(.live-emergency-stats),
+            .stats:not(.five):not(.live-emergency-stats) {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
+        @media (max-width: 991.98px) {
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
+            body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+            body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+            .stats.five,
+            .stats.live-emergency-stats,
+            #partnerSummaryCards,
+            #hubSummaryCards {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
         }
         @media (max-width: 575.98px) {
-            body.dashboard-body[data-dashboard-role="maintenance"] .stats {
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats,
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.five,
+            body.dashboard-body[data-dashboard-role="maintenance"] .stats.live-emergency-stats,
+            body.dashboard-body[data-dashboard-role="maintenance"] #partnerSummaryCards,
+            body.dashboard-body[data-dashboard-role="maintenance"] #hubSummaryCards,
+            .stats,
+            .stats.five,
+            .stats.live-emergency-stats,
+            #partnerSummaryCards,
+            #hubSummaryCards {
                 grid-template-columns: 1fr !important;
             }
         }
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats > * {
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats > *,
+        .stats > * {
             min-width: 0 !important;
             max-width: 100% !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .stats .card,
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats article {
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats article,
+        .stats .card,
+        .stats article {
             min-height: 112px !important;
             height: 100% !important;
-            padding: 1.35rem 1.5rem !important;
+            padding: 1.25rem 1.4rem !important;
             overflow: hidden !important;
             background: #ffffff !important;
             border: 1px solid #e2e8f0 !important;
@@ -1869,18 +2251,26 @@
             display: flex !important;
             flex-direction: column !important;
             justify-content: center !important;
+            box-sizing: border-box !important;
         }
         body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:hover,
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats article:hover {
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats article:hover,
+        .stats .card:hover,
+        .stats article:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
             border-color: #cbd5e1 !important;
         }
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(1) { border-top: 4px solid #2563eb !important; }
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(2) { border-top: 4px solid #f59e0b !important; }
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(3) { border-top: 4px solid #16a34a !important; }
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(4) { border-top: 4px solid #06b6d4 !important; }
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats span {
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(1),
+        .stats .card:nth-child(1) { border-top: 4px solid #2563eb !important; }
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(2),
+        .stats .card:nth-child(2) { border-top: 4px solid #f59e0b !important; }
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(3),
+        .stats .card:nth-child(3) { border-top: 4px solid #16a34a !important; }
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats .card:nth-child(4),
+        .stats .card:nth-child(4) { border-top: 4px solid #06b6d4 !important; }
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats span,
+        .stats span {
             font-size: 0.74rem !important;
             font-weight: 700 !important;
             color: #64748b !important;
@@ -1888,7 +2278,8 @@
             text-transform: uppercase !important;
             margin-bottom: 0.4rem !important;
         }
-        body.dashboard-body[data-dashboard-role="maintenance"] .stats strong {
+        body.dashboard-body[data-dashboard-role="maintenance"] .stats strong,
+        .stats strong {
             font-size: 1.85rem !important;
             font-weight: 800 !important;
             line-height: 1.15 !important;
@@ -3666,7 +4057,7 @@
                     <div class="card shadow-sm border-0 rounded-4 mb-4">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
                             <!-- Top Header: Title, Active Badge, View Switcher & Refresh Button -->
-                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-3">
                                 <div>
                                     <div class="d-flex align-items-center gap-2">
                                         <h4 class="fw-bold mb-0" id="liveEmergencyFeedTitle"><i class="fa-solid fa-tower-broadcast text-primary me-1"></i>Live Emergency Feed</h4>
@@ -3674,7 +4065,7 @@
                                     </div>
                                     <p class="text-muted mb-0 small mt-1">Live dispatch pipeline, partner assignments, geofence radius tracking, and SLA urgency monitoring.</p>
                                 </div>
-                                <div class="d-flex align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
                                     <!-- View Switcher: List/Grid View vs Map View -->
                                     <div class="btn-group btn-group-sm rounded-pill shadow-xs" role="group" id="dispatchViewSwitcher">
                                         <button type="button" class="btn btn-sm btn-primary text-white" id="btnDispatchViewList" onclick="window.switchDispatchLayout('list')">
@@ -3692,7 +4083,7 @@
                             </div>
 
                             <!-- Operations Reference Guide Strip & Accordion Toggle -->
-                            <div class="d-flex flex-wrap align-items-center justify-content-between p-2.5 px-3 mb-2.5 rounded-3 border bg-light bg-opacity-50" style="border-color: #e2e8f0 !important;">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between py-2 px-3 mb-3 rounded-3 border bg-light bg-opacity-50" style="border-color: #e2e8f0 !important; min-height: 44px;">
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle" style="width: 24px; height: 24px;">
                                         <i class="fa-solid fa-circle-info" style="font-size: 0.76rem;"></i>
@@ -3758,15 +4149,15 @@
                             </div>
 
                             <!-- Operational Filter & Search Toolbar (Precision Grid Alignment) -->
-                            <div class="row g-2.5 align-items-center" id="dispatchListToolbar">
+                            <div class="row g-2 align-items-center" id="dispatchListToolbar">
                                 <div class="col-md-5">
-                                    <div class="input-group input-group-sm">
+                                    <div class="input-group">
                                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
                                         <input type="text" class="form-control" id="liveBookingsSearchInput" placeholder="Search Booking ID, Customer, Area, Partner..." oninput="window.filterDispatchTable()">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <select class="form-select form-select-sm" id="liveBookingsStatusFilter" onchange="window.filterDispatchTable()">
+                                    <select class="form-select" id="liveBookingsStatusFilter" onchange="window.filterDispatchTable()">
                                         <option value="ALL">All Operational Statuses</option>
                                         <option value="WITHIN_SLA">Within SLA</option>
                                         <option value="APPROACHING_BREACH">Approaching SLA Breach</option>
@@ -3912,7 +4303,7 @@
                     </div>
 
                     <!-- Summary Metric Cards (Total Partners, On Duty, Off Duty, Idle, Busy) -->
-                    <div class="stats mb-4" id="partnerSummaryCards">
+                    <div class="stats five live-emergency-stats mb-4" id="partnerSummaryCards">
                         <article class="card p-4 text-start h-100 shadow-sm border-0">
                             <div class="d-flex align-items-center justify-content-between w-100 mb-1">
                                 <span class="text-muted small fw-bold text-uppercase">Total Partners</span>
@@ -4104,7 +4495,7 @@
                     </div>
 
                     <!-- Summary Metric Cards (Total Hubs, Active Hubs, Inactive Hubs, Mapped Partners, Avg Radius) -->
-                    <div class="stats mb-4" id="hubSummaryCards">
+                    <div class="stats five live-emergency-stats mb-4" id="hubSummaryCards">
                         <article class="card p-4 text-start h-100 shadow-sm border-0">
                             <div class="d-flex align-items-center justify-content-between w-100 mb-1">
                                 <span class="text-muted small fw-bold text-uppercase">Total Hubs</span>
@@ -4233,7 +4624,7 @@
 
                 <!-- Maintenance Worker Management Panel -->
                 <section class="d-none animate__animated animate__fadeIn" data-view="workers" th:if="${maintenanceSuperAdmin}">
-                    <div class="row g-3 mb-4 stats">
+                    <div class="row g-3 mb-4">
                         <div class="col-6 col-lg-3">
                             <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100">
                                 <span class="small text-muted text-uppercase fw-bold">Maintenance workers</span>
@@ -4246,6 +4637,20 @@
                                 <span class="small text-muted text-uppercase fw-bold">Dashboard access</span>
                                 <strong class="d-block fs-5 text-success mt-2">Enabled</strong>
                                 <span class="small text-muted">Routes to /dashboards/maintenance</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100">
+                                <span class="small text-muted text-uppercase fw-bold">Shift coverage</span>
+                                <strong class="d-block fs-5 text-dark mt-2">24/7 Rotational</strong>
+                                <span class="small text-muted">Morning, General, Night</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100">
+                                <span class="small text-muted text-uppercase fw-bold">Specialist trades</span>
+                                <strong class="d-block fs-5 text-info mt-2">6 Active Skills</strong>
+                                <span class="small text-muted">Plumbing, Electrical &amp; more</span>
                             </div>
                         </div>
                     </div>
@@ -4449,7 +4854,7 @@
                     </style>
 
                     <!-- Top Summary Stats Row -->
-                    <div class="row g-4 mb-4 stats">
+                    <div class="stats mb-4">
                         <div class="col-xl-3 col-md-6">
                             <article class="card">
                                 <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">

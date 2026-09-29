@@ -7,7 +7,7 @@
 body.dashboard-body,
 body.app-dashboard {
     --dashboard-sidebar-width: 300px !important;
-    --dashboard-topbar-height: 82px !important;
+    --dashboard-topbar-height: 72px !important;
     --dashboard-content-gutter: 28px !important;
 }
 
@@ -114,7 +114,7 @@ body.app-dashboard {
         overflow-x: hidden !important;
         overflow-y: auto !important;
         overscroll-behavior-y: contain !important;
-        scrollbar-width: thin !important;
+        scrollbar-width: none !important;
         scrollbar-color: rgba(255, 255, 255, 0.35) transparent !important;
         box-sizing: border-box !important;
     }
@@ -273,7 +273,7 @@ body.dashboard-body[data-dashboard-role="maintenance"] .sidebar-nav {
     overflow-x: hidden !important;
     overflow-y: auto !important;
     overscroll-behavior-y: contain !important;
-    scrollbar-width: thin !important;
+    scrollbar-width: none !important;
     scrollbar-color: rgba(255, 255, 255, 0.35) transparent !important;
     padding: 14px 16px 12px !important;
     gap: 5px !important;
@@ -1542,3 +1542,32 @@ body.app-dashboard :is(.dash-main, .vendor-main, .agent-main, .main-content) {
 
 
 
+
+/* -------------------------------------------------------------
+   HIDE SIDEBAR VERTICAL SCROLLBAR LINE COMPLETELY
+   Keeps scrollability while removing vertical scrollbar bar & arrows
+   ------------------------------------------------------------- */
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar),
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav, .sidebar-body),
+html body.app-dashboard .sidebar-nav {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar)::-webkit-scrollbar,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav, .sidebar-body)::-webkit-scrollbar,
+html body.app-dashboard .sidebar-nav::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+    background: transparent !important;
+}
+
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-thumb,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-track,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}

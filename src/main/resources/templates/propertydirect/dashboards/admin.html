@@ -320,9 +320,9 @@
             bottom: 0 !important;
             height: 100vh !important;
             max-height: 100vh !important;
-            width: 275px !important;
-            min-width: 275px !important;
-            max-width: 275px !important;
+            width: 280px !important;
+            min-width: 280px !important;
+            max-width: 280px !important;
             margin: 0 !important;
             padding: 16px 14px 115px 14px !important;
             border-radius: 0 !important;
@@ -418,8 +418,9 @@
         .sidebar-nav button:hover {
             color: #ffffff !important;
             background: rgba(255, 255, 255, 0.07) !important;
+        }
 
-            .modal-card textarea {
+        .modal-card textarea {
                 min-height: 85px !important;
                 resize: vertical !important;
             }
@@ -580,9 +581,9 @@
                 bottom: 0 !important;
                 height: 100vh !important;
                 max-height: 100vh !important;
-                width: 275px !important;
-                min-width: 275px !important;
-                max-width: 275px !important;
+                width: 280px !important;
+                min-width: 280px !important;
+                max-width: 280px !important;
                 margin: 0 !important;
                 padding: 16px 14px 115px 14px !important;
                 border-radius: 0 !important;
@@ -791,13 +792,13 @@
                 color: #ef4444 !important;
             }
 
-            /* MAIN DASHBOARD CANVAS WITH UNLOCKED SCROLLING */
+            /* MAIN DASHBOARD CANVAS WITH ZERO GAPS */
             main.dash-main,
             .dash-main {
-                margin: 0 0 0 275px !important;
-                padding: 20px 24px !important;
-                width: calc(100% - 275px) !important;
-                max-width: calc(100% - 275px) !important;
+                margin: 0 0 0 280px !important;
+                padding: 0 !important;
+                width: calc(100% - 280px) !important;
+                max-width: calc(100% - 280px) !important;
                 min-height: 100vh !important;
                 height: auto !important;
                 box-sizing: border-box !important;
@@ -806,22 +807,32 @@
                 overflow-y: visible !important;
             }
 
-            /* Top Header Bar */
+            /* Top Header Bar - Zero Margin, Flush at Top:0, Sticky Scroll */
             .dash-header {
-                height: 72px !important;
-                min-height: 72px !important;
-                max-height: 72px !important;
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 1020 !important;
+                height: 80px !important;
+                min-height: 80px !important;
+                max-height: 80px !important;
                 background: #ffffff !important;
                 border: none !important;
                 border-bottom: 1px solid #e2e8f0 !important;
                 border-radius: 0 !important;
                 padding: 0 32px !important;
-                box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02) !important;
-                margin: 0 0 28px 0 !important;
+                box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04) !important;
+                margin: 0 !important;
                 display: flex !important;
                 justify-content: space-between !important;
                 align-items: center !important;
                 box-sizing: border-box !important;
+                width: 100% !important;
+            }
+
+            .dash-header::before,
+            .dash-header::after {
+                display: none !important;
+                content: none !important;
             }
 
             .dash-header .eyebrow {
@@ -874,6 +885,14 @@
                 grid-template-columns: repeat(4, 1fr) !important;
                 gap: 22px !important;
                 margin-bottom: 28px !important;
+            }
+
+            .dash-grid.three,
+            .dash-grid[data-cols="3"],
+            [data-view="leads"] .dash-grid.three {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 16px !important;
+                width: 100% !important;
             }
 
             .dash-grid article {
@@ -1319,6 +1338,189 @@
                 overflow-x: hidden !important;
                 overflow-y: visible !important;
             }
+    
+        /* Hide redundant injected header meta (Live workspace, duplicate SA) */
+        .dashboard-header-meta,
+        .dash-header .dashboard-header-meta,
+        .dashboard-live-status {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        /* Prevent overlapping menu button on sidebar */
+        .pd-sidebar-menu,
+        .pd-sidebar-reopen,
+        .dashboard-sidebar-open {
+            display: none !important;
+        }
+
+        @media (max-width: 900px) {
+            body.sidebar-open .pd-sidebar-menu,
+            body.dashboard-menu-open .pd-sidebar-menu {
+                display: none !important;
+            }
+            body:not(.sidebar-open):not(.dashboard-menu-open).sidebar-collapsed .pd-sidebar-menu {
+                display: inline-flex !important;
+                position: fixed !important;
+                top: 14px !important;
+                left: 14px !important;
+                z-index: 1010 !important;
+            }
+        }
+
+        /* Ensure Leads container and tables scroll horizontally with zero button clipping */
+        .dashboard-table-scroll,
+        #agentLeadsContainer {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            display: block !important;
+            box-sizing: border-box !important;
+        }
+
+        #agentLeadsContainer table {
+            min-width: 960px !important;
+            width: 100% !important;
+        }
+
+        #agentLeadsContainer td:last-child {
+            min-width: 270px !important;
+            width: 270px !important;
+            white-space: nowrap !important;
+            text-align: right !important;
+        }
+
+    
+        /* Seamless Horizontal Divider Baseline Alignment (80px) */
+        aside.dash-sidebar,
+        .dash-sidebar {
+            padding-top: 0 !important;
+        }
+
+        .dash-brand {
+            height: 80px !important;
+            min-height: 80px !important;
+            max-height: 80px !important;
+            padding: 0 20px !important;
+            margin: 0 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-sizing: border-box !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        main.dash-main,
+        .dash-main {
+            padding-top: 0 !important;
+        }
+
+        .dash-header {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1020 !important;
+            height: 80px !important;
+            min-height: 80px !important;
+            max-height: 80px !important;
+            margin: 0 !important;
+            padding: 0 32px !important;
+            background: #ffffff !important;
+            border: 0 !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04) !important;
+            box-sizing: border-box !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            flex-wrap: nowrap !important;
+            width: 100% !important;
+        }
+
+    
+        /* Zero gap guarantees between page, header, and sidebar */
+        html body.app-dashboard[data-platform="propertydirect"] {
+            --dashboard-sidebar-width: 280px !important;
+            --dashboard-topbar-height: 80px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] aside.dash-sidebar,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar {
+            width: 280px !important;
+            min-width: 280px !important;
+            max-width: 280px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            left: 0 !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
+            height: 80px !important;
+            min-height: 80px !important;
+            max-height: 80px !important;
+            margin: 0 !important;
+            padding: 0 20px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-sizing: border-box !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] main.dash-main,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-main {
+            margin: 0 0 0 280px !important;
+            width: calc(100% - 280px) !important;
+            max-width: calc(100% - 280px) !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header {
+            position: sticky !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 1020 !important;
+            height: 80px !important;
+            min-height: 80px !important;
+            max-height: 80px !important;
+            margin: 0 !important;
+            padding: 0 32px !important;
+            background: #ffffff !important;
+            border: 0 !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04) !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header::before,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-panel {
+            padding: 24px 32px 48px 32px !important;
+            margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        @media (max-width: 900px) {
+            html body.app-dashboard[data-platform="propertydirect"] main.dash-main,
+            html body.app-dashboard[data-platform="propertydirect"] .dash-main {
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+            }
+            html body.app-dashboard[data-platform="propertydirect"] .dash-panel {
+                padding: 18px 20px 36px 20px !important;
+            }
+        }
+
     </style>
     <link rel="stylesheet" href="/shared/css/dashboard-flat.css?v=20260831-blue-headings-v1">
     <link rel="stylesheet" href="/propertydirect/css/smartsociety-parity.css?v=20260903-header-baseline-v11">
@@ -1327,6 +1529,400 @@
     <link rel="stylesheet" href="/propertydirect/css/dashboard-responsive.css?v=20260912-global-alignment-v3">
     <link rel="stylesheet" href="/propertydirect/css/dashboard-polish.css?v=20260928-visual-v2">
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
+    <!-- Smart Society Design Alignment: Gap Reduction, Zero Unwanted Space & Sidebar Dots Fix -->
+    <style>
+        
+/* -------------------------------------------------------------
+   HIDE SIDEBAR VERTICAL SCROLLBAR LINE COMPLETELY
+   Keeps scrollability while removing vertical scrollbar bar & arrows
+   ------------------------------------------------------------- */
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar),
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav, .sidebar-body),
+html body.app-dashboard .sidebar-nav {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar)::-webkit-scrollbar,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav, .sidebar-body)::-webkit-scrollbar,
+html body.app-dashboard .sidebar-nav::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+    background: transparent !important;
+}
+
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-thumb,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-track,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}
+
+        /* 1. Remove unwanted pseudo-element dots/circles from sidebar buttons */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button::before,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        /* 2. Sleek, unified Smart Society sidebar button layout */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button {
+            display: flex !important;
+            align-items: center !important;
+            grid-template-columns: none !important;
+            gap: 10px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            padding: 8px 12px !important;
+            margin: 0 0 2px 0 !important;
+            font-size: 0.84rem !important;
+            font-weight: 700 !important;
+            border-radius: 10px !important;
+            text-align: left !important;
+            color: rgba(255, 255, 255, 0.78) !important;
+            transition: all 0.18s ease !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08) !important;
+            color: #ffffff !important;
+            transform: none !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button.active {
+            background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+            border: none !important;
+            transform: none !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button svg {
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            opacity: 0.9 !important;
+        }
+
+        /* 3. Ensure sidebar scrolling & height fits all 12 navigation items without large bottom gap */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar {
+            height: 100vh !important;
+            height: 100dvh !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 0 10px 10px 10px !important;
+            box-sizing: border-box !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+            height: auto !important;
+            max-height: none !important;
+            overflow-y: auto !important;
+            scrollbar-width: none !important;
+            padding: 10px 4px 6px 0 !important;
+            margin-bottom: 0 !important;
+            gap: 2px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-user-card {
+            flex-shrink: 0 !important;
+            position: relative !important;
+            bottom: auto !important;
+            left: auto !important;
+            right: auto !important;
+            margin-top: auto !important;
+            padding: 8px 12px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+                /* Exact Seamless Horizontal Baseline Alignment (72px) between Brand & Header */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .dash-brand,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
+            height: 72px !important;
+            min-height: 72px !important;
+            max-height: 72px !important;
+            box-sizing: border-box !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            margin: 0 !important;
+            padding: 0 16px !important;
+            display: flex !important;
+            align-items: center !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] main.dash-main > .dash-header,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header {
+            height: 72px !important;
+            min-height: 72px !important;
+            max-height: 72px !important;
+            box-sizing: border-box !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            margin: 0 !important;
+            padding: 0 28px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+        }
+
+        /* 4. Desktop Header: Title on Left, Actions on Right, No Collisions, Zero Margins */
+        @media (min-width: 901px) {
+            html body.app-dashboard[data-platform="propertydirect"] .dash-header .dashboard-menu-toggle,
+            html body.app-dashboard[data-platform="propertydirect"] .dashboard-menu-toggle {
+                display: none !important;
+            }
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header {
+            min-height: 70px !important;
+            height: 70px !important;
+            max-height: 70px !important;
+            padding: 0 28px !important;
+            margin: 0 !important;
+            background: #ffffff !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
+            gap: 16px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header > div:first-of-type {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+            text-align: left !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header .header-actions {
+            flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header h1,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header #panelTitle {
+            font-size: 1.35rem !important;
+            font-weight: 800 !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            margin: 2px 0 0 0 !important;
+            line-height: 1.2 !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header .propertydirect-section-eyebrow {
+            font-size: 0.72rem !important;
+            letter-spacing: 0.08em !important;
+            font-weight: 800 !important;
+            white-space: nowrap !important;
+            color: #64748b !important;
+            margin: 0 !important;
+        }
+
+        /* 5. Eliminate unwanted vertical gaps across all dashboard panels */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-panel {
+            padding: 16px 28px 24px 28px !important;
+            margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-card {
+            margin: 0 0 16px 0 !important;
+            border-radius: 14px !important;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
+        }
+
+        /* 6. Clean Table Card (No nested border gaps or double padding) */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-card:has(.dashboard-table-scroll),
+        html body.app-dashboard[data-platform="propertydirect"] #subtabEnquiriesView,
+        html body.app-dashboard[data-platform="propertydirect"] #subtabVisitsView {
+            padding: 0 !important;
+            overflow: hidden !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table {
+            margin: 0 !important;
+            border-collapse: collapse !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table th {
+            padding: 10px 14px !important;
+            font-size: 0.74rem !important;
+            font-weight: 800 !important;
+            white-space: nowrap !important;
+            background: #f8fafc !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td {
+            padding: 11px 14px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td[colspan] {
+            padding: 20px 14px !important;
+            font-size: 0.85rem !important;
+        }
+
+        /* 7. Tight panel top row (no wrap collapse) */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-panel > div:first-child {
+            margin-bottom: 12px !important;
+        }
+    </style>
+    
+        <style>\n/* Detailed Metadata Buttons and Interactive Modal */
+        .btn-meta-category:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.4) !important;
+        }
+        .btn-meta-amenity:hover {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 22px rgba(5, 150, 105, 0.4) !important;
+        }
+        .btn-meta-location:hover {
+            background: linear-gradient(135deg, #c2410c 0%, #9a3412 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 22px rgba(234, 88, 12, 0.4) !important;
+        }
+        .btn-meta-action:active {
+            transform: translateY(0) scale(0.98) !important;
+        }
+
+        .meta-detail-grid-item {
+            padding: 14px 18px !important;
+            border-radius: 14px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+            transition: all 0.2s ease !important;
+        }
+        .meta-detail-grid-item:hover {
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07) !important;
+            transform: translateY(-1px) !important;
+        }
+        .meta-del-btn {
+            background: transparent !important;
+            border: none !important;
+            color: #94a3b8 !important;
+            cursor: pointer !important;
+            padding: 4px 6px !important;
+            border-radius: 6px !important;
+            font-size: 0.85rem !important;
+            line-height: 1 !important;
+            transition: all 0.15s ease !important;
+        }
+        .meta-del-btn:hover {
+            background: #fee2e2 !important;
+            color: #ef4444 !important;
+        }
+
+\n</style>\n<style>
+        /* Ensure Metadata Detail Modal activates with backdrop blur */
+        #metadataDetailModal.show,
+        #metadataDetailModal.active {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            pointer-events: auto !important;
+            visibility: visible !important;
+            z-index: 999999 !important;
+            position: fixed !important;
+            inset: 0 !important;
+            background: rgba(15, 23, 42, 0.65) !important;
+            backdrop-filter: blur(6px) !important;
+        }
+        #metadataDetailModal:not(.show):not(.active),
+        #metadataDetailModal.hidden {
+            display: none !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+            z-index: -9999 !important;
+        }
+        #metadataDetailModal .modal-card {
+            text-align: left !important;
+        }
+        #metadataDetailModal form,
+        #metaDynamicFields {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 16px !important;
+            width: 100% !important;
+            text-align: left !important;
+        }
+        #metaDynamicFields > div {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            width: 100% !important;
+            text-align: left !important;
+        }
+        #metaDynamicFields label {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            text-align: left !important;
+            gap: 4px !important;
+            margin-bottom: 6px !important;
+            font-size: 0.82rem !important;
+            font-weight: 750 !important;
+            color: #334155 !important;
+            width: 100% !important;
+        }
+        #metaDynamicFields input:not([type="checkbox"]),
+        #metaDynamicFields textarea,
+        #metaDynamicFields select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        #metadataDetailModal input[type="checkbox"] {
+            width: 20px !important;
+            min-width: 20px !important;
+            max-width: 20px !important;
+            height: 20px !important;
+            min-height: 20px !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+            cursor: pointer !important;
+        }
+</style>
+<style>
+        #metadataDetailForm,
+        #metaDynamicFields,
+        #metadataDetailForm div,
+        #metadataDetailForm label {
+            text-align: left !important;
+            justify-content: flex-start !important;
+            align-items: center !important;
+        }
+        #metadataDetailModal label {
+            display: flex !important;
+            justify-content: flex-start !important;
+            text-align: left !important;
+            gap: 4px !important;
+            width: 100% !important;
+        }
+</style>
 </head>
 
 <body class="app-dashboard" data-platform="propertydirect" data-dashboard-role="admin">
@@ -1335,17 +1931,59 @@
             <span class="sidebar-home-mark me-2" aria-hidden="true"><svg viewBox="0 0 32 32" width="26" height="26" fill="#3b82f6"><path d="M4 14.5 16 4l12 10.5V28h-8v-8h-8v8H4Z" /><path d="M9.5 9V5.5h4" /></svg></span>
             <h4 class="mb-0 fw-bold text-white fs-5">Property<span style="color: #3b82f6 !important;">Direct</span></h4>
         </a>
-        <nav class="sidebar-nav" aria-label="Agent broker sections">
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" class="active" data-panel="overview">Dashboard</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="my-properties">My Properties</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="add-property">Add Property</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="edit-property">Edit Property</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="enquiries">Property Enquiries</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="leads">Leads</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="tours">Scheduled Visits</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="messages">Messages</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="profile">Profile</button>
-            <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="reports">Reports</button>
+        <nav class="sidebar-nav" aria-label="Platform Admin sections">
+            <button class="active" type="button" data-panel="overview" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('overview');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Overview & Metrics
+            </button>
+            <button type="button" data-panel="users" style="position:relative;" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('users');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                Customer Directory
+                <span id="sidebarUserCountBadge" style="margin-left:auto; background:rgba(59,130,246,0.25); color:#60a5fa; font-size:0.72rem; padding:2px 7px; border-radius:10px; font-weight:800;">0</span>
+            </button>
+            <button type="button" data-panel="verifications" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('verifications');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Owner & Builder Verification
+                <span id="sidebarPendingAppsBadge" style="margin-left:auto; background:rgba(245,158,11,0.25); color:#fbbf24; font-size:0.72rem; padding:2px 7px; border-radius:10px; font-weight:800; display:none;">0</span>
+            </button>
+            <button type="button" data-panel="projects" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('projects');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="22" x2="9" y2="22.01"></line><line x1="15" y1="22" x2="15" y2="22.01"></line><line x1="9" y1="6" x2="9" y2="6.01"></line><line x1="15" y1="6" x2="15" y2="6.01"></line><line x1="9" y1="10" x2="9" y2="10.01"></line><line x1="15" y1="10" x2="15" y2="10.01"></line><line x1="9" y1="14" x2="9" y2="14.01"></line><line x1="15" y1="14" x2="15" y2="14.01"></line><line x1="9" y1="18" x2="9" y2="18.01"></line><line x1="15" y1="18" x2="15" y2="18.01"></line></svg>
+                Builder Projects & Units
+            </button>
+            <button type="button" data-panel="my-properties" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('my-properties');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Property Inventory & Queue
+                <span id="sidebarPendingListingsBadge" style="margin-left:auto; background:rgba(239,68,68,0.25); color:#f87171; font-size:0.72rem; padding:2px 7px; border-radius:10px; font-weight:800; display:none;">0</span>
+            </button>
+            <button type="button" data-panel="enquiries" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('enquiries');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                Enquiries & Visit Tracking
+            </button>
+            <button type="button" data-panel="reports" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('reports');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Reports & Complaints
+                <span id="sidebarOpenReportsBadge" style="margin-left:auto; background:rgba(239,68,68,0.25); color:#f87171; font-size:0.72rem; padding:2px 7px; border-radius:10px; font-weight:800; display:none;">0</span>
+            </button>
+            <button type="button" data-panel="metadata" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('metadata');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                Categories & Locations
+            </button>
+            <button type="button" data-panel="content" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('content');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Featured & Content
+            </button>
+            <button type="button" data-panel="audit" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('audit');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Notifications & Audit
+            </button>
+            <button type="button" data-panel="add-property" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('add-property');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Post Listing on Behalf
+            </button>
+            <button type="button" data-panel="profile" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('profile');}return false;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Admin Profile
+            </button>
         </nav>
         <div class="sidebar-user-card">
             <a class="logout" href="/dashboards/logout?platform=propertydirect" title="Logout">
@@ -1361,86 +1999,428 @@
     <main class="dash-main">
         <header class="dash-header">
             <div>
-                <p class="propertydirect-section-eyebrow">AGENT & BROKER DASHBOARD</p>
+                <p class="propertydirect-section-eyebrow">PROPERTYDIRECT ADMIN OPERATIONS</p>
                 <h1 id="panelTitle">Dashboard</h1>
             </div>
             <div class="header-actions" style="display: flex; align-items: center; gap: 12px;">
-                <span class="status active" style="padding: 6px 14px; border-radius: 999px; font-weight: 800; font-size: 0.78rem; background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; white-space: nowrap;">✓ Verified Broker</span>
-                <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" class="primary" data-panel="add-property">＋ Add Property</button>
-                <div class="user-avatar-badge" title="Click to open Agent Profile" data-panel="profile"
-                    style="cursor: pointer; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(37,99,235,0.25);">
-                    SA</div>
+                <span class="status active" style="padding: 6px 14px; border-radius: 999px; font-weight: 800; font-size: 0.78rem; background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; white-space: nowrap;">✓ Platform Admin</span>
+                <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel('users'); return false; }" class="primary" data-panel="users" style="display:inline-flex; align-items:center; gap:8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    Manage Users
+                </button>
+                <div class="user-avatar-badge" title="Platform Administrator Profile" data-panel="profile"
+                    style="cursor: pointer; background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(37,99,235,0.25);">
+                    PA</div>
             </div>
         </header>
 
         <section class="dash-panel" data-view="overview">
-            <div class="dash-grid">
-                <article><span>Active Properties</span><strong data-summary-key="activeListings">0</strong></article>
-                <article><span>Total Leads</span><strong data-summary-key="totalEnquiries">0</strong></article>
-                <article><span>Scheduled Visits</span><strong data-summary-key="scheduledVisits">0</strong></article>
-                <article><span>Contact Messages</span><strong data-summary-key="totalEnquiries">0</strong></article>
+            <div style="margin-bottom:20px;">
+                <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Platform Operations Overview</h2>
+                <p style="font-size:0.88rem; color:#64748b; margin:0;">Real-time metrics and system activity across customers, properties, verifications, enquiries, and moderation queues. <em>Click any summary card to view relevant filtered records.</em></p>
             </div>
-            <div class="dash-card">
-                <div class="card-head">
+
+            <!-- Summary Cards Grid (Clickable) -->
+            <div class="dash-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important; gap:16px; margin-bottom:24px;">
+                <!-- Pending Approvals Card -->
+                <article onclick="switchTabAndFilter('my-properties', 'PENDING_APPROVAL')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#fffbeb; border:1px solid #fde68a; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(217,119,6,0.15)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#b45309; text-transform:uppercase; letter-spacing:0.06em;">Pending Approvals</span>
+                        <span style="font-size:0.9rem;">⏳</span>
+                    </div>
+                    <strong id="overviewPendingApprovals" style="font-size:1.8rem; font-weight:800; color:#92400e; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#b45309; font-size:0.76rem; font-weight:700;">Submissions awaiting review →</small>
+                </article>
+
+                <!-- Posting Approvals Card -->
+                <article onclick="switchTabAndFilter('verifications', 'PENDING')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Owner/Builder Verification</span>
+                        <span style="font-size:0.9rem;">🛡️</span>
+                    </div>
+                    <strong id="overviewPendingVerifications" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#64748b; font-size:0.76rem;">Pending verification reviews →</small>
+                </article>
+
+                <!-- Active Properties Card -->
+                <article onclick="switchTabAndFilter('my-properties', 'ACTIVE')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ecfdf5; border:1px solid #a7f3d0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(5,150,105,0.15)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#047857; text-transform:uppercase; letter-spacing:0.06em;">Active Properties</span>
+                        <span style="font-size:0.9rem;">🏡</span>
+                    </div>
+                    <strong id="overviewActiveProperties" style="font-size:1.8rem; font-weight:800; color:#065f46; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#047857; font-size:0.76rem; font-weight:700;">Live on public marketplace →</small>
+                </article>
+
+                <!-- Customer Directory Card -->
+                <article onclick="switchTabAndFilter('users', 'ALL')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#eff6ff; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(37,99,235,0.15)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#1d4ed8; text-transform:uppercase; letter-spacing:0.06em;">Customer Directory</span>
+                        <span style="font-size:0.9rem;">👥</span>
+                    </div>
+                    <strong id="overviewTotalUsers" style="font-size:1.8rem; font-weight:800; color:#1e40af; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#1d4ed8; font-size:0.76rem; font-weight:700;">Registered platform accounts →</small>
+                </article>
+
+                <!-- Builder Projects & Units Card -->
+                <article onclick="switchTabAndFilter('projects', 'ALL')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Builder Projects</span>
+                        <span style="font-size:0.9rem;">🏗️</span>
+                    </div>
+                    <strong id="overviewBuilderProjects" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#64748b; font-size:0.76rem;"><span id="overviewAvailableUnits" style="font-weight:700; color:#059669;">0</span> available units →</small>
+                </article>
+
+                <!-- Enquiries Card -->
+                <article onclick="switchTabAndFilter('enquiries', 'ENQUIRIES')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Customer Enquiries</span>
+                        <span style="font-size:0.9rem;">📩</span>
+                    </div>
+                    <strong id="overviewTotalEnquiries" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#64748b; font-size:0.76rem;">Lead inquiries across listings →</small>
+                </article>
+
+                <!-- Scheduled Visits Card -->
+                <article onclick="switchTabAndFilter('enquiries', 'VISITS')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Scheduled Visits</span>
+                        <span style="font-size:0.9rem;">📅</span>
+                    </div>
+                    <strong id="overviewScheduledVisits" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#64748b; font-size:0.76rem;">Site visit appointments →</small>
+                </article>
+
+                <!-- Open Reports & Complaints Card -->
+                <article onclick="switchTabAndFilter('reports', 'OPEN')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#fef2f2; border:1px solid #fecaca; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(220,38,38,0.15)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#dc2626; text-transform:uppercase; letter-spacing:0.06em;">Open Reports</span>
+                        <span style="font-size:0.9rem;">🚨</span>
+                    </div>
+                    <strong id="overviewOpenReports" style="font-size:1.8rem; font-weight:800; color:#b91c1c; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#dc2626; font-size:0.76rem; font-weight:700;">Consumer complaints flagged →</small>
+                </article>
+
+                <!-- System Audit History Card -->
+                <article onclick="switchTabAndFilter('audit', 'ALL')"
+                    style="cursor:pointer; padding:18px; border-radius:16px; background:#f8fafc; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
+                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Audit History</span>
+                        <span style="font-size:0.9rem;">📜</span>
+                    </div>
+                    <strong id="overviewTotalAudit" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
+                    <small style="color:#64748b; font-size:0.76rem;">Logged administrative events →</small>
+                </article>
+            </div>
+
+            <!-- Actionable Notifications & Moderation Alerts -->
+            <div class="dash-card" style="margin-bottom:24px; padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                    <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0; display:flex; align-items:center; gap:8px;">
+                        <span>🔔</span> Actionable Notifications & Moderation Alerts
+                    </h3>
+                </div>
+                <div id="overviewNotificationsList" style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="padding:14px; text-align:center; color:#64748b; font-size:0.85rem;">Checking moderation queues...</div>
+                </div>
+            </div>
+
+            <!-- Real-Time Recent Activity Feed -->
+            <div class="dash-card" style="padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                     <div>
-                        <h3> Agent Real-Time Notifications</h3>
-                        <p>Alerts for new customer enquiries, site visit bookings, and property approval decisions.</p>
+                        <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0;">Recent Administrative & System Activity</h3>
+                        <p style="font-size:0.82rem; color:#64748b; margin:2px 0 0 0;">Chronological stream of property approvals, seller verifications, account modifications, and reports.</p>
+                    </div>
+                    <button type="button" onclick="switchTabAndFilter('audit', 'ALL')"
+                        style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-size:0.78rem; font-weight:700; cursor:pointer;">
+                        View Full Audit Log →
+                    </button>
+                </div>
+                <div id="overviewRecentActivity" style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="padding:14px; text-align:center; color:#64748b; font-size:0.85rem;">Loading recent system events...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= USER MANAGEMENT PANEL ================= -->
+        <section class="dash-panel hidden" data-view="users">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">User Management & Directory</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Real-time permanent registry of all customers, buyers, tenants, property owners, and builders stored in the database.</p>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button type="button" id="refreshUsersBtn" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                        Refresh Directory
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Ribbon -->
+            <div class="dash-grid" style="grid-template-columns: repeat(5, 1fr) !important; gap:14px; margin-bottom:22px;">
+                <article style="padding:16px; border-radius:14px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                    <span style="font-size:0.76rem; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Total Users</span>
+                    <strong id="userStatTotal" style="font-size:1.6rem; font-weight:800; color:#0f172a; display:block; margin-top:4px;">0</strong>
+                </article>
+                <article style="padding:16px; border-radius:14px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                    <span style="font-size:0.76rem; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:0.06em;">Customers / Tenants</span>
+                    <strong id="userStatCustomers" style="font-size:1.6rem; font-weight:800; color:#2563eb; display:block; margin-top:4px;">0</strong>
+                </article>
+                <article style="padding:16px; border-radius:14px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                    <span style="font-size:0.76rem; font-weight:700; color:#059669; text-transform:uppercase; letter-spacing:0.06em;">Property Owners</span>
+                    <strong id="userStatOwners" style="font-size:1.6rem; font-weight:800; color:#059669; display:block; margin-top:4px;">0</strong>
+                </article>
+                <article style="padding:16px; border-radius:14px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                    <span style="font-size:0.76rem; font-weight:700; color:#d97706; text-transform:uppercase; letter-spacing:0.06em;">Builders</span>
+                    <strong id="userStatBuilders" style="font-size:1.6rem; font-weight:800; color:#d97706; display:block; margin-top:4px;">0</strong>
+                </article>
+                <article style="padding:16px; border-radius:14px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+                    <span style="font-size:0.76rem; font-weight:700; color:#dc2626; text-transform:uppercase; letter-spacing:0.06em;">Suspended</span>
+                    <strong id="userStatSuspended" style="font-size:1.6rem; font-weight:800; color:#dc2626; display:block; margin-top:4px;">0</strong>
+                </article>
+            </div>
+
+            <!-- Search and Filter Toolbar -->
+            <div class="dash-card" style="margin-bottom:18px; padding:16px 20px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:240px; position:relative;">
+                        <input id="userSearchInput" type="text" placeholder="Search by name, email, phone, ID, or company..."
+                            style="width:100%; box-sizing:border-box; padding:11px 16px 11px 38px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem; outline:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.2"
+                            style="position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none;">
+                            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <select id="userRoleFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
+                            <option value="">All Roles</option>
+                            <option value="CUSTOMER">Customer / Buyer / Tenant</option>
+                            <option value="OWNER">Property Owner</option>
+                            <option value="BUILDER">Builder</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+
+                        <select id="userStatusFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
+                            <option value="">All Statuses</option>
+                            <option value="ACTIVE">Active</option>
+                            <option value="SUSPENDED">Suspended</option>
+                        </select>
+
+                        <select id="userVerifyFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
+                            <option value="">All Verification</option>
+                            <option value="VERIFIED">Posting Verified</option>
+                            <option value="PENDING">Pending Approval</option>
+                            <option value="STANDARD">Standard</option>
+                        </select>
+
+                        <button type="button" id="userFilterResetBtn" style="padding:10px 16px; border-radius:10px; border:1px solid #e2e8f0; background:#f1f5f9; color:#475569; font-size:0.84rem; font-weight:700; cursor:pointer;">
+                            Reset
+                        </button>
                     </div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 10px; background: #ffffff; display: flex; align-items: flex-start; gap: 12px;">
-                        <span style="font-size: 1.1rem; background: #eff6ff; padding: 6px; border-radius: 8px;">📩</span>
-                        <div>
-                            <strong style="display: block; font-size: 0.88rem; color: #0f172a;">New Enquiry</strong>
-                            <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #64748b;">Rahul Sharma submitted an enquiry for 3 BHK Luxury Villa (#PD-8492).</p>
-                            <small style="color: #94a3b8; font-size: 0.74rem;">10 mins ago</small>
-                        </div>
-                    </div>
+            </div>
+
+            <!-- Users Table Card -->
+            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+                <div class="dashboard-table-scroll">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">User ID</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">User & Contact Details</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Role</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Registration Date</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Account Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Verification Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em; text-align:right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">
+                                    Loading registered customer accounts...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= POSTING APPROVALS PANEL ================= -->
+        <section class="dash-panel hidden" data-view="verifications">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Owner & Builder Posting Approvals</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Review applications from customers and builders requesting permission to list properties on PropertyDirect.</p>
+                </div>
+                <button type="button" id="refreshAppsBtn" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    Refresh Applications
+                </button>
+            </div>
+
+            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+                <div class="dashboard-table-scroll">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Applicant Name</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Requested Role</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Company / RERA Details</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Verification Details / Notes</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Decision Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em; text-align:right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="verificationsTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">
+                                    Loading posting applications...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        
+        <!-- ================= BUILDER PROJECTS & UNIT INVENTORY PANEL ================= -->
+        <section class="dash-panel hidden" data-view="projects">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Builder Projects & Unit Inventory</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Track builder developments, towers/wings, unit inventories, RERA compliance, and unit-specific availability.</p>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button type="button" onclick="loadProjects()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                        Refresh Projects
+                    </button>
+                </div>
+            </div>
+
+            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+                <div class="dashboard-table-scroll">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Project ID</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Project & Location</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Builder / Developer</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">RERA Reg #</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Unit Inventory</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; text-align:right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectsTableBody">
+                            <tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">Loading builder projects...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
         <section class="dash-panel hidden" data-view="my-properties">
-            <div class="dash-card">
-                <div class="card-head">
-                    <div>
-                        <h3> My Agent Listings & Inventory</h3>
-                        <p>Manage active, pending, and sold properties listed by your brokerage agency.</p>
-                    </div>
-                    <button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" class="primary small" data-panel="add-property">＋ Post New Property</button>
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Property Inventory & Approval Queue</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Complete inventory of submitted, approved, active, and sold properties with full administrative review powers.</p>
                 </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button type="button" onclick="switchTabAndFilter('add-property')" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                        ＋ Create Listing on Behalf
+                    </button>
+                    <button type="button" onclick="loadInventory()" class="small" style="padding:8px 14px; border-radius:10px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; cursor:pointer;">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Toolbar Filters -->
+            <div class="dash-card" style="margin-bottom:18px; padding:16px 20px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:240px; position:relative;">
+                        <input id="inventorySearchInput" type="text" placeholder="Search by title, code, owner, locality, or city..."
+                            style="width:100%; box-sizing:border-box; padding:11px 16px 11px 38px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem; outline:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.2"
+                            style="position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none;">
+                            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <select id="inventoryStatusFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
+                            <option value="">All Statuses</option>
+                            <option value="PENDING_APPROVAL">⏳ Pending Approval (Queue)</option>
+                            <option value="CHANGES_REQUESTED">✎ Changes Requested</option>
+                            <option value="ACTIVE">✓ Active / Live</option>
+                            <option value="SOLD">Sold</option>
+                            <option value="RENTED">Rented</option>
+                            <option value="REJECTED">Rejected</option>
+                            <option value="INACTIVE">Inactive</option>
+                            <option value="DRAFT">Draft</option>
+                        </select>
+
+                        <select id="inventoryTypeFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
+                            <option value="">All Listing Types</option>
+                            <option value="SELL">For Sale</option>
+                            <option value="RENT">For Rent</option>
+                            <option value="LEASE">For Lease</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
                 <div class="dashboard-table-scroll">
-                    <table>
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
                         <thead>
-                            <tr>
-                                <th>Property Title</th>
-                                <th>Location</th>
-                                <th>Type</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                                <th>Enquiries</th>
-                                <th>Actions</th>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Code</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Property & Location</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Owner / Submitter</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Price / Rent</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Featured</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; text-align:right;">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>3 BHK Luxury Villa</strong></td>
-                                <td>Anna Nagar, Chennai</td>
-                                <td>Villa / Sale</td>
-                                <td>₹1.45 Cr</td>
-                                <td><span class="status active">Active</span></td>
-                                <td>14 Leads</td>
-                                <td><button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="edit-property">Edit</button></td>
-                            </tr>
-                            <tr>
-                                <td><strong>2 BHK Modern Apartment</strong></td>
-                                <td>Indiranagar, Bangalore</td>
-                                <td>Apartment / Rent</td>
-                                <td>₹42,000/mo</td>
-                                <td><span class="status active">Active</span></td>
-                                <td>8 Leads</td>
-                                <td><button onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel(this.dataset.panel); return false; }" data-panel="edit-property">Edit</button></td>
-                            </tr>
+                        <tbody id="inventoryTableBody">
+                            <tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">Loading property inventory...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1457,6 +2437,23 @@
                     </div>
                 </div>
                 <form class="form-grid" id="postApartmentForm">
+                    <!-- Identified Owner / Builder Section -->
+                    <div style="grid-column: 1 / -1; background:#f0fdf4; border:1px solid #bbf7d0; padding:16px 20px; border-radius:14px; margin-bottom:12px;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+                            <span style="font-size:1.2rem;">🏢</span>
+                            <strong style="color:#166534; font-size:0.94rem;">Posting on Behalf of Verified Owner or Builder *</strong>
+                        </div>
+                        <p style="margin:0 0 10px 0; font-size:0.82rem; color:#15803d; line-height:1.4;">
+                            Administrators post listings on behalf of an identified owner or builder. Every listing permanently retains its actual owner/builder and submitting administrator account.
+                        </p>
+                        <label style="display:flex; flex-direction:column; gap:6px; font-size:0.84rem; font-weight:700; color:#1e293b;">
+                            Select Identified Owner or Builder Account *
+                            <select id="adminOwnerSelect" name="ownerId" required style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid #86efac; background:#ffffff; font-weight:700; font-size:0.86rem; color:#0f172a;">
+                                <option value="">— Choose Verified Owner or Builder Account —</option>
+                            </select>
+                        </label>
+                    </div>
+
                     <div class="property-form-section" style="grid-column: 1 / -1;">
                         <strong>Step 1 — Basic Information</strong>
                         <small>Provide title, listing type (Sale/Rent/Lease), property type, and category.</small>
@@ -1966,338 +2963,255 @@
             </div>
         </section>
 
+        <!-- ================= ENQUIRIES & VISIT TRACKING PANEL ================= -->
         <section class="dash-panel hidden" data-view="enquiries">
-            <div class="dash-card">
-                <div class="card-head">
-                    <div>
-                        <h3> Property Enquiries</h3>
-                        <p>Incoming property contact requests from buyers and tenants.</p>
-                    </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+                <div style="flex:1 1 340px; min-width:240px;">
+                    <h2 style="font-size:1.35rem; font-weight:800; color:#0f172a; margin:0 0 2px 0; line-height:1.2;">Customer Enquiries &amp; Visit Tracking</h2>
+                    <p style="font-size:0.84rem; color:#64748b; margin:0; line-height:1.35;">Track customer inquiries across properties and projects, respond to messages, and manage site visit appointments.</p>
                 </div>
+                <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                    <button type="button" id="subtabEnquiriesBtn" class="pill-btn active" onclick="switchEnquirySubtab('enquiries')"
+                        style="padding:7px 16px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#0f172a; color:#ffffff;">
+                        Customer Inquiries
+                    </button>
+                    <button type="button" id="subtabVisitsBtn" class="pill-btn" onclick="switchEnquirySubtab('visits')"
+                        style="padding:7px 16px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff; color:#334155;">
+                        Scheduled Visits
+                    </button>
+                </div>
+            </div>
+
+            <!-- Subtab 1: Enquiries -->
+            <div id="subtabEnquiriesView" class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
                 <div class="dashboard-table-scroll">
-                    <table>
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
                         <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Customer Name</th>
-                                <th>Contact Phone</th>
-                                <th>Property Interested</th>
-                                <th>Status</th>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Date</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Customer Contact</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Property / Project</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Customer Message & Reply</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; text-align:right;">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Today, 10:30 AM</td>
-                                <td>Karthik Raja</td>
-                                <td>+91 98401 23456</td>
-                                <td>3 BHK Luxury Villa (Anna Nagar)</td>
-                                <td><span class="status active">New Lead</span></td>
-                            </tr>
+                        <tbody id="enquiriesTableBody">
+                            <tr><td colspan="6" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">Loading customer inquiries...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-        </section>
 
-        <section class="dash-panel hidden" data-view="leads">
-            <div class="dash-card">
-                <div class="card-head">
-                    <div>
-                        <h3> Lead Management Pipeline</h3>
-                        <p>Track client acquisition, preferred contact times, site visit conversions, and deal status.</p>
-                    </div>
-                </div>
-                <div class="dash-grid three" style="margin-bottom: 24px;">
-                    <article><span>New Leads</span><strong>12</strong></article>
-                    <article><span>In Follow-up / Negotiation</span><strong>18</strong></article>
-                    <article><span>Closed Deals</span><strong>12</strong></article>
-                </div>
-
-                <div class="dashboard-table-scroll" id="agentLeadsContainer" style="margin-top: 16px;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background: #f8fafc; border-bottom: 1px solid #cbd5e1; text-align: left;">
-                                <th style="padding: 12px 16px; font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase;">Lead / Name</th>
-                                <th style="padding: 12px 16px; font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase;">Contact Details</th>
-                                <th style="padding: 12px 16px; font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase;">Property & Location</th>
-                                <th style="padding: 12px 16px; font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase;">Preferred Time</th>
-                                <th style="padding: 12px 16px; font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase;">Status</th>
-                                <th style="padding: 12px 16px; font-size: 0.78rem; font-weight: 800; color: #475569; text-transform: uppercase; text-align: right;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.95rem; font-weight: 800;">Rahul Sharma</strong>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <div style="font-size: 0.85rem; color: #334155; font-weight: 600;">+91 98401 23456</div>
-                                    <small style="color: #64748b;">rahul@example.com</small>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.85rem;">3 BHK Apartment (#PD-8492)</strong><br>
-                                    <small style="color: #64748b;">Anna Nagar, Chennai</small>
-                                </td>
-                                <td style="padding: 14px 16px; font-size: 0.82rem; color: #2563eb; font-weight: 700;">
-                                    Afternoon (12 PM - 4 PM)
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                                        <span class="status pending" style="background: #dbeafe; color: #1e40af; font-weight: 800; font-size: 0.74rem; padding: 3px 10px; border-radius: 999px;">New Lead</span>
-                                        <select onchange="showToast('Lead status updated to: ' + this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 0.76rem; background: #ffffff; cursor: pointer;">
-                                            <option value="New" selected>New</option>
-                                            <option value="Contacted">Contacted</option>
-                                            <option value="Interested">Interested</option>
-                                            <option value="Site Visit Scheduled">Site Visit Scheduled</option>
-                                            <option value="Negotiation">Negotiation</option>
-                                            <option value="Closed">Closed</option>
-                                            <option value="Not Interested">Not Interested</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td style="padding: 14px 16px; text-align: right;">
-                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
-                                        <a href="tel:+919840123456" class="btn-table-action btn-call">Call</a>
-                                        <a href="https://wa.me/919840123456?text=Hi%20Rahul,%20regarding%20your%20enquiry" target="_blank" class="btn-table-action btn-whatsapp">WhatsApp</a>
-                                        <button type="button" class="btn-table-action btn-contacted" onclick="showToast('Lead marked as Contacted!')">Mark Contacted</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.95rem; font-weight: 800;">Ananya Roy</strong>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <div style="font-size: 0.85rem; color: #334155; font-weight: 600;">+91 98123 45678</div>
-                                    <small style="color: #64748b;">ananya@example.com</small>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.85rem;">2 BHK Modern Flat (#PD-3104)</strong><br>
-                                    <small style="color: #64748b;">Indiranagar, Bangalore</small>
-                                </td>
-                                <td style="padding: 14px 16px; font-size: 0.82rem; color: #2563eb; font-weight: 700;">
-                                    Evening (4 PM - 8 PM)
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <div style="display: flex; flex-direction: column; gap: 4px; align-items: flex-start;">
-                                        <span class="status active" style="background: #d1fae5; color: #065f46; font-weight: 800; font-size: 0.74rem; padding: 3px 10px; border-radius: 999px;">Interested</span>
-                                        <select onchange="showToast('Lead status updated to: ' + this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 700; font-size: 0.76rem; background: #ffffff; cursor: pointer;">
-                                            <option value="New">New</option>
-                                            <option value="Contacted">Contacted</option>
-                                            <option value="Interested" selected>Interested</option>
-                                            <option value="Site Visit Scheduled">Site Visit Scheduled</option>
-                                            <option value="Negotiation">Negotiation</option>
-                                            <option value="Closed">Closed</option>
-                                            <option value="Not Interested">Not Interested</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td style="padding: 14px 16px; text-align: right;">
-                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
-                                        <a href="tel:+919812345678" class="btn-table-action btn-call">Call</a>
-                                        <a href="https://wa.me/919812345678?text=Hi%20Ananya,%20regarding%20your%20enquiry" target="_blank" class="btn-table-action btn-whatsapp">WhatsApp</a>
-                                        <button type="button" class="btn-table-action btn-contacted" onclick="showToast('Lead marked as Contacted!')">Mark Contacted</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <section class="dash-panel hidden" data-view="messages">
-            <div class="dash-card">
-                <div class="card-head" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                    <div>
-                        <h3 style="margin: 0 0 4px 0; color: #0f172a; font-weight: 800;">Client Messages & Communications</h3>
-                        <p style="margin: 0; color: #64748b; font-size: 0.88rem;">Direct response-tracked communication hub with buyers, tenants, and property owners.</p>
-                    </div>
-                    <button class="primary small" onclick="showToast('✓ Checked for new client messages!')" style="box-shadow: 0 4px 12px rgba(37,99,235,0.25);">Refresh Messages</button>
-                </div>
-
-                <!-- Search & Quick Filter Row -->
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" onclick="filterClientMessages('all')" class="btn-table-action" style="background: #2563eb; color: #ffffff !important; border: 1px solid #2563eb; font-weight: 800; padding: 6px 14px; border-radius: 999px;">All Messages (4)</button>
-                        <button type="button" onclick="filterClientMessages('unread')" class="btn-table-action" style="background: #fffbeb; color: #b45309 !important; border: 1px solid #fde68a; font-weight: 800; padding: 6px 14px; border-radius: 999px;">Unread (2)</button>
-                        <button type="button" onclick="filterClientMessages('buyer')" class="btn-table-action" style="background: #ffffff; color: #334155 !important; border: 1px solid #cbd5e1; font-weight: 700; padding: 6px 14px; border-radius: 999px;">Buyer Inquiries</button>
-                        <button type="button" onclick="filterClientMessages('tenant')" class="btn-table-action" style="background: #ffffff; color: #334155 !important; border: 1px solid #cbd5e1; font-weight: 700; padding: 6px 14px; border-radius: 999px;">Tenant Requests</button>
-                    </div>
-                    <input type="text" id="clientMessageSearch" onkeyup="searchClientMessages()" placeholder="Search client or property..." style="padding: 8px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.85rem; font-weight: 600; width: 280px; background: #ffffff;">
-                </div>
-
-                <!-- Messages Table -->
+            <!-- Subtab 2: Visits -->
+            <div id="subtabVisitsView" class="dash-card" style="display:none; padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
                 <div class="dashboard-table-scroll">
-                    <table id="clientMessagesTable">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
                         <thead>
-                            <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
-                                <th style="padding: 14px 16px; font-weight: 800; color: #475569; font-size: 0.78rem;">CLIENT & SENDER</th>
-                                <th style="padding: 14px 16px; font-weight: 800; color: #475569; font-size: 0.78rem;">PROPERTY CONTEXT</th>
-                                <th style="padding: 14px 16px; font-weight: 800; color: #475569; font-size: 0.78rem;">MESSAGE CONTENT</th>
-                                <th style="padding: 14px 16px; font-weight: 800; color: #475569; font-size: 0.78rem;">RECEIVED</th>
-                                <th style="padding: 14px 16px; font-weight: 800; color: #475569; font-size: 0.78rem;">STATUS</th>
-                                <th style="padding: 14px 16px; font-weight: 800; color: #475569; font-size: 0.78rem; text-align: right;">ACTIONS</th>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Visit ID</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Scheduled Date/Time</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Visitor Contact</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Property Requested</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; text-align:right;">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Message 1 -->
-                            <tr class="msg-row" data-type="unread buyer" style="border-bottom: 1px solid #e2e8f0; background: #fbfcfd;">
-                                <td style="padding: 14px 16px;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">RS</div>
-                                        <div>
-                                            <strong style="color: #0f172a; font-size: 0.92rem; display: block;">Rahul Sharma</strong>
-                                            <small style="color: #64748b; font-weight: 600;">+91 98401 23456</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.85rem; display: block;">3 BHK Luxury Villa</strong>
-                                    <small style="color: #2563eb; font-weight: 700;">Anna Nagar, Chennai</small>
-                                </td>
-                                <td style="padding: 14px 16px; max-width: 300px;">
-                                    <p style="margin: 0; font-size: 0.85rem; color: #334155; font-weight: 600; line-height: 1.4;">"Hi Rajesh, is the price negotiable for immediate registration? We are planning a site visit this Sunday."</p>
-                                </td>
-                                <td style="padding: 14px 16px; font-size: 0.82rem; color: #475569; font-weight: 700;">
-                                    Today, 02:15 PM
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <span class="status pending" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-weight: 800; font-size: 0.76rem; padding: 4px 10px; border-radius: 999px;">● New / Unread</span>
-                                </td>
-                                <td style="padding: 14px 16px; text-align: right;">
-                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
-                                        <button type="button" class="btn-table-action" onclick="openReplyModal('Rahul Sharma', '+91 98401 23456', '3 BHK Luxury Villa')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8) !important; color: white !important; font-weight: 800;">Reply</button>
-                                        <a href="tel:+919840123456" class="btn-table-action btn-call">Call</a>
-                                        <a href="https://wa.me/919840123456?text=Hi%20Rahul,%20regarding%20your%20message" target="_blank" class="btn-table-action btn-whatsapp">WhatsApp</a>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Message 2 -->
-                            <tr class="msg-row" data-type="unread tenant" style="border-bottom: 1px solid #e2e8f0; background: #fbfcfd;">
-                                <td style="padding: 14px 16px;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #16a34a, #15803d); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">AR</div>
-                                        <div>
-                                            <strong style="color: #0f172a; font-size: 0.92rem; display: block;">Ananya Roy</strong>
-                                            <small style="color: #64748b; font-weight: 600;">+91 98123 45678</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.85rem; display: block;">2 BHK Modern Apartment</strong>
-                                    <small style="color: #16a34a; font-weight: 700;">Indiranagar, Bangalore</small>
-                                </td>
-                                <td style="padding: 14px 16px; max-width: 300px;">
-                                    <p style="margin: 0; font-size: 0.85rem; color: #334155; font-weight: 600; line-height: 1.4;">"Hello! Is the maintenance fee included in the ₹42,000/mo rent? When can we inspect the flat?"</p>
-                                </td>
-                                <td style="padding: 14px 16px; font-size: 0.82rem; color: #475569; font-weight: 700;">
-                                    Today, 11:45 AM
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <span class="status pending" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-weight: 800; font-size: 0.76rem; padding: 4px 10px; border-radius: 999px;">● New / Unread</span>
-                                </td>
-                                <td style="padding: 14px 16px; text-align: right;">
-                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
-                                        <button type="button" class="btn-table-action" onclick="openReplyModal('Ananya Roy', '+91 98123 45678', '2 BHK Modern Apartment')" style="background: linear-gradient(135deg, #2563eb, #1d4ed8) !important; color: white !important; font-weight: 800;">Reply</button>
-                                        <a href="tel:+919812345678" class="btn-table-action btn-call">Call</a>
-                                        <a href="https://wa.me/919812345678?text=Hi%20Ananya,%20regarding%20your%20message" target="_blank" class="btn-table-action btn-whatsapp">WhatsApp</a>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Message 3 -->
-                            <tr class="msg-row" data-type="read owner" style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 14px 16px;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5, #3730a3); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">VP</div>
-                                        <div>
-                                            <strong style="color: #0f172a; font-size: 0.92rem; display: block;">Venkatesh Prasad</strong>
-                                            <small style="color: #64748b; font-weight: 600;">+91 94440 12345</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.85rem; display: block;">Commercial Space</strong>
-                                    <small style="color: #4f46e5; font-weight: 700;">Guindy, Chennai</small>
-                                </td>
-                                <td style="padding: 14px 16px; max-width: 300px;">
-                                    <p style="margin: 0; font-size: 0.85rem; color: #334155; font-weight: 500; line-height: 1.4;">"I have uploaded the updated structural audit & RERA documents. Please publish the listing."</p>
-                                </td>
-                                <td style="padding: 14px 16px; font-size: 0.82rem; color: #64748b;">
-                                    Yesterday, 05:30 PM
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <span class="status active" style="background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; font-weight: 800; font-size: 0.76rem; padding: 4px 10px; border-radius: 999px;">✓ Replied</span>
-                                </td>
-                                <td style="padding: 14px 16px; text-align: right;">
-                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
-                                        <button type="button" class="btn-table-action" onclick="openReplyModal('Venkatesh Prasad', '+91 94440 12345', 'Commercial Space')" style="background: linear-gradient(135deg, #334155, #0f172a) !important; color: white !important; font-weight: 800;">View Thread</button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                            <!-- Message 4 -->
-                            <tr class="msg-row" data-type="read buyer" style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 14px 16px;">
-                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #0f172a, #334155); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">SM</div>
-                                        <div>
-                                            <strong style="color: #0f172a; font-size: 0.92rem; display: block;">Siddharth Malhotra</strong>
-                                            <small style="color: #64748b; font-weight: 600;">+91 97110 55443</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <strong style="color: #0f172a; font-size: 0.85rem; display: block;">Plot / Land</strong>
-                                    <small style="color: #475569; font-weight: 700;">ECR Beach Road, Chennai</small>
-                                </td>
-                                <td style="padding: 14px 16px; max-width: 300px;">
-                                    <p style="margin: 0; font-size: 0.85rem; color: #334155; font-weight: 500; line-height: 1.4;">"Please share the DTCP approval number and boundary coordinates."</p>
-                                </td>
-                                <td style="padding: 14px 16px; font-size: 0.82rem; color: #64748b;">
-                                    06 Sept 2026
-                                </td>
-                                <td style="padding: 14px 16px;">
-                                    <span class="status closed" style="background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1; font-weight: 800; font-size: 0.76rem; padding: 4px 10px; border-radius: 999px;">✓ Resolved</span>
-                                </td>
-                                <td style="padding: 14px 16px; text-align: right;">
-                                    <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
-                                        <button type="button" class="btn-table-action" onclick="openReplyModal('Siddharth Malhotra', '+91 97110 55443', 'Plot / Land')" style="background: linear-gradient(135deg, #334155, #0f172a) !important; color: white !important; font-weight: 800;">View Thread</button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tbody id="visitsTableBody">
+                            <tr><td colspan="6" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">Loading site visits...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+        </section>
 
-            <!-- Client Message Reply Modal -->
-            <div id="replyModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
-                <div style="background: #ffffff; width: 100%; max-width: 520px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; border: 1px solid #e2e8f0; animation: modalFadeIn 0.2s ease-out;">
-                    <div style="background: linear-gradient(135deg, #0f172a, #1e293b); padding: 18px 24px; color: white; display: flex; justify-content: space-between; align-items: center;">
-                        <h4 style="margin: 0; font-size: 1.05rem; font-weight: 800;" id="replyModalTitle">Reply to Client</h4>
-                        <button type="button" onclick="closeReplyModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.4rem; cursor: pointer; line-height: 1;">&times;</button>
-                    </div>
-                    <form onsubmit="sendClientReply(event)" style="padding: 20px 24px;">
-                        <div style="margin-bottom: 14px; background: #f8fafc; padding: 12px 14px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <small style="color: #64748b; font-weight: 700; display: block; margin-bottom: 2px;">CLIENT DETAILS</small>
-                            <span id="replyClientMeta" style="color: #0f172a; font-weight: 800; font-size: 0.9rem;"></span>
-                        </div>
-                        <div style="margin-bottom: 16px;">
-                            <label style="display: block; font-size: 0.82rem; font-weight: 800; color: #334155; margin-bottom: 6px;">YOUR RESPONSE MESSAGE</label>
-                            <textarea id="replyMessageText" required rows="4" placeholder="Type your response to the client..." style="width: 100%; border-radius: 8px; border: 1px solid #cbd5e1; padding: 10px 12px; font-size: 0.88rem; font-family: inherit; resize: vertical; box-sizing: border-box;"></textarea>
-                        </div>
-                        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                            <button type="button" onclick="closeReplyModal()" style="padding: 8px 16px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f1f5f9; color: #475569; font-weight: 700; cursor: pointer;">Cancel</button>
-                            <button type="submit" class="primary small" style="padding: 8px 20px; font-weight: 800;">Send Message</button>
-                        </div>
-                    </form>
+        <!-- ================= REPORTS & COMPLAINTS PANEL ================= -->
+        <section class="dash-panel hidden" data-view="reports">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Reports & Moderation Complaints</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Investigate user-reported misleading listings, inaccurate pricing, fraudulent photos, or violations of platform guidelines.</p>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <select id="reportStatusFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
+                        <option value="">All Reports</option>
+                        <option value="OPEN">🚨 Open Complaints Only</option>
+                        <option value="RESOLVED">✓ Resolved</option>
+                        <option value="DISMISSED">Dismissed</option>
+                    </select>
+                    <button type="button" onclick="loadReports()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+                <div class="dashboard-table-scroll">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Report ID</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Date Filed</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Listing Flagged</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Complaint Reason & Resolution</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Status</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; text-align:right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody">
+                            <tr><td colspan="6" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">Loading reports & complaints...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
+        <!-- ================= CATEGORIES, AMENITIES & LOCATIONS PANEL ================= -->
+        <section class="dash-panel hidden" data-view="metadata">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Property Categories, Amenities & Locations</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Platform metadata catalog powering search filters, property listings, and locality breakdowns with live counts.</p>
+                </div>
+                <div class="metadata-action-buttons" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                    <!-- Add Category Button -->
+                    <button type="button" onclick="openMetadataDetailModal('Category')" id="btnAddCategoryMeta" class="btn-meta-action btn-meta-category"
+                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(37,99,235,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <span style="width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="M15 3v18"></path><path d="M3 9h18"></path><path d="M3 15h18"></path></svg>
+                        </span>
+                        <span>+ Add Category</span>
+                        <span id="metaCatBadge" style="padding:2px 7px; border-radius:999px; background:rgba(255,255,255,0.22); font-size:0.72rem; font-weight:700;">Catalog</span>
+                    </button>
+
+                    <!-- Add Amenity Button -->
+                    <button type="button" onclick="openMetadataDetailModal('Amenity')" id="btnAddAmenityMeta" class="btn-meta-action btn-meta-amenity"
+                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #065f46 0%, #059669 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(5,150,105,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <span style="width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                        </span>
+                        <span>+ Add Amenity</span>
+                        <span id="metaAmenBadge" style="padding:2px 7px; border-radius:999px; background:rgba(255,255,255,0.22); font-size:0.72rem; font-weight:700;">Catalog</span>
+                    </button>
+
+                    <!-- Add Location Button -->
+                    <button type="button" onclick="openMetadataDetailModal('Location')" id="btnAddLocationMeta" class="btn-meta-action btn-meta-location"
+                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #9a3412 0%, #ea580c 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(234,88,12,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);">
+                        <span style="width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        </span>
+                        <span>+ Add Location</span>
+                        <span id="metaLocBadge" style="padding:2px 7px; border-radius:999px; background:rgba(255,255,255,0.22); font-size:0.72rem; font-weight:700;">Catalog</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categories Card -->
+            <div class="dash-card" style="margin-bottom:22px; padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Supported Property Categories</h3>
+                <div id="metaCategoriesGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+                    <div style="color:#64748b; font-size:0.85rem;">Loading categories...</div>
+                </div>
+            </div>
+
+            <!-- Amenities Card -->
+            <div class="dash-card" style="margin-bottom:22px; padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Standard Amenities Catalog</h3>
+                <div id="metaAmenitiesGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                    <div style="color:#64748b; font-size:0.85rem;">Loading amenities...</div>
+                </div>
+            </div>
+
+            <!-- Locations Card -->
+            <div class="dash-card" style="padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Supported Tier 1 & Tier 2 Cities</h3>
+                <div id="metaLocationsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
+                    <div style="color:#64748b; font-size:0.85rem;">Loading locations...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= FEATURED LISTINGS & PUBLIC CONTENT PANEL ================= -->
+        <section class="dash-panel hidden" data-view="content">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Featured Listings & Public Content</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Spotlight verified properties on the PropertyDirect homepage hero section and search results.</p>
+                </div>
+                <button type="button" onclick="switchTabAndFilter('my-properties', 'ACTIVE')" class="primary small" style="background:#0f172a;">
+                    Browse Properties to Feature →
+                </button>
+            </div>
+
+            <div class="dash-card" style="padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0; margin-bottom:24px;">
+                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Currently Featured Properties</h3>
+                <div id="featuredListingsContainer" style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="color:#64748b; font-size:0.85rem;">Loading featured listings...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= NOTIFICATIONS & AUDIT HISTORY PANEL ================= -->
+        <section class="dash-panel hidden" data-view="audit">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+                <div>
+                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Administrative Audit History & Event Logs</h2>
+                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Permanent, tamper-evident audit trail of all moderation decisions, property submissions, approvals, rejections, and user status changes.</p>
+                </div>
+                <button type="button" onclick="loadAudit()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    Refresh Audit Log
+                </button>
+            </div>
+
+            <!-- Toolbar Filters -->
+            <div class="dash-card" style="margin-bottom:18px; padding:16px 20px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
+                <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:240px; position:relative;">
+                        <input id="auditSearchInput" type="text" placeholder="Search by actor, detail note, or target ID..."
+                            style="width:100%; box-sizing:border-box; padding:11px 16px 11px 38px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem; outline:none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.2"
+                            style="position:absolute; left:12px; top:50%; transform:translateY(-50%); pointer-events:none;">
+                            <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <select id="auditTargetTypeFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
+                            <option value="">All Entities</option>
+                            <option value="LISTING">Listings</option>
+                            <option value="APPLICATION">Applications</option>
+                            <option value="ACCOUNT">User Accounts</option>
+                            <option value="REPORT">Reports</option>
+                            <option value="VISIT">Visits</option>
+                            <option value="ENQUIRY">Enquiries</option>
+                            <option value="METADATA">Metadata</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+                <div class="dashboard-table-scroll">
+                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                        <thead>
+                            <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Timestamp</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Action</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Target Entity</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Actor</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Detail / Justification</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTableBody">
+                            <tr><td colspan="5" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">Loading audit trail...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= ADMIN PROFILE PANEL ================= -->
         <section class="dash-panel hidden" data-view="profile">
             <div class="dash-card">
                 <div class="card-head">
@@ -2315,7 +3229,7 @@
             </div>
         </section>
 
-        <section class="dash-panel hidden pd-reports-panel" data-view="reports">
+        <section class="dash-panel hidden pd-reports-panel" data-view="legacy-analytics">
             <!-- Header Bar Card -->
             <div class="dash-card" style="margin-bottom: 24px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px 28px; box-shadow: 0 8px 24px rgba(15,23,42,0.06);">
                 <div class="card-head" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
@@ -2398,7 +3312,7 @@
                     <span style="font-size: 1.1rem;">🎯</span>
                     <h4 style="margin: 0; color: #15803d; font-size: 1.05rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.02em;">Lead Conversion Pipeline Reports</h4>
                 </div>
-                <div class="dash-grid pd-report-grid pd-report-grid-five" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+                <div class="dash-grid pd-report-grid pd-report-grid-five" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
                     <article style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px 22px; box-shadow: 0 4px 16px rgba(15,23,42,0.06); display: flex; flex-direction: column; gap: 6px;">
                         <span style="font-size: 0.76rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">TOTAL LEADS</span>
                         <strong style="font-size: 1.35rem; color: #0f172a; font-weight: 800; line-height: 1.2;">68,430</strong>
@@ -2455,7 +3369,7 @@
                         <span style="font-size: 0.78rem; color: #64748b; font-weight: 700; background: #f8fafc; padding: 4px 12px; border-radius: 6px; border: 1px solid #e2e8f0;">Received Today, 04:15 PM</span>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: #f8fafc; padding: 16px 20px; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; background: #f8fafc; padding: 16px 20px; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 16px;">
                         <div>
                             <span style="display: block; font-size: 0.74rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em;">PROPOSED DATE & TIME</span>
                             <strong style="font-size: 0.95rem; color: #0f172a; font-weight: 800;">10 Sept 2026 at 4:00 PM</strong>
@@ -2495,7 +3409,7 @@
                         <span style="font-size: 0.78rem; color: #64748b; font-weight: 700; background: #f8fafc; padding: 4px 12px; border-radius: 6px; border: 1px solid #e2e8f0;">Confirmed Yesterday</span>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: #f8fafc; padding: 16px 20px; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 16px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; background: #f8fafc; padding: 16px 20px; border-radius: 12px; border: 1px solid #f1f5f9; margin-bottom: 16px;">
                         <div>
                             <span style="display: block; font-size: 0.74rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em;">SCHEDULED DATE & TIME</span>
                             <strong style="font-size: 0.95rem; color: #0f172a; font-weight: 800;">12 Sept 2026 at 11:30 AM</strong>
@@ -2720,7 +3634,7 @@
             </div>
         </section>
 
-        <section class="dash-panel hidden" data-view="profile">
+        <section class="dash-panel hidden" data-view="legacy-profile">
             <div class="dash-card">
                 <div class="card-head">
                     <div>
@@ -2748,58 +3662,121 @@
         </section>
     </main>
 
+    
+    <!-- ================= ACCOUNT INSPECTION MODAL ================= -->
+    <div class="modal hidden" id="userInspectModal" role="dialog" aria-modal="true" aria-labelledby="inspectModalTitle" style="z-index:999999;">
+        <div class="modal-card" style="width:min(620px, 94vw) !important; max-height:88vh; overflow-y:auto; padding:28px !important;">
+            <button class="close" id="closeInspectModalBtn" type="button" aria-label="Close modal">×</button>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+                <div id="inspectAvatar" style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg, #1e3a8a, #3b82f6); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.1rem; box-shadow:0 4px 12px rgba(37,99,235,0.25);">
+                    CU
+                </div>
+                <div>
+                    <h2 id="inspectModalTitle" style="font-size:1.25rem; font-weight:800; color:#0f172a; margin:0;">Account Profile Audit</h2>
+                    <p id="inspectUserSubtitle" style="font-size:0.82rem; color:#64748b; margin:2px 0 0 0;">Customer ID #USR-0</p>
+                </div>
+            </div>
+
+            <!-- Profile Info Grid -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:20px; background:#f8fafc; padding:18px; border-radius:14px; border:1px solid #e2e8f0;">
+                <div>
+                    <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Full Name</span>
+                    <strong id="inspectName" style="display:block; font-size:0.92rem; color:#0f172a; margin-top:2px;">—</strong>
+                </div>
+                <div>
+                    <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Account Role</span>
+                    <div id="inspectRoleBadge" style="margin-top:2px;">—</div>
+                </div>
+                <div>
+                    <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Email Address</span>
+                    <strong id="inspectEmail" style="display:block; font-size:0.88rem; color:#0f172a; margin-top:2px; word-break:break-all;">—</strong>
+                </div>
+                <div>
+                    <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Phone Number</span>
+                    <strong id="inspectPhone" style="display:block; font-size:0.88rem; color:#0f172a; margin-top:2px;">—</strong>
+                </div>
+                <div>
+                    <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Account Status</span>
+                    <div id="inspectStatusBadge" style="margin-top:2px;">—</div>
+                </div>
+                <div>
+                    <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Posting Verification</span>
+                    <div id="inspectPostingBadge" style="margin-top:2px;">—</div>
+                </div>
+                <div style="grid-column: span 2;">
+                    <span style="font-size:0.74rem; font-weight:700; color:#64748b; text-transform:uppercase;">Registration Timestamp</span>
+                    <strong id="inspectRegDate" style="display:block; font-size:0.84rem; color:#334155; margin-top:2px;">—</strong>
+                </div>
+            </div>
+
+            <!-- Seller Application Section (Visible for Builders / Owners) -->
+            <div id="inspectApplicationCard" style="display:none; margin-bottom:20px; padding:16px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:14px;">
+                <h4 style="font-size:0.88rem; font-weight:800; color:#1e40af; margin:0 0 10px 0; display:flex; align-items:center; gap:6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Seller & Verification Application Details
+                </h4>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.82rem;">
+                    <div>
+                        <span style="color:#64748b; display:block;">Company Name:</span>
+                        <strong id="inspectCompany" style="color:#0f172a;">—</strong>
+                    </div>
+                    <div>
+                        <span style="color:#64748b; display:block;">RERA / Registration No:</span>
+                        <strong id="inspectRegNumber" style="color:#0f172a;">—</strong>
+                    </div>
+                    <div style="grid-column: span 2;">
+                        <span style="color:#64748b; display:block;">Verification Details / Operating License:</span>
+                        <p id="inspectVerifyDetails" style="margin:2px 0 0 0; color:#1e293b; background:#ffffff; padding:8px 10px; border-radius:8px; border:1px solid #cbd5e1; font-size:0.82rem; white-space:pre-wrap;"></p>
+                    </div>
+                    <div>
+                        <span style="color:#64748b; display:block;">Review Status:</span>
+                        <strong id="inspectAppDecision" style="color:#0f172a;">—</strong>
+                    </div>
+                    <div>
+                        <span style="color:#64748b; display:block;">Admin Review Note:</span>
+                        <span id="inspectReviewNote" style="color:#0f172a;">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Notice Banner -->
+            <div style="display:flex; align-items:flex-start; gap:10px; padding:12px 14px; background:#f1f5f9; border-radius:12px; border:1px solid #cbd5e1; margin-bottom:24px;">
+                <span style="font-size:1.1rem;">🔒</span>
+                <p style="margin:0; font-size:0.78rem; color:#475569; line-height:1.4;">
+                    <strong>Security & Privacy Guarantee:</strong> In accordance with security policies, user passwords and cryptographic hashes are never displayed, exposed in APIs, or accessible to administrative operators.
+                </p>
+            </div>
+
+            <!-- Actions Row -->
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid #e2e8f0; padding-top:18px;">
+                <div style="display:flex; gap:10px;">
+                    <button type="button" id="inspectSuspendBtn" style="padding:10px 18px; border-radius:10px; font-size:0.84rem; font-weight:700; cursor:pointer; border:none; transition:all 0.2s;">
+                        Suspend Account
+                    </button>
+                    <button type="button" id="inspectPostingBtn" style="padding:10px 18px; border-radius:10px; font-size:0.84rem; font-weight:700; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff; color:#0f172a;">
+                        Grant Posting Permission
+                    </button>
+                </div>
+                <button type="button" id="closeInspectModalBottomBtn" class="modal-cancel">Close</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast hidden" id="toast"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function switchTab(panelId) {
-                if (!panelId) return;
-
-                document.querySelectorAll("[data-panel]").forEach(function (btn) {
-                    if (btn.dataset.panel === panelId) {
-                        btn.classList.add("active");
-                    } else {
-                        btn.classList.remove("active");
-                    }
-                });
-
-                document.querySelectorAll("[data-view]").forEach(function (view) {
-                    if (view.dataset.view === panelId) {
-                        view.classList.remove("hidden");
-                        view.style.display = "block";
-                    } else {
-                        view.classList.add("hidden");
-                        view.style.display = "none";
-                    }
-                });
-
-                var activeBtn = document.querySelector('.sidebar-nav [data-panel="' + panelId + '"]');
-                var titleElem = document.getElementById("panelTitle");
-                if (activeBtn && titleElem) {
-                    var text = activeBtn.textContent.trim();
-                    titleElem.textContent = text;
-                }
-
-                if (history.pushState) {
-                    history.pushState(null, null, '#' + panelId);
-                } else {
-                    location.hash = '#' + panelId;
-                }
+        window.switchTab = function(panelId, filterOptions) {
+            if (window.switchTabAndFilter) {
+                window.switchTabAndFilter(panelId, filterOptions);
             }
-
-            document.addEventListener("click", function (e) {
-                var target = e.target.closest("[data-panel]");
-                if (target) {
+        };
+        document.addEventListener("click", function (e) {
+            var target = e.target.closest("[data-panel]");
+            if (target && target.dataset && target.dataset.panel) {
+                if (window.switchTabAndFilter) {
                     e.preventDefault();
-                    switchTab(target.dataset.panel);
+                    window.switchTabAndFilter(target.dataset.panel);
                 }
-            });
-
-            var initialHash = window.location.hash.replace("#", "");
-            if (initialHash && document.querySelector('[data-view="' + initialHash + '"]')) {
-                switchTab(initialHash);
-            } else {
-                switchTab("overview");
             }
         });
     </script>
@@ -3008,6 +3985,120 @@
         }
     </script>
     <script src="/shared/js/dashboard-system.js?v=20260916-universal-sidebar-v3"></script>
+
+    <!-- Modal: Review Seller Application -->
+    <div id="reviewAppModal" class="modal hidden" style="display:none;">
+        <div class="modal-card">
+            <button type="button" class="close" onclick="closeModal('reviewAppModal')">×</button>
+            <h2>Review Posting Application</h2>
+            <p>Evaluate applicant credentials and decide whether to approve posting permissions.</p>
+
+            <div style="background:#f8fafc; padding:12px 16px; border-radius:12px; margin-bottom:18px; border:1px solid #e2e8f0; font-size:0.86rem;">
+                <div><strong>Applicant:</strong> <span id="reviewAppName">—</span></div>
+                <div style="margin-top:4px;"><strong>Requested Role:</strong> <span id="reviewAppRole">—</span></div>
+                <input type="hidden" id="reviewAppId">
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="display:block; font-size:0.82rem; font-weight:700; color:#334155; margin-bottom:6px;">Verification Note or Reason *</label>
+                <textarea id="reviewAppNote" placeholder="Enter findings, verification reference, or rejection reason..." style="width:100%; box-sizing:border-box; padding:10px; border-radius:10px; border:1px solid #cbd5e1; min-height:80px;"></textarea>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px;">
+                <button type="button" onclick="submitApplicationReview('APPROVED')" style="padding:10px 18px; border-radius:10px; background:#10b981; color:#ffffff; font-weight:800; border:none; cursor:pointer;">
+                    ✓ Approve Application
+                </button>
+                <button type="button" onclick="submitApplicationReview('REJECTED')" style="padding:10px 18px; border-radius:10px; background:#ef4444; color:#ffffff; font-weight:800; border:none; cursor:pointer;">
+                    ✕ Reject Application
+                </button>
+                <button type="button" onclick="closeModal('reviewAppModal')" class="modal-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Builder Project Units Breakdown -->
+    <div id="projectUnitsModal" class="modal hidden" style="display:none;">
+        <div class="modal-card" style="width:min(720px, 94vw) !important;">
+            <button type="button" class="close" onclick="closeModal('projectUnitsModal')">×</button>
+            <h2 id="projectUnitsModalTitle">Project Units Breakdown</h2>
+            <p>Unit-specific inventory, pricing, configuration, and availability status.</p>
+
+            <div class="dashboard-table-scroll" style="max-height:400px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:12px; margin-bottom:18px;">
+                <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.84rem;">
+                    <thead>
+                        <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                            <th style="padding:10px 14px;">Tower / Wing</th>
+                            <th style="padding:10px 14px;">Unit #</th>
+                            <th style="padding:10px 14px;">Config</th>
+                            <th style="padding:10px 14px;">Price</th>
+                            <th style="padding:10px 14px;">Availability</th>
+                            <th style="padding:10px 14px; text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectUnitsTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end;">
+                <button type="button" onclick="closeModal('projectUnitsModal')" class="modal-cancel">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Inspect Listing Details -->
+    <div id="inspectListingModal" class="modal hidden" style="display:none;">
+        <div class="modal-card">
+            <button type="button" class="close" onclick="closeModal('inspectListingModal')">×</button>
+            <h2>Property Listing Inspection</h2>
+            <p>Full property details and moderation history.</p>
+            <div id="inspectListingModalBody"></div>
+            <div style="display:flex; justify-content:flex-end; margin-top:18px;">
+                <button type="button" onclick="closeModal('inspectListingModal')" class="modal-cancel">Close</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- ================= DETAILED METADATA CREATOR MODAL ================= -->
+    
+    <!-- ================= DETAILED METADATA CREATOR MODAL ================= -->
+    <div class="modal hidden" id="metadataDetailModal" role="dialog" aria-modal="true" aria-labelledby="metaModalTitle" style="z-index:999999;">
+        <div class="modal-card" style="width:min(620px, 94vw) !important; max-height:88vh; overflow-y:auto; padding:28px 32px !important; border-radius:20px; box-shadow:0 25px 60px rgba(15,23,42,0.35); background:#ffffff;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+                <div style="display:flex; align-items:center; gap:14px;">
+                    <div id="metaModalIconBadge" style="width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        <!-- SVG injected by JS -->
+                    </div>
+                    <div>
+                        <h2 id="metaModalTitle" style="font-size:1.35rem; font-weight:800; color:#0f172a; margin:0 0 2px 0;">Configure Catalog Item</h2>
+                        <p id="metaModalSubtitle" style="font-size:0.82rem; color:#64748b; margin:0;">Platform metadata taxonomy specification.</p>
+                    </div>
+                </div>
+                <button type="button" class="close" onclick="closeModal('metadataDetailModal')" aria-label="Close" style="width:34px; height:34px; border-radius:10px; border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; font-size:1.1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s ease;">✕</button>
+            </div>
+
+            <form id="metadataDetailForm" onsubmit="submitMetadataDetail(event)">
+                <input type="hidden" id="metaItemType" value="Category">
+
+                <!-- Dynamic Form Fields injected via JS based on type -->
+                <div id="metaDynamicFields" style="display:flex; flex-direction:column; gap:16px;">
+                    <!-- Injected dynamically -->
+                </div>
+
+                <div class="pd-modal-actions" style="display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-top:24px; padding-top:16px; border-top:1px solid #f1f5f9;">
+                    <button type="button" onclick="closeModal('metadataDetailModal')" class="modal-cancel" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#475569; font-weight:700; font-size:0.85rem; cursor:pointer;">Cancel</button>
+                    <button type="submit" id="metaSubmitBtn" class="primary" style="padding:10px 24px; border-radius:12px; font-weight:750; font-size:0.85rem; color:#ffffff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(15,23,42,0.2);">
+                        Save & Publish Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PropertyDirect Unified Platform Admin Script -->
+    <script src="/propertydirect/js/admin-dashboard.js?v=20260929-admin-v1"></script>
+
 </body>
 
 </html>

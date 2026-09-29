@@ -1877,6 +1877,7 @@
             <button type="button" data-panel="services"><span>Home services</span></button>
             <button type="button" data-panel="rentpay"><span>Rent & payments</span></button>
             <button type="button" data-panel="plans"><span>Plans</span></button>
+            <button type="button" data-panel="become-owner" style="color:#059669; font-weight:800;"><span>🏠 Become Property Owner</span></button>
             <button type="button" data-panel="support"><span>Support</span></button>
         </nav>
         <a class="logout-link" href="/dashboards/logout?platform=propertydirect">Logout</a>
@@ -1891,6 +1892,7 @@
                     enquiries.</p>
             </div>
             <div class="header-actions">
+                <button type="button" class="secondary" data-panel="become-owner" style="border:1px solid #10b981; color:#065f46; background:#ecfdf5; font-weight:800;">🏠 Apply for Owner Posting</button>
                 <a class="secondary" href="/propertydirect/apartments">Browse public listings</a>
                 <button class="primary" type="button" data-panel="search">Search Properties</button>
                 <span class="user-avatar-badge">CU</span>
@@ -2626,6 +2628,61 @@
             </div>
         </section>
 
+        <!-- ================= BECOME PROPERTY OWNER PANEL ================= -->
+        <section class="dash-panel hidden" data-view="become-owner">
+            <div class="dash-card" style="max-width:760px; margin:0 auto; padding:28px; background:#ffffff; border-radius:18px; border:1px solid #e2e8f0; box-shadow:0 4px 20px rgba(0,0,0,0.04);">
+                <div style="display:flex; align-items:center; gap:14px; margin-bottom:20px; border-bottom:1px solid #f1f5f9; padding-bottom:18px;">
+                    <div style="width:48px; height:48px; border-radius:14px; background:#ecfdf5; color:#059669; display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+                        🏠
+                    </div>
+                    <div>
+                        <h2 style="font-size:1.35rem; font-weight:800; color:#0f172a; margin:0;">Apply to Become Property Owner</h2>
+                        <p style="font-size:0.86rem; color:#64748b; margin:2px 0 0 0;">Upgrade your existing customer account to list and sell/rent properties directly.</p>
+                    </div>
+                </div>
+
+                <!-- Existing Application Status Card (Dynamically updated) -->
+                <div id="ownerAppStatusCard" style="display:none; padding:16px 20px; border-radius:14px; margin-bottom:24px; border:1px solid #cbd5e1;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+                        <strong style="font-size:0.92rem; color:#0f172a;">Application Status</strong>
+                        <span id="ownerAppBadge" style="padding:4px 12px; border-radius:999px; font-size:0.78rem; font-weight:800;">—</span>
+                    </div>
+                    <p id="ownerAppMsg" style="font-size:0.84rem; color:#475569; margin:0 0 6px 0;"></p>
+                    <small id="ownerAppNote" style="color:#64748b; font-size:0.78rem; display:block;"></small>
+                </div>
+
+                <form id="becomeOwnerForm" style="display:flex; flex-direction:column; gap:18px;">
+                    <div style="background:#f8fafc; padding:16px; border-radius:12px; border:1px solid #e2e8f0;">
+                        <span style="font-size:0.78rem; font-weight:700; color:#64748b; text-transform:uppercase;">Connected Customer Account</span>
+                        <div style="display:flex; align-items:center; gap:16px; margin-top:6px; font-size:0.88rem; color:#0f172a; font-weight:700;">
+                            <span id="custMeName">—</span>
+                            <span style="color:#cbd5e1;">•</span>
+                            <span id="custMeEmail" style="color:#64748b; font-weight:500;">—</span>
+                            <span style="color:#cbd5e1;">•</span>
+                            <span id="custMePhone" style="color:#64748b; font-weight:500;">—</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label style="display:block; font-size:0.84rem; font-weight:700; color:#334155; margin-bottom:6px;">
+                            Property Ownership Details & Proof *
+                        </label>
+                        <textarea id="ownerVerificationDetails" required rows="4" placeholder="Detail your property location (e.g. Flat 402, Oakwood Heights, Indiranagar, Bengaluru), deed/tax assessment number, or utility reference for verification..."
+                            style="width:100%; box-sizing:border-box; padding:12px 14px; border-radius:12px; border:1px solid #cbd5e1; font-size:0.88rem; resize:vertical; outline:none;"></textarea>
+                        <small style="color:#64748b; font-size:0.76rem; display:block; margin-top:4px;">
+                            Our platform administrators verify property documents to maintain a 100% verified, broker-free marketplace.
+                        </small>
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+                        <button type="submit" id="submitOwnerAppBtn" class="primary" style="background:#059669; padding:12px 24px; border-radius:12px; font-weight:800; cursor:pointer;">
+                            Submit Application for Admin Review
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
         <section class="dash-panel hidden" data-view="plans">
             <div class="pd-plans-wrapper">
                 <div class="pd-plans-header">
@@ -3210,5 +3267,93 @@
         } catch(e) {}
     });
 </script>
+
+    <script>
+    (function() {
+        async function loadMe() {
+            try {
+                const res = await fetch('/api/property/portal/me', { headers: { 'Accept': 'application/json' } });
+                if (!res.ok) return;
+                const me = await res.json();
+                document.getElementById('custMeName').textContent = me.name || 'Customer Account';
+                document.getElementById('custMeEmail').textContent = me.email || '';
+                document.getElementById('custMePhone').textContent = me.phone || '';
+
+                const appCard = document.getElementById('ownerAppStatusCard');
+                const appBadge = document.getElementById('ownerAppBadge');
+                const appMsg = document.getElementById('ownerAppMsg');
+                const appNote = document.getElementById('ownerAppNote');
+                const form = document.getElementById('becomeOwnerForm');
+
+                if (me.role === 'OWNER' || me.postingVerified) {
+                    appCard.style.display = 'block';
+                    appCard.style.background = '#ecfdf5';
+                    appCard.style.borderColor = '#86efac';
+                    appBadge.textContent = '✓ Verified Property Owner';
+                    appBadge.style.background = '#dcfce7';
+                    appBadge.style.color = '#15803d';
+                    appMsg.textContent = 'Congratulations! Your account is verified as a Property Owner. You have active posting privileges.';
+                    if (form) form.style.display = 'none';
+                } else if (me.application) {
+                    appCard.style.display = 'block';
+                    const dec = (me.application.decision || 'PENDING').toUpperCase();
+                    if (dec === 'PENDING') {
+                        appCard.style.background = '#fffbeb';
+                        appCard.style.borderColor = '#fde68a';
+                        appBadge.textContent = '⏳ Pending Review';
+                        appBadge.style.background = '#fef3c7';
+                        appBadge.style.color = '#b45309';
+                        appMsg.textContent = 'Your application to become a Property Owner is currently awaiting review by Platform Administrators.';
+                        appNote.textContent = 'Submitted details: ' + (me.application.verificationDetails || '');
+                        if (form) form.style.display = 'none';
+                    } else if (dec === 'REJECTED') {
+                        appCard.style.background = '#fef2f2';
+                        appCard.style.borderColor = '#fca5a5';
+                        appBadge.textContent = '✕ Needs Attention';
+                        appBadge.style.background = '#fee2e2';
+                        appBadge.style.color = '#b91c1c';
+                        appMsg.textContent = 'Your previous application was not approved: ' + (me.application.reviewNote || 'Please update your details.');
+                        appNote.textContent = 'You may re-submit updated verification details below.';
+                        if (form) form.style.display = 'flex';
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading me:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMe();
+            const form = document.getElementById('becomeOwnerForm');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const details = document.getElementById('ownerVerificationDetails')?.value.trim();
+                    if (!details) return;
+                    const btn = document.getElementById('submitOwnerAppBtn');
+                    btn.disabled = true;
+                    btn.textContent = 'Submitting Application...';
+                    try {
+                        const res = await fetch('/api/property/portal/applications', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                            body: JSON.stringify({ role: 'OWNER', verificationDetails: details })
+                        });
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.message || 'Unable to submit application.');
+                        alert('✓ Your application to become a Property Owner has been submitted! Administrators will review your details.');
+                        await loadMe();
+                    } catch (err) {
+                        alert(err.message || 'Error submitting application.');
+                    } finally {
+                        btn.disabled = false;
+                        btn.textContent = 'Submit Application for Admin Review';
+                    }
+                });
+            }
+        });
+    })();
+    </script>
+
 </body>
 </html>

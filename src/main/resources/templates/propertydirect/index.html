@@ -876,7 +876,7 @@
 
           </ul>
 
-          <a href="/propertydirect/dashboards/vendor" class="header-top-btn">Post Property</a>
+          <a href="/propertydirect/workspace?tab=profile" class="header-top-btn">Post Property</a>
         </div>
 
       </div>
@@ -921,13 +921,13 @@
                 <a href="/propertydirect/apartments?type=RENT" class="navbar-link">Rent</a>
               </li>
               <li>
-                <a href="/propertydirect/dashboards/vendor" class="navbar-link">Sell</a>
+                <a href="/propertydirect/workspace?tab=profile" class="navbar-link">Sell</a>
               </li>
               <li>
                 <a href="/propertydirect/apartments?category=COMMERCIAL" class="navbar-link">Commercial</a>
               </li>
               <li>
-                <a href="#contact" class="navbar-link">Agents & Contact</a>
+                <a href="#contact" class="navbar-link">Builders & Contact</a>
               </li>
             </ul>
           </div>
@@ -981,7 +981,7 @@
             <h2 class="h1 hero-title">Find Your Perfect Property</h2>
 
             <p class="hero-text">
-              Discover verified homes, commercial spaces, and rental apartments with direct owner & agent contacts.
+              Discover verified homes, commercial spaces, and rental apartments with direct owner & builder contacts.
             </p>
 
             <form class="pd-hero-search-box" action="/propertydirect/apartments" method="GET">
@@ -1318,7 +1318,7 @@
                         <a href="#">William Seklo</a>
                       </p>
 
-                      <p class="author-title">Estate Agents</p>
+                      <p class="author-title">Property listings</p>
                     </div>
 
                   </div>
@@ -1436,7 +1436,7 @@
                         <a href="#">William Seklo</a>
                       </p>
 
-                      <p class="author-title">Estate Agents</p>
+                      <p class="author-title">Property listings</p>
                     </div>
 
                   </div>
@@ -1554,7 +1554,7 @@
                         <a href="#">William Seklo</a>
                       </p>
 
-                      <p class="author-title">Estate Agents</p>
+                      <p class="author-title">Property listings</p>
                     </div>
 
                   </div>
@@ -1672,7 +1672,7 @@
                         <a href="#">William Seklo</a>
                       </p>
 
-                      <p class="author-title">Estate Agents</p>
+                      <p class="author-title">Property listings</p>
                     </div>
 
                   </div>
@@ -2118,7 +2118,7 @@
             <li><p class="footer-list-title">Platform</p></li>
             <li><a href="#service" class="footer-link">How it works</a></li>
             <li><a href="/propertydirect/dashboards/customer" class="footer-link">Customer dashboard</a></li>
-            <li><a href="/propertydirect/dashboards/vendor" class="footer-link">Vendor dashboard</a></li>
+            <li><a href="/propertydirect/workspace?tab=profile" class="footer-link">Owner / Builder workspace</a></li>
             <li><a href="/propertydirect/dashboards/admin" class="footer-link">Admin dashboard</a></li>
             <li><a href="/propertydirect/dashboards/superadmin" class="footer-link">Superadmin dashboard</a></li>
             <li><a href="/propertydirect/terms/post-property" class="footer-link">Listing guidelines</a></li>
@@ -2213,6 +2213,14 @@
       </form>
       <form class="pd-auth-form is-hidden" id="pdSignupForm">
         <label class="pd-auth-field">
+          Account Type / Role
+          <select id="pdSignupRole" name="role" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-weight:700; font-size:0.86rem; background:#ffffff;">
+            <option value="CUSTOMER" selected>Customer / Buyer / Tenant</option>
+            <option value="BUILDER">Builder (Developer / Construction Firm)</option>
+            <option value="OWNER">Property Owner (Individual Owner)</option>
+          </select>
+        </label>
+        <label class="pd-auth-field">
           Full name
           <input id="pdSignupName" name="name" autocomplete="name" required maxlength="120">
         </label>
@@ -2231,6 +2239,41 @@
             <button type="button" class="pd-password-toggle" data-password-toggle="pdSignupPassword" aria-label="Show password" aria-pressed="false"><ion-icon name="eye-outline"></ion-icon></button>
           </span>
         </label>
+
+        <!-- Builder Specific Fields -->
+        <div id="pdSignupBuilderFields" style="display:none; flex-direction:column; gap:10px; padding:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; margin-top:4px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:1.05rem;">🏗️</span>
+            <strong style="font-size:0.82rem; color:#1e293b;">Builder Company & License Details</strong>
+          </div>
+          <label class="pd-auth-field">
+            Company / Entity Name *
+            <input id="pdSignupCompany" name="companyName" placeholder="e.g. Prestige Estates Projects Ltd" maxlength="160">
+          </label>
+          <label class="pd-auth-field">
+            RERA / Corporate Registration No *
+            <input id="pdSignupRegNum" name="registrationNumber" placeholder="e.g. PRM/KA/RERA/1251/..." maxlength="160">
+          </label>
+          <label class="pd-auth-field">
+            Verification Details & Operating License *
+            <textarea id="pdSignupVerifyDetails" name="verificationDetails" rows="2" placeholder="Provide licensing details, registered office address, or web reference for admin review..." style="width:100%; border-radius:8px; border:1px solid #cbd5e1; padding:8px; font-size:0.82rem;"></textarea>
+          </label>
+          <small style="color:#64748b; font-size:0.75rem;">Builders require platform admin review before publishing property listings.</small>
+        </div>
+
+        <!-- Owner Specific Fields -->
+        <div id="pdSignupOwnerFields" style="display:none; flex-direction:column; gap:10px; padding:14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; margin-top:4px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span style="font-size:1.05rem;">🏠</span>
+            <strong style="font-size:0.82rem; color:#1e293b;">Property Owner Verification</strong>
+          </div>
+          <label class="pd-auth-field">
+            Ownership Proof / Details *
+            <textarea id="pdOwnerVerifyDetails" name="verificationDetails" rows="2" placeholder="State property location, tax receipt number or deed reference for admin review..." style="width:100%; border-radius:8px; border:1px solid #cbd5e1; padding:8px; font-size:0.82rem;"></textarea>
+          </label>
+          <small style="color:#64748b; font-size:0.75rem;">Existing customers can also apply for property owner permissions from their account.</small>
+        </div>
+
         <p class="pd-auth-error" id="pdSignupError" aria-live="polite"></p>
         <button class="pd-auth-submit" type="submit">Create account</button>
       </form>
@@ -2558,7 +2601,7 @@
         const inferRole = (u) => {
           const val = String(u || '').toLowerCase();
           if (val.includes('superadmin')) return 'superadmin';
-          if (val.includes('agent')) return 'agent';
+          if (val.includes('builder')) return 'builder';
           if (val.includes('vendor')) return 'vendor';
           if (val.startsWith('admin') || val.includes('admin@')) return 'admin';
           return 'customer';
@@ -2596,12 +2639,8 @@
           });
           const result = await response.json();
           if (!response.ok) throw new Error(result.message || 'Unable to create account.');
-          username.value = signupData.email;
-          password.value = signupData.password;
           signupForm.reset();
-          setAuthMode('signin');
-          error.style.color = '#15803d';
-          error.textContent = 'Account created. Sign in with your email and password.';
+          window.location.assign(result.redirect || '/propertydirect/workspace');
         } catch (requestError) {
           signupError.textContent = requestError.message || 'Unable to create account. Please try again.';
         } finally {

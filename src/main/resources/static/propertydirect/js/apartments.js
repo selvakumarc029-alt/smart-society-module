@@ -246,21 +246,21 @@ function publishedApartments() {
         id: item.id,
         isPublished: true,
         listingMode: item.type || "Rent",
-        title: escapeApartmentText(item.title || `${item.bhk || "2 BHK"} Apartment in ${item.locality || "Owner Listed"}`),
+        title: escapeApartmentText(item.title || `Property in ${item.locality || item.city || "your city"}`),
         society: escapeApartmentText(item.society || item.locality || "Owner Listed Apartment"),
         locality: escapeApartmentText(item.locality || "Owner Listed"),
-        city: escapeApartmentText(item.city || "Bangalore"),
-        rent: Number(item.rent || String(item.price || "").replace(/[^\d]/g, "") || 28000),
+        city: escapeApartmentText(item.city || "Not specified"),
+        rent: Number(item.rent ?? item.price ?? 0),
         maintenance: Number(item.maintenance || 0),
-        deposit: item.deposit || (item.type === "Buy" ? "For Sale" : "Rs. 1,00,000"),
-        sqft: item.sqft || "1,100 sqft",
+        deposit: item.deposit == null ? "Not specified" : money(Number(item.deposit)),
+        sqft: item.sqft || "Area not specified",
         photo: "Owner posted",
-        furnishing: item.furnishing || "Semi Furnished",
-        type: item.bhk || "2 BHK",
+        furnishing: escapeApartmentText(item.furnishing || "Not specified"),
+        type: escapeApartmentText(item.bhk || "Not specified"),
         tenant: "All",
-        available: item.available || "Ready to Move",
-        parking: item.parking || "Bike Parking Car Parking",
-        apartmentType: item.apartmentType || (item.type === "Premium" ? "Gated Society" : "Owner Listed Apartment"),
+        available: escapeApartmentText(item.available || "Confirm availability"),
+        parking: escapeApartmentText(item.parking || "Not specified"),
+        apartmentType: escapeApartmentText(item.apartmentType || "Apartment"),
         image: safeApartmentImage(item.image || item.imageUrl),
         video: item.video || item.videoUrl || "",
         imageUrls: Array.isArray(item.imageUrls) ? item.imageUrls : [],
@@ -268,7 +268,7 @@ function publishedApartments() {
         address: item.address,
         pincode: item.pincode,
         description: item.description,
-        nearby: [escapeApartmentText(item.notes || "Owner listed"), "Direct contact", "No brokerage"]
+        nearby: [escapeApartmentText(item.amenities || "Amenities not specified"), "Direct contact"]
     }));
 }
 
@@ -276,14 +276,7 @@ function escapeApartmentText(value){return String(value??"").replace(/[&<>"']/g,
 function safeApartmentImage(value){const url=String(value||"");return /^(\/|https:\/\/)/i.test(url)?escapeApartmentText(url):"/shared/images/apartment-living-1.webp";}
 
 function allApartments() {
-    let suspended = [];
-    try { suspended = JSON.parse(localStorage.getItem("propertydirect-suspended-apartments") || "[]"); } catch(e){}
-    const suspendedSet = new Set(suspended.map(s => String(s).toLowerCase().trim()));
-
-    // Search inventory must come exclusively from the approved public API.
-    // Demo cards and localStorage are never customer-visible inventory.
-    return publishedApartments()
-        .filter(apt => !suspendedSet.has(String(apt.title).toLowerCase().trim()));
+    return publishedApartments();
 }
 
 function readOwnerContactRequests() {
@@ -443,10 +436,10 @@ function renderApartments(items = filteredApartments()) {
             .replace(/[^a-z0-9]+/g, "-")
             .replace(/^-+|-+$/g, "");
         const detailUrl = `/propertydirect/apartment-detail?id=${encodeURIComponent(apt.id)}`;
-        const bathroomsText = apt.bathrooms ? `${apt.bathrooms} Baths` : "2 Baths";
-        const ownerAgentLabel = apt.isPublished ? "Owner Listed" : "Verified Agent";
+        const bathroomsText = apt.bathrooms ? `${apt.bathrooms} Baths` : "Bathrooms not specified";
+        const ownerAgentLabel = "Approved Owner / Builder Listing";
         return `
-        <article class="apartment-card"
+        <article class="apartment-card" data-listing-id="${apt.id}"
             data-apartment-title="${safeAttribute(apt.title)}"
             data-apartment-city="${safeAttribute(apt.city)}"
             data-apartment-locality="${safeAttribute(apt.locality)}"
@@ -1224,22 +1217,33 @@ hydrateCityDropdowns();
 applyUrlSearch();
 renderSocieties();
 updateFilterState();
-fetch("/api/properties/public?page=0&size=100", {headers:{Accept:"application/json"}}).then(r=>r.ok?r.json():Promise.reject(new Error("Discovery service unavailable"))).then(payload=>{
-    const items = Array.isArray(payload) ? payload : (payload.content || []);
+async function loadPublicInventory() {
+    const items=[];
+    for(let page=0;;page++) {
+        const response=await fetch(`/api/properties/public?page=${page}&size=100`,{headers:{Accept:'application/json'}});
+        if(!response.ok) throw new Error('Properties could not be loaded. Please try again.');
+        const payload=await response.json();
+        items.push(...(Array.isArray(payload)?payload:payload.content||[]));
+        if(Array.isArray(payload)||!payload.hasNext) break;
+    }
+    return items;
+}
+if(results) results.innerHTML='<article class="apartment-card empty-results" role="status"><h2>Loading properties…</h2><p>Finding approved, available listings.</p></article>';
+loadPublicInventory().then(items=>{
     const mapped=items.map(x=>({
         id:x.id,title:x.title,society:x.society,locality:x.locality,city:x.city,type:x.listingType,
         rent:Number(x.price||0),price:x.price,bhk:x.bhk,bathrooms:x.bathrooms,furnishing:x.furnishing,
         image:x.imageUrl,imageUrl:x.imageUrl,imageUrls:String(x.imageUrls||"").split(/\r?\n/).filter(Boolean),
         deposit:x.deposit,maintenance:x.maintenance,sqft:x.areaSqft?`${x.areaSqft.toLocaleString("en-IN")} sqft`:"Area on request",
-        parking:x.parking,address:x.address,pincode:x.pincode,description:x.description,notes:x.notes,
-        available:x.availableFrom?new Date(x.availableFrom).toLocaleDateString("en-IN"):"Ready to Move",
+        parking:x.parking,address:x.address,pincode:x.pincode,description:x.description,amenities:x.amenities,
+        available:x.availableFrom?new Date(x.availableFrom).toLocaleDateString("en-IN"):"Confirm availability",
         apartmentType:x.propertyType||"Apartment"
     }));
     approvedDiscoveryListings = mapped;
     approvedDiscoveryLoaded = true;
     renderSocieties(); updateFilterState();
-}).catch(()=>{
+}).catch(error=>{
     approvedDiscoveryListings = [];
     approvedDiscoveryLoaded = true;
-    updateFilterState();
+    if(results) results.innerHTML='<article class="apartment-card empty-results" role="alert"><h2>Properties could not be loaded</h2><p>Please retry. Your filters have been kept.</p><button class="primary" type="button" onclick="location.reload()">Try again</button></article>';
 });

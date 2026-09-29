@@ -415,7 +415,7 @@ function setDashboardAuthMode(mode) {
 function inferPropertyDirectRole(username) {
     const value = String(username || "").toLowerCase();
     if (value.includes("superadmin")) return "superadmin";
-    if (value.includes("agent")) return "agent";
+    if (value.includes("builder")) return "builder";
     if (value.includes("vendor")) return "vendor";
     if (value.startsWith("admin") || value.includes("admin@")) return "admin";
     return pendingDashboardLogin?.role || "customer";
@@ -455,7 +455,7 @@ async function submitDashboardCredentials() {
             return;
         }
         dashboardLoginModal?.classList.add("hidden");
-        window.location.href = pendingDashboardLogin.target || data.redirect || propertyDirectDashboardTarget(resolvedRole);
+        window.location.href = data.redirect || pendingDashboardLogin.target || propertyDirectDashboardTarget(resolvedRole);
     } catch (error) {
         showToast("Login failed. Please try again.");
     }

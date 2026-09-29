@@ -426,6 +426,9 @@
             longitude: input.longitude ? Number(input.longitude) : null,
             notes: input.description || null
         };
+        if (form.elements.ownerId && form.elements.ownerId.value) {
+            payload.ownerId = Number(form.elements.ownerId.value);
+        }
         if (!payload.title || !payload.locality || !payload.city || !payload.price) throw new Error("Title, city, locality and a valid price are required.");
         if (form.dataset.editingId) {
             await api(`/listings/${form.dataset.editingId}/resubmit`, {method: "PATCH", body: JSON.stringify(payload)});

@@ -968,15 +968,15 @@
     <a class="brand" href="/propertydirect"><span class="brand-mark">PD</span> <span>Property</span>Direct</a>
     <div class="apartment-searchbar" style="max-width: 600px;">
         <select id="listingCity"><option value="Chennai">Chennai</option><option value="Bangalore">Bangalore</option><option value="Mumbai">Mumbai</option><option value="Pune">Pune</option></select>
-        <input id="listingSearch" placeholder=" AI Search: e.g. '3 BHK house in Chennai below 80 lakhs'">
-        <button class="primary small" id="listingSearchButton" style="background: linear-gradient(135deg, #2563eb, #7c3aed); border: none; font-weight: 800;"> AI Search</button>
+        <input id="listingSearch" placeholder="Search locality, project or bedrooms" aria-label="Search properties">
+        <button class="primary small" id="listingSearchButton" style="background: linear-gradient(135deg, #2563eb, #7c3aed); border: none; font-weight: 800;">Search</button>
     </div>
     <nav class="nav">
         <a href="/" class="smartsociety-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
             SmartSociety
         </a>
-        <a href="/propertydirect/dashboards/customer">Customer Dashboard</a>
+        <a href="/propertydirect/workspace">Customer Dashboard</a>
         <button class="primary small post-apartment-trigger" data-open-modal="post"><span aria-hidden="true">＋</span> Post Apartment</button>
     </nav>
 
@@ -1097,12 +1097,12 @@
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="font-size: 1.3rem;"></span>
-                    <strong style="font-size: 1.05rem; color: #a7f3d0;">AI Smart Recommendations</strong>
-                    <span style="background: #7c3aed; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">Personalized for You</span>
+                    <strong style="font-size: 1.05rem; color: #a7f3d0;">Find a home that fits</strong>
+                    <span style="background: #7c3aed; color: #ffffff; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">Quick searches</span>
                 </div>
-                <small style="color: #94a3b8; font-size: 0.78rem;">Based on: Search History · Saved Searches · Viewed Listings · Location · Budget</small>
+                <small style="color: #94a3b8; font-size: 0.78rem;">Browse approved, currently available listings</small>
             </div>
-            <p style="margin: 0 0 12px 0; font-size: 0.86rem; color: #cbd5e1;">"Recommended 2 & 3 BHK verified apartments in Anna Nagar under ₹85 Lakhs matching your saved preferences."</p>
+            <p style="margin: 0 0 12px 0; font-size: 0.86rem; color: #cbd5e1;">Choose a city and purpose, then narrow your results by budget, bedrooms and property type.</p>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="aiPromptChips">
                 <button type="button" onclick="runAiQuery('3 BHK house in Chennai below 80 lakhs')" style="background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.2); padding: 5px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; cursor: pointer;"> 3 BHK house in Chennai below 80 lakhs</button>
                 <button type="button" onclick="runAiQuery('2 BHK apartment near Chennai under 50 lakh with parking')" style="background: rgba(255,255,255,0.12); color: #ffffff; border: 1px solid rgba(255,255,255,0.2); padding: 5px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 700; cursor: pointer;"> 2 BHK apartment near Chennai under 50 lakh with parking</button>
@@ -1190,6 +1190,7 @@
 </script>
 
 <script src="/shared/js/required-fields.js?v=20260826-v2"></script>
-<script src="/propertydirect/js/apartments.js?v=20260905-api-inventory-v1"></script>
+<script src="/propertydirect/js/apartments.js?v=20260929-real-workflow-v1"></script>
+<script src="/propertydirect/js/public-workflow.js?v=20260929-1"></script>
 </body>
 </html>

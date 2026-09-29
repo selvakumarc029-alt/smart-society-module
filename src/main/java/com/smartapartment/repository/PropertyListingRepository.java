@@ -17,4 +17,7 @@ public interface PropertyListingRepository extends JpaRepository<PropertyListing
 
     @Query("SELECT p FROM PropertyListing p WHERE p.id = :i AND p.ownerId = :c")
     Optional<PropertyListing> findByIdAndCustomerId(@Param("i") Long i, @Param("c") Long c);
+
+    List<PropertyListing> findByProjectId(Long projectId);
+    List<PropertyListing> findByProjectIdOrderByCreatedAtDesc(Long projectId);
 }

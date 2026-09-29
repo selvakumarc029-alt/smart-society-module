@@ -101,11 +101,11 @@ public class PropertyWorkflowController {
             @Valid @RequestBody PropertyStatusRequest request,
             HttpSession session) {
         String status = request.status().trim().toUpperCase(Locale.ROOT);
-        if (!status.equals("APPROVED") && !status.equals("REJECTED")) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Status must be APPROVED or REJECTED");
+        if (!status.equals("APPROVED") && !status.equals("REJECTED") && !status.equals("CHANGES_REQUESTED")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Status must be APPROVED, REJECTED or CHANGES_REQUESTED");
         }
-        if (status.equals("REJECTED") && blank(request.rejectionReason())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rejection reason is required");
+        if (!status.equals("APPROVED") && blank(request.rejectionReason())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A reason is required when rejecting or requesting changes");
         }
         return properties.verify(id,
                 new PropertyApiController.ModerationRequest(status, request.rejectionReason(), "PropertyDirect Super Admin"),

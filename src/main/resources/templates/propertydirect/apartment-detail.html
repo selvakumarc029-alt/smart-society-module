@@ -142,20 +142,24 @@
             box-shadow: 0 4px 14px rgba(15, 52, 96, 0.3) !important;
         }
         .detail-page {
-            max-width: 1080px !important;
-            margin: 0 auto !important;
-            padding: 16px 20px !important;
+            width: min(1380px, calc(100% - 48px)) !important;
+            max-width: min(1380px, calc(100% - 48px)) !important;
+            margin: 24px auto !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
         }
         .detail-hero {
             display: flex !important;
             justify-content: space-between !important;
-            align-items: flex-end !important;
-            padding: 16px 22px !important;
-            margin-bottom: 18px !important;
+            align-items: center !important;
+            gap: 24px !important;
+            padding: 20px 26px !important;
+            margin-bottom: 22px !important;
             background: #ffffff !important;
             border: 1px solid #e2e8f0 !important;
-            border-radius: 14px !important;
-            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04) !important;
+            box-sizing: border-box !important;
         }
         .detail-hero p.breadcrumb {
             font-size: 0.76rem !important;
@@ -195,9 +199,20 @@
         }
         .detail-layout {
             display: grid !important;
-            grid-template-columns: minmax(0, 1fr) 320px !important;
-            gap: 22px !important;
+            grid-template-columns: minmax(0, 1fr) 360px !important;
+            gap: 28px !important;
             align-items: start !important;
+            box-sizing: border-box !important;
+        }
+        .detail-sidebar {
+            position: sticky !important;
+            top: 92px !important;
+            align-self: start !important;
+        }
+        @media (max-width: 960px) {
+            .detail-layout { grid-template-columns: 1fr !important; }
+            .detail-sidebar { position: static !important; }
+            .detail-hero { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
         }
         .photo-grid {
             display: grid !important;
@@ -398,8 +413,19 @@
             font-weight: 700 !important;
             color: #0f172a !important;
         }
+        .overview-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)) !important;
+            gap: 12px !important;
+        }
         .overview-grid article {
-            padding: 10px 14px !important;
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 12px 14px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4px !important;
         }
         .pd-tour-modal-overlay {
             position: fixed !important;
@@ -447,6 +473,7 @@
         }
     </style>
 <link rel="stylesheet" href="/shared/css/required-fields.css?v=20260826-v2">
+<link rel="stylesheet" href="/propertydirect/css/smartsociety-brand.css?v=20260929-precision-v1">
 </head>
 <body>
 <header class="topbar compact">
@@ -457,11 +484,12 @@
             SmartSociety
         </a>
         <a href="/propertydirect/apartments">Back to Apartments</a>
-        <a href="/propertydirect/dashboards/customer">Customer Dashboard</a>
+        <a href="/propertydirect/workspace">Customer Dashboard</a>
     </nav>
 </header>
 
-<main class="detail-page">
+<p id="detailLoading" role="status" style="padding:32px;text-align:center">Loading property details…</p>
+<main class="detail-page" style="visibility:hidden" aria-busy="true">
     <section class="detail-hero">
         <div>
             <div class="d-flex align-items-center gap-2 mb-1">
@@ -622,6 +650,9 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+    // Current listings are hydrated from the approved API below.
+    // Keep the earlier layout implementation without reading stale browser records.
+    return;
     const params = new URLSearchParams(window.location.search);
     let data = null;
 
@@ -1346,14 +1377,23 @@ document.addEventListener("DOMContentLoaded", function() {
 <script>
 document.addEventListener("DOMContentLoaded", async () => {
     const listingId = new URLSearchParams(window.location.search).get("id");
-    if (!listingId) return;
+    const main = document.querySelector('.detail-page');
+    const loading = document.getElementById('detailLoading');
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(node => node.remove());
+    const unavailable = message => {
+        main.innerHTML = '<section class="detail-card"><h1>Property unavailable</h1><p></p><a href="/propertydirect/apartments">Browse available properties</a></section>';
+        main.querySelector('p').textContent = message;
+        main.style.visibility = 'visible'; main.setAttribute('aria-busy','false'); loading.remove();
+        document.title = 'Property unavailable · PropertyDirect';
+    };
+    if (!listingId || !/^\d+$/.test(listingId)) { unavailable('Open a property from the current listings to see its details.'); return; }
 
     const safeText = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[ch]);
     const currency = value => value == null ? "Price on request" : `₹${Number(value).toLocaleString("en-IN")}`;
 
     try {
         const response = await fetch(`/api/property/listings/${encodeURIComponent(listingId)}`, {headers:{Accept:"application/json"}});
-        if (!response.ok) throw new Error("Approved apartment was not found");
+        if (!response.ok) throw new Error(response.status===404 ? 'This property is no longer publicly available.' : 'Property details could not be loaded. Please try again.');
         const item = await response.json();
         const location = [item.locality, item.city, item.pincode].filter(Boolean).join(", ");
         const title = item.title || `${item.bhk || "Apartment"} in ${item.locality || item.city || "your city"}`;
@@ -1364,11 +1404,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const heading = document.querySelector(".detail-hero h1");
         if (heading) heading.textContent = title;
         const locationNode = document.querySelector(".detail-hero p:not(.breadcrumb)");
-        if (locationNode) locationNode.textContent = location || "Verified location";
+        if (locationNode) locationNode.textContent = location || "Location not specified";
         const priceNode = document.querySelector(".detail-price strong");
         if (priceNode) priceNode.textContent = `${currency(item.price)}${String(item.listingType || "").toUpperCase() === "RENT" ? " / month" : ""}`;
         const priceMeta = document.querySelector(".detail-price span");
-        if (priceMeta) priceMeta.textContent = item.deposit ? `Security deposit: ${currency(item.deposit)}` : "Verified direct-owner listing";
+        if (priceMeta) priceMeta.textContent = [item.deposit!=null?`Deposit: ${currency(item.deposit)}`:'',item.maintenance!=null?`Maintenance: ${currency(item.maintenance)}`:''].filter(Boolean).join(' · ');
 
         const overview = document.querySelector(".overview-grid");
         if (overview) overview.innerHTML = `
@@ -1378,30 +1418,53 @@ document.addEventListener("DOMContentLoaded", async () => {
             <article><span>Built-up Area</span><strong>${item.areaSqft ? `${Number(item.areaSqft).toLocaleString("en-IN")} sqft` : "On request"}</strong></article>
             <article><span>Furnishing</span><strong>${safeText(item.furnishing || "Not specified")}</strong></article>
             <article><span>Parking</span><strong>${safeText(item.parking || "Confirm with owner")}</strong></article>
-            <article><span>Available From</span><strong>${item.availableFrom ? new Date(item.availableFrom).toLocaleDateString("en-IN") : "Ready to move"}</strong></article>
+            <article><span>Available From</span><strong>${item.availableFrom ? new Date(item.availableFrom).toLocaleDateString("en-IN") : "Confirm with owner / builder"}</strong></article>
             <article><span>Address</span><strong>${safeText(item.address || location || "Shared after contact verification")}</strong></article>
         `;
 
-        const urls = String(item.imageUrls || "").split(/\r?\n/).filter(Boolean);
+        const urls = String(item.imageUrls || "").split(/\r?\n/).filter(url=>/^\/api\/property\/media\/[^/]+$/.test(url));
         if (item.imageUrl && !urls.includes(item.imageUrl)) urls.unshift(item.imageUrl);
         if (urls.length) {
-            const slideImages = [...document.querySelectorAll(".slide-item img")];
-            const thumbImages = [...document.querySelectorAll(".slider-thumb-item img")];
-            slideImages.forEach((img, index) => { img.src = urls[index % urls.length]; img.alt = `${title} photo ${index + 1}`; });
-            thumbImages.forEach((img, index) => { img.src = urls[index % urls.length]; img.alt = `${title} thumbnail ${index + 1}`; });
+            const safeUrls=urls.filter(url=>/^\/(?!\/)|^https:\/\//.test(url));
+            const track=document.getElementById('sliderTrack');
+            track.innerHTML=safeUrls.map((url,index)=>`<div class="slide-item"><img src="${safeText(url)}" alt="${safeText(title)} · photo ${index+1}"></div>`).join('');
+            const thumbs=document.getElementById('sliderThumbBar');
+            thumbs.innerHTML=safeUrls.map((url,index)=>`<button type="button" class="slider-thumb-item" data-index="${index}" aria-label="View photo ${index+1}"><img src="${safeText(url)}" alt=""></button>`).join('');
+            let current=0;
+            const show=index=>{
+                current=(index+safeUrls.length)%safeUrls.length;
+                track.style.transform=`translateX(-${current*100}%)`;
+                document.getElementById('sliderCounter').textContent=`${current+1} / ${safeUrls.length}`;
+                document.getElementById('sliderLabel').textContent=`Property photo ${current+1}`;
+                thumbs.querySelectorAll('button').forEach((b,i)=>{b.classList.toggle('active',i===current);b.setAttribute('aria-pressed',String(i===current));});
+            };
+            document.getElementById('sliderPrev').onclick=()=>show(current-1);
+            document.getElementById('sliderNext').onclick=()=>show(current+1);
+            thumbs.addEventListener('click',event=>{const button=event.target.closest('[data-index]');if(button)show(Number(button.dataset.index));});
+            if(safeUrls.length) show(0);
+        } else {
+            document.getElementById('propertySlider').textContent='No property photos provided.';
+            document.getElementById('sliderThumbBar').replaceChildren();
         }
-
-        window.localStorage.setItem("propertydirect-selected-apartment", JSON.stringify({
-            id:item.id,title,price:currency(item.price),location,bhk:item.bhk,baths:item.bathrooms,
-            sqft:item.areaSqft ? `${item.areaSqft} sqft` : "",image:item.imageUrl,deposit:currency(item.deposit)
-        }));
+        document.querySelector('.amenities-list').innerHTML=String(item.amenities||'Not specified').split(/[,\n]/).filter(Boolean).map(a=>`<span>${safeText(a.trim())}</span>`).join('');
+        const video=document.querySelector('[onclick="openVideoModal()"]')?.closest('.detail-card');
+        if(video) video.innerHTML=`<h2>About this property</h2><p style="white-space:pre-line">${safeText(item.description||'The owner or builder has not added a description.')}</p>`;
+        const coordinates=item.latitude!=null&&item.longitude!=null?`${item.latitude},${item.longitude}`:location;
+        const map=document.querySelector('#detailMapCanvas iframe');
+        if(coordinates) {map.src=`https://maps.google.com/maps?q=${encodeURIComponent(coordinates)}&z=14&output=embed`;map.title='Property location';}
+        else document.getElementById('detailMapCanvas').textContent='Location not provided.';
+        document.querySelector('.owner-card').innerHTML='<h3>Contact owner / builder</h3><p>Send your enquiry to the account managing this property. Track the response in your workspace.</p><button class="primary full" data-detail-action="contact">Send enquiry</button><button class="ghost full" data-detail-action="visit">Request a visit</button>';
+        document.querySelector('.safety-card').innerHTML='<h3>Your next steps</h3><p>Enquiries and visit requests are saved in your workspace. A visit is confirmed only when the owner, builder or admin accepts it.</p>';
+        document.querySelectorAll('[data-detail-action="contact"]').forEach(button=>{button.textContent='Contact owner / builder';});
+        document.querySelectorAll('#seoMetaDescription,#ogDesc').forEach(node=>node.content=item.description||title);
+        main.style.visibility='visible'; main.setAttribute('aria-busy','false'); loading.remove();
     } catch (error) {
-        const toast = document.getElementById("toast");
-        if (toast) { toast.textContent = error.message; toast.classList.remove("hidden"); }
+        unavailable(error.message);
     }
 });
 </script>
 <script src="/shared/js/required-fields.js?v=20260826-v2"></script>
-<script src="/propertydirect/js/apartments.js?v=20260721-apartments"></script>
+<script src="/propertydirect/js/apartments.js?v=20260929-real-workflow-v1"></script>
+<script src="/propertydirect/js/public-workflow.js?v=20260929-1"></script>
 </body>
 </html>

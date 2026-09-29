@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Workspace · PropertyDirect</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/shared/css/typography.css?v=20260818-readable-type-v1">
+  <link rel="stylesheet" href="/propertydirect/css/workspace.css?v=20260929-unified-1">
+  <script src="/propertydirect/js/workspace.js?v=20260929-1" defer></script>
+</head>
+<body class="pd-workspace">
+  <a class="skip-link" href="#workspaceContent">Skip to content</a>
+  <aside class="workspace-sidebar" id="workspaceSidebar" aria-label="Workspace navigation">
+    <a href="/propertydirect" class="workspace-brand"><span>PD</span><div>PropertyDirect<small>YOUR PROPERTY WORKSPACE</small></div></a>
+    <div class="workspace-person" hidden><span id="accountAvatar">PD</span><div><strong id="accountName">Loading account…</strong><small id="accountRole">Please wait</small></div></div>
+    <nav id="workspaceNav" aria-label="Main navigation"></nav>
+  </aside>
+  <main class="workspace-main">
+    <header class="workspace-header"><div><p class="eyebrow">PROPERTYDIRECT</p><h1 id="pageTitle">My workspace</h1></div><div class="header-tools"><span class="live-label"><i></i> Saved account data</span><button type="button" id="refreshWorkspace" class="secondary">Refresh</button><button type="button" id="toggleNav" class="secondary" aria-controls="workspaceSidebar" aria-expanded="false">Menu</button></div></header>
+    <section id="workspaceContent" tabindex="-1" aria-live="polite"><div class="state-card">Loading your workspace…</div></section>
+  </main>
+  <dialog id="workspaceDialog" aria-labelledby="dialogTitle"><header><div><p class="eyebrow">PROPERTYDIRECT</p><h2 id="dialogTitle">Details</h2></div><button type="button" id="closeDialog" class="icon-button" aria-label="Close dialog">×</button></header><div id="dialogBody"></div></dialog>
+  <div id="workspaceNotice" class="notice" role="status" hidden></div>
+</body>
+</html>

@@ -658,9 +658,9 @@ html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role=
 }
 
 html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
-  height: 80px !important;
-  min-height: 80px !important;
-  max-height: 80px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
   padding: 0 20px !important;
   box-sizing: border-box !important;
   display: flex !important;
@@ -674,10 +674,10 @@ html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
 html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role="admin"], [data-dashboard-role="customer"]) main.dash-main > .dash-header {
   width: 100% !important;
   max-width: 100% !important;
-  height: 80px !important;
-  min-height: 80px !important;
-  max-height: 80px !important;
-  margin: 0 0 24px 0 !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  margin: 0 !important;
   padding: 0 28px !important;
   top: 0 !important;
   position: sticky !important;
@@ -694,9 +694,10 @@ html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role=
 }
 
 html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role="admin"], [data-dashboard-role="customer"]) main.dash-main > .dash-panel {
-  margin-left: 24px !important;
-  width: calc(100% - 24px) !important;
-  max-width: calc(100% - 24px) !important;
+  margin-left: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 16px 28px 24px 28px !important;
 }
 
 /* Vendor Dashboard Attached Header & Sidebar */
@@ -711,8 +712,8 @@ html body[data-dashboard-role="vendor"] main.vendor-main {
 html body[data-dashboard-role="vendor"] main.vendor-main > header.vendor-top {
   width: 100% !important;
   max-width: 100% !important;
-  margin: 0 0 24px 0 !important;
-  padding: 18px 32px !important;
+  margin: 0 !important;
+  padding: 14px 28px !important;
   border-left: 0 !important;
   border-top: 0 !important;
   border-right: 0 !important;
@@ -723,9 +724,10 @@ html body[data-dashboard-role="vendor"] main.vendor-main > header.vendor-top {
 }
 
 html body[data-dashboard-role="vendor"] main.vendor-main > .vendor-panel {
-  margin-left: 32px !important;
-  width: calc(100% - 32px) !important;
-  max-width: calc(100% - 32px) !important;
+  margin-left: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 16px 28px 24px 28px !important;
 }
 
 /* Agent Dashboard Attached Header & Sidebar */
@@ -740,8 +742,8 @@ html body[data-dashboard-role="agent"] main.agent-main {
 html body[data-dashboard-role="agent"] main.agent-main > header.agent-header {
   width: 100% !important;
   max-width: 100% !important;
-  margin: 0 0 24px 0 !important;
-  padding: 18px 32px !important;
+  margin: 0 !important;
+  padding: 14px 28px !important;
   border-left: 0 !important;
   border-top: 0 !important;
   border-right: 0 !important;
@@ -752,7 +754,7 @@ html body[data-dashboard-role="agent"] main.agent-main > header.agent-header {
 }
 
 html body[data-dashboard-role="agent"] main.agent-main > .dash-panel {
-  margin-left: 32px !important;
+  margin-left: 0 !important;
   width: calc(100% - 32px) !important;
   max-width: calc(100% - 32px) !important;
 }
@@ -1041,7 +1043,7 @@ html body.app-dashboard[data-platform="propertydirect"] .dash-main .dash-panel d
   min-width: 0 !important;
   overflow-x: auto !important;
   overflow-y: visible !important;
-  scrollbar-width: thin !important;
+  scrollbar-width: none !important;
 }
 
 html body.app-dashboard[data-platform="propertydirect"] .dash-main .dash-panel table td:last-child {
@@ -1327,9 +1329,9 @@ html body[data-platform="propertydirect"] .pd-dashboard-action-card .modal-actio
 /* 1. Sidebar Brand Container Layout */
 html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .dash-brand,
 html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
-  height: 80px !important;
-  min-height: 80px !important;
-  max-height: 80px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
   padding: 0 20px !important;
   box-sizing: border-box !important;
   display: flex !important;
@@ -1514,8 +1516,8 @@ html body[data-dashboard-role="vendor"] :is(.vendor-top, .page-header, .panel-he
   gap: 18px !important;
 }
 
-html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card, .metric-card, .stats-card, .summary-card, .kpi-card, article),
-html body[data-dashboard-role="vendor"] :is(.dash-card, .metric-card, .stats-card, .summary-card, .kpi-card, article) {
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-grid, .stats-grid, .metric-grid, .summary-grid, .kpi-grid) > :is(.dash-card, .metric-card, .stats-card, .summary-card, .kpi-card, article),
+html body[data-dashboard-role="vendor"] :is(.vendor-grid, .stats-grid, .metric-grid, .summary-grid, .kpi-grid) > :is(.dash-card, .metric-card, .stats-card, .summary-card, .kpi-card, article) {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1523,6 +1525,34 @@ html body[data-dashboard-role="vendor"] :is(.dash-card, .metric-card, .stats-car
   height: 100%;
   min-height: 118px;
   overflow: hidden !important;
+}
+
+/* Dedicated Table and Content Card Reset - Never Vertically Centered with Gap */
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)):not(.hidden):not([hidden]),
+html body[data-dashboard-role="vendor"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)):not(.hidden):not([hidden]) {
+  display: block;
+  justify-content: flex-start !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] #subtabEnquiriesView.hidden,
+html body.app-dashboard[data-platform="propertydirect"] #subtabVisitsView.hidden,
+html body.app-dashboard[data-platform="propertydirect"] #subtabEnquiriesView[hidden],
+html body.app-dashboard[data-platform="propertydirect"] #subtabVisitsView[hidden] {
+  display: none !important;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) .dashboard-table-scroll,
+html body[data-dashboard-role="vendor"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) .dashboard-table-scroll {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  width: 100% !important;
 }
 
 html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card, .metric-card, .stats-card, .summary-card, .kpi-card, article) :is(h1, h2, h3, h4, strong) {
@@ -1699,11 +1729,11 @@ html body[data-dashboard-role="vendor"] :is(.vendor-top, .vendor-main > .vendor-
   position: sticky !important;
   top: 0 !important;
   z-index: 1020 !important;
-  height: 70px !important;
-  min-height: 70px !important;
-  max-height: 70px !important;
-  margin: 0 0 24px 0 !important;
-  padding: 0 32px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  margin: 0 !important;
+  padding: 0 28px !important;
   border: 0 !important;
   border-bottom: 1px solid #e2e8f0 !important;
   border-radius: 0 !important;
@@ -1720,7 +1750,7 @@ html body.app-dashboard[data-platform="propertydirect"] :is(.dash-panel, .dashbo
 html body[data-dashboard-role="vendor"] :is(.vendor-main > .dash-panel, .vendor-content) {
   width: 100% !important;
   max-width: 100% !important;
-  padding: 0 32px 40px 32px !important;
+  padding: 16px 28px 24px 28px !important;
   box-sizing: border-box !important;
 }
 
@@ -1831,3 +1861,32 @@ html body.app-dashboard[data-platform="propertydirect"] :is(.dash-grid, .stats) 
   display: block !important;
 }
 
+
+/* -------------------------------------------------------------
+   HIDE SIDEBAR VERTICAL SCROLLBAR LINE COMPLETELY
+   Keeps scrollability while removing vertical scrollbar bar & arrows
+   ------------------------------------------------------------- */
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar),
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav, .sidebar-body),
+html body.app-dashboard .sidebar-nav {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar)::-webkit-scrollbar,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav, .sidebar-body)::-webkit-scrollbar,
+html body.app-dashboard .sidebar-nav::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+    background: transparent !important;
+}
+
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-thumb,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-track,
+html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sidebar) :is(.sidebar-nav, nav, .nav)::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+}

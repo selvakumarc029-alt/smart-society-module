@@ -1637,10 +1637,10 @@ function superadminPaymentsMarkup() {
             <span class="status live">Synced today</span>
         </div>
         <div class="payment-summary-grid">
-            <article><span>Total Collected</span><strong>Rs. 82.4L</strong><small>Across all PropertyDirect modules</small></article>
-            <article><span>Pending Settlement</span><strong>Rs. 6.8L</strong><small>Owner payouts and service vendors</small></article>
-            <article><span>Failed / Review</span><strong>18</strong><small>Payment callbacks needing action</small></article>
-            <article><span>Refund Queue</span><strong>Rs. 74K</strong><small>Customer support review pending</small></article>
+            <article><span>Total Collected</span><strong>Rs. 0</strong><small>Across all PropertyDirect modules</small></article>
+            <article><span>Pending Settlement</span><strong>Rs. 0</strong><small>Owner payouts and service vendors</small></article>
+            <article><span>Failed / Review</span><strong>0</strong><small>Payment callbacks needing action</small></article>
+            <article><span>Refund Queue</span><strong>Rs. 0</strong><small>Customer support review pending</small></article>
         </div>
         <div class="subscription-subtabs payment-tabs" role="tablist" aria-label="Payment sections">
             <button class="active" type="button" data-payment-tab="rent" aria-selected="true">Rent Payments</button>
@@ -1652,9 +1652,7 @@ function superadminPaymentsMarkup() {
             <table class="payment-detail-table">
                 <tbody>
                 <tr><th>Transaction</th><th>Customer / Owner</th><th>Apartment</th><th>Amount</th><th>Status</th><th>Action</th></tr>
-                <tr><td>PD-RP-10021<br><small>UPI - 10:15 AM</small></td><td>Asha R / Manifest Heights Owner</td><td>2 BHK Hebbal</td><td>Rs. 28,000</td><td><span class="status paid">Settled</span></td><td><button data-action="receipt">Receipt</button></td></tr>
-                <tr><td>PD-RP-10022<br><small>Card - 11:40 AM</small></td><td>Rahul K / Premium Owner Desk</td><td>3 BHK Bellandur</td><td>Rs. 50,000</td><td><span class="status pending">Settlement Due</span></td><td><button data-action="mark-paid">Settle</button></td></tr>
-                <tr><td>PD-RP-10023<br><small>NetBanking - 12:05 PM</small></td><td>Priya S / Sri Balaji Serenity</td><td>2 BHK Kaikondrahalli</td><td>Rs. 42,000</td><td><span class="status open">Bank Review</span></td><td><button data-action="resolve-task">Review</button></td></tr>
+                <tr><td colspan="6" style="text-align:center; padding:24px; color:#64748b;">No rent payment transactions recorded.</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1662,9 +1660,7 @@ function superadminPaymentsMarkup() {
             <table class="payment-detail-table">
                 <tbody>
                 <tr><th>Plan</th><th>Owner</th><th>Cycle</th><th>Amount</th><th>Status</th><th>Action</th></tr>
-                <tr><td>Assisted Owner Plan</td><td>Demo Owner</td><td>Jul 2026</td><td>Rs. 4,999</td><td><span class="status paid">Active</span></td><td><button data-action="receipt">Invoice</button></td></tr>
-                <tr><td>Premium Owner Plan</td><td>Koramangala Owner</td><td>Jul 2026</td><td>Rs. 2,499</td><td><span class="status paid">Active</span></td><td><button data-action="receipt">Invoice</button></td></tr>
-                <tr><td>Premium Renewal</td><td>Whitefield Owner</td><td>Aug 2026</td><td>Rs. 2,499</td><td><span class="status pending">Upcoming</span></td><td><button data-action="manage-plan">Manage</button></td></tr>
+                <tr><td colspan="6" style="text-align:center; padding:24px; color:#64748b;">No subscription plan transactions recorded.</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1672,9 +1668,7 @@ function superadminPaymentsMarkup() {
             <table class="payment-detail-table">
                 <tbody>
                 <tr><th>Service</th><th>Customer</th><th>Vendor</th><th>Amount</th><th>Status</th><th>Action</th></tr>
-                <tr><td>Painting</td><td>Meena Rao</td><td>Prime Paints</td><td>Rs. 18,000</td><td><span class="status pending">Vendor Payout</span></td><td><button data-action="mark-paid">Pay Vendor</button></td></tr>
-                <tr><td>Cleaning</td><td>Arun Kumar</td><td>CleanPro</td><td>Rs. 1,299</td><td><span class="status paid">Paid</span></td><td><button data-action="receipt">Receipt</button></td></tr>
-                <tr><td>Tenant Agreement</td><td>Priya S</td><td>Legal Desk</td><td>Rs. 999</td><td><span class="status open">Document Pending</span></td><td><button data-action="resolve-task">Follow Up</button></td></tr>
+                <tr><td colspan="6" style="text-align:center; padding:24px; color:#64748b;">No service transactions recorded.</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1682,9 +1676,7 @@ function superadminPaymentsMarkup() {
             <table class="payment-detail-table">
                 <tbody>
                 <tr><th>Issue</th><th>Reference</th><th>User</th><th>Amount</th><th>Priority</th><th>Action</th></tr>
-                <tr><td>Payment callback failed</td><td>PD-FL-4421</td><td>Chennai customer</td><td>Rs. 2,499</td><td><span class="status open">High</span></td><td><button data-action="resolve-task">Resolve</button></td></tr>
-                <tr><td>Refund requested</td><td>PD-RF-1088</td><td>Service booking user</td><td>Rs. 1,299</td><td><span class="status pending">Medium</span></td><td><button data-action="mark-paid">Approve</button></td></tr>
-                <tr><td>Duplicate rent payment</td><td>PD-DP-3020</td><td>Bangalore tenant</td><td>Rs. 28,000</td><td><span class="status open">High</span></td><td><button data-action="resolve-task">Audit</button></td></tr>
+                <tr><td colspan="6" style="text-align:center; padding:24px; color:#64748b;">No payment exceptions or disputes found.</td></tr>
                 </tbody>
             </table>
         </div>

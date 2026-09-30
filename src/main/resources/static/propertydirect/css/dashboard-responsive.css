@@ -645,16 +645,23 @@ html body.app-dashboard[data-platform="propertydirect"] .dash-main .dash-panel d
   max-width: none !important;
 }
 
-/* PropertyDirect dashboards: attach the top header directly flush to the fixed sidebar and top edge.
-   Both .dash-brand and .dash-header are locked to 80px height with 0 top margin so their bottom border lines align seamlessly on the exact same horizontal axis. */
+/* Keep the content offset tied to the sidebar; mobile drawers reserve no space. */
 html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role="admin"], [data-dashboard-role="customer"]) main.dash-main {
-  margin-left: 275px !important;
-  width: calc(100% - 275px) !important;
-  max-width: calc(100% - 275px) !important;
-  padding: 0 24px 36px 0 !important;
+  margin-left: var(--dashboard-sidebar-width) !important;
+  width: calc(100% - var(--dashboard-sidebar-width)) !important;
+  max-width: calc(100% - var(--dashboard-sidebar-width)) !important;
+  padding: 0 !important;
   margin-top: 0 !important;
   padding-top: 0 !important;
   background: #f6f8fc !important;
+}
+
+@media (max-width: 991.98px) {
+  html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role="admin"], [data-dashboard-role="customer"]) main.dash-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 html body.app-dashboard[data-platform="propertydirect"] .dash-brand {

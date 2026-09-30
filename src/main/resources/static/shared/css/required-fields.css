@@ -4,6 +4,16 @@
     margin-left: 0.22rem;
     display: inline !important;
     font-size: inherit;
+    line-height: inherit;
+}
+
+.label-title-text {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.2rem !important;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
 }
 
 form[id*="login"] .required-star,

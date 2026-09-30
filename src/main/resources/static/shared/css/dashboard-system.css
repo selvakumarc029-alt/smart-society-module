@@ -295,7 +295,7 @@ body.app-dashboard .dash-sidebar .sidebar-nav button.active {
     font-weight:750;
     transition:.2s;
 }
-.dashboard-body .logout::before,.app-dashboard .logout::before{content:"←";font-size:.9rem}
+.dashboard-body .logout::before,.app-dashboard .logout::before{content:none !important;display:none !important;}
 .dashboard-body .logout:hover,.app-dashboard .logout:hover{color:#fff;background:rgba(255,255,255,.14);transform:translateY(-1px)}
 body.dashboard-body .sidebar > .logout,
 body.app-dashboard .dash-sidebar > .logout { color:rgba(255,255,255,.8) !important; background:rgba(255,255,255,.07) !important; border-color:rgba(255,255,255,.16) !important; box-shadow:none !important; }

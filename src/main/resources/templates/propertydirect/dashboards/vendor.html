@@ -859,12 +859,7 @@
               </thead>
               <tbody id="ownerListingsBody">
                 <tr>
-                  <td><strong>Prestige High Line (2 BHK)</strong><br><small style="color: #64748b;">Outer Ring Road, Bengaluru</small></td>
-                  <td>Apartment / Rent</td>
-                  <td>₹42,000/mo</td>
-                  <td><span class="status APPROVED">● Verified & Live</span></td>
-                  <td>02 Sep 2026</td>
-                  <td><button style="padding: 5px 12px; font-size: 0.78rem;" onclick="showVendorToast('✏️ Edit Listing dialog opened')">Edit</button></td>
+                  <td colspan="6" style="text-align: center; padding: 28px; color: #64748b;">No property listings registered yet. Click &quot;+ List New Property&quot; to submit a property for verification.</td>
                 </tr>
               </tbody>
             </table>
@@ -882,23 +877,9 @@
             </div>
             <button class="primary" onclick="openLaunchProjectModal()">+ Launch New Project</button>
           </div>
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-            <div style="border: 1px solid #cbd5e1; border-radius: 16px; padding: 20px; background: #ffffff;">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                <span class="status APPROVED">Under Construction</span>
-                <span style="font-size: 0.78rem; color: #64748b; font-weight: 700;">Possession Q4 2027</span>
-              </div>
-              <h3 style="margin: 0 0 4px 0; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Prestige Grand Palms</h3>
-              <p style="margin: 0 0 14px 0; font-size: 0.84rem; color: #64748b;">Whitefield Main Road, Bengaluru</p>
-              <div style="background: #f8fafc; border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.82rem; font-weight: 700; color: #334155;">
-                Config: 2, 3 & 4 BHK Luxury Apartments<br>
-                <span style="color: #2563eb; font-weight: 800; font-size: 0.95rem;">Starting ₹1.15 Cr</span>
-              </div>
-              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <button onclick="openProjectGallery('Prestige Grand Palms')" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700;">Gallery</button>
-                <button onclick="openFloorPlans('Prestige Grand Palms')" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700;">Floor Plans</button>
-                <button onclick="openSalesHotline('Prestige Grand Palms', '+91 98000 11223', 'sales@prestige.com')" style="padding: 6px 12px; font-size: 0.78rem; font-weight: 700; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; cursor: pointer;">Sales Hotline</button>
-              </div>
+          <div id="vendorProjectsContainer" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+            <div style="grid-column: 1 / -1; padding: 36px 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+              No builder projects launched yet. Click &quot;+ Launch New Project&quot; to register a project.
             </div>
           </div>
         </div>
@@ -1149,11 +1130,11 @@
       <div style="padding: 24px; display: grid; gap: 16px;">
         <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px;">
           <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">DIRECT PHONE HOTLINE</div>
-          <strong id="hotlinePhone" style="font-size: 1.1rem; color: #2563eb;">+91 98000 11223</strong>
+          <strong id="hotlinePhone" style="font-size: 1.1rem; color: #2563eb;">Not provided</strong>
         </div>
         <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px;">
           <div style="font-size: 0.8rem; color: #64748b; margin-bottom: 4px;">OFFICIAL PROJECT EMAIL</div>
-          <strong id="hotlineEmail" style="font-size: 1.05rem; color: #0f172a;">sales@prestige.com</strong>
+          <strong id="hotlineEmail" style="font-size: 1.05rem; color: #0f172a;">sales@propertydirect.in</strong>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
           <button onclick="triggerHotlineCall()" style="flex: 1; padding: 10px; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Call Sales Desk</button>
@@ -1187,8 +1168,8 @@
     }
     function openSalesHotline(projectName, phone, email) {
       document.getElementById('hotlineTitle').textContent = 'Sales Desk - ' + (projectName || 'Project');
-      document.getElementById('hotlinePhone').textContent = phone || '+91 98000 11223';
-      document.getElementById('hotlineEmail').textContent = email || 'sales@prestige.com';
+      document.getElementById('hotlinePhone').textContent = phone || 'Not provided';
+      document.getElementById('hotlineEmail').textContent = email || 'sales@propertydirect.in';
       document.getElementById('salesHotlineModal').classList.remove('hidden');
     }
     function handleSaveProject(e) {

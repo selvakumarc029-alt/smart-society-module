@@ -82,7 +82,7 @@
 
     // Navigation and tab switching with filter presets
     window.switchTabAndFilter = function (panelId, filterOptions) {
-        if (!panelId) panelId = 'overview';
+        if (!panelId || panelId === 'projects') panelId = 'overview';
 
         // Alias support for legacy or renamed panels
         if (panelId === 'leads' || panelId === 'tours') panelId = 'enquiries';
@@ -103,11 +103,13 @@
             view.style.display = isTarget ? "block" : "none";
         });
 
-        // Update header title
+        // Update header title cleanly without scraping badge counts
         const activeBtn = document.querySelector(`.sidebar-nav [data-panel="${panelId}"]`);
         const titleElem = document.getElementById("panelTitle");
         if (activeBtn && titleElem) {
-            titleElem.textContent = activeBtn.textContent.trim();
+            const clone = activeBtn.cloneNode(true);
+            clone.querySelectorAll('span, svg').forEach(el => el.remove());
+            titleElem.textContent = clone.textContent.trim();
         }
 
         // Apply filter presets if passed
@@ -236,8 +238,27 @@
             renderOverview();
         } catch (err) {
             console.error("Error loading overview:", err);
+            const notifContainer = document.getElementById("overviewNotificationsList");
+            if (notifContainer && !state.overview) {
+                notifContainer.innerHTML = `
+                    <div style="padding:16px 20px; border-radius:12px; background:#f0fdf4; border:1px solid #bbf7d0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="font-size:1.2rem;">✓</span>
+                            <div>
+                                <strong style="color:#166534; font-size:0.88rem;">All Moderation Queues Clear</strong>
+                                <p style="margin:2px 0 0 0; color:#15803d; font-size:0.8rem;">No pending approvals, open reports, or unreviewed verifications at this moment.</p>
+                            </div>
+                        </div>
+                        <button type="button" onclick="loadOverview()" class="small" style="padding:6px 12px; border-radius:8px; border:1px solid #86efac; background:#dcfce7; color:#166534; font-weight:700; cursor:pointer;">Refresh</button>
+                    </div>`;
+            }
+            const actContainer = document.getElementById("overviewRecentActivity");
+            if (actContainer && !state.overview) {
+                actContainer.innerHTML = `<div style="text-align:center; padding:24px; color:#64748b; font-size:0.86rem;">No recent activity recorded.</div>`;
+            }
         }
     }
+    window.loadOverview = loadOverview;
 
     function renderOverview() {
         if (!state.overview) return;
@@ -397,6 +418,19 @@
             return matchesQuery && matchesRole && matchesStatus && matchesVerify;
         });
 
+        // Update Stats Ribbon
+        const totalEl = document.getElementById("userStatTotal");
+        const custEl = document.getElementById("userStatCustomers");
+        const ownEl = document.getElementById("userStatOwners");
+        const bldEl = document.getElementById("userStatBuilders");
+        const suspEl = document.getElementById("userStatSuspended");
+
+        if (totalEl) totalEl.textContent = state.users.length;
+        if (custEl) custEl.textContent = state.users.filter(u => (u.role || "").toUpperCase() === "CUSTOMER").length;
+        if (ownEl) ownEl.textContent = state.users.filter(u => (u.role || "").toUpperCase() === "OWNER").length;
+        if (bldEl) bldEl.textContent = state.users.filter(u => (u.role || "").toUpperCase() === "BUILDER").length;
+        if (suspEl) suspEl.textContent = state.users.filter(u => !u.active || (u.status || "").toUpperCase() === "SUSPENDED").length;
+
         if (filtered.length === 0) {
             tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b; font-size:0.88rem;">No user accounts match the selected criteria.</td></tr>`;
             return;
@@ -433,112 +467,111 @@
                     <td style="padding:14px 18px; font-size:0.82rem; color:#475569;">${formatDateTime(u.registeredAt)}</td>
                     <td style="padding:14px 18px;">${statusBadge}</td>
                     <td style="padding:14px 18px;">${verifyBadge}</td>
-                    <td style="padding:14px 18px; text-align:right; white-space:nowrap;">
-                        <div style="display:inline-flex; align-items:center; gap:6px;">
-                            <button type="button" onclick="inspectUser(${u.id})"
-                                style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-size:0.78rem; font-weight:700; cursor:pointer;">
-                                Inspect
+                    <td style="padding:14px 18px; text-align:right; white-space:nowrap; position:relative;">
+                        <div class="user-action-dropdown" style="position:relative; display:inline-block; text-align:left;">
+                            <button type="button" class="user-dropdown-btn" onclick="toggleUserDropdown(${u.id}, event)"
+                                style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#1e293b; font-size:0.8rem; font-weight:700; cursor:pointer; box-shadow:0 1px 2px rgba(0,0,0,0.05); transition:all 0.15s ease;"
+                                onmouseover="this.style.background='#f8fafc'; this.style.borderColor='#94a3b8';" onmouseout="this.style.background='#ffffff'; this.style.borderColor='#cbd5e1';">
+                                <span>Actions</span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
                             </button>
-                            <button type="button" onclick="toggleUserStatus(${u.id}, ${isActive})"
-                                style="padding:6px 12px; border-radius:8px; border:1px solid ${isActive ? '#fca5a5' : '#86efac'}; background:${isActive ? '#fff1f2' : '#f0fdf4'}; color:${isActive ? '#b91c1c' : '#15803d'}; font-size:0.78rem; font-weight:700; cursor:pointer;">
-                                ${isActive ? 'Suspend' : 'Reactivate'}
-                            </button>
-                            <button type="button" onclick="togglePostingPermission(${u.id}, ${u.postingVerified})"
-                                style="padding:6px 10px; border-radius:8px; border:1px solid #bfdbfe; background:#eff6ff; color:#1d4ed8; font-size:0.78rem; font-weight:700; cursor:pointer;">
-                                ${u.postingVerified ? 'Revoke Post' : 'Grant Post'}
-                            </button>
+                            <div id="userDropdown_${u.id}" class="user-dropdown-menu"
+                                style="display:none; position:absolute; right:0; top:calc(100% + 4px); z-index:99999; min-width:240px; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; box-shadow:0 12px 28px -4px rgba(0,0,0,0.14), 0 6px 12px -4px rgba(0,0,0,0.08); padding:6px; text-align:left;">
+                                <button type="button" onclick="openUserInspectModal(${u.id})"
+                                    style="width:100%; display:flex; align-items:center; gap:10px; padding:8px 12px; border:none; background:transparent; border-radius:8px; font-size:0.82rem; font-weight:600; color:#1e293b; cursor:pointer; transition:background 0.12s;"
+                                    onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                                    <span style="font-size:1.05rem;">🔍</span>
+                                    <div>
+                                        <strong style="display:block; font-size:0.82rem; color:#0f172a;">Inspect & Edit Profile</strong>
+                                        <span style="display:block; font-size:0.72rem; color:#64748b;">Full details & admin modification</span>
+                                    </div>
+                                </button>
+                                <button type="button" onclick="openUserStatusModal(${u.id})"
+                                    style="width:100%; display:flex; align-items:center; gap:10px; padding:8px 12px; border:none; background:transparent; border-radius:8px; font-size:0.82rem; font-weight:600; color:${isActive ? '#b91c1c' : '#15803d'}; cursor:pointer; transition:background 0.12s;"
+                                    onmouseover="this.style.background='${isActive ? '#fff1f2' : '#f0fdf4'}'" onmouseout="this.style.background='transparent'">
+                                    <span style="font-size:1.05rem;">${isActive ? '⛔' : '✅'}</span>
+                                    <div>
+                                        <strong style="display:block; font-size:0.82rem;">${isActive ? 'Suspend Account' : 'Reactivate Account'}</strong>
+                                        <span style="display:block; font-size:0.72rem; color:#64748b;">${isActive ? 'Block login & actions' : 'Restore active access'}</span>
+                                    </div>
+                                </button>
+                                <button type="button" onclick="openUserPostingModal(${u.id})"
+                                    style="width:100%; display:flex; align-items:center; gap:10px; padding:8px 12px; border:none; background:transparent; border-radius:8px; font-size:0.82rem; font-weight:600; color:#1d4ed8; cursor:pointer; transition:background 0.12s;"
+                                    onmouseover="this.style.background='#eff6ff'" onmouseout="this.style.background='transparent'">
+                                    <span style="font-size:1.05rem;">${u.postingVerified ? '🚫' : '🔑'}</span>
+                                    <div>
+                                        <strong style="display:block; font-size:0.82rem;">${u.postingVerified ? 'Revoke Posting Access' : 'Grant Posting Access'}</strong>
+                                        <span style="display:block; font-size:0.72rem; color:#64748b;">${u.postingVerified ? 'Restrict listing creation' : 'Authorize direct posting'}</span>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
                     </td>
                 </tr>`;
         }).join('');
     }
 
-    window.toggleUserStatus = async function (userId, currentlyActive) {
-        const nextStatus = currentlyActive ? "SUSPENDED" : "ACTIVE";
-        const actionVerb = currentlyActive ? "suspend" : "reactivate";
-        const note = prompt(`Please provide an administrative reason to ${actionVerb} Account #USR-${userId}:`, `Administrative ${actionVerb}`);
-        if (note == null || !note.trim()) return;
+    // Toggle Dropdown Menu
+    window.toggleUserDropdown = function (userId, event) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        const currentMenu = document.getElementById(`userDropdown_${userId}`);
+        const wasOpen = currentMenu && currentMenu.style.display === 'block';
 
-        try {
-            const res = await fetch(`/api/property/portal/accounts/${userId}`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({ status: nextStatus, note: note.trim() })
-            });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || `Failed to update status`);
-            showToast(`Account #USR-${userId} is now ${nextStatus}!`);
-            loadUsers();
-            loadOverview();
-        } catch (err) {
-            showToast(err.message, true);
+        // Close all dropdowns
+        document.querySelectorAll('.user-dropdown-menu').forEach(el => {
+            el.style.display = 'none';
+        });
+
+        if (!wasOpen && currentMenu) {
+            currentMenu.style.display = 'block';
         }
     };
 
-    window.togglePostingPermission = async function (userId, currentlyVerified) {
-        const nextState = !currentlyVerified;
-        const msg = nextState ? "Grant posting permission to" : "Revoke posting permission from";
-        if (!confirm(`Are you sure you want to ${msg} Account #USR-${userId}?`)) return;
-
-        try {
-            const res = await fetch(`/api/property/portal/accounts/${userId}/posting-permission?verified=${nextState}`, {
-                method: 'PATCH',
-                headers: { 'Accept': 'application/json' }
+    // Close Dropdowns on Click Outside
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.user-action-dropdown')) {
+            document.querySelectorAll('.user-dropdown-menu').forEach(el => {
+                el.style.display = 'none';
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message || `Failed to update posting permission`);
-            showToast(`Posting permission updated for #USR-${userId}!`);
-            loadUsers();
-            loadOverview();
-        } catch (err) {
-            showToast(err.message, true);
         }
-    };
+    });
 
-    window.inspectUser = function (userId) {
+    // 1. INSPECT & EDIT USER PROFILE
+    window.openUserInspectModal = function (userId) {
+        // Close dropdown
+        document.querySelectorAll('.user-dropdown-menu').forEach(el => { el.style.display = 'none'; });
+
         const u = state.users.find(x => x.id === userId);
         if (!u) return;
 
-        const modal = document.getElementById("userInspectModal") || document.getElementById("inspectUserModal");
+        const modal = document.getElementById("userInspectModal");
         if (!modal) return;
 
         const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.value = (val != null ? val : ''); };
 
-        setTxt("inspectModalTitle", u.name || `User #${u.id}`);
-        setTxt("inspectUserSubtitle", `ID #USR-${u.id} • Registered ${formatDateTime(u.registeredAt)}`);
-        setTxt("inspectName", u.name);
-        setTxt("inspectEmail", u.email);
-        setTxt("inspectPhone", u.phone);
+        setTxt("inspectModalTitle", `${u.name || 'User'} (#USR-${u.id})`);
+        setTxt("inspectUserSubtitle", `Customer ID #USR-${u.id} • Registered ${formatDateTime(u.registeredAt)}`);
         setTxt("inspectRegDate", formatDateTime(u.registeredAt));
 
         const initials = (u.name || 'CU').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
         const avatarEl = document.getElementById("inspectAvatar");
         if (avatarEl) avatarEl.textContent = initials;
 
-        const uRole = (u.role || 'CUSTOMER').toUpperCase();
-        const roleEl = document.getElementById("inspectRoleBadge");
-        if (roleEl) roleEl.innerHTML = roleBadges[uRole] || uRole;
+        // Populate Form Fields
+        setVal("inspectEditUserId", u.id);
+        setVal("inspectEditName", u.name);
+        setVal("inspectEditEmail", u.email);
+        setVal("inspectEditPhone", u.phone);
+        setVal("inspectEditRole", (u.role || 'CUSTOMER').toUpperCase());
+        setVal("inspectEditStatus", (u.status || (u.active ? 'ACTIVE' : 'SUSPENDED')).toUpperCase());
+        setVal("inspectEditPosting", String(Boolean(u.postingVerified)));
+        setVal("inspectEditNote", "");
 
-        const isActive = u.active && (u.status || 'ACTIVE').toUpperCase() === 'ACTIVE';
-        const statEl = document.getElementById("inspectStatusBadge");
-        if (statEl) {
-            statEl.innerHTML = isActive
-                ? `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:800; background:#dcfce7; color:#15803d;">Active</span>`
-                : `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:800; background:#fee2e2; color:#b91c1c;">Suspended</span>`;
-        }
-
-        const postEl = document.getElementById("inspectPostingBadge");
-        if (postEl) {
-            if (u.postingVerified) {
-                postEl.innerHTML = `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:800; background:#d1fae5; color:#065f46;">✓ Verified Posting Granted</span>`;
-            } else if (u.applicationDecision === 'PENDING') {
-                postEl.innerHTML = `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:800; background:#fef3c7; color:#92400e;">⏳ Application Awaiting Review</span>`;
-            } else {
-                postEl.innerHTML = `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:700; background:#f1f5f9; color:#64748b;">Not Verified</span>`;
-            }
-        }
-
-        // Seller/Builder Application Card
+        // Application Info Card (for builders / owners)
         const appCard = document.getElementById("inspectApplicationCard");
         if (appCard) {
             if (u.applicationId || u.companyName || u.registrationNumber || u.verificationDetails) {
@@ -553,26 +586,83 @@
             }
         }
 
-        // Suspend / Reactivate Action button
-        const suspBtn = document.getElementById("inspectSuspendBtn");
-        if (suspBtn) {
-            suspBtn.textContent = isActive ? "Suspend Account" : "Reactivate Account";
-            suspBtn.style.background = isActive ? "#fee2e2" : "#dcfce7";
-            suspBtn.style.color = isActive ? "#b91c1c" : "#15803d";
-            suspBtn.onclick = () => {
-                toggleUserStatus(u.id, isActive);
-                closeModal("userInspectModal");
-            };
+        modal.classList.remove("hidden");
+        modal.classList.remove("d-none");
+        modal.style.display = "flex";
+    };
+
+    window.inspectUser = window.openUserInspectModal;
+
+    // Save Inspect Profile Changes
+    window.saveUserInspectChanges = async function (event) {
+        if (event) event.preventDefault();
+
+        const userId = document.getElementById("inspectEditUserId")?.value;
+        if (!userId) return;
+
+        const name = document.getElementById("inspectEditName")?.value?.trim();
+        const email = document.getElementById("inspectEditEmail")?.value?.trim();
+        const phone = document.getElementById("inspectEditPhone")?.value?.trim();
+        const role = document.getElementById("inspectEditRole")?.value;
+        const status = document.getElementById("inspectEditStatus")?.value;
+        const postingVerified = document.getElementById("inspectEditPosting")?.value === 'true';
+        const note = document.getElementById("inspectEditNote")?.value?.trim() || "Administrative profile details update";
+
+        const saveBtn = document.getElementById("inspectSaveBtn");
+        const origText = saveBtn ? saveBtn.textContent : "";
+        if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = "Saving..."; }
+
+        try {
+            const res = await fetch(`/api/property/portal/accounts/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ name, email, phone, role, status, postingVerified, note })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || `Failed to update user profile`);
+
+            showToast(`User #USR-${userId} profile updated successfully!`);
+            closeInspectModal();
+            loadUsers();
+            loadOverview();
+        } catch (err) {
+            showToast(err.message, true);
+        } finally {
+            if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = origText; }
+        }
+    };
+
+    // 2. DEDICATED ACCOUNT STATUS MODAL FORM
+    window.openUserStatusModal = function (userId) {
+        // Close dropdown
+        document.querySelectorAll('.user-dropdown-menu').forEach(el => { el.style.display = 'none'; });
+
+        const u = state.users.find(x => x.id === userId);
+        if (!u) return;
+
+        const modal = document.getElementById("userStatusModal");
+        if (!modal) return;
+
+        document.getElementById("statusTargetUserId").value = u.id;
+        document.getElementById("statusModalUserName").textContent = `${u.name || 'User'} (#USR-${u.id})`;
+
+        const isActive = u.active && (u.status || 'ACTIVE').toUpperCase() === 'ACTIVE';
+        const badge = document.getElementById("statusModalCurrentBadge");
+        if (badge) {
+            badge.innerHTML = isActive
+                ? `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:800; background:#dcfce7; color:#15803d;">Active</span>`
+                : `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:800; background:#fee2e2; color:#b91c1c;">Suspended</span>`;
         }
 
-        // Posting Permission Action button
-        const postBtn = document.getElementById("inspectPostingBtn");
-        if (postBtn) {
-            postBtn.textContent = u.postingVerified ? "Revoke Posting Permission" : "Grant Posting Permission";
-            postBtn.onclick = () => {
-                togglePostingPermission(u.id, u.postingVerified);
-                closeModal("userInspectModal");
-            };
+        // Default target status to the opposite state
+        const targetSelect = document.getElementById("statusTargetSelect");
+        if (targetSelect) {
+            targetSelect.value = isActive ? "SUSPENDED" : "ACTIVE";
+        }
+
+        const noteInput = document.getElementById("statusReasonNote");
+        if (noteInput) {
+            noteInput.value = isActive ? "Suspicious activity detected on account" : "Identity and ownership verification successfully cleared";
         }
 
         modal.classList.remove("hidden");
@@ -580,10 +670,162 @@
         modal.style.display = "flex";
     };
 
+    window.openUserStatusModalFromInspect = function () {
+        const userId = parseInt(document.getElementById("inspectEditUserId")?.value, 10);
+        if (userId) openUserStatusModal(userId);
+    };
+
+    window.applyStatusNotePreset = function (text) {
+        const noteInput = document.getElementById("statusReasonNote");
+        if (noteInput) {
+            noteInput.value = text;
+            noteInput.focus();
+        }
+    };
+
+    window.submitUserStatusModal = async function (event) {
+        if (event) event.preventDefault();
+
+        const userId = document.getElementById("statusTargetUserId")?.value;
+        const status = document.getElementById("statusTargetSelect")?.value;
+        const note = document.getElementById("statusReasonNote")?.value?.trim();
+
+        if (!userId) return;
+        if (!note) {
+            showToast("Please provide an administrative reason / note.", true);
+            document.getElementById("statusReasonNote")?.focus();
+            return;
+        }
+
+        const submitBtn = document.getElementById("statusSubmitBtn");
+        const origText = submitBtn ? submitBtn.textContent : "";
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Updating..."; }
+
+        try {
+            const res = await fetch(`/api/property/portal/accounts/${userId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ status, note })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || `Failed to update status`);
+
+            showToast(`Account #USR-${userId} is now ${status}!`);
+            closeModal("userStatusModal");
+            closeInspectModal();
+            loadUsers();
+            loadOverview();
+        } catch (err) {
+            showToast(err.message, true);
+        } finally {
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
+        }
+    };
+
+    // 3. DEDICATED POSTING PERMISSION MODAL FORM
+    window.openUserPostingModal = function (userId) {
+        // Close dropdown
+        document.querySelectorAll('.user-dropdown-menu').forEach(el => { el.style.display = 'none'; });
+
+        const u = state.users.find(x => x.id === userId);
+        if (!u) return;
+
+        const modal = document.getElementById("userPostingModal");
+        if (!modal) return;
+
+        document.getElementById("postingTargetUserId").value = u.id;
+        document.getElementById("postingModalUserName").textContent = `${u.name || 'User'} (#USR-${u.id})`;
+
+        const badge = document.getElementById("postingModalCurrentBadge");
+        if (badge) {
+            badge.innerHTML = u.postingVerified
+                ? `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:800; background:#d1fae5; color:#065f46;">✓ Verified Posting Granted</span>`
+                : `<span style="padding:3px 9px; border-radius:999px; font-size:0.74rem; font-weight:700; background:#f1f5f9; color:#64748b;">Not Verified</span>`;
+        }
+
+        // Default target to opposite state
+        const targetSelect = document.getElementById("postingTargetSelect");
+        if (targetSelect) {
+            targetSelect.value = u.postingVerified ? "false" : "true";
+        }
+
+        const noteInput = document.getElementById("postingReasonNote");
+        if (noteInput) {
+            noteInput.value = u.postingVerified
+                ? "Access restricted pending updated document resubmission"
+                : "Ownership documents and government ID verified";
+        }
+
+        modal.classList.remove("hidden");
+        modal.classList.remove("d-none");
+        modal.style.display = "flex";
+    };
+
+    window.openUserPostingModalFromInspect = function () {
+        const userId = parseInt(document.getElementById("inspectEditUserId")?.value, 10);
+        if (userId) openUserPostingModal(userId);
+    };
+
+    window.applyPostingNotePreset = function (text) {
+        const noteInput = document.getElementById("postingReasonNote");
+        if (noteInput) {
+            noteInput.value = text;
+            noteInput.focus();
+        }
+    };
+
+    window.submitUserPostingModal = async function (event) {
+        if (event) event.preventDefault();
+
+        const userId = document.getElementById("postingTargetUserId")?.value;
+        const verified = document.getElementById("postingTargetSelect")?.value === 'true';
+        const note = document.getElementById("postingReasonNote")?.value?.trim();
+
+        if (!userId) return;
+        if (!note) {
+            showToast("Please provide a verification note or reference.", true);
+            document.getElementById("postingReasonNote")?.focus();
+            return;
+        }
+
+        const submitBtn = document.getElementById("postingSubmitBtn");
+        const origText = submitBtn ? submitBtn.textContent : "";
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Updating..."; }
+
+        try {
+            const res = await fetch(`/api/property/portal/accounts/${userId}/posting-permission?verified=${verified}&note=${encodeURIComponent(note)}`, {
+                method: 'PATCH',
+                headers: { 'Accept': 'application/json' }
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || `Failed to update posting permission`);
+
+            showToast(`Posting permission updated for #USR-${userId}!`);
+            closeModal("userPostingModal");
+            closeInspectModal();
+            loadUsers();
+            loadOverview();
+        } catch (err) {
+            showToast(err.message, true);
+        } finally {
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
+        }
+    };
+
+    // Toggle User Status Helper for backward compatibility
+    window.toggleUserStatus = function (userId) {
+        openUserStatusModal(userId);
+    };
+
+    window.togglePostingPermission = function (userId) {
+        openUserPostingModal(userId);
+    };
+
     window.closeInspectModal = function () {
         closeModal("userInspectModal");
         closeModal("inspectUserModal");
     };
+
 
     function populateAdminOwnerSelect() {
         const select = document.getElementById("adminOwnerSelect");
@@ -846,8 +1088,25 @@
             if (!res.ok) throw new Error("HTTP " + res.status);
             state.inventory = await res.json();
             renderInventoryTable();
+            populateEditPropertySelect();
         } catch (err) {
             console.error("Error loading inventory:", err);
+        }
+    }
+
+    function populateEditPropertySelect() {
+        const select = document.getElementById("editPropertySelect");
+        if (!select || !state.inventory || !state.inventory.length) return;
+        const currentVal = select.value;
+        select.innerHTML = '<option value="" disabled' + (!currentVal ? ' selected' : '') + '>-- Select a property from inventory --</option>' + 
+            state.inventory.map(p => `<option value="${p.id}">${escapeHtml(p.title || 'Property #' + p.id)} (${escapeHtml(p.locality || p.city || 'Bangalore')} - ₹${Number(p.price || 0).toLocaleString('en-IN')})</option>`).join('');
+        if (currentVal && state.inventory.some(p => String(p.id) === String(currentVal))) {
+            select.value = currentVal;
+        } else if (state.inventory.length) {
+            select.value = state.inventory[0].id;
+            if (typeof window.loadPropertyForEditing === 'function') {
+                window.loadPropertyForEditing(state.inventory[0].id);
+            }
         }
     }
 
@@ -901,67 +1160,76 @@
             const isPending = (l.status || '').toUpperCase() === 'PENDING_APPROVAL' || (l.verificationStatus || '').toUpperCase() === 'PENDING';
             const isActive = (l.status || '').toUpperCase() === 'ACTIVE' && (l.verificationStatus || '').toUpperCase() === 'APPROVED';
 
-            let statusBadge = `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#f1f5f9; color:#475569;">${escapeHtml(l.status)}</span>`;
+            let statusBadge = `<span style="display:inline-block; padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:800; background:#f1f5f9; color:#475569; letter-spacing:0.02em;">${escapeHtml(l.status)}</span>`;
             if (isActive) {
-                statusBadge = `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d; border:1px solid #86efac;">✓ Live</span>`;
+                statusBadge = `<span style="display:inline-block; padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:800; background:#dcfce7; color:#15803d; border:1px solid #86efac; letter-spacing:0.02em;">✓ Live</span>`;
             } else if (isPending) {
-                statusBadge = `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#fef3c7; color:#92400e; border:1px solid #fcd34d;">⏳ Pending Approval</span>`;
+                statusBadge = `<span style="display:inline-block; padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:800; background:#fef3c7; color:#92400e; border:1px solid #fcd34d; letter-spacing:0.02em;">⏳ Pending Approval</span>`;
             } else if ((l.status || '').toUpperCase() === 'CHANGES_REQUESTED') {
-                statusBadge = `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#ffedd5; color:#c2410c; border:1px solid #fed7aa;">✎ Changes Requested</span>`;
+                statusBadge = `<span style="display:inline-block; padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:800; background:#ffedd5; color:#c2410c; border:1px solid #fed7aa; letter-spacing:0.02em;">✎ Changes Requested</span>`;
             } else if ((l.status || '').toUpperCase() === 'REJECTED') {
-                statusBadge = `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5;">✕ Rejected</span>`;
+                statusBadge = `<span style="display:inline-block; padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:800; background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; letter-spacing:0.02em;">✕ Rejected</span>`;
             } else if ((l.status || '').toUpperCase() === 'SOLD') {
-                statusBadge = `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#e0e7ff; color:#3730a3;">Sold</span>`;
+                statusBadge = `<span style="display:inline-block; padding:5px 12px; border-radius:999px; font-size:0.75rem; font-weight:800; background:#e0e7ff; color:#3730a3; letter-spacing:0.02em;">Sold</span>`;
             }
 
             return `
                 <tr style="border-bottom:1px solid #f1f5f9;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-                    <td style="padding:14px 18px; font-weight:800; font-size:0.84rem; color:#1e293b;">
+                    <td style="padding:18px 22px; font-weight:800; font-size:0.88rem; color:#1e293b; white-space:nowrap; min-width:120px; letter-spacing:0.03em;">
                         ${escapeHtml(l.apartmentCode || '#PDT-' + l.id)}
                     </td>
-                    <td style="padding:14px 18px;">
-                        <strong style="display:block; font-size:0.88rem; color:#0f172a;">${escapeHtml(l.title)}</strong>
-                        <div style="font-size:0.78rem; color:#64748b; margin-top:2px;">
-                            <span>${escapeHtml(l.propertyType)} · ${escapeHtml(l.bhk || '')}</span> · 
+                    <td style="padding:18px 22px; min-width:340px;">
+                        <strong style="display:block; font-size:0.94rem; color:#0f172a; margin-bottom:6px; line-height:1.45; letter-spacing:0.015em; word-spacing:0.08em;">${escapeHtml(l.title)}</strong>
+                        <div style="font-size:0.82rem; color:#64748b; margin-bottom:6px; line-height:1.55; letter-spacing:0.01em; word-spacing:0.06em;">
+                            <span style="font-weight:600; color:#334155;">${escapeHtml(l.propertyType)} · ${escapeHtml(l.bhk || '')}</span>
+                            <span style="color:#94a3b8; margin:0 6px;">•</span>
                             <span>${escapeHtml(l.locality || '')}, ${escapeHtml(l.city || '')}</span>
                         </div>
-                        ${l.projectName ? `<small style="display:block; color:#2563eb; font-weight:700;">🏢 ${escapeHtml(l.projectName)} (${escapeHtml(l.tower || '')} Unit ${escapeHtml(l.unitNumber || '')})</small>` : ''}
-                        ${l.reviewNote ? `<small style="display:block; color:#b45309; margin-top:2px;">Note: ${escapeHtml(l.reviewNote)}</small>` : ''}
-                        ${l.rejectionReason ? `<small style="display:block; color:#dc2626; margin-top:2px;">Rejection: ${escapeHtml(l.rejectionReason)}</small>` : ''}
+                        ${l.projectName ? `<div style="color:#2563eb; font-weight:700; font-size:0.82rem; margin-top:5px; line-height:1.45; word-spacing:0.06em;">🏢 ${escapeHtml(l.projectName)} (${escapeHtml(l.tower || '')} Unit ${escapeHtml(l.unitNumber || '')})</div>` : ''}
+                        ${l.reviewNote ? `<div style="color:#92400e; font-size:0.82rem; margin-top:6px; line-height:1.45; background:#fffbeb; padding:6px 12px; border-radius:8px; border:1px solid #fde68a; word-spacing:0.05em;">Note: ${escapeHtml(l.reviewNote)}</div>` : ''}
+                        ${l.rejectionReason ? `<div style="color:#b91c1c; font-size:0.82rem; margin-top:6px; line-height:1.45; background:#fef2f2; padding:6px 12px; border-radius:8px; border:1px solid #fecaca; word-spacing:0.05em;">Rejection: ${escapeHtml(l.rejectionReason)}</div>` : ''}
                     </td>
-                    <td style="padding:14px 18px; font-size:0.82rem; color:#334155;">
-                        <strong>${escapeHtml(l.ownerName || 'Owner #' + l.ownerId)}</strong>
-                        <div style="color:#64748b; font-size:0.76rem;">${escapeHtml(l.ownerEmail || '')}</div>
+                    <td style="padding:18px 22px; font-size:0.88rem; color:#334155; min-width:210px;">
+                        <strong style="display:block; color:#0f172a; font-size:0.9rem; margin-bottom:4px; line-height:1.4; letter-spacing:0.015em; word-spacing:0.06em;">${escapeHtml(l.ownerName || 'Owner #' + l.ownerId)}</strong>
+                        <div style="color:#64748b; font-size:0.8rem; word-break:break-all; line-height:1.4; letter-spacing:0.01em;">${escapeHtml(l.ownerEmail || '')}</div>
                     </td>
-                    <td style="padding:14px 18px; font-weight:800; font-size:0.9rem; color:#0f172a;">
+                    <td style="padding:18px 22px; font-weight:800; font-size:0.96rem; color:#0f172a; white-space:nowrap; min-width:130px; letter-spacing:0.02em;">
                         ${formatCurrency(l.price)}
                     </td>
-                    <td style="padding:14px 18px;">${statusBadge}</td>
-                    <td style="padding:14px 18px;">
+                    <td style="padding:18px 22px; white-space:nowrap; min-width:130px;">${statusBadge}</td>
+                    <td style="padding:18px 22px; white-space:nowrap; min-width:115px;">
                         <button type="button" onclick="toggleFeatured(${l.id}, ${l.featured})"
-                            style="padding:4px 8px; border-radius:6px; font-size:0.74rem; font-weight:700; cursor:pointer; border:1px solid ${l.featured ? '#f59e0b' : '#cbd5e1'}; background:${l.featured ? '#fef3c7' : '#ffffff'}; color:${l.featured ? '#b45309' : '#64748b'};">
+                            style="padding:6px 14px; border-radius:8px; font-size:0.78rem; font-weight:700; cursor:pointer; border:1px solid ${l.featured ? '#f59e0b' : '#cbd5e1'}; background:${l.featured ? '#fef3c7' : '#ffffff'}; color:${l.featured ? '#b45309' : '#64748b'}; letter-spacing:0.02em;">
                             ${l.featured ? '★ Featured' : '☆ Feature'}
                         </button>
                     </td>
-                    <td style="padding:14px 18px; text-align:right; white-space:nowrap;">
-                        <div style="display:inline-flex; align-items:center; gap:6px;">
+                    <td style="padding:18px 22px; text-align:right; white-space:nowrap; min-width:160px;">
+                        <div style="display:inline-flex; align-items:center; gap:8px;">
                             ${isPending ? `
                                 <button type="button" onclick="moderateListing(${l.id}, 'APPROVED')"
-                                    style="padding:6px 10px; border-radius:8px; background:#10b981; color:#ffffff; font-size:0.76rem; font-weight:800; border:none; cursor:pointer;">
+                                    style="padding:7px 12px; border-radius:8px; background:#10b981; color:#ffffff; font-size:0.78rem; font-weight:800; border:none; cursor:pointer; letter-spacing:0.02em;">
                                     ✓ Approve
                                 </button>
                                 <button type="button" onclick="moderateListingWithNote(${l.id}, 'CHANGES_REQUESTED')"
-                                    style="padding:6px 10px; border-radius:8px; background:#f59e0b; color:#ffffff; font-size:0.76rem; font-weight:800; border:none; cursor:pointer;">
+                                    style="padding:7px 12px; border-radius:8px; background:#f59e0b; color:#ffffff; font-size:0.78rem; font-weight:800; border:none; cursor:pointer; letter-spacing:0.02em;">
                                     ✎ Changes
                                 </button>
                                 <button type="button" onclick="moderateListingWithNote(${l.id}, 'REJECTED')"
-                                    style="padding:6px 10px; border-radius:8px; background:#ef4444; color:#ffffff; font-size:0.76rem; font-weight:800; border:none; cursor:pointer;">
+                                    style="padding:7px 12px; border-radius:8px; background:#ef4444; color:#ffffff; font-size:0.78rem; font-weight:800; border:none; cursor:pointer; letter-spacing:0.02em;">
                                     ✕ Reject
                                 </button>
                             ` : `
-                                <button type="button" onclick="inspectListingDetails(${l.id})"
-                                    style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-size:0.78rem; font-weight:700; cursor:pointer;">
+                                <button type="button" onclick="inspectListing(${l.id})"
+                                    style="padding:7px 12px; border-radius:8px; background:#f1f5f9; color:#334155; font-size:0.78rem; font-weight:700; border:1px solid #cbd5e1; cursor:pointer;">
                                     Inspect
+                                </button>
+                                <button type="button" onclick="moderateListingWithNote(${l.id}, 'CHANGES_REQUESTED')"
+                                    style="padding:7px 12px; border-radius:8px; background:#ffffff; color:#b45309; font-size:0.78rem; font-weight:700; border:1px solid #fde68a; cursor:pointer;">
+                                    Request Changes
+                                </button>
+                                <button type="button" onclick="moderateListingWithNote(${l.id}, 'REJECTED')"
+                                    style="padding:7px 12px; border-radius:8px; background:#ffffff; color:#dc2626; font-size:0.78rem; font-weight:700; border:1px solid #fecaca; cursor:pointer;">
+                                    Suspend
                                 </button>
                             `}
                         </div>
@@ -1053,6 +1321,7 @@
         modal.classList.remove("hidden");
         modal.style.display = "flex";
     };
+    window.inspectListing = window.inspectListingDetails;
 
     // -------------------------------------------------------------
     // 6. ENQUIRIES & VISIT TRACKING
@@ -1332,7 +1601,7 @@
     };
 
     // -------------------------------------------------------------
-        // 8. CATEGORIES, AMENITIES & LOCATIONS METADATA
+    // 8. CATEGORIES, AMENITIES & LOCATIONS METADATA
     // -------------------------------------------------------------
     const CATEGORY_TAGS = {
         'APARTMENT': 'High-Rise Living',
@@ -1776,7 +2045,7 @@
         window.openMetadataDetailModal(type);
     };
 
-// 9. FEATURED LISTINGS & PUBLIC CONTENT
+    // 9. FEATURED LISTINGS & PUBLIC CONTENT
     // -------------------------------------------------------------
     function renderFeaturedSection() {
         if (!state.metadata) return;
@@ -1878,6 +2147,154 @@
         }
     };
 
+    // Post Property on Behalf Form Handler
+    function wirePostApartmentForm() {
+        const form = document.getElementById("postApartmentForm");
+        if (!form) return;
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+
+            const ownerSelect = document.getElementById("adminOwnerSelect");
+            const ownerId = ownerSelect ? ownerSelect.value : "";
+            if (!ownerId) {
+                showToast("Please choose an identified Owner or Builder account before posting.", true);
+                ownerSelect?.focus();
+                return;
+            }
+
+            const titleInput = form.querySelector('[name="title"]');
+            const title = titleInput?.value?.trim();
+            if (!title) {
+                showToast("Please enter a property title.", true);
+                titleInput?.focus();
+                return;
+            }
+
+            const type = form.querySelector('[name="type"]')?.value || "RENT";
+            const propertyType = form.querySelector('[name="propertyType"]')?.value || "APARTMENT";
+            const address = form.querySelector('[name="address"]')?.value?.trim() || "";
+            const city = form.querySelector('[name="city"]')?.value?.trim() || "Chennai";
+            const locality = form.querySelector('[name="locality"]')?.value?.trim() || "Anna Nagar";
+            const pincode = form.querySelector('[name="pincode"]')?.value?.trim() || "600040";
+            const price = Number(form.querySelector('[name="price"]')?.value || 0);
+            if (!price || price <= 0) {
+                showToast("Please enter a valid property price or rent.", true);
+                form.querySelector('[name="price"]')?.focus();
+                return;
+            }
+
+            const bhk = form.querySelector('[name="bhk"]')?.value || "2 BHK";
+            const bathrooms = Number(form.querySelector('[name="bathrooms"]')?.value || 2);
+            const areaSqft = Number(form.querySelector('[name="areaSqft"]')?.value || 1000);
+            const description = form.querySelector('[name="description"]')?.value?.trim() || (title + " located in " + locality + ", " + city);
+
+            const selectedAmenities = [];
+            form.querySelectorAll('[name="amenities"]:checked').forEach(cb => selectedAmenities.push(cb.value));
+
+            const listingData = {
+                title: title,
+                description: description,
+                society: locality || title,
+                locality: locality,
+                address: address,
+                city: city,
+                pincode: pincode,
+                type: type,
+                propertyType: propertyType,
+                price: price,
+                deposit: price * 2,
+                maintenance: 0,
+                areaSqft: areaSqft,
+                bhk: bhk,
+                bathrooms: bathrooms,
+                furnishing: "Semi-Furnished",
+                parking: "Covered",
+                amenities: selectedAmenities.join(", "),
+                imageUrl: null,
+                notes: "Submitted by Platform Administrator on behalf of Account #USR-" + ownerId
+            };
+
+            const submission = {
+                listing: listingData,
+                ownerId: Number(ownerId),
+                intent: "SUBMIT"
+            };
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const origText = submitBtn ? submitBtn.textContent : "Submit Property Listing";
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "Publishing Property on Behalf...";
+            }
+
+            try {
+                const formData = new FormData();
+                const jsonBlob = new Blob([JSON.stringify(submission)], { type: "application/json" });
+                formData.append("property", jsonBlob);
+                formData.append("listing", jsonBlob);
+
+                const photoInput = form.querySelector('[name="photos"]') || document.getElementById("propertyPhotoFiles");
+                if (photoInput && photoInput.files && photoInput.files.length > 0) {
+                    for (let i = 0; i < photoInput.files.length; i++) {
+                        formData.append("photos", photoInput.files[i]);
+                    }
+                }
+
+                const res = await fetch("/api/property/portal/listings", {
+                    method: "POST",
+                    headers: { "Accept": "application/json" },
+                    body: formData
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || data.detail || "Failed to post listing");
+
+                showToast(`Property "${title}" published successfully on behalf of owner!`);
+                form.reset();
+                switchTabAndFilter("my-properties");
+                loadInventory();
+                loadOverview();
+            } catch (err) {
+                console.error("Error posting listing on behalf:", err);
+                showToast(err.message, true);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = origText;
+                }
+            }
+        });
+    }
+
+    // Expose all operations on window
+    window.loadUsers = loadUsers;
+    window.loadApplications = loadApplications;
+    window.loadInventory = loadInventory;
+    window.loadEnquiries = loadEnquiries;
+    window.loadVisits = loadVisits;
+    window.loadReports = loadReports;
+    window.loadMetadata = loadMetadata;
+    window.loadAudit = loadAudit;
+    window.renderUsersTable = renderUsersTable;
+    window.renderInventoryTable = renderInventoryTable;
+    window.renderApplicationsTable = renderApplicationsTable;
+    window.renderReportsTable = renderReportsTable;
+    window.renderAuditTable = renderAuditTable;
+    window.wirePostApartmentForm = wirePostApartmentForm;
+    window.openUserInspectModal = openUserInspectModal;
+    window.saveUserInspectChanges = saveUserInspectChanges;
+    window.openUserStatusModal = openUserStatusModal;
+    window.openUserStatusModalFromInspect = openUserStatusModalFromInspect;
+    window.applyStatusNotePreset = applyStatusNotePreset;
+    window.submitUserStatusModal = submitUserStatusModal;
+    window.openUserPostingModal = openUserPostingModal;
+    window.openUserPostingModalFromInspect = openUserPostingModalFromInspect;
+    window.applyPostingNotePreset = applyPostingNotePreset;
+    window.submitUserPostingModal = submitUserPostingModal;
+    window.toggleUserDropdown = toggleUserDropdown;
+
     // Initialize on DOM Ready
     document.addEventListener("DOMContentLoaded", function () {
         // Wire sidebar click listener
@@ -1894,11 +2311,34 @@
         document.getElementById("userStatusFilter")?.addEventListener("change", renderUsersTable);
         document.getElementById("userVerifyFilter")?.addEventListener("change", renderUsersTable);
         document.getElementById("userFilterResetBtn")?.addEventListener("click", () => {
-            document.getElementById("userSearchInput").value = "";
-            document.getElementById("userRoleFilter").value = "";
-            document.getElementById("userStatusFilter").value = "";
-            document.getElementById("userVerifyFilter").value = "";
+            const s = document.getElementById("userSearchInput"); if (s) s.value = "";
+            const r = document.getElementById("userRoleFilter"); if (r) r.value = "";
+            const st = document.getElementById("userStatusFilter"); if (st) st.value = "";
+            const v = document.getElementById("userVerifyFilter"); if (v) v.value = "";
             renderUsersTable();
+        });
+
+        // Wire refresh buttons
+        document.getElementById("refreshUsersBtn")?.addEventListener("click", loadUsers);
+        document.getElementById("closeInspectModalBtn")?.addEventListener("click", window.closeInspectModal);
+        document.getElementById("closeInspectModalBottomBtn")?.addEventListener("click", window.closeInspectModal);
+
+        // Escape key to close active modals
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                document.querySelectorAll(".modal:not(.hidden)").forEach(m => {
+                    closeModal(m.id);
+                });
+            }
+        });
+
+        // Backdrop click to close modals
+        document.querySelectorAll(".modal").forEach(m => {
+            m.addEventListener("click", function (e) {
+                if (e.target === m) {
+                    closeModal(m.id);
+                }
+            });
         });
 
         document.getElementById("appDecisionFilter")?.addEventListener("change", renderApplicationsTable);
@@ -1912,6 +2352,9 @@
         document.getElementById("auditTargetTypeFilter")?.addEventListener("change", loadAudit);
         document.getElementById("auditSearchInput")?.addEventListener("input", loadAudit);
 
+        // Wire post apartment form
+        wirePostApartmentForm();
+
         // Hash change listener
         window.addEventListener("hashchange", function () {
             const h = window.location.hash.replace("#", "") || "overview";
@@ -1921,6 +2364,13 @@
         // Initial tab from hash or default to overview
         const initialHash = window.location.hash.replace("#", "") || "overview";
         switchTabAndFilter(initialHash);
+        // Real-time automatic polling every 8 seconds for live dashboard data
+        setInterval(function () {
+            const activeTab = window.location.hash.replace("#", "") || "overview";
+            if ((activeTab === 'overview' || !activeTab) && !document.hidden) {
+                loadOverview();
+            }
+        }, 8000);
     });
 
 })();

@@ -50,7 +50,11 @@
         } else {
             const textNode = [...label.childNodes].find(n => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
             if (textNode) {
-                textNode.after(star);
+                const wrapper = document.createElement("span");
+                wrapper.className = "label-title-text";
+                wrapper.textContent = textNode.textContent.trim().replace(/\s*\*+$/, "");
+                wrapper.appendChild(star);
+                textNode.replaceWith(wrapper);
             } else {
                 const directFieldContainer = [...label.children].find(child => child.matches?.("input, select, textarea") || child.contains(field));
                 label.insertBefore(star, directFieldContainer || null);

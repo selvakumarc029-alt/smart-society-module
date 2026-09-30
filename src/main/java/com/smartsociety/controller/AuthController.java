@@ -166,7 +166,6 @@ public class AuthController {
                 new DashboardRoute("propertydirect", "superadmin", "/propertydirect/dashboards/superadmin"),
                 new DashboardRoute("propertydirect", "admin", "/propertydirect/dashboards/admin"),
                 new DashboardRoute("propertydirect", "customer", "/propertydirect/dashboards/customer"),
-                new DashboardRoute("propertydirect", "agent", "/propertydirect/dashboards/agent"),
                 new DashboardRoute("propertydirect", "vendor", "/propertydirect/dashboards/vendor")
         };
 

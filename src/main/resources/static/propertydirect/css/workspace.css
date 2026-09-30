@@ -271,3 +271,27 @@ body.pd-workspace .workspace-header h1 {
     min-height: 0;
   }
 }
+
+/* Shared alignment for every workspace tab, including long records and forms. */
+body.pd-workspace :is(.panel-head, .form-grid, .details-grid, .actions, .header-tools) > * {
+  min-width: 0;
+}
+body.pd-workspace :is(.panel-head, .form-actions, .header-tools) {
+  flex-wrap: wrap;
+}
+body.pd-workspace :is(.panel, .intro-card, .record-card, .tile-body) {
+  overflow-wrap: anywhere;
+}
+body.pd-workspace .table-scroll {
+  min-width: 0;
+  max-width: 100%;
+}
+body.pd-workspace .form-grid {
+  align-items: start;
+}
+body.pd-workspace .workspace-header {
+  min-height: 76px !important;
+}
+body.pd-workspace .workspace-sidebar {
+  max-width: calc(100vw - 28px);
+}

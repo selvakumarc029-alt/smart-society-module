@@ -1571,3 +1571,5 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
     height: 0 !important;
     background: transparent !important;
 }
+
+.logout::before { content: none !important; display: none !important; }

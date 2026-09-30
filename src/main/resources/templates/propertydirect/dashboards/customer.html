@@ -295,20 +295,20 @@
             display: none !important;
         }
 
-        /* ULTRA-PREMIUM FLOATING TOAST NOTIFICATION - TOP RIGHT TOPBAR */
+        /* ULTRA-PREMIUM FLOATING TOAST NOTIFICATION - BOTTOM RIGHT */
         #toast,
         .toast {
             position: fixed !important;
-            top: 28px !important;
-            right: 28px !important;
-            bottom: auto !important;
+            bottom: 24px !important;
+            right: 24px !important;
+            top: auto !important;
             left: auto !important;
             padding: 12px 20px !important;
-            border-radius: 12px !important;
+            border-radius: 14px !important;
             background: #0f172a !important;
             color: #ffffff !important;
-            border: 1px solid rgba(255, 255, 255, 0.14) !important;
-            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.25) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            box-shadow: 0 12px 36px rgba(15, 23, 42, 0.35) !important;
             font-family: 'Manrope', sans-serif !important;
             font-size: 0.84rem !important;
             font-weight: 700 !important;
@@ -318,6 +318,7 @@
             z-index: 999999 !important;
             backdrop-filter: blur(12px) !important;
             transition: opacity 0.25s ease, transform 0.25s ease !important;
+            max-width: 440px !important;
         }
 
         #toast.hidden,
@@ -327,7 +328,7 @@
             opacity: 0 !important;
             visibility: hidden !important;
             pointer-events: none !important;
-            transform: translateY(-10px) !important;
+            transform: translateY(12px) !important;
         }
 
         /* FIXED CENTERED SCREEN BACKDROP OVERLAY FOR MODALS */
@@ -1640,27 +1641,281 @@
 
         body[data-dashboard-role="customer"] .card-head {
             display: flex !important;
-            align-items: flex-start !important;
+            align-items: center !important;
             justify-content: space-between !important;
             gap: 18px !important;
             flex-wrap: wrap !important;
+            margin-bottom: 22px !important;
+        }
+
+        body[data-dashboard-role="customer"] .card-head h3 {
+            margin: 0 !important;
+            font-size: 1.35rem !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            letter-spacing: -0.02em !important;
+        }
+
+        body[data-dashboard-role="customer"] .card-head .inline-state {
+            display: inline-flex !important;
+            align-items: center !important;
+            height: 32px !important;
+            padding: 0 16px !important;
+            border-radius: 999px !important;
+            background: #eff6ff !important;
+            color: #2563eb !important;
+            border: 1px solid #bfdbfe !important;
+            font-size: 0.78rem !important;
+            font-weight: 700 !important;
+            white-space: nowrap !important;
         }
 
         body[data-dashboard-role="customer"] .form-grid {
             display: grid !important;
-            grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
-            gap: 16px !important;
-            align-items: end !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 18px 20px !important;
+            align-items: start !important;
+            margin-bottom: 24px !important;
         }
 
-        body[data-dashboard-role="customer"] .form-grid label,
-        body[data-dashboard-role="customer"] .profile-wide {
+        body[data-dashboard-role="customer"] .form-grid label {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-start !important;
+            align-items: stretch !important;
+            gap: 6px !important;
+            font-size: 0.82rem !important;
+            font-weight: 700 !important;
+            color: #334155 !important;
+            margin: 0 !important;
             min-width: 0 !important;
         }
 
+        body[data-dashboard-role="customer"] .form-grid label > span:first-child,
+        body[data-dashboard-role="customer"] .form-grid label > .label-title,
+        body[data-dashboard-role="customer"] .form-grid label > .label-title-text {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            font-size: 0.82rem !important;
+            font-weight: 700 !important;
+            color: #334155 !important;
+            min-height: 20px !important;
+            line-height: 20px !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid label > .required-star:last-child {
+            display: none !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid input:not([type="checkbox"]):not([type="radio"]),
+        body[data-dashboard-role="customer"] .form-grid select {
+            height: 44px !important;
+            min-height: 44px !important;
+            box-sizing: border-box !important;
+            padding: 0 14px !important;
+            border-radius: 12px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            font-family: inherit !important;
+            font-size: 0.88rem !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+            outline: none !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid input:focus,
+        body[data-dashboard-role="customer"] .form-grid select:focus,
+        body[data-dashboard-role="customer"] .form-grid textarea:focus {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid textarea {
+            box-sizing: border-box !important;
+            padding: 12px 14px !important;
+            border-radius: 12px !important;
+            border: 1.5px solid #cbd5e1 !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            font-family: inherit !important;
+            font-size: 0.88rem !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+            min-height: 96px !important;
+            outline: none !important;
+            resize: vertical !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid label:has(input[type="checkbox"]),
+        body[data-dashboard-role="customer"] .form-grid label.checkbox-label {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 10px !important;
+            cursor: pointer !important;
+            height: 44px !important;
+            margin-top: 26px !important;
+            font-size: 0.88rem !important;
+            font-weight: 600 !important;
+            color: #334155 !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid input[type="checkbox"] {
+            width: 18px !important;
+            min-width: 18px !important;
+            height: 18px !important;
+            min-height: 18px !important;
+            accent-color: #2563eb !important;
+            cursor: pointer !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid .property-form-section,
         body[data-dashboard-role="customer"] .form-grid .profile-wide,
-        body[data-dashboard-role="customer"] .form-grid label:has(textarea) {
+        body[data-dashboard-role="customer"] .form-grid label:has(textarea),
+        body[data-dashboard-role="customer"] .form-grid .form-submit-row,
+        body[data-dashboard-role="customer"] .form-grid > button[type="submit"],
+        body[data-dashboard-role="customer"] .form-grid > button.primary {
             grid-column: 1 / -1 !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid .property-form-section {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 3px !important;
+            padding: 14px 0 6px 0 !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            margin-bottom: 4px !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid .property-form-section strong {
+            font-size: 0.96rem !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid .property-form-section small {
+            font-size: 0.8rem !important;
+            color: #64748b !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid > button[type="submit"],
+        body[data-dashboard-role="customer"] .form-grid > button.primary {
+            height: 46px !important;
+            min-height: 46px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            border-radius: 12px !important;
+            font-size: 0.92rem !important;
+            font-weight: 700 !important;
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25) !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            margin-top: 8px !important;
+            width: 100% !important;
+        }
+
+        body[data-dashboard-role="customer"] .form-grid > button[type="submit"]:hover,
+        body[data-dashboard-role="customer"] .form-grid > button.primary:hover {
+            background: #1d4ed8 !important;
+            box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+        }
+
+        body[data-dashboard-role="customer"] .dash-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            gap: 24px !important;
+            margin-bottom: 24px !important;
+            padding-bottom: 18px !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            flex-wrap: nowrap !important;
+            flex-shrink: 0 !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions button,
+        body[data-dashboard-role="customer"] .header-actions a {
+            height: 40px !important;
+            line-height: 40px !important;
+            padding: 0 16px !important;
+            border-radius: 10px !important;
+            font-family: 'Manrope', sans-serif !important;
+            font-size: 0.84rem !important;
+            font-weight: 700 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            text-decoration: none !important;
+            box-sizing: border-box !important;
+            transition: all 0.2s ease !important;
+            white-space: nowrap !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions a.secondary {
+            background: #f8fafc !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions a.secondary:hover {
+            background: #e2e8f0 !important;
+            color: #0f172a !important;
+            border-color: #94a3b8 !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions button.secondary {
+            border: 1.5px solid #10b981 !important;
+            color: #065f46 !important;
+            background: #ecfdf5 !important;
+            font-weight: 800 !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions button.secondary:hover {
+            background: #d1fae5 !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions button.primary {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.22) !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions button.primary:hover {
+            background: #1d4ed8 !important;
+        }
+
+        body[data-dashboard-role="customer"] .header-actions .user-avatar-badge {
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+            color: #ffffff !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 800 !important;
+            font-size: 0.85rem !important;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15) !important;
+            flex-shrink: 0 !important;
         }
 
         body[data-dashboard-role="customer"] .dashboard-table-scroll {
@@ -1854,6 +2109,260 @@
     <link rel="stylesheet" href="/propertydirect/css/dashboard-responsive.css?v=20260912-global-alignment-v3">
     <link rel="stylesheet" href="/propertydirect/css/dashboard-polish.css?v=20260928-visual-v2">
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
+
+<!-- ULTRA-HIGH SPECIFICITY CUSTOMER DASHBOARD ALIGNMENT PERFECTION -->
+<style id="pd-customer-perfect-alignment">
+    /* 1. RELOCATE TOAST NOTIFICATION TO BOTTOM RIGHT */
+    #toast,
+    .toast,
+    html body.app-dashboard #toast,
+    html body.app-dashboard .toast {
+        position: fixed !important;
+        bottom: 24px !important;
+        right: 24px !important;
+        top: auto !important;
+        left: auto !important;
+        padding: 12px 20px !important;
+        border-radius: 14px !important;
+        background: #0f172a !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        box-shadow: 0 12px 36px rgba(15, 23, 42, 0.35) !important;
+        font-family: 'Manrope', -apple-system, sans-serif !important;
+        font-size: 0.84rem !important;
+        font-weight: 700 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        z-index: 999999 !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        max-width: 420px !important;
+        box-sizing: border-box !important;
+        transition: opacity 0.25s ease, transform 0.25s ease !important;
+    }
+
+    #toast.hidden,
+    .toast.hidden,
+    #toast:empty,
+    html body.app-dashboard #toast.hidden,
+    html body.app-dashboard .toast.hidden,
+    html body.app-dashboard #toast:empty {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform: translateY(12px) !important;
+    }
+
+    /* 2. HEADER CONTAINER & ALIGNMENT */
+    html body.app-dashboard[data-platform="propertydirect"] .dash-header,
+    body[data-dashboard-role="customer"] .dash-header {
+        height: auto !important;
+        min-height: 84px !important;
+        max-height: none !important;
+        width: 100% !important;
+        margin: 0 0 24px 0 !important;
+        padding: 18px 32px !important;
+        border-radius: 0 !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 20px !important;
+        flex-wrap: wrap !important;
+        background: #ffffff !important;
+        box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04) !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 100 !important;
+        box-sizing: border-box !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .dash-header > div:first-child,
+    body[data-dashboard-role="customer"] .dash-header > div:first-child {
+        flex: 1 1 300px !important;
+        min-width: 240px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .dash-header .eyebrow,
+    body[data-dashboard-role="customer"] .dash-header .eyebrow {
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.08em !important;
+        color: #2563eb !important;
+        text-transform: uppercase !important;
+        margin: 0 !important;
+        line-height: 1.2 !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .dash-header h1,
+    html body.app-dashboard[data-platform="propertydirect"] .dash-header #panelTitle,
+    body[data-dashboard-role="customer"] .dash-header h1,
+    body[data-dashboard-role="customer"] .dash-header #panelTitle {
+        font-size: 1.6rem !important;
+        font-weight: 850 !important;
+        color: #0f172a !important;
+        margin: 0 !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.02em !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .dash-header p:not(.eyebrow),
+    body[data-dashboard-role="customer"] .dash-header p:not(.eyebrow) {
+        font-size: 0.85rem !important;
+        color: #64748b !important;
+        margin: 0 !important;
+        line-height: 1.4 !important;
+        max-width: 650px !important;
+    }
+
+    /* 3. HEADER ACTIONS BAR & BUTTONS */
+    html body.app-dashboard[data-platform="propertydirect"] .dash-header .header-actions,
+    body[data-dashboard-role="customer"] .dash-header .header-actions,
+    body[data-dashboard-role="customer"] .header-actions {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* All Header Action Buttons / Links Uniform Sizing */
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions > :is(button, a, .secondary, .primary),
+    body[data-dashboard-role="customer"] .header-actions > :is(button, a, .secondary, .primary) {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        height: 40px !important;
+        min-height: 40px !important;
+        max-height: 40px !important;
+        padding: 0 16px !important;
+        border-radius: 10px !important;
+        font-family: 'Manrope', -apple-system, sans-serif !important;
+        font-size: 0.84rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.01em !important;
+        white-space: nowrap !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        box-sizing: border-box !important;
+        line-height: 1 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* Become Owner Button */
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions > button[data-panel="become-owner"],
+    body[data-dashboard-role="customer"] .header-actions > button[data-panel="become-owner"] {
+        background: #ecfdf5 !important;
+        color: #065f46 !important;
+        border: 1px solid #10b981 !important;
+        box-shadow: 0 1px 3px rgba(16, 185, 129, 0.12) !important;
+    }
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions > button[data-panel="become-owner"]:hover,
+    body[data-dashboard-role="customer"] .header-actions > button[data-panel="become-owner"]:hover {
+        background: #d1fae5 !important;
+        border-color: #059669 !important;
+        color: #064e3b !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 3px 8px rgba(16, 185, 129, 0.2) !important;
+    }
+
+    /* Secondary Link (Browse public listings) */
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions > a.secondary,
+    body[data-dashboard-role="customer"] .header-actions > a.secondary {
+        background: #f8fafc !important;
+        color: #334155 !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    }
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions > a.secondary:hover,
+    body[data-dashboard-role="customer"] .header-actions > a.secondary:hover {
+        background: #f1f5f9 !important;
+        border-color: #94a3b8 !important;
+        color: #0f172a !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* Primary Action (Search Properties) */
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions > button.primary,
+    body[data-dashboard-role="customer"] .header-actions > button.primary {
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+        color: #ffffff !important;
+        border: 1px solid #1d4ed8 !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+    }
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions > button.primary:hover,
+    body[data-dashboard-role="customer"] .header-actions > button.primary:hover {
+        background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%) !important;
+        border-color: #1e40af !important;
+        color: #ffffff !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35) !important;
+    }
+
+    /* Avatar Badge */
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions .user-avatar-badge,
+    body[data-dashboard-role="customer"] .header-actions .user-avatar-badge,
+    body[data-dashboard-role="customer"] .user-avatar-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        max-width: 40px !important;
+        border-radius: 50% !important;
+        font-size: 0.84rem !important;
+        font-weight: 800 !important;
+        background: #0f172a !important;
+        color: #ffffff !important;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15) !important;
+        line-height: 1 !important;
+        box-sizing: border-box !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* 4. SIDEBAR ALIGNMENTS */
+    html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button::before,
+    html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button::after,
+    html body.app-dashboard .dash-sidebar .sidebar-nav button::before,
+    html body.app-dashboard .dash-sidebar .sidebar-nav button::after {
+        content: none !important;
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button,
+    body[data-dashboard-role="customer"] .dash-sidebar .sidebar-nav button {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        min-height: 44px !important;
+        padding: 10px 16px !important;
+        border-radius: 10px !important;
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        color: rgba(255, 255, 255, 0.75) !important;
+        text-align: left !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button.active,
+    body[data-dashboard-role="customer"] .dash-sidebar .sidebar-nav button.active {
+        color: #ffffff !important;
+        background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%) !important;
+        font-weight: 700 !important;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+    }
+</style>
 </head>
 
 <body class="app-dashboard" data-platform="propertydirect" data-dashboard-role="customer">
@@ -1941,24 +2450,9 @@
                                 <th>Next Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="customerRecentActivityBody">
                             <tr>
-                                <td>Saved listing</td>
-                                <td>Prestige Green Gables · Bengaluru</td>
-                                <td><span class="status active">Active</span></td>
-                                <td><button type="button" data-panel="compare">Compare</button></td>
-                            </tr>
-                            <tr>
-                                <td>Site visit</td>
-                                <td>Sobha Dream Acres · Panathur Road</td>
-                                <td><span class="status pending">Scheduled</span></td>
-                                <td><button type="button" data-panel="visits">View Visit</button></td>
-                            </tr>
-                            <tr>
-                                <td>Support enquiry</td>
-                                <td>Owner contact verification</td>
-                                <td><span class="status active">Open</span></td>
-                                <td><button type="button" data-panel="support">Open Ticket</button></td>
+                                <td colspan="4" style="text-align: center; padding: 28px; color: #64748b;">No recent activity recorded yet. Explore properties or schedule a visit to see updates here.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1972,32 +2466,39 @@
                     <h3>Search Properties</h3><span class="inline-state" id="searchResultState">Set any combination of
                         filters</span>
                 </div>
-                <form class="form-grid" id="propertySearchForm"><label>City<input name="city"
-                            value="Bangalore"></label><label>Society or locality<input
-                            name="locality"></label><label>Purpose<select name="type">
-                            <option value="RENT">Rent</option>
-                            <option value="SALE">Buy</option>
-                            <option value="">Any</option>
-                        </select></label><label>BHK<select name="bhk">
-                            <option value="">Any</option>
-                            <option>1 BHK</option>
-                            <option>2 BHK</option>
-                            <option>3 BHK</option>
-                            <option>4 BHK</option>
-                        </select></label><label>Minimum price<input name="minPrice" type="number"
-                            min="0"></label><label>Maximum price<input name="maxPrice" type="number"
-                            min="0"></label><label>Furnishing<select name="furnishing">
-                            <option value="">Any</option>
-                            <option>Unfurnished</option>
-                            <option>Semi Furnished</option>
-                            <option>Fully Furnished</option>
-                        </select></label><label>Sort<select name="sort">
-                            <option value="newest">Newest</option>
-                            <option value="price_asc">Price: low to high</option>
-                            <option value="price_desc">Price: high to low</option>
-                        </select></label><button class="primary" data-property-api-action="search"
-                        type="submit">Search</button><a class="primary" href="/propertydirect/apartments">Open Full
-                        Listings</a></form>
+                <form class="form-grid" id="propertySearchForm">
+                    <label><span>City</span><input name="city" value="Bangalore"></label>
+                    <label><span>Society or locality</span><input name="locality" placeholder="e.g. Koramangala"></label>
+                    <label><span>Purpose</span><select name="type">
+                        <option value="RENT">Rent</option>
+                        <option value="SALE">Buy</option>
+                        <option value="">Any</option>
+                    </select></label>
+                    <label><span>BHK</span><select name="bhk">
+                        <option value="">Any</option>
+                        <option>1 BHK</option>
+                        <option>2 BHK</option>
+                        <option>3 BHK</option>
+                        <option>4 BHK</option>
+                    </select></label>
+                    <label><span>Minimum price (₹)</span><input name="minPrice" type="number" min="0" placeholder="Min price"></label>
+                    <label><span>Maximum price (₹)</span><input name="maxPrice" type="number" min="0" placeholder="Max price"></label>
+                    <label><span>Furnishing</span><select name="furnishing">
+                        <option value="">Any</option>
+                        <option>Unfurnished</option>
+                        <option>Semi Furnished</option>
+                        <option>Fully Furnished</option>
+                    </select></label>
+                    <label><span>Sort by</span><select name="sort">
+                        <option value="newest">Newest</option>
+                        <option value="price_asc">Price: low to high</option>
+                        <option value="price_desc">Price: high to low</option>
+                    </select></label>
+                    <div style="display:flex; align-items:flex-end; gap:10px; margin-top:26px;">
+                        <button class="primary" data-property-api-action="search" type="submit" style="height:44px; padding:0 22px; margin:0;">Search</button>
+                        <a class="secondary" href="/propertydirect/apartments" style="height:44px; line-height:44px; padding:0 16px; margin:0;">Open Full Listings</a>
+                    </div>
+                </form>
                 <div class="grid" id="propertySearchResults"></div>
             </div>
         </section>
@@ -2005,25 +2506,35 @@
         <section class="dash-panel hidden" data-view="saved-searches">
             <div class="dash-card">
                 <div class="card-head">
-                    <h3>Saved Searches & Alerts</h3><span class="inline-state">Store discovery criteria for later</span>
+                    <div>
+                        <h3>Saved Searches & Alerts</h3>
+                        <p style="margin:4px 0 0 0; color:#64748b; font-size:0.84rem;">Store your preferred discovery criteria to receive instant notifications.</p>
+                    </div>
+                    <span class="inline-state">Store discovery criteria for later</span>
                 </div>
-                <form class="form-grid" id="savedSearchForm"><label>Search name<input name="name"
-                            placeholder="Whitefield 2 BHK" required></label><label>City<input name="city"
-                            value="Bangalore"></label><label>Locality<input
-                            name="locality"></label><label>Purpose<select name="type">
-                            <option value="RENT">Rent</option>
-                            <option value="SALE">Buy</option>
-                        </select></label><label>BHK<select name="bhk">
-                            <option value="">Any</option>
-                            <option>1 BHK</option>
-                            <option>2 BHK</option>
-                            <option>3 BHK</option>
-                            <option>4 BHK</option>
-                        </select></label><label>Minimum<input name="minPrice" type="number"
-                            min="0"></label><label>Maximum<input name="maxPrice" type="number"
-                            min="0"></label><label><input name="alertsEnabled" type="checkbox" checked> Enable
-                        alerts</label><button class="primary" data-property-api-action="save-search" type="submit">Save
-                        Search</button></form>
+                <form class="form-grid" id="savedSearchForm">
+                    <label><span>Search name</span><input name="name" placeholder="e.g. Whitefield 2 BHK" required></label>
+                    <label><span>City</span><input name="city" value="Bangalore"></label>
+                    <label><span>Locality</span><input name="locality" placeholder="e.g. Whitefield, Indiranagar"></label>
+                    <label><span>Purpose</span><select name="type">
+                        <option value="RENT">Rent</option>
+                        <option value="SALE">Buy</option>
+                    </select></label>
+                    <label><span>BHK</span><select name="bhk">
+                        <option value="">Any</option>
+                        <option>1 BHK</option>
+                        <option>2 BHK</option>
+                        <option>3 BHK</option>
+                        <option>4 BHK</option>
+                    </select></label>
+                    <label><span>Minimum Price (₹)</span><input name="minPrice" type="number" min="0" placeholder="Min budget"></label>
+                    <label><span>Maximum Price (₹)</span><input name="maxPrice" type="number" min="0" placeholder="Max budget"></label>
+                    <label class="checkbox-label"><input name="alertsEnabled" type="checkbox" checked> <span>Enable instant alerts</span></label>
+                    <button class="primary" data-property-api-action="save-search" type="submit">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        Save Search
+                    </button>
+                </form>
                 <div class="dashboard-table-scroll">
                     <table>
                         <thead>
@@ -2149,42 +2660,9 @@
                                     Property C</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="customerComparisonTableBody">
                             <tr>
-                                <td style="font-weight: 800; color: #0f172a;">Price</td>
-                                <td style="font-weight: 800; color: #16a34a; font-size: 1rem;">₹70 Lakhs</td>
-                                <td style="font-weight: 800; color: #16a34a; font-size: 1rem;">₹75 Lakhs</td>
-                                <td style="font-weight: 800; color: #16a34a; font-size: 1rem;">₹80 Lakhs</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 800; color: #0f172a;">Area</td>
-                                <td>1,200 sqft</td>
-                                <td>1,450 sqft</td>
-                                <td>1,500 sqft</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 800; color: #0f172a;">Bedrooms</td>
-                                <td>2 BHK</td>
-                                <td>3 BHK</td>
-                                <td>3 BHK</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 800; color: #0f172a;">Bathrooms</td>
-                                <td>2 Baths</td>
-                                <td>2 Baths</td>
-                                <td>3 Baths</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 800; color: #0f172a;">Parking</td>
-                                <td>1 Parking</td>
-                                <td>1 Parking</td>
-                                <td>2 Parkings</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight: 800; color: #0f172a;">Floor</td>
-                                <td>3rd Floor</td>
-                                <td>5th Floor</td>
-                                <td>8th Floor</td>
+                                <td colspan="4" style="text-align: center; padding: 36px 20px; color: #64748b; font-size: 0.9rem;">No properties selected for comparison. Browse properties and click &quot;Compare&quot; to inspect specifications side-by-side.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -2209,79 +2687,13 @@
                 <div class="card-head">
                     <div>
                         <h3> Account Notifications & Real-Time Alerts</h3>
-                        <p>Updates on enquiries, agent responses, site visit confirmations, price drops, and new
-                            matching
-                            properties.</p>
+                        <p>Updates on enquiries, agent responses, site visit confirmations, price drops, and new matching properties.</p>
                     </div>
-                    <button class="ghost small" onclick="showToast('All notifications marked as read!')">Mark All as
-                        Read</button>
+                    <button class="ghost small" onclick="showToast('All notifications marked as read!')">Mark All as Read</button>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <div
-                        style="padding: 14px 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; display: flex; align-items: flex-start; gap: 14px;">
-                        <span style="font-size: 1.2rem; background: #eff6ff; padding: 8px; border-radius: 10px;"></span>
-                        <div>
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a;">Enquiry
-                                Received</strong>
-                            <p style="margin: 2px 0 0 0; font-size: 0.84rem; color: #64748b;">Your enquiry for 3 BHK
-                                Luxury
-                                Villa (#PD-8492) has been delivered to Agent Rajesh Kumar.</p>
-                            <small style="color: #94a3b8; font-size: 0.76rem;">Today, 10:15 AM</small>
-                        </div>
-                    </div>
-
-                    <div
-                        style="padding: 14px 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; display: flex; align-items: flex-start; gap: 14px;">
-                        <span style="font-size: 1.2rem; background: #f0fdf4; padding: 8px; border-radius: 10px;"></span>
-                        <div>
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a;">Agent Responded</strong>
-                            <p style="margin: 2px 0 0 0; font-size: 0.84rem; color: #64748b;">Agent Rajesh Kumar
-                                responded:
-                                <em>"Hello Rahul, floor plans sent to your email. Physical visit slot is available
-                                    tomorrow."</em>
-                            </p>
-                            <small style="color: #94a3b8; font-size: 0.76rem;">Today, 11:30 AM</small>
-                        </div>
-                    </div>
-
-                    <div
-                        style="padding: 14px 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; display: flex; align-items: flex-start; gap: 14px;">
-                        <span style="font-size: 1.2rem; background: #ecfdf5; padding: 8px; border-radius: 10px;"></span>
-                        <div>
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a;">Site Visit
-                                Confirmed</strong>
-                            <p style="margin: 2px 0 0 0; font-size: 0.84rem; color: #64748b;">Your physical site tour
-                                for 3
-                                BHK Luxury Villa on 10 September at 4:00 PM has been confirmed.</p>
-                            <small style="color: #94a3b8; font-size: 0.76rem;">1 hour ago</small>
-                        </div>
-                    </div>
-
-                    <div
-                        style="padding: 14px 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; display: flex; align-items: flex-start; gap: 14px;">
-                        <span
-                            style="font-size: 1.2rem; background: #fffbeb; padding: 8px; border-radius: 10px;">️</span>
-                        <div>
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a;">Property Price
-                                Changed</strong>
-                            <p style="margin: 2px 0 0 0; font-size: 0.84rem; color: #64748b;">Price drop alert! 3 BHK
-                                Villa
-                                in Anna Nagar reduced price from ₹1.50 Cr to ₹1.45 Cr (Save ₹5L!).</p>
-                            <small style="color: #94a3b8; font-size: 0.76rem;">Yesterday</small>
-                        </div>
-                    </div>
-
-                    <div
-                        style="padding: 14px 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; display: flex; align-items: flex-start; gap: 14px;">
-                        <span style="font-size: 1.2rem; background: #f5f3ff; padding: 8px; border-radius: 10px;"></span>
-                        <div>
-                            <strong style="display: block; font-size: 0.92rem; color: #0f172a;">New Matching Property
-                                Found</strong>
-                            <p style="margin: 2px 0 0 0; font-size: 0.84rem; color: #64748b;">New matching property: 3
-                                BHK
-                                Apartment in Hebbal, Bangalore (₹28,000/mo) matches your saved search filters.</p>
-                            <small style="color: #94a3b8; font-size: 0.76rem;">2 days ago</small>
-                        </div>
+                <div id="customerNotificationsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="padding: 36px 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                        No new notifications. Alerts on enquiries, visit confirmations, and price updates will appear here.
                     </div>
                 </div>
             </div>
@@ -2295,39 +2707,50 @@
                         <p>Share complete contact, budget and move-in requirements so the owner can respond accurately.
                         </p>
                     </div><span class="inline-state" id="ownerContactState">Choose a listing from search or
-                        shortlist</span>
-                </div>
-                <form class="form-grid detailed-property-form" id="ownerContactForm">
-                    <div class="property-form-section"><strong>Property and requester</strong><small>Required identity
-                            and
-                            listing information.</small></div><label>Listing ID *<input name="listingId" type="number"
-                            min="1" required></label><label>Your full name *<input name="name" maxlength="100"
-                            required></label><label>Phone number *<input name="phone" type="tel" pattern="[0-9+ ]{7,20}"
-                            required></label><label>Email address *<input name="email" type="email" required></label>
-                    <div class="property-form-section"><strong>Requirement</strong><small>Purpose, affordability and
-                            preferred response.</small></div><label>Request type *<select name="type" required>
-                            <option value="OWNER_CONTACT">Owner contact</option>
-                            <option value="PRICE_DISCUSSION">Price discussion</option>
-                            <option value="DOCUMENT_QUERY">Document query</option>
-                            <option value="AVAILABILITY_QUERY">Availability query</option>
-                        </select></label><label>Expected move-in / purchase date<input name="moveInDate"
-                            type="date"></label><label>Budget range<input name="budget"
-                            placeholder="e.g. Rs. 25,000–30,000 per month"></label><label>Preferred contact
-                        method<select name="contactMethod">
-                            <option>Phone call</option>
-                            <option>WhatsApp</option>
-                            <option>Email</option>
-                            <option>In-app response</option>
-                        </select></label><label>Preferred callback time<input name="callbackAt"
-                            type="datetime-local"></label><label>Occupants / family size<input name="occupants"
-                            type="number" min="1" max="50"></label><label class="profile-wide">Detailed message
-                        *<textarea name="message" minlength="10" maxlength="1500" required
-                            placeholder="Describe your requirement, questions and any conditions"></textarea></label><label
-                        class="profile-wide"><input name="contactConsent" type="checkbox" required> I consent to sharing
-                        these contact details with the verified property owner. *</label><button
-                        class="primary profile-wide" data-property-api-action="contact-owner" type="submit">Send
-                        Detailed
-                        Enquiry</button>
+                        shortli                <form class="form-grid detailed-property-form" id="ownerContactForm">
+                    <div class="property-form-section">
+                        <strong>Property and Requester Information</strong>
+                        <small>Required identity and target listing reference.</small>
+                    </div>
+                    <label><span>Listing ID</span><input name="listingId" type="number" min="1" placeholder="e.g. 101" required></label>
+                    <label><span>Your Full Name</span><input name="name" maxlength="100" placeholder="Full name" required></label>
+                    <label><span>Phone Number</span><input name="phone" type="tel" pattern="[0-9+ ]{7,20}" placeholder="+91 98765 43210" required></label>
+                    <label><span>Email Address</span><input name="email" type="email" placeholder="you@domain.com" required></label>
+                    
+                    <div class="property-form-section">
+                        <strong>Requirement & Preferences</strong>
+                        <small>Specify your purpose, budget range and callback preference.</small>
+                    </div>
+                    <label><span>Request Type</span><select name="type" required>
+                        <option value="OWNER_CONTACT">Owner direct contact</option>
+                        <option value="PRICE_DISCUSSION">Price negotiation</option>
+                        <option value="DOCUMENT_QUERY">Title deed & verification query</option>
+                        <option value="AVAILABILITY_QUERY">Possession / availability query</option>
+                    </select></label>
+                    <label><span>Expected Move-in / Purchase Date</span><input name="moveInDate" type="date"></label>
+                    <label><span>Budget Range</span><input name="budget" placeholder="e.g. ₹25,000–30,000 / month"></label>
+                    <label><span>Preferred Contact Method</span><select name="contactMethod">
+                        <option>Phone call</option>
+                        <option>WhatsApp</option>
+                        <option>Email</option>
+                        <option>In-app response</option>
+                    </select></label>
+                    <label><span>Preferred Callback Time</span><input name="callbackAt" type="datetime-local"></label>
+                    <label><span>Occupants / Family Size</span><input name="occupants" type="number" min="1" max="50" placeholder="e.g. 3"></label>
+                    
+                    <label class="profile-wide">
+                        <span>Detailed Message</span>
+                        <textarea name="message" minlength="10" maxlength="1500" required placeholder="Describe your requirement, questions and specific conditions for the owner..."></textarea>
+                    </label>
+                    <div class="profile-wide" style="margin-top:6px;">
+                        <label class="checkbox-label" style="margin-top:0;">
+                            <input name="contactConsent" type="checkbox" required>
+                            <span>I consent to sharing these contact details with the verified property owner.</span>
+                        </label>
+                    </div>
+                    <button class="primary profile-wide" data-property-api-action="contact-owner" type="submit">
+                        Send Detailed Enquiry
+                    </button>
                 </form>
             </div>
         </section>
@@ -2337,35 +2760,44 @@
                 <div class="card-head">
                     <div>
                         <h3>Site Visits</h3>
-                        <p>Request a physical visit or virtual tour with complete attendee and access details.</p>
+                        <p style="margin:4px 0 0 0; color:#64748b; font-size:0.84rem;">Request a physical visit or virtual tour with complete attendee and access details.</p>
                     </div><span class="inline-state">Requests remain traceable</span>
                 </div>
                 <form class="form-grid detailed-property-form" id="propertyVisitForm">
-                    <div class="property-form-section"><strong>Visit identity</strong><small>Property and visitor
-                            contact
-                            information.</small></div><label>Listing ID *<input name="listingId" type="number" min="1"
-                            required></label><label>Visitor full name *<input name="visitorName" maxlength="100"
-                            required></label><label>Contact phone *<input name="contactPhone" type="tel"
-                            pattern="[0-9+ ]{7,20}" required></label><label>Attendees *<input name="attendees"
-                            type="number" min="1" max="20" value="1" required></label>
-                    <div class="property-form-section"><strong>Schedule and access</strong><small>Select the preferred
-                            format, time and meeting instructions.</small></div><label>Visit mode *<select
-                            name="visitMode" required>
-                            <option>Physical property visit</option>
-                            <option>Live video tour</option>
-                            <option>Owner callback and walkthrough</option>
-                        </select></label><label>Preferred date and time *<input name="scheduledAt" type="datetime-local"
-                            required></label><label>Alternate date and time<input name="alternateAt"
-                            type="datetime-local"></label><label>Meeting point / landmark<input name="meetingPoint"
-                            maxlength="200"></label><label>Vehicle number<input name="vehicleNumber"
-                            maxlength="20"></label><label>Broker involved?<select name="brokerInvolved">
-                            <option>No</option>
-                            <option>Yes</option>
-                        </select></label><label class="profile-wide">Questions and visit notes<textarea name="notes"
-                            maxlength="1500"
-                            placeholder="Availability confirmation, rooms to inspect, documents to carry and accessibility needs"></textarea></label><button
-                        class="primary profile-wide" data-property-api-action="schedule-visit" type="submit">Request
-                        Detailed Visit</button>
+                    <div class="property-form-section">
+                        <strong>Visit Identity & Contact</strong>
+                        <small>Property target and primary visitor contact information.</small>
+                    </div>
+                    <label><span>Listing ID</span><input name="listingId" type="number" min="1" placeholder="e.g. 101" required></label>
+                    <label><span>Visitor Full Name</span><input name="visitorName" maxlength="100" placeholder="Your name" required></label>
+                    <label><span>Contact Phone</span><input name="contactPhone" type="tel" pattern="[0-9+ ]{7,20}" placeholder="+91 98765 43210" required></label>
+                    <label><span>Attendees Count</span><input name="attendees" type="number" min="1" max="20" value="1" required></label>
+                    
+                    <div class="property-form-section">
+                        <strong>Schedule & Access Details</strong>
+                        <small>Select preferred format, appointment time and vehicle/meeting notes.</small>
+                    </div>
+                    <label><span>Visit Mode</span><select name="visitMode" required>
+                        <option>Physical property visit</option>
+                        <option>Live video tour</option>
+                        <option>Owner callback and walkthrough</option>
+                    </select></label>
+                    <label><span>Preferred Date and Time</span><input name="scheduledAt" type="datetime-local" required></label>
+                    <label><span>Alternate Date and Time</span><input name="alternateAt" type="datetime-local"></label>
+                    <label><span>Meeting Point / Landmark</span><input name="meetingPoint" maxlength="200" placeholder="e.g. Main Gate, Tower B Lobby"></label>
+                    <label><span>Vehicle Number (for Gate Pass)</span><input name="vehicleNumber" maxlength="20" placeholder="e.g. KA-01-AB-1234"></label>
+                    <label><span>Broker Involved?</span><select name="brokerInvolved">
+                        <option>No</option>
+                        <option>Yes</option>
+                    </select></label>
+                    
+                    <label class="profile-wide">
+                        <span>Questions & Visit Notes</span>
+                        <textarea name="notes" maxlength="1500" placeholder="Availability confirmation, rooms to inspect, documents to carry and gate entry instructions..."></textarea>
+                    </label>
+                    <button class="primary profile-wide" data-property-api-action="schedule-visit" type="submit">
+                        Request Detailed Visit
+                    </button>
                 </form>
                 <div class="dashboard-table-scroll">
                     <table>
@@ -2393,7 +2825,7 @@
                 </div>
                 <div class="dashboard-table-scroll">
                     <table>
-                        <tbody>
+                        <thead>
                             <tr>
                                 <th>Property</th>
                                 <th>Interested party</th>
@@ -2402,23 +2834,10 @@
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
+                        </thead>
+                        <tbody id="customerOffersTableBody">
                             <tr>
-                                <td>2 BHK · Whitefield</td>
-                                <td>Priya S</td>
-                                <td>Rental enquiry</td>
-                                <td>Visit: 24 Aug, 11:00 AM</td>
-                                <td><span class="status pending">Awaiting response</span></td>
-                                <td><button data-action="approve">Accept</button> <button
-                                        data-action="edit-row">Counter</button></td>
-                            </tr>
-                            <tr>
-                                <td>3 BHK · HSR Layout</td>
-                                <td>Rahul K</td>
-                                <td>Purchase offer</td>
-                                <td>₹82,00,000</td>
-                                <td><span class="status open">Offer received</span></td>
-                                <td><button data-action="approve">Accept</button> <button
-                                        data-action="resolve-task">Decline</button></td>
+                                <td colspan="6" style="text-align: center; padding: 28px; color: #64748b;">No active offers or enquiries at this time. Incoming buyer and tenant requests will appear here.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -2799,32 +3218,39 @@
                         <p>Raise a traceable PropertyDirect support request with complete context.</p>
                     </div><span class="inline-state" id="supportState">Ready</span>
                 </div>
-                <form class="form-grid detailed-property-form" id="propertySupportForm"><label>Issue title *<input
-                            name="title" required maxlength="140" placeholder="Short summary"></label><label>Category
-                        *<select name="category" required>
-                            <option>ACCOUNT_ACCESS</option>
-                            <option>LISTING_APPROVAL</option>
-                            <option>PAYMENT_OR_PLAN</option>
-                            <option>OWNER_CONTACT</option>
-                            <option>VISIT_OR_SERVICE</option>
-                            <option>PRIVACY_OR_SAFETY</option>
-                            <option>TECHNICAL_ISSUE</option>
-                        </select></label><label>Priority *<select name="priority" required>
-                            <option>NORMAL</option>
-                            <option>HIGH</option>
-                            <option>URGENT</option>
-                        </select></label><label>Related listing / transaction ID<input
-                            name="reference"></label><label>Preferred contact method<select name="contactMethod">
-                            <option>In-app update</option>
-                            <option>Phone</option>
-                            <option>Email</option>
-                        </select></label><label>Available callback time<input name="callbackAt"
-                            type="datetime-local"></label><label class="profile-wide">Detailed issue *<textarea
-                            name="details" required minlength="15" maxlength="2000"
-                            placeholder="Explain what happened, expected result, error message and steps already tried"></textarea></label><label
-                        class="profile-wide">Screenshot / document reference<input name="attachmentReference"
-                            placeholder="Filename or secure reference"></label><button class="primary profile-wide"
-                        data-action="support" type="button">Raise Detailed Ticket</button></form>
+                <form class="form-grid detailed-property-form" id="propertySupportForm">
+                    <label><span>Issue Title</span><input name="title" required maxlength="140" placeholder="Short summary of the issue"></label>
+                    <label><span>Category</span><select name="category" required>
+                        <option>ACCOUNT_ACCESS</option>
+                        <option>LISTING_APPROVAL</option>
+                        <option>PAYMENT_OR_PLAN</option>
+                        <option>OWNER_CONTACT</option>
+                        <option>VISIT_OR_SERVICE</option>
+                        <option>PRIVACY_OR_SAFETY</option>
+                        <option>TECHNICAL_ISSUE</option>
+                    </select></label>
+                    <label><span>Priority</span><select name="priority" required>
+                        <option>NORMAL</option>
+                        <option>HIGH</option>
+                        <option>URGENT</option>
+                    </select></label>
+                    <label><span>Related Listing / Reference ID</span><input name="reference" placeholder="e.g. Prop #101 or Txn #45"></label>
+                    <label><span>Preferred Contact Method</span><select name="contactMethod">
+                        <option>In-app update</option>
+                        <option>Phone</option>
+                        <option>Email</option>
+                    </select></label>
+                    <label><span>Available Callback Time</span><input name="callbackAt" type="datetime-local"></label>
+                    <label class="profile-wide">
+                        <span>Detailed Issue</span>
+                        <textarea name="details" required minlength="15" maxlength="2000" placeholder="Explain what happened, expected result, error message and steps already tried..."></textarea>
+                    </label>
+                    <label class="profile-wide">
+                        <span>Screenshot / Document Reference</span>
+                        <input name="attachmentReference" placeholder="Filename or reference URL">
+                    </label>
+                    <button class="primary profile-wide" data-action="support" type="button">Raise Detailed Ticket</button>
+                </form>
                 <h3 style="margin-top: 24px;">Tickets</h3>
                 <ul class="task-list" id="supportTickets">
                     <li>No active support tickets</li>

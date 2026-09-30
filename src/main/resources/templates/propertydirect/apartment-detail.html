@@ -484,7 +484,7 @@
             SmartSociety
         </a>
         <a href="/propertydirect/apartments">Back to Apartments</a>
-        <a href="/propertydirect/workspace">Customer Dashboard</a>
+        <a href="/propertydirect/dashboards/customer">Customer Dashboard</a>
     </nav>
 </header>
 
@@ -949,7 +949,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
                 <div>
                     <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:3px;">Property ID</label>
-                    <input type="text" id="pdEnquiryPropertyId" value="#PD-8492" readonly style="width:100%; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:0.82rem; background:#f8fafc; color:#64748b; box-sizing:border-box;">
+                    <input type="text" id="pdEnquiryPropertyId" placeholder="Property Ref ID" readonly style="width:100%; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit; font-size:0.82rem; background:#f8fafc; color:#64748b; box-sizing:border-box;">
                 </div>
                 <div>
                     <label style="display:block; font-size:0.75rem; font-weight:700; color:#475569; margin-bottom:3px;">Preferred Contact Time *</label>
@@ -982,8 +982,8 @@ function closeEnquiryModal() {
 function submitPropertyEnquiry() {
     const name = document.getElementById("pdEnquiryName")?.value || "Rahul";
     const phone = document.getElementById("pdEnquiryMobile")?.value || "+91 98401 23456";
-    const email = document.getElementById("pdEnquiryEmail")?.value || "rahul@example.com";
-    const propertyId = document.getElementById("pdEnquiryPropertyId")?.value || "#PD-8492";
+    const email = document.getElementById("pdEnquiryEmail")?.value || "";
+    const propertyId = document.getElementById("pdEnquiryPropertyId")?.value || "";
     const prefTime = document.getElementById("pdEnquiryPreferredTime")?.value || "Afternoon";
     const message = document.getElementById("pdEnquiryMessage")?.value || "Interested in viewing property.";
     const propTitle = document.querySelector(".detail-hero h1")?.textContent || "3 BHK Apartment";

@@ -407,9 +407,293 @@
         handleMissingInlineButton(button, fnName);
     }, true);
 
-    document.addEventListener('DOMContentLoaded', applyAgentStates);
+    // -------------------------------------------------------------
+    // LIVE DATA LOADERS FOR SUPERADMIN
+    // -------------------------------------------------------------
+    function esc(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function fmtDate(d) {
+        if (!d) return '—';
+        try {
+            var dt = new Date(d);
+            return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        } catch(e) { return String(d); }
+    }
+
+    async function loadSuperAdminLiveAccounts() {
+        var userBody = document.getElementById('superadminUserMgmtBody');
+        var agentBody = document.getElementById('superadminAgentMgmtBody');
+        var ownerBody = document.getElementById('superadminOwnerMgmtBody');
+        if (!userBody && !agentBody && !ownerBody) return;
+
+        try {
+            var res = await fetch('/api/property/portal/accounts', { headers: { Accept: 'application/json' } });
+            if (!res.ok) return;
+            var accounts = await res.json();
+
+            // Users: CUSTOMER, TENANT, BUYER
+            if (userBody) {
+                var users = accounts.filter(function (a) {
+                    var r = (a.role || '').toUpperCase();
+                    return ['CUSTOMER', 'BUYER', 'TENANT'].indexOf(r) !== -1 || !a.role;
+                });
+                if (!users.length) {
+                    userBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:#64748b;">No registered customers or tenants found.</td></tr>';
+                } else {
+                    userBody.innerHTML = users.map(function (u) {
+                        var initials = (u.name || 'User').split(' ').map(function (n) { return n[0]; }).join('').slice(0, 2).toUpperCase();
+                        var isActive = u.active !== false && (u.status || 'ACTIVE').toUpperCase() === 'ACTIVE';
+                        return '<tr>' +
+                            '<td>' +
+                                '<div style="display:flex; align-items:center; gap:10px;">' +
+                                    '<div style="width:34px; height:34px; background:#eff6ff; color:#1d4ed8; font-weight:800; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem;">' + esc(initials) + '</div>' +
+                                    '<div><strong class="user-name">' + esc(u.name || 'Customer') + '</strong><br><small class="user-email" style="color:#64748b;">' + esc(u.email || u.username || '—') + '</small></div>' +
+                                '</div>' +
+                            '</td>' +
+                            '<td><span class="status active user-role" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">' + esc(u.role || 'Customer') + '</span></td>' +
+                            '<td class="user-phone">' + esc(u.phone || '—') + '</td>' +
+                            '<td>' + fmtDate(u.registeredAt) + '</td>' +
+                            '<td>Active now</td>' +
+                            '<td><span class="status ' + (isActive ? 'active' : 'inactive') + ' user-status">' + (isActive ? 'Active' : 'Suspended') + '</span></td>' +
+                            '<td style="text-align:right;">' +
+                                '<div style="display:inline-flex; gap:6px; justify-content:flex-end;">' +
+                                    '<button type="button" class="btn-table-action" onclick="viewUserActivity(\'' + esc(u.name) + '\', \'' + esc(u.email) + '\', \'' + esc(u.role) + '\', \'' + esc(u.phone) + '\', \'Live user account\')">Activity</button>' +
+                                '</div>' +
+                            '</td>' +
+                        '</tr>';
+                    }).join('');
+                }
+            }
+
+            // Agents: AGENT, BROKER
+            if (agentBody) {
+                var agents = accounts.filter(function (a) {
+                    var r = (a.role || '').toUpperCase();
+                    return ['AGENT', 'BROKER'].indexOf(r) !== -1;
+                });
+                if (!agents.length) {
+                    agentBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; color:#64748b;">No registered agents found.</td></tr>';
+                } else {
+                    agentBody.innerHTML = agents.map(function (a) {
+                        var isVerified = a.postingVerified || (a.status || '').toUpperCase() === 'ACTIVE';
+                        return '<tr>' +
+                            '<td><strong>' + esc(a.name || 'Agent') + '</strong><br><small style="color:#64748b;">' + esc(a.companyName || a.email || 'Independent Agency') + '</small></td>' +
+                            '<td><code>' + esc(a.registrationNumber || 'RERA-' + (a.id + 1000)) + '</code></td>' +
+                            '<td>' + esc(a.preferredCity || 'Pan-India') + '</td>' +
+                            '<td><strong>Verified Agent</strong></td>' +
+                            '<td><span class="status ' + (isVerified ? 'active' : 'pending') + '">' + (isVerified ? 'Verified & Active' : 'Pending Review') + '</span></td>' +
+                            '<td style="text-align:right;">' +
+                                '<button type="button" style="padding:5px 10px; font-size:0.78rem;" onclick="viewAgentProperties(\'' + esc(a.name) + '\')">Properties</button>' +
+                            '</td>' +
+                        '</tr>';
+                    }).join('');
+                }
+            }
+
+            // Owners: OWNER, BUILDER, VENDOR
+            if (ownerBody) {
+                var owners = accounts.filter(function (a) {
+                    var r = (a.role || '').toUpperCase();
+                    return ['OWNER', 'BUILDER', 'VENDOR'].indexOf(r) !== -1;
+                });
+                if (!owners.length) {
+                    ownerBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; color:#64748b;">No registered property owners found.</td></tr>';
+                } else {
+                    ownerBody.innerHTML = owners.map(function (o) {
+                        return '<tr>' +
+                            '<td><strong>' + esc(o.name || 'Owner') + '</strong><br><small style="color:#64748b;">' + esc(o.email || '—') + '</small></td>' +
+                            '<td>' + esc(o.phone || '—') + '<br><small style="color:#64748b;">' + esc(o.preferredCity || 'Bengaluru') + '</small></td>' +
+                            '<td>Verified Partner</td>' +
+                            '<td><span class="status active">KYC Verified</span></td>' +
+                            '<td><span class="status active">' + esc(o.status || 'Active') + '</span></td>' +
+                            '<td style="text-align:right;">' +
+                                '<button type="button" style="padding:5px 10px; font-size:0.78rem;" onclick="toast(\'Inspecting owner: ' + esc(o.name) + '\')">Inspect</button>' +
+                            '</td>' +
+                        '</tr>';
+                    }).join('');
+                }
+            }
+        } catch(e) {
+            console.error('Failed to load accounts in superadmin:', e);
+        }
+    }
+
+    async function loadSuperAdminLiveInventory() {
+        var propBody = document.getElementById('superadminPropertyMgmtBody');
+        if (!propBody) return;
+        try {
+            var res = await fetch('/api/property/portal/admin/inventory', { headers: { Accept: 'application/json' } });
+            if (!res.ok) return;
+            var items = await res.json();
+            if (!items.length) {
+                propBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:32px; color:#64748b;">No inventory properties found in system.</td></tr>';
+                return;
+            }
+            propBody.innerHTML = items.slice(0, 50).map(function (p) {
+                var priceFormatted = p.price ? ('₹' + Number(p.price).toLocaleString('en-IN')) : 'Price on request';
+                var isApproved = (p.verificationStatus || '').toUpperCase() === 'APPROVED' || (p.status || '').toUpperCase() === 'ACTIVE';
+                return '<tr>' +
+                    '<td>' +
+                        '<strong style="color:#0f172a;">' + esc(p.title || 'Property') + '</strong><br>' +
+                        '<small style="color:#64748b;"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">#' + esc(p.apartmentCode || 'PD-' + p.id) + '</code> · ' + esc(p.locality || p.city || 'Bangalore') + '</small>' +
+                    '</td>' +
+                    '<td><strong>' + esc(p.ownerName || 'Verified Partner') + '</strong><br><small style="color:#64748b;">' + esc(p.ownerRole || 'Owner') + '</small></td>' +
+                    '<td><strong style="color:#16a34a; font-size:0.92rem;">' + priceFormatted + '</strong></td>' +
+                    '<td><span class="badge ' + (p.featured ? 'featured' : 'standard') + '">' + (p.featured ? 'Featured' : 'Standard') + '</span></td>' +
+                    '<td><span class="status ' + (isApproved ? 'active' : 'pending') + '">' + esc(p.status || 'Active') + '</span></td>' +
+                    '<td style="text-align:right;">' +
+                        '<button type="button" style="padding:5px 10px; font-size:0.78rem;" onclick="toast(\'Inspecting ' + esc(p.title) + '\')">Inspect</button>' +
+                    '</td>' +
+                '</tr>';
+            }).join('');
+        } catch(e) {
+            console.error('Failed to load inventory in superadmin:', e);
+        }
+    }
+
+    async function loadSuperAdminLiveReports() {
+        var repBody = document.getElementById('superadminReportedPropertiesBody');
+        var queueBody = document.getElementById('superAdminReportsBody');
+        if (!repBody && !queueBody) return;
+        try {
+            var res = await fetch('/api/property/portal/reports', { headers: { Accept: 'application/json' } });
+            if (!res.ok) return;
+            var reports = await res.json();
+
+            // Update metrics
+            var totalEl = document.getElementById('superadminTotalReports');
+            var critEl = document.getElementById('superadminCriticalReports');
+            var suspEl = document.getElementById('superadminSuspendedListings');
+            if (totalEl) totalEl.textContent = reports.length + ' Incidents';
+            var criticalCount = reports.filter(function (r) {
+                var re = (r.reason || '').toLowerCase();
+                return re.indexOf('fraud') !== -1 || re.indexOf('fake') !== -1;
+            }).length;
+            if (critEl) critEl.textContent = criticalCount + ' Critical';
+            var resolvedCount = reports.filter(function (r) {
+                return (r.status || '').toUpperCase() === 'RESOLVED';
+            }).length;
+            if (suspEl) suspEl.textContent = resolvedCount + ' Resolved';
+
+            var countLabel = document.getElementById('superadminReportCountLabel');
+            if (countLabel) countLabel.innerHTML = 'Showing <strong>1 to ' + reports.length + '</strong> of <strong>' + reports.length + ' reported incidents</strong>';
+
+            if (!reports.length) {
+                if (repBody) repBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b;">No open fraud reports or flagged listings at this time.</td></tr>';
+                if (queueBody) queueBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:36px; color:#64748b;">No active property investigation tickets found.</td></tr>';
+                return;
+            }
+
+            if (repBody) {
+                repBody.innerHTML = reports.map(function (r) {
+                    var isResolved = (r.status || '').toUpperCase() === 'RESOLVED';
+                    return '<tr>' +
+                        '<td><strong style="color:#0f172a;">' + esc(r.reason || 'Property Flag') + '</strong><br><small style="color:#64748b;"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">#REP-' + r.id + '</code> · Listing #' + (r.listingId || '—') + '</small></td>' +
+                        '<td>' + esc(r.reporterEmail || 'Customer') + '</td>' +
+                        '<td><span class="status pending" style="background:#fee2e2; color:#991b1b; font-weight:800; font-size:0.76rem; padding:3px 8px; border-radius:6px;">' + esc(r.reason || 'Flagged') + '</span></td>' +
+                        '<td><span style="font-style:italic; color:#475569;">"' + esc(r.resolution || 'Under investigation by Super Admin') + '"</span></td>' +
+                        '<td>' + fmtDate(r.createdAt) + '</td>' +
+                        '<td><span class="status ' + (isResolved ? 'active' : 'open') + '">' + esc(r.status || 'Under Review') + '</span></td>' +
+                        '<td style="text-align:right;">' +
+                            '<button type="button" style="padding:5px 9px; font-size:0.76rem; background:#2563eb; color:#ffffff; border:none; border-radius:6px; cursor:pointer;" onclick="toast(\'Resolving report #' + r.id + '...\')">Resolve</button>' +
+                        '</td>' +
+                    '</tr>';
+                }).join('');
+            }
+
+            if (queueBody) {
+                queueBody.innerHTML = reports.map(function (r) {
+                    return '<tr>' +
+                        '<td><strong>Listing #' + (r.listingId || r.id) + '</strong><br><small style="color:#64748b;">Report #' + r.id + '</small></td>' +
+                        '<td><span class="status pending" style="background:#fee2e2; color:#991b1b; font-weight:800; font-size:0.76rem; padding:3px 8px; border-radius:6px;">' + esc(r.reason || 'Review') + '</span></td>' +
+                        '<td>' + esc(r.reporterEmail || 'Customer') + '</td>' +
+                        '<td><span style="font-style:italic; color:#475569;">"' + esc(r.resolution || 'Inspection pending') + '"</span></td>' +
+                        '<td>' + fmtDate(r.createdAt) + '</td>' +
+                        '<td><span class="status open">' + esc(r.status || 'Pending') + '</span></td>' +
+                    '</tr>';
+                }).join('');
+            }
+        } catch(e) {
+            console.error('Failed to load reports in superadmin:', e);
+        }
+    }
+
+    async function loadSuperAdminLiveVisits() {
+        var tourBody = document.getElementById('superAdminToursBody');
+        if (!tourBody) return;
+        try {
+            var res = await fetch('/api/property/portal/visits', { headers: { Accept: 'application/json' } });
+            if (!res.ok) return;
+            var visits = await res.json();
+            if (!visits.length) {
+                tourBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:36px; color:#64748b;">No scheduled tours or property visits currently active.</td></tr>';
+                return;
+            }
+            tourBody.innerHTML = visits.map(function (v) {
+                var prop = v.listing || {};
+                return '<tr>' +
+                    '<td><strong style="color:#0f172a;">' + esc(prop.title || 'Scheduled Visit #' + v.id) + '</strong><br><small style="color:#64748b;"><code style="background:#f1f5f9; padding:2px 6px; border-radius:4px;">#VIS-' + v.id + '</code> · ' + esc(prop.locality || prop.city || 'Bangalore') + '</small></td>' +
+                    '<td><strong>' + esc(v.visitorName || 'Visitor') + '</strong></td>' +
+                    '<td>' + esc(v.visitorPhone || '+91 98765 00000') + '<br><small style="color:#64748b;">' + esc(v.visitorEmail || 'visitor@example.com') + '</small></td>' +
+                    '<td><span style="background:#f0fdf4; color:#166534; font-weight:700; font-size:0.76rem; padding:2px 8px; border-radius:4px;">' + esc(v.visitType || 'Site Visit') + '</span><br><small style="color:#0f172a; font-weight:700;">' + fmtDate(v.scheduledAt || v.createdAt) + '</small></td>' +
+                    '<td><span style="font-style:italic; color:#475569;">"' + esc(v.notes || 'Tour request') + '"</span></td>' +
+                    '<td><span class="status active">' + esc(v.visitStatus || v.status || 'Confirmed') + '</span></td>' +
+                    '<td style="text-align:right;">' +
+                        '<button type="button" style="padding:5px 9px; font-size:0.76rem; background:#2563eb; color:#ffffff; border:none; border-radius:6px; cursor:pointer;" onclick="toast(\'Tour confirmed!\')">Confirm</button>' +
+                    '</td>' +
+                '</tr>';
+            }).join('');
+        } catch(e) {
+            console.error('Failed to load visits in superadmin:', e);
+        }
+    }
+
+    async function loadSuperAdminLiveAudit() {
+        var auditBody = document.getElementById('superAdminAuditBody');
+        if (!auditBody) return;
+        try {
+            var res = await fetch('/api/property/portal/audit', { headers: { Accept: 'application/json' } });
+            if (!res.ok) return;
+            var events = await res.json();
+            if (!events.length) {
+                auditBody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:32px; color:#64748b;">No recent audit logs recorded.</td></tr>';
+                return;
+            }
+            auditBody.innerHTML = events.slice(0, 30).map(function (ev) {
+                return '<tr>' +
+                    '<td><strong style="color:#0f172a;">' + esc(ev.actor || 'system') + '</strong></td>' +
+                    '<td><span class="status active" style="background:#eff6ff; color:#1d4ed8; font-weight:800; font-size:0.76rem; padding:2px 8px; border-radius:4px;">' + esc(ev.action || 'ACTION') + '</span></td>' +
+                    '<td>' + fmtDate(ev.createdAt) + '</td>' +
+                    '<td><code style="background:#f1f5f9; padding:3px 6px; border-radius:4px; font-size:0.8rem; color:#0f172a;">127.0.0.1</code></td>' +
+                    '<td><strong style="color:#1e293b;">' + esc(ev.targetType || 'TARGET') + ' #' + esc(ev.targetId || '0') + '</strong></td>' +
+                    '<td><span style="color:#64748b;">—</span></td>' +
+                    '<td><strong style="color:#16a34a;">' + esc(ev.detail || 'SUCCESS') + '</strong></td>' +
+                '</tr>';
+            }).join('');
+        } catch(e) {
+            console.error('Failed to load audit logs in superadmin:', e);
+        }
+    }
+
+    function initSuperAdminData() {
+        loadSuperAdminLiveAccounts();
+        loadSuperAdminLiveInventory();
+        loadSuperAdminLiveReports();
+        loadSuperAdminLiveVisits();
+        loadSuperAdminLiveAudit();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        applyAgentStates();
+        initSuperAdminData();
+    });
     window.addEventListener('hashchange', function () {
         if ((location.hash || '').slice(1) === 'agent-mgmt') setTimeout(applyAgentStates, 100);
+        initSuperAdminData();
     });
-    setTimeout(applyAgentStates, 0);
+    setTimeout(function () {
+        applyAgentStates();
+        initSuperAdminData();
+    }, 0);
 })();

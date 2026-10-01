@@ -128,7 +128,7 @@ public class MaintenanceRequestService {
 
         MaintenanceRequest request = new MaintenanceRequest();
         request.setRequestNumber(requestNumber);
-        request.setTenantId(tenantId != null ? tenantId : "default");
+        request.setTenantId(tenantId != null && !tenantId.isBlank() ? tenantId : "society-1");
         request.setResidentId(resident.getId());
         request.setResidentName(user.getFullName() != null ? user.getFullName() : "Resident");
         request.setResidentPhone(user.getPhone());
@@ -206,17 +206,13 @@ public class MaintenanceRequestService {
                 requests = requestRepository.findByResidentIdOrderByCreatedAtDesc(resident.getId());
             }
         } else {
-            String tenantId = user.getTenantId();
-            if (tenantId == null || tenantId.isBlank() || isSuperAdmin(user)) {
-                requests = requestRepository.findAll();
+            // Maintenance staff and society admins view all maintenance requests across SmartSociety and PropertyDirect
+            if ("active".equals(filterMode)) {
+                requests = requestRepository.findByRequestStatusInOrderByCreatedAtDesc(ACTIVE_STATUSES);
+            } else if ("completed".equals(filterMode)) {
+                requests = requestRepository.findByRequestStatusInOrderByCreatedAtDesc(COMPLETED_STATUSES);
             } else {
-                if ("active".equals(filterMode)) {
-                    requests = requestRepository.findByTenantIdAndRequestStatusInOrderByCreatedAtDesc(tenantId, ACTIVE_STATUSES);
-                } else if ("completed".equals(filterMode)) {
-                    requests = requestRepository.findByTenantIdAndRequestStatusInOrderByCreatedAtDesc(tenantId, COMPLETED_STATUSES);
-                } else {
-                    requests = requestRepository.findByTenantIdOrderByCreatedAtDesc(tenantId);
-                }
+                requests = requestRepository.findAllByOrderByCreatedAtDesc();
             }
         }
 
@@ -419,7 +415,11 @@ public class MaintenanceRequestService {
             }
         } else if (!isSuperAdmin(user)) {
             String tenantId = user.getTenantId();
-            if (tenantId != null && !tenantId.isBlank() && !tenantId.equalsIgnoreCase(request.getTenantId())) {
+            if (tenantId != null && !tenantId.isBlank() 
+                    && !tenantId.equalsIgnoreCase(request.getTenantId())
+                    && !"society-1".equalsIgnoreCase(request.getTenantId())
+                    && !"propertydirect".equalsIgnoreCase(request.getTenantId())
+                    && !"default".equalsIgnoreCase(request.getTenantId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                         "Unauthorized: Request belongs to another society/tenant.");
             }

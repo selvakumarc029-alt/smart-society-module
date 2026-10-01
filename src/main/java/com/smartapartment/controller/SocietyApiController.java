@@ -56,6 +56,8 @@ public class SocietyApiController {
     private com.smartapartment.repository.MaintenancePartnerRepository maintenancePartners;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private com.smartapartment.repository.MaintenanceHubRepository maintenanceHubs;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private com.smartapartment.service.MailService mailService;
 
     public SocietyApiController(CurrentUserService currentUser, DashboardService dashboards,
                                 ApartmentRepository apartments, ResidentRepository residents,
@@ -217,6 +219,15 @@ public class SocietyApiController {
 
     @PostMapping("/residents") @PreAuthorize("hasRole('SOCIETY_ADMIN')") @Transactional
     public Map<String,Object> resident(@Valid @RequestBody ResidentRequest request){String tenant=currentUser.requireTenantId();String email=request.email().trim().toLowerCase(Locale.ROOT);if(users.findByEmail(email).isPresent())throw new IllegalArgumentException("Email already exists");Apartment apartment=apartments.findFirstByTenantIdAndUnitNoOrderByIdAsc(tenant,request.unitNo()).orElseThrow(()->new IllegalArgumentException("Apartment was not found"));AppUser user=new AppUser();user.setTenantId(tenant);user.setFullName(request.name().trim());user.setEmail(email);user.setPhone(request.phone());user.setAddress(request.address());user.setEmergencyContactName(request.emergencyContactName());user.setEmergencyContactPhone(request.emergencyContactPhone());user.setProfileNotes(request.notes());user.setRole(UserRole.RESIDENT);user.setPasswordHash(passwordEncoder.encode(request.temporaryPassword()));user=users.save(user);Resident resident=new Resident();resident.setTenantId(tenant);resident.setUser(user);resident.setApartment(apartment);resident.setResidentType(request.residentType().toUpperCase(Locale.ROOT));resident.setMoveInDate(request.moveInDate());resident.setVehicleNumber(request.vehicleNumber());return residentView(residents.save(resident));}
+
+    @PostMapping("/residents/send-registration-link")
+    @PreAuthorize("hasAnyRole('SOCIETY_ADMIN','SUPER_ADMIN')")
+    public Map<String, Object> sendResidentRegistrationLink(@Valid @RequestBody SendResidentLinkRequest request) {
+        if (mailService == null) {
+            return Map.of("sent", false, "message", "Mail service is not configured on this server");
+        }
+        return mailService.sendResidentSelfRegistrationLink(request.email().trim(), request.registrationLink().trim());
+    }
 
     @GetMapping("/team-users")
     @PreAuthorize("hasAnyRole('SOCIETY_ADMIN','SUPER_ADMIN','MAINTENANCE_STAFF')")
@@ -1271,4 +1282,5 @@ public class SocietyApiController {
     public record SecurityAssignmentRequest(@NotNull Long securityGuardId,@NotBlank String assignmentType,
                                             @NotBlank String assignmentValue,String shiftName,String notes){}
     public record AmenityRequest(@NotBlank String name,@Positive int capacity,@NotNull @PositiveOrZero BigDecimal bookingFee,boolean approvalRequired){}
+    public record SendResidentLinkRequest(@NotBlank @Email String email, @NotBlank String registrationLink) {}
 }

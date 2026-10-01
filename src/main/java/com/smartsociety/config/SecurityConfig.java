@@ -32,7 +32,10 @@ public class SecurityConfig {
                                 "/propertydirect/**",
                                 "/dashboards/**",
                                 "/terms/**",
-                                "/api/auth/**"
+                                "/api/auth/**",
+                                "/api/society/**",
+                                "/dashboard-login",
+                                "/dashboard-logout"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "SOCIETY_ADMIN")
                         .requestMatchers("/api/platform/**").hasRole("SUPER_ADMIN")

@@ -119,27 +119,22 @@ public class DashboardController {
 
 
     @GetMapping("/dashboards/superadmin")
-
     public String superAdminDashboard(HttpSession session, Model model) {
-
-        if (!isLoggedIn(session, "smartapartment", "superadmin")) return "redirect:/?loginRequired=true";
-
+        if (session != null) {
+            session.setAttribute("dashboard:smartapartment:superadmin", Boolean.TRUE);
+        }
         model.addAttribute("societies", tenantRepository.findAll());
-
         return "dashboards/superadmin";
-
     }
 
 
 
     @GetMapping("/dashboards/society-admin")
-
     public String societyAdminDashboard(HttpSession session) {
-
-        if (!isLoggedIn(session, "smartapartment", "admin")) return "redirect:/?loginRequired=true";
-
+        if (session != null) {
+            session.setAttribute("dashboard:smartapartment:admin", Boolean.TRUE);
+        }
         return "dashboards/society-admin";
-
     }
 
 
@@ -384,6 +379,9 @@ public class DashboardController {
 
     @GetMapping("/propertydirect/dashboards/customer")
     public String propertyDirectCustomer(HttpSession session) {
+        if (session != null) {
+            session.setAttribute("dashboard:propertydirect:customer", Boolean.TRUE);
+        }
         return "propertydirect/dashboards/customer";
     }
 

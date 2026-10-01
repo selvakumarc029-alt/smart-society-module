@@ -854,7 +854,7 @@ async function loadPlatformBackendData(){
             tenants.forEach(tenant => noticeSocietySelect.add(new Option(tenant.societyName, tenant.id)));
             if ([...noticeSocietySelect.options].some(option => option.value === selectedSociety)) noticeSocietySelect.value = selectedSociety;
         }
-        fill('table[data-table="societies"]',tenants,t=>{const r=document.createElement("tr");r.dataset.recordId=t.id;td(r,t.societyName);td(r,[t.city,t.state].filter(Boolean).join(", "));td(r,planById.get(String(t.subscriptionPlanId))?.name||"Unassigned");td(r,t.approved?"Approved":"Pending");const c=document.createElement("td");c.innerHTML=`<button class="btn btn-sm btn-outline-primary me-1" data-backend-action="edit-society">Edit</button><button class="btn btn-sm ${t.approved?'btn-outline-danger':'btn-outline-success'}" data-backend-action="${t.approved?'suspend-society':'approve-society'}">${t.approved?'Suspend':'Approve'}</button>`;r.appendChild(c);return r;});
+        fill('table[data-table="societies"]',tenants,t=>{const r=document.createElement("tr");r.dataset.recordId=t.id;td(r,t.societyName);td(r,[t.city,t.state].filter(Boolean).join(", "));td(r,planById.get(String(t.subscriptionPlanId))?.name||"Unassigned");td(r,t.approved?"Approved":"Pending");const c=document.createElement("td");c.innerHTML=`<button class="btn btn-sm btn-outline-primary me-1" data-backend-action="view-society">View</button><button class="btn btn-sm ${t.approved?'btn-outline-danger':'btn-outline-success'}" data-backend-action="${t.approved?'suspend-society':'approve-society'}">${t.approved?'Suspend':'Approve'}</button>`;r.appendChild(c);return r;});
         fill('table[data-table="users"]',users,u=>{const r=document.createElement("tr");r.dataset.userId=u.id;td(r,u.name);td(r,u.role);td(r,u.tenantId);td(r,u.locked?"Locked":"Active");const c=document.createElement("td");c.innerHTML=`<button type="button" class="btn btn-sm btn-outline-primary" data-platform-user-edit>Edit User</button>`;r.appendChild(c);return r;});
         window.platformPlans = plans;
         renderOverviewPlanCards(plans);
@@ -1449,17 +1449,21 @@ document.addEventListener("click",event=>{
         const contactEmail = window.prompt("Contact email (optional)", "") || "";
         operation = mutateSociety("platform/tenants", "POST", {societyName: societyName.trim(), city: city.trim(), contactEmail});
     }
-    else if(action === "edit-society") {
+    else if(action === "view-society" || action === "edit-society") {
         const society = (window.platformTenants || []).find(item => String(item.id) === String(id));
         const administrator = (window.platformUsers || []).find(user =>
             String(user.tenantId) === String(society?.tenantId) && ["SOCIETY_ADMIN", "FACILITY_MANAGER"].includes(String(user.role))
         );
-        if (!society || typeof window.openSocietyEditor !== "function") {
-            showToast("The complete society profile is still loading. Please try again.");
+        if (!society) {
+            showToast("Society details not found. Please try again.");
             button.disabled = false;
             return;
         }
-        window.openSocietyEditor(society, administrator || null);
+        if (typeof window.openSocietyViewer === "function") {
+            window.openSocietyViewer(society, administrator || null);
+        } else if (typeof window.openSocietyEditor === "function") {
+            window.openSocietyEditor(society, administrator || null);
+        }
         button.disabled = false;
         return;
     }
@@ -4139,6 +4143,18 @@ function openActionModal(action, button) {
                         ✓ This link belongs to ONE person only. Submitted details will auto-appear in your Residents table.
                     </small>
                 </div>
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px dashed #bfdbfe;">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: #1e3a8a; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                        <i class="fa-solid fa-paper-plane" style="color: #2563eb;"></i> Send Registration Link directly to Resident's Email:
+                    </label>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <input type="email" id="residentInviteEmailInput" placeholder="Enter resident's email (e.g. resident@example.com)" style="flex: 1; min-width: 220px; background: #ffffff; border: 1px solid #93c5fd; padding: 9px 12px; border-radius: 8px; font-size: 0.84rem; color: #0f172a; outline: none;">
+                        <button type="button" id="btnSendResidentLinkEmail" onclick="window.sendResidentSelfLinkEmail()" style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);">
+                            <i class="fa-solid fa-paper-plane"></i> Send Link
+                        </button>
+                    </div>
+                    <div id="residentEmailSendStatus" style="display: none; font-size: 0.8rem; margin-top: 6px; font-weight: 600;"></div>
+                </div>
             </div>
             <div class="flat-form-section"><strong>Or fill details directly below:</strong><span>Manual Admin Creation</span></div>
         `;
@@ -5275,6 +5291,85 @@ window.copyGeneratedResidentUrl = function() {
     }
 };
 
+window.sendResidentSelfLinkEmail = async function() {
+    const emailInput = document.getElementById("residentInviteEmailInput");
+    const statusEl = document.getElementById("residentEmailSendStatus");
+    const sendBtn = document.getElementById("btnSendResidentLinkEmail");
+    
+    const email = (emailInput ? emailInput.value : "").trim();
+    if (!email || !email.includes("@") || !email.includes(".")) {
+        if (statusEl) {
+            statusEl.style.display = "block";
+            statusEl.style.color = "#dc2626";
+            statusEl.textContent = "Please enter a valid email address.";
+        }
+        return;
+    }
+    
+    // Ensure the link is generated
+    let urlInput = document.getElementById("generatedResidentUrlInput");
+    if (!urlInput || !urlInput.value) {
+        window.generateResidentSelfLink();
+        urlInput = document.getElementById("generatedResidentUrlInput");
+    }
+    const registrationLink = urlInput ? urlInput.value : "";
+    if (!registrationLink) {
+        if (statusEl) {
+            statusEl.style.display = "block";
+            statusEl.style.color = "#dc2626";
+            statusEl.textContent = "Unable to generate registration link. Please try again.";
+        }
+        return;
+    }
+    
+    if (sendBtn) {
+        sendBtn.disabled = true;
+        sendBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
+    }
+    if (statusEl) {
+        statusEl.style.display = "block";
+        statusEl.style.color = "#2563eb";
+        statusEl.textContent = "Sending registration link to " + email + "...";
+    }
+    
+    try {
+        const resp = await fetch("/api/society/residents/send-registration-link", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: email, registrationLink: registrationLink })
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (resp.ok && (data.sent !== false)) {
+            if (statusEl) {
+                statusEl.style.color = "#059669";
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Registration link successfully sent to <strong>${escapeAttribute(email)}</strong>!`;
+            }
+            if (window.showToast) {
+                window.showToast(`✓ Registration link sent to ${email}`);
+            }
+            if (emailInput) emailInput.value = "";
+        } else {
+            const errMsg = data.message || "Failed to send email. Please check SMTP/Brevo config or copy link manually.";
+            if (statusEl) {
+                statusEl.style.color = "#dc2626";
+                statusEl.textContent = errMsg;
+            }
+        }
+    } catch (err) {
+        if (statusEl) {
+            statusEl.style.color = "#dc2626";
+            statusEl.textContent = "Error sending email: " + (err.message || "Network error");
+        }
+    } finally {
+        if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Link`;
+        }
+    }
+};
+
 window.renderSmartApartmentResidents = function() {
     const tbody = document.querySelector('[data-table="residents"] tbody');
     if (!tbody) return;
@@ -5342,7 +5437,18 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("input", (e) => {
     if (!e.target) return;
     const target = e.target;
-    if (target.type === "tel" || (target.name && /phone|mobile|contact/i.test(target.name)) || (target.id && /phone|mobile|contact/i.test(target.id))) {
-        target.value = target.value.replace(/[^0-9]/g, "");
+    const id = (target.id || "").toLowerCase();
+    const name = (target.name || "").toLowerCase();
+    
+    // Do not restrict fields that contain names, persons, departments, emails, notes, etc.
+    if (/name|person|department|dept|email|address|title|message|note|desc|url|ref/i.test(id) ||
+        /name|person|department|dept|email|address|title|message|note|desc|url|ref/i.test(name)) {
+        return;
+    }
+    
+    // Only restrict pure phone/mobile number inputs
+    if (target.type === "tel" || /phone|mobile|contactphone|contactnumber|cellphone/i.test(id) || /phone|mobile|contactphone|contactnumber|cellphone/i.test(name)) {
+        target.value = target.value.replace(/[^0-9]/g, "").slice(0, 15);
     }
 });
+

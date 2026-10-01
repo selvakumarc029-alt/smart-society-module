@@ -1107,9 +1107,11 @@
                 <a href="#pass" class="nav-link btn btn-link text-start text-decoration-none" data-panel="pass"><i class="fa-solid fa-id-badge me-2"></i> Visitor Pre-Approval</a>
                 <a href="#services" class="nav-link btn btn-link text-start text-decoration-none" data-panel="services"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Carpentry & Home Services</a>
                 <a href="#complaints" class="nav-link btn btn-link text-start text-decoration-none" data-panel="complaints"><i class="fa-solid fa-headset me-2"></i> Helpdesk & Complaints</a>
+                <a href="#maintenance-chat" class="nav-link btn btn-link text-start text-decoration-none" data-panel="maintenance-chat"><i class="fa-solid fa-comments me-2 text-info"></i> Maintenance Chat <span class="badge bg-primary rounded-pill ms-auto" id="residentChatSidebarBadge" style="display:none;">0</span></a>
                 <a href="#amenities" class="nav-link btn btn-link text-start text-decoration-none" data-panel="amenities"><i class="fa-solid fa-dumbbell me-2"></i> Amenity Booking</a>
                 <a href="#announcements" class="nav-link btn btn-link text-start text-decoration-none" data-panel="announcements"><i class="fa-solid fa-bullhorn me-2"></i> Notice Board</a>
                 <a href="#deliveries" class="nav-link btn btn-link text-start text-decoration-none" data-panel="deliveries"><i class="fa-solid fa-box me-2"></i> Parcel & Deliveries</a>
+                <a href="#post-property" class="nav-link btn btn-link text-start text-decoration-none" data-panel="post-property"><i class="fa-solid fa-house-chimney me-2 text-warning"></i> Post Flat (Rent / Sale) <span class="badge bg-warning text-dark ms-auto" id="residentPendingPropertiesBadge" style="display:none;">0</span></a>
                 <a href="#profile" class="nav-link btn btn-link text-start text-decoration-none" data-panel="profile"><i class="fa-solid fa-user me-2"></i> My Profile</a>
             </nav>
             <div class="sidebar-footer p-3 mt-auto border-top border-secondary text-center">
@@ -1127,6 +1129,9 @@
                     <h2 class="mb-0 fw-bold text-dark" id="title">Overview</h2>
                 </div>
                 <div class="d-flex align-items-center gap-3 header-actions">
+                    <button type="button" class="btn btn-outline-primary rounded-pill shadow-sm px-3 fw-semibold" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')">
+                        <i class="fa-solid fa-comments me-2 text-primary"></i>Chat with Maintenance
+                    </button>
                     <a class="btn btn-primary rounded-pill shadow-sm px-4" href="tel:+919844022010" aria-label="Call gate guard at +91 98440 22010">
                         <i class="fa-solid fa-phone me-2"></i>Call Gate Guard <span class="ms-1">+91 98440 22010</span>
                     </a>
@@ -1189,6 +1194,26 @@
                                 </button>
                                 <button type="button" class="btn btn-outline-light rounded-pill px-3 fw-bold" onclick="openLatestActiveTracker()">
                                     <i class="fa-solid fa-location-dot me-1"></i>Live Tracker
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Owner Property Action Card -->
+                    <div class="card p-4 shadow-sm border-0 rounded-4 mb-4" style="background: linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%); color: #ffffff;">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                            <div>
+                                <span class="badge bg-warning text-dark px-3 py-1 rounded-pill text-uppercase fw-bold mb-2" style="letter-spacing:0.5px; font-size:0.75rem;">
+                                    <i class="fa-solid fa-house-chimney me-1"></i> Owner Property Portal
+                                </span>
+                                <h4 class="fw-bold mb-1 text-white">Looking to Rent or Sell Your Flat?</h4>
+                                <p class="text-light text-opacity-75 mb-0 small">
+                                    Direct Flat Owner Listing: Post your apartment for Rent or Sale. Your listing is verified by the Society Admin and published for genuine tenants and buyers.
+                                </p>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-warning rounded-pill px-4 fw-bold shadow text-dark" onclick="window.openPanel('post-property')">
+                                    <i class="fa-solid fa-plus-circle me-2"></i>Post Flat (Rent / Sale)
                                 </button>
                             </div>
                         </div>
@@ -1541,7 +1566,7 @@
                                     </ul>
                                 </div>
                                 <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.15rem; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                    Home Services
+                                    <i class="fa-solid fa-screwdriver-wrench text-primary me-2"></i>Carpentry & Home Services
                                 </h4>
                             </div>
                             <div class="flex-grow-1 mx-lg-3" style="max-width: 520px;">
@@ -1565,7 +1590,7 @@
 
                     <!-- 8 Core Service Categories Grid (Card View) -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-shapes text-primary me-2"></i>Explore All Home Services</h5>
+                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-screwdriver-wrench text-primary me-2"></i>Explore Carpentry & Home Services</h5>
                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill small fw-semibold">Instant Booking Available</span>
                     </div>
                     <div class="row g-2 g-md-3 mb-4" id="nobrokerCategoryGrid">
@@ -1729,6 +1754,44 @@
                         </div>
                     </div>
 
+                    <!-- My Maintenance Requests → Request Details Section -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4 position-relative" style="border-left: 6px solid #2563eb !important;">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="text-uppercase fw-bold text-muted small" style="font-size:0.75rem; letter-spacing:0.5px;">My Maintenance Requests &rarr; Request Details</span>
+                                <h3 class="fw-bold text-dark mb-0 mt-1">AC Repair</h3>
+                            </div>
+                            <span class="badge bg-primary text-white font-monospace fw-bold px-3 py-1.5 rounded-pill fs-6">Ticket: #REQ-1024</span>
+                        </div>
+                        <div class="row g-3 py-3 border-top border-bottom border-light-subtle my-2">
+                            <div class="col-sm-4">
+                                <span class="text-muted small d-block">Status:</span>
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-1 fw-bold fs-6 mt-1">
+                                    <i class="fa-solid fa-user-check me-1"></i>Worker Assigned
+                                </span>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="text-muted small d-block">Assigned Worker:</span>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <div class="staff-avatar-mini" style="background:#2563eb; color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem;"><i class="fa-solid fa-user-gear"></i></div>
+                                    <strong class="text-dark fs-6">Kumar</strong>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <span class="text-muted small d-block">Estimated Completion:</span>
+                                <strong class="text-dark fs-6 d-block mt-1"><i class="fa-regular fa-clock text-primary me-1.5"></i>2 Hours</strong>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-3 mt-3 pt-1">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold" onclick="showTrackWorkerModal('Kumar', 'REQ-1024')">
+                                <i class="fa-solid fa-map-location-dot me-2 text-primary"></i>Track Worker
+                            </button>
+                            <button type="button" class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar', true)">
+                                <i class="fa-solid fa-comments me-2"></i>Chat with Maintenance
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="card complaints-card shadow-sm border-0 rounded-4">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
                             <div class="d-flex align-items-center gap-3">
@@ -1758,6 +1821,38 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr data-record-id="req-1024">
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="ticket-id-tag font-monospace text-primary fw-bold">#REQ-1024</span>
+                                                <span class="badge bg-warning text-dark rounded-pill px-2 py-0.5" style="font-size:0.68rem;">MEDIUM</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="ticket-title-text fw-bold">AC Repair</div>
+                                            <div class="ticket-desc-text">Master bedroom AC unit not cooling adequately</div>
+                                        </td>
+                                        <td>
+                                            <span class="ticket-cat-badge"><i class="fa-solid fa-fan text-info me-1.5"></i>AC</span>
+                                        </td>
+                                        <td>
+                                            <div class="d-inline-flex align-items-center gap-2">
+                                                <span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span>
+                                                <span class="staff-name-text">Kumar (AC Specialist)</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1.5"></i>Today</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge status-pill status-progress status" data-status="Assigned"><span class="status-dot dot-progress"></span>Assigned</span>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')">
+                                                <i class="fa-solid fa-comments me-1"></i>Chat with Maintenance
+                                            </button>
+                                        </td>
+                                    </tr>
                                     <tr data-record-id="complaint-102">
                                         <td>
                                             <div class="d-flex align-items-center gap-2">
@@ -1785,7 +1880,12 @@
                                             <span class="badge status-pill status-progress status" data-status="In Progress"><span class="status-dot dot-progress"></span>In Progress</span>
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-sm btn-resolve-ticket" data-action="close" data-ticket-id="complaint-102" onclick="window.resolveResidentComplaintRow(this, 'complaint-102')"><i class="fa-solid fa-check me-1.5"></i>Mark Resolved</button>
+                                            <div class="d-flex gap-2 align-items-center">
+                                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" onclick="openResidentChat('req_T-102_cust', 'T-102', 'Bathroom Water Leakage', 'Ramesh (Plumber)')">
+                                                    <i class="fa-solid fa-comments me-1"></i>Chat
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-resolve-ticket" data-action="close" data-ticket-id="complaint-102" onclick="window.resolveResidentComplaintRow(this, 'complaint-102')"><i class="fa-solid fa-check me-1.5"></i>Mark Resolved</button>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr data-record-id="complaint-088">
@@ -2047,6 +2147,1596 @@
                     </div>
                 </section>
 
+                <!-- Post Property (Owner Listing) Section -->
+                <section class="d-none animate__animated animate__fadeIn" data-view="post-property">
+                    <!-- KPI Metric Cards -->
+                    <div class="row g-4 mb-4 stats">
+                        <div class="col-md-3">
+                            <article class="card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
+                                <span class="text-muted small fw-bold text-uppercase">My Submissions</span>
+                                <strong class="fs-2 fw-bold text-dark mt-2 d-block" id="resPropStatTotal">0</strong>
+                                <span class="small text-muted d-block mt-1">Total posted flats</span>
+                            </article>
+                        </div>
+                        <div class="col-md-3">
+                            <article class="card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
+                                <span class="text-muted small fw-bold text-uppercase">Pending Approval</span>
+                                <strong class="fs-2 fw-bold text-warning mt-2 d-block" id="resPropStatPending">0</strong>
+                                <span class="small text-muted d-block mt-1">Awaiting admin review</span>
+                            </article>
+                        </div>
+                        <div class="col-md-3">
+                            <article class="card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
+                                <span class="text-muted small fw-bold text-uppercase">Approved & Live</span>
+                                <strong class="fs-2 fw-bold text-success mt-2 d-block" id="resPropStatApproved">0</strong>
+                                <span class="small text-muted d-block mt-1">Live in marketplace</span>
+                            </article>
+                        </div>
+                        <div class="col-md-3">
+                            <article class="card p-4 h-100 shadow-sm border-0 rounded-4 bg-white">
+                                <span class="text-muted small fw-bold text-uppercase">Changes Requested</span>
+                                <strong class="fs-2 fw-bold text-danger mt-2 d-block" id="resPropStatRejected">0</strong>
+                                <span class="small text-muted d-block mt-1">Requires clarification</span>
+                            </article>
+                        </div>
+                    </div>
+
+                    <!-- Post Property Form Card -->
+                    <div class="card shadow-sm border-0 rounded-4 mb-4" id="postPropertyFormCard">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
+                            <div>
+                                <h4 class="fw-bold mb-1"><i class="fa-solid fa-house-chimney text-primary me-2"></i>Post Your Flat for Rent or Sale</h4>
+                                <p class="text-muted small mb-0">Fill in your apartment details below. Your listing is routed to the Society Admin for verification and approval.</p>
+                            </div>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-bold">
+                                <i class="fa-solid fa-shield-halved me-1"></i> Admin Verification Required
+                            </span>
+                        </div>
+                        <div class="card-body px-4 pb-4">
+                            <form id="ownerPostPropertyForm">
+                                <!-- Step 1: Listing Type & Flat Identity -->
+                                <div class="p-3 mb-4 rounded-3 border bg-light">
+                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <label class="fw-bold text-dark small text-uppercase mb-0">Listing Intent *</label>
+                                            <div class="btn-group" role="group" aria-label="Listing Intent">
+                                                <input type="radio" class="btn-check" name="propListingTypeRadio" id="intentRent" value="RENT" checked>
+                                                <label class="btn btn-outline-primary btn-sm px-4 fw-bold rounded-start-pill" for="intentRent">
+                                                    <i class="fa-solid fa-key me-1"></i> For Rent
+                                                </label>
+
+                                                <input type="radio" class="btn-check" name="propListingTypeRadio" id="intentSale" value="SALE">
+                                                <label class="btn btn-outline-primary btn-sm px-4 fw-bold rounded-end-pill" for="intentSale">
+                                                    <i class="fa-solid fa-tag me-1"></i> For Sale
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-white text-dark border px-3 py-2 rounded-pill">
+                                                <i class="fa-solid fa-user-check me-1 text-success"></i> Posting as Verified Flat Owner: <strong>Kavya N</strong>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-8">
+                                        <label for="propTitle" class="form-label fw-bold small">Property Listing Title *</label>
+                                        <input type="text" class="form-control" id="propTitle" placeholder="e.g. Spacious 3 BHK Flat with East Facing Balcony" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="propPropertyType" class="form-label fw-bold small">Property Type</label>
+                                        <select class="form-select" id="propPropertyType">
+                                            <option value="APARTMENT" selected>Apartment / Flat</option>
+                                            <option value="PENTHOUSE">Penthouse</option>
+                                            <option value="STUDIO">Studio Flat</option>
+                                            <option value="VILLA">Society Villa / Duplex</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="propUnitNumber" class="form-label fw-bold small">Flat / Unit Number *</label>
+                                        <input type="text" class="form-control" id="propUnitNumber" value="A-101" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propTower" class="form-label fw-bold small">Tower / Block *</label>
+                                        <input type="text" class="form-control" id="propTower" value="Block A" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propBhk" class="form-label fw-bold small">BHK Configuration *</label>
+                                        <select class="form-select" id="propBhk" required>
+                                            <option value="1 BHK">1 BHK</option>
+                                            <option value="2 BHK">2 BHK</option>
+                                            <option value="3 BHK" selected>3 BHK</option>
+                                            <option value="4 BHK">4 BHK</option>
+                                            <option value="4+ BHK">4+ BHK / Penthouse</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propArea" class="form-label fw-bold small">Super Built-up Area (Sq.Ft) *</label>
+                                        <input type="number" class="form-control" id="propArea" value="1650" min="200" max="10000" required>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="propPrice" class="form-label fw-bold small" id="propPriceLabel">Expected Monthly Rent (₹) *</label>
+                                        <input type="number" class="form-control" id="propPrice" placeholder="e.g. 42000" min="1000" required>
+                                    </div>
+                                    <div class="col-md-3" id="propDepositGroup">
+                                        <label for="propDeposit" class="form-label fw-bold small">Security Deposit (₹)</label>
+                                        <input type="number" class="form-control" id="propDeposit" placeholder="e.g. 180000" min="0">
+                                    </div>
+                                    <div class="col-md-3" id="propMaintGroup">
+                                        <label for="propMaintenance" class="form-label fw-bold small">Monthly Maintenance (₹)</label>
+                                        <input type="number" class="form-control" id="propMaintenance" placeholder="e.g. 3500" min="0">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propAvailableFrom" class="form-label fw-bold small">Available From *</label>
+                                        <input type="date" class="form-control" id="propAvailableFrom" required>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="propFurnishing" class="form-label fw-bold small">Furnishing Status</label>
+                                        <select class="form-select" id="propFurnishing">
+                                            <option value="Fully Furnished">Fully Furnished</option>
+                                            <option value="Semi-Furnished" selected>Semi-Furnished</option>
+                                            <option value="Unfurnished">Unfurnished</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propBathrooms" class="form-label fw-bold small">Bathrooms</label>
+                                        <select class="form-select" id="propBathrooms">
+                                            <option value="1">1 Bathroom</option>
+                                            <option value="2">2 Bathrooms</option>
+                                            <option value="3" selected>3 Bathrooms</option>
+                                            <option value="4">4 Bathrooms</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propFloor" class="form-label fw-bold small">Floor</label>
+                                        <input type="number" class="form-control" id="propFloor" value="1" min="0" max="50">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propParking" class="form-label fw-bold small">Parking Slot</label>
+                                        <select class="form-select" id="propParking">
+                                            <option value="Covered 4-Wheeler (Slot P-12)" selected>Covered 4-Wheeler (Slot P-12)</option>
+                                            <option value="Open 4-Wheeler">Open 4-Wheeler</option>
+                                            <option value="2-Wheeler Only">2-Wheeler Only</option>
+                                            <option value="None">None</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6" id="propTenantPrefGroup">
+                                        <label for="propTenantPref" class="form-label fw-bold small">Tenant Preference</label>
+                                        <select class="form-select" id="propTenantPref">
+                                            <option value="Families Preferred" selected>Families Preferred</option>
+                                            <option value="Working Professionals / Bachelors Allowed">Working Professionals / Bachelors Allowed</option>
+                                            <option value="Company Lease Only">Company Lease Only</option>
+                                            <option value="Any Genuine Tenant">Any Genuine Tenant</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propContactName" class="form-label fw-bold small">Owner Contact Name</label>
+                                        <input type="text" class="form-control" id="propContactName" value="Kavya N">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="propContactPhone" class="form-label fw-bold small">Owner Contact Mobile</label>
+                                        <input type="tel" class="form-control" id="propContactPhone" value="+91 98440 22010">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Key Amenities Included</label>
+                                        <div class="d-flex flex-wrap gap-3 p-3 border rounded-3 bg-light">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="Modular Kitchen" id="amModularKitchen" checked>
+                                                <label class="form-check-label small" for="amModularKitchen">Modular Kitchen</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="Wardrobes in all Bedrooms" id="amWardrobes" checked>
+                                                <label class="form-check-label small" for="amWardrobes">Wardrobes</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="Geysers in Bathrooms" id="amGeyser" checked>
+                                                <label class="form-check-label small" for="amGeyser">Geysers</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="Air Conditioning" id="amAC">
+                                                <label class="form-check-label small" for="amAC">Air Conditioning</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="100% Power Backup" id="amPower" checked>
+                                                <label class="form-check-label small" for="amPower">Power Backup</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="Piped Gas (Adani/GAIL)" id="amGas">
+                                                <label class="form-check-label small" for="amGas">Piped Gas</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="Balcony with View" id="amBalcony" checked>
+                                                <label class="form-check-label small" for="amBalcony">Balcony View</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="propAmenities" value="Society Gym & Swimming Pool Access" id="amGym" checked>
+                                                <label class="form-check-label small" for="amGym">Gym & Pool Access</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="propDescription" class="form-label fw-bold small">Detailed Description & Special Features</label>
+                                        <textarea class="form-control" id="propDescription" rows="3" placeholder="Describe natural lighting, woodwork, electrical fittings, cross ventilation, nearby society amenities, etc."></textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold small">Select or Provide Apartment Cover Photo</label>
+                                        <div class="d-flex flex-wrap gap-2 mb-2">
+                                            <button type="button" class="btn btn-outline-secondary btn-sm preset-photo-chip active border-primary" data-url="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80">
+                                                <i class="fa-solid fa-couch me-1"></i> Modern Living Room
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm preset-photo-chip" data-url="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80">
+                                                <i class="fa-solid fa-bed me-1"></i> Master Bedroom
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm preset-photo-chip" data-url="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80">
+                                                <i class="fa-solid fa-city me-1"></i> Luxury Corner Flat
+                                            </button>
+                                            <button type="button" class="btn btn-outline-secondary btn-sm preset-photo-chip" data-url="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80">
+                                                <i class="fa-solid fa-sun me-1"></i> Garden & Balcony View
+                                            </button>
+                                        </div>
+                                        <input type="url" class="form-control" id="propImageUrl" value="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1000&q=80" placeholder="https://example.com/photo.jpg">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="propNotes" class="form-label fw-bold small">Notes for Society Admin & Security</label>
+                                        <input type="text" class="form-control" id="propNotes" placeholder="e.g. Key available with security / Owner available on weekends for visits">
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                    <span class="small text-muted"><i class="fa-solid fa-info-circle me-1 text-primary"></i> Submissions undergo instant notification to Society Admin.</span>
+                                    <button type="submit" class="btn btn-primary rounded-pill px-5 fw-bold shadow">
+                                        <i class="fa-solid fa-paper-plane me-2"></i>Submit Property to Admin for Approval
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- My Submitted Properties Card -->
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head" id="myPostedPropertiesHeader">
+                            <div>
+                                <h4 class="fw-bold mb-1">My Submitted Properties</h4>
+                                <p class="text-muted small mb-0">Track verification status and reviews from the Society Admin.</p>
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="window.refreshPropertyApprovals()">
+                                <i class="fa-solid fa-rotate me-1"></i> Refresh List
+                            </button>
+                        </div>
+                        <div class="card-body px-4 pb-4">
+                            <div id="residentPropertyListingsContainer">
+                                <div class="text-center py-5 text-muted">
+                                    <div class="spinner-border text-primary spinner-border-sm me-2"></div>Loading your property listings...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dedicated WhatsApp / Messenger Real-Life Chat Section -->
+                <section class="d-none animate__animated animate__fadeIn" data-view="maintenance-chat" id="residentChatPanel">
+                    <style id="smart-resident-chat-theme">
+                        #residentChatPanel {
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            overflow-x: hidden !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        .wa-app-card {
+                            display: flex !important;
+                            flex-direction: row !important;
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            height: 700px !important;
+                            max-height: calc(100vh - 160px) !important;
+                            border-radius: 16px !important;
+                            overflow: hidden !important;
+                            background: #ffffff !important;
+                            border: 1px solid #d1d7db !important;
+                            box-shadow: 0 12px 36px rgba(11, 20, 26, 0.09) !important;
+                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+                            position: relative !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        /* WhatsApp Left Sidebar */
+                        .wa-sidebar {
+                            width: 320px !important;
+                            min-width: 280px !important;
+                            max-width: 340px !important;
+                            background: #ffffff !important;
+                            border-right: 1px solid #d1d7db !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            height: 100% !important;
+                            flex-shrink: 0 !important;
+                            box-sizing: border-box !important;
+                            overflow: hidden !important;
+                        }
+
+                        .wa-sidebar-header {
+                            background: #f0f2f5 !important;
+                            padding: 12px 16px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            border-bottom: 1px solid #e9edef !important;
+                            height: 64px !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        .wa-my-profile {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 10px !important;
+                        }
+
+                        .wa-user-avatar {
+                            width: 40px !important;
+                            height: 40px !important;
+                            border-radius: 50% !important;
+                            background: linear-gradient(135deg, #00a884 0%, #008069 100%) !important;
+                            color: #ffffff !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            font-weight: 700 !important;
+                            font-size: 1.05rem !important;
+                            box-shadow: 0 2px 6px rgba(0, 168, 132, 0.25) !important;
+                            position: relative !important;
+                        }
+
+                        .wa-online-dot {
+                            position: absolute !important;
+                            bottom: 1px !important;
+                            right: 1px !important;
+                            width: 11px !important;
+                            height: 11px !important;
+                            border-radius: 50% !important;
+                            background: #25d366 !important;
+                            border: 2px solid #ffffff !important;
+                        }
+
+                        .wa-header-icon-btn {
+                            all: unset !important;
+                            cursor: pointer !important;
+                            width: 36px !important;
+                            height: 36px !important;
+                            border-radius: 50% !important;
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            color: #54656f !important;
+                            font-size: 1.1rem !important;
+                            transition: background 0.15s ease !important;
+                        }
+
+                        .wa-header-icon-btn:hover {
+                            background: #e9edef !important;
+                            color: #111b21 !important;
+                        }
+
+                        /* Search & Category Filter */
+                        .wa-search-container {
+                            padding: 8px 12px !important;
+                            background: #ffffff !important;
+                            border-bottom: 1px solid #f0f2f5 !important;
+                        }
+
+                        .wa-search-pill {
+                            background: #f0f2f5 !important;
+                            border-radius: 8px !important;
+                            padding: 7px 14px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 10px !important;
+                        }
+
+                        .wa-search-input {
+                            all: unset !important;
+                            width: 100% !important;
+                            font-size: 0.88rem !important;
+                            color: #111b21 !important;
+                        }
+
+                        .wa-search-input::placeholder {
+                            color: #8696a0 !important;
+                        }
+
+                        .wa-filter-tabs {
+                            display: flex !important;
+                            gap: 6px !important;
+                            padding: 8px 14px 6px 14px !important;
+                            border-bottom: 1px solid #f0f2f5 !important;
+                            background: #ffffff !important;
+                            overflow-x: auto !important;
+                        }
+
+                        .wa-tab-chip {
+                            all: unset !important;
+                            cursor: pointer !important;
+                            padding: 5px 12px !important;
+                            border-radius: 16px !important;
+                            font-size: 0.78rem !important;
+                            font-weight: 550 !important;
+                            color: #54656f !important;
+                            background: #f0f2f5 !important;
+                            transition: all 0.15s ease !important;
+                        }
+
+                        .wa-tab-chip:hover {
+                            background: #e9edef !important;
+                        }
+
+                        .wa-tab-chip.active {
+                            background: #e7fce3 !important;
+                            color: #008069 !important;
+                            font-weight: 700 !important;
+                        }
+
+                        /* WhatsApp Thread List */
+                        .wa-thread-list {
+                            flex-grow: 1 !important;
+                            overflow-y: auto !important;
+                            background: #ffffff !important;
+                        }
+
+                        .wa-thread-card {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 13px !important;
+                            padding: 12px 16px !important;
+                            cursor: pointer !important;
+                            border-bottom: 1px solid #f0f2f5 !important;
+                            transition: background 0.15s ease !important;
+                            text-decoration: none !important;
+                            position: relative !important;
+                            width: 100% !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        .wa-thread-card:hover {
+                            background: #f5f6f6 !important;
+                        }
+
+                        .wa-thread-card.active {
+                            background: #f0f2f5 !important;
+                        }
+
+                        .wa-thread-avatar {
+                            width: 48px !important;
+                            height: 48px !important;
+                            border-radius: 50% !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            font-size: 1.25rem !important;
+                            flex-shrink: 0 !important;
+                            position: relative !important;
+                        }
+
+                        .wa-avatar-tech {
+                            background: #e1f3fb !important;
+                            color: #0077b6 !important;
+                        }
+
+                        .wa-avatar-plumb {
+                            background: #fef3c7 !important;
+                            color: #d97706 !important;
+                        }
+
+                        .wa-thread-info {
+                            flex: 1 1 0% !important;
+                            min-width: 0 !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            gap: 3px !important;
+                        }
+
+                        .wa-thread-row-top {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                        }
+
+                        .wa-thread-name {
+                            font-size: 0.94rem !important;
+                            font-weight: 600 !important;
+                            color: #111b21 !important;
+                            white-space: nowrap !important;
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important;
+                        }
+
+                        .wa-thread-time {
+                            font-size: 0.72rem !important;
+                            color: #667781 !important;
+                            flex-shrink: 0 !important;
+                            margin-left: 6px !important;
+                        }
+
+                        .wa-thread-card.active .wa-thread-time {
+                            color: #00a884 !important;
+                            font-weight: 600 !important;
+                        }
+
+                        .wa-thread-ticket-tag {
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            font-size: 0.7rem !important;
+                            font-weight: 600 !important;
+                            color: #008069 !important;
+                            background: #e7fce3 !important;
+                            padding: 1px 7px !important;
+                            border-radius: 4px !important;
+                            width: fit-content !important;
+                        }
+
+                        .wa-thread-row-msg {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            gap: 6px !important;
+                        }
+
+                        .wa-thread-preview {
+                            font-size: 0.82rem !important;
+                            color: #667781 !important;
+                            white-space: nowrap !important;
+                            overflow: hidden !important;
+                            text-overflow: ellipsis !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 4px !important;
+                        }
+
+                        .wa-unread-badge {
+                            background: #25d366 !important;
+                            color: #ffffff !important;
+                            font-size: 0.7rem !important;
+                            font-weight: 700 !important;
+                            border-radius: 12px !important;
+                            padding: 2px 7px !important;
+                            flex-shrink: 0 !important;
+                            line-height: 1 !important;
+                        }
+
+                        /* WhatsApp Right Chat Window */
+                        .wa-chat-window {
+                            flex: 1 1 0% !important;
+                            min-width: 0 !important;
+                            width: 0 !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            height: 100% !important;
+                            background-color: #efeae2 !important;
+                            background-image: radial-gradient(#d5cdc1 1px, transparent 1px), radial-gradient(#d5cdc1 1px, #efeae2 1px) !important;
+                            background-size: 24px 24px !important;
+                            background-position: 0 0, 12px 12px !important;
+                            position: relative !important;
+                            overflow: hidden !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        /* WhatsApp Chat Header */
+                        .wa-chat-header {
+                            background: #f0f2f5 !important;
+                            padding: 10px 16px !important;
+                            border-bottom: 1px solid #d1d7db !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            height: 64px !important;
+                            box-sizing: border-box !important;
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            z-index: 10 !important;
+                        }
+
+                        .wa-target-profile {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 12px !important;
+                            cursor: pointer !important;
+                        }
+
+                        .wa-target-avatar {
+                            width: 42px !important;
+                            height: 42px !important;
+                            border-radius: 50% !important;
+                            background: #0077b6 !important;
+                            color: #ffffff !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            font-size: 1.15rem !important;
+                            position: relative !important;
+                        }
+
+                        .wa-target-title {
+                            font-size: 0.95rem !important;
+                            font-weight: 650 !important;
+                            color: #111b21 !important;
+                            line-height: 1.2 !important;
+                        }
+
+                        .wa-target-status {
+                            font-size: 0.75rem !important;
+                            color: #667781 !important;
+                        }
+
+                        .wa-target-status.online {
+                            color: #00a884 !important;
+                            font-weight: 600 !important;
+                        }
+
+                        .wa-header-actions {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 6px !important;
+                        }
+
+                        .wa-action-btn {
+                            all: unset !important;
+                            cursor: pointer !important;
+                            width: 38px !important;
+                            height: 38px !important;
+                            border-radius: 50% !important;
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            color: #54656f !important;
+                            font-size: 1.05rem !important;
+                            transition: background 0.15s ease !important;
+                        }
+
+                        .wa-action-btn:hover {
+                            background: #e9edef !important;
+                            color: #111b21 !important;
+                        }
+
+                        /* Pinned Ticket Bar */
+                        .wa-pinned-ticket {
+                            background: #ffffff !important;
+                            border-bottom: 1px solid #e9edef !important;
+                            padding: 8px 18px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            box-shadow: 0 1px 3px rgba(11,20,26,0.05) !important;
+                            font-size: 0.82rem !important;
+                            color: #3b4a54 !important;
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            box-sizing: border-box !important;
+                            z-index: 5 !important;
+                        }
+
+                        .wa-pinned-badge {
+                            background: #008069 !important;
+                            color: #ffffff !important;
+                            font-size: 0.7rem !important;
+                            font-weight: 700 !important;
+                            padding: 2px 7px !important;
+                            border-radius: 4px !important;
+                            margin-right: 8px !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        /* Messages Stream Container */
+                        .wa-messages-container {
+                            flex-grow: 1 !important;
+                            overflow-y: auto !important;
+                            padding: 16px 24px !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            gap: 6px !important;
+                            box-sizing: border-box !important;
+                            width: 100% !important;
+                            max-width: 100% !important;
+                        }
+
+                        .wa-date-divider {
+                            align-self: center !important;
+                            background: #ffffff !important;
+                            color: #54656f !important;
+                            font-size: 0.72rem !important;
+                            font-weight: 600 !important;
+                            padding: 4px 12px !important;
+                            border-radius: 8px !important;
+                            box-shadow: 0 1px 2px rgba(11,20,26,0.1) !important;
+                            text-transform: uppercase !important;
+                            margin: 6px 0 10px 0 !important;
+                        }
+
+                        .wa-security-notice {
+                            align-self: center !important;
+                            background: #ffeecd !important;
+                            color: #54656f !important;
+                            font-size: 0.74rem !important;
+                            padding: 6px 14px !important;
+                            border-radius: 8px !important;
+                            box-shadow: 0 1px 2px rgba(11,20,26,0.08) !important;
+                            text-align: center !important;
+                            max-width: 480px !important;
+                            margin-bottom: 10px !important;
+                            line-height: 1.4 !important;
+                        }
+
+                        /* WhatsApp Chat Bubbles */
+                        .wa-msg-bubble {
+                            position: relative !important;
+                            padding: 6px 10px 6px 12px !important;
+                            font-size: 0.91rem !important;
+                            line-height: 1.38 !important;
+                            max-width: 72% !important;
+                            word-break: break-word !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            box-shadow: 0 1px 1px rgba(11,20,26,0.13) !important;
+                        }
+
+                        /* Incoming (Technician) */
+                        .wa-msg-bubble.incoming {
+                            background: #ffffff !important;
+                            color: #111b21 !important;
+                            border-radius: 0px 8px 8px 8px !important;
+                            align-self: flex-start !important;
+                        }
+
+                        .wa-msg-bubble.incoming::before {
+                            content: "" !important;
+                            position: absolute !important;
+                            top: 0 !important;
+                            left: -8px !important;
+                            width: 0 !important;
+                            height: 0 !important;
+                            border-top: 0px solid transparent !important;
+                            border-right: 8px solid #ffffff !important;
+                            border-bottom: 10px solid transparent !important;
+                        }
+
+                        .wa-sender-tag {
+                            font-size: 0.75rem !important;
+                            font-weight: 700 !important;
+                            color: #008069 !important;
+                            margin-bottom: 2px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 5px !important;
+                        }
+
+                        /* Outgoing (Resident - Green Bubble) */
+                        .wa-msg-bubble.outgoing {
+                            background: #d9fdd3 !important;
+                            color: #111b21 !important;
+                            border-radius: 8px 0px 8px 8px !important;
+                            align-self: flex-end !important;
+                        }
+
+                        .wa-msg-bubble.outgoing::before {
+                            content: "" !important;
+                            position: absolute !important;
+                            top: 0 !important;
+                            right: -8px !important;
+                            width: 0 !important;
+                            height: 0 !important;
+                            border-top: 0px solid transparent !important;
+                            border-left: 8px solid #d9fdd3 !important;
+                            border-bottom: 10px solid transparent !important;
+                        }
+
+                        .wa-bubble-content {
+                            color: #111b21 !important;
+                            font-size: 0.91rem !important;
+                            margin-bottom: 2px !important;
+                        }
+
+                        .wa-bubble-footer {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: flex-end !important;
+                            gap: 4px !important;
+                            font-size: 0.68rem !important;
+                            color: #667781 !important;
+                            margin-left: 12px !important;
+                            float: right !important;
+                        }
+
+                        .wa-read-tick {
+                            color: #53bdeb !important;
+                            font-size: 0.75rem !important;
+                        }
+
+                        /* Typing Indicator Bubble */
+                        .wa-typing-card {
+                            align-self: flex-start !important;
+                            background: #ffffff !important;
+                            padding: 8px 14px !important;
+                            border-radius: 12px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 8px !important;
+                            box-shadow: 0 1px 1px rgba(11,20,26,0.13) !important;
+                        }
+
+                        .wa-dots {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 4px !important;
+                        }
+
+                        .wa-dot {
+                            width: 6px !important;
+                            height: 6px !important;
+                            background: #8696a0 !important;
+                            border-radius: 50% !important;
+                            animation: waBounce 1.4s infinite ease-in-out both !important;
+                        }
+
+                        .wa-dot:nth-child(1) { animation-delay: -0.32s !important; }
+                        .wa-dot:nth-child(2) { animation-delay: -0.16s !important; }
+
+                        @keyframes waBounce {
+                            0%, 80%, 100% { transform: scale(0); }
+                            40% { transform: scale(1); }
+                        }
+
+                        /* Quick Smart Replies Strip */
+                        .wa-quick-bar {
+                            background: rgba(240, 242, 245, 0.96) !important;
+                            backdrop-filter: blur(8px) !important;
+                            padding: 8px 16px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 8px !important;
+                            overflow-x: auto !important;
+                            white-space: nowrap !important;
+                            border-top: 1px solid #e9edef !important;
+                            scrollbar-width: none !important;
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        .wa-quick-bar::-webkit-scrollbar {
+                            display: none !important;
+                        }
+
+                        .wa-quick-pill {
+                            all: unset !important;
+                            cursor: pointer !important;
+                            background: #ffffff !important;
+                            color: #3b4a54 !important;
+                            border: 1px solid #d1d7db !important;
+                            padding: 6px 14px !important;
+                            border-radius: 18px !important;
+                            font-size: 0.78rem !important;
+                            font-weight: 500 !important;
+                            box-shadow: 0 1px 2px rgba(11,20,26,0.04) !important;
+                            transition: all 0.15s ease !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        .wa-quick-pill:hover {
+                            background: #e7fce3 !important;
+                            border-color: #25d366 !important;
+                            color: #008069 !important;
+                            transform: translateY(-1px) !important;
+                        }
+
+                        /* WhatsApp Bottom Input Bar */
+                        .wa-input-footer {
+                            background: #f0f2f5 !important;
+                            padding: 10px 16px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 10px !important;
+                            border-top: 1px solid #e9edef !important;
+                            position: relative !important;
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            box-sizing: border-box !important;
+                        }
+
+                        .wa-input-box {
+                            flex-grow: 1 !important;
+                            background: #ffffff !important;
+                            border-radius: 8px !important;
+                            padding: 10px 16px !important;
+                            font-size: 0.92rem !important;
+                            border: none !important;
+                            outline: none !important;
+                            color: #111b21 !important;
+                            box-shadow: 0 1px 2px rgba(11,20,26,0.06) !important;
+                        }
+
+                        .wa-input-box::placeholder {
+                            color: #8696a0 !important;
+                        }
+
+                        .wa-send-circle-btn {
+                            all: unset !important;
+                            cursor: pointer !important;
+                            width: 44px !important;
+                            height: 44px !important;
+                            border-radius: 50% !important;
+                            background: #00a884 !important;
+                            color: #ffffff !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            box-shadow: 0 2px 8px rgba(0, 168, 132, 0.35) !important;
+                            transition: transform 0.15s ease, background 0.15s ease !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                        .wa-send-circle-btn:hover {
+                            background: #008069 !important;
+                            transform: scale(1.06) !important;
+                        }
+
+                        .wa-send-circle-btn:active {
+                            transform: scale(0.95) !important;
+                        }
+
+                        /* Real WhatsApp Web Emoji & Reaction Keyboard */
+                        .wa-emoji-picker-container {
+                            position: absolute !important;
+                            bottom: 68px !important;
+                            left: 12px !important;
+                            width: 345px !important;
+                            max-width: calc(100% - 24px) !important;
+                            height: 330px !important;
+                            background: #ffffff !important;
+                            border-radius: 16px !important;
+                            box-shadow: 0 16px 40px rgba(11, 20, 26, 0.22), 0 2px 10px rgba(11, 20, 26, 0.08) !important;
+                            border: 1px solid #d1d7db !important;
+                            display: none !important;
+                            flex-direction: column !important;
+                            overflow: hidden !important;
+                            z-index: 9999 !important;
+                            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+                        }
+
+                        .wa-emoji-picker-container.open {
+                            display: flex !important;
+                            animation: waPopIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                        }
+
+                        .wa-emoji-picker-container.d-none {
+                            display: none !important;
+                        }
+
+                        @keyframes waPopIn {
+                            0% { opacity: 0; transform: translateY(12px) scale(0.96); }
+                            100% { opacity: 1; transform: translateY(0) scale(1); }
+                        }
+
+                        .wa-picker-tabs {
+                            display: flex !important;
+                            align-items: center !important;
+                            background: #f0f2f5 !important;
+                            border-bottom: 1px solid #e9edef !important;
+                            padding: 6px 10px !important;
+                            gap: 4px !important;
+                        }
+
+                        .wa-picker-tab {
+                            all: unset !important;
+                            cursor: pointer !important;
+                            width: 32px !important;
+                            height: 32px !important;
+                            border-radius: 8px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            font-size: 1.15rem !important;
+                            transition: background 0.12s ease !important;
+                        }
+
+                        .wa-picker-tab:hover {
+                            background: #e4e7ea !important;
+                        }
+
+                        .wa-picker-tab.active {
+                            background: #ffffff !important;
+                            box-shadow: 0 1px 3px rgba(11,20,26,0.14) !important;
+                        }
+
+                        .wa-picker-close-btn {
+                            all: unset !important;
+                            cursor: pointer !important;
+                            margin-left: auto !important;
+                            width: 28px !important;
+                            height: 28px !important;
+                            border-radius: 50% !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            color: #54656f !important;
+                            font-size: 1rem !important;
+                            font-weight: 700 !important;
+                            line-height: 1 !important;
+                            background: #e4e7ea !important;
+                            transition: all 0.15s ease !important;
+                        }
+
+                        .wa-picker-close-btn:hover {
+                            background: #ef4444 !important;
+                            color: #ffffff !important;
+                            transform: scale(1.08) !important;
+                        }
+
+                        .wa-picker-search {
+                            display: flex !important;
+                            align-items: center !important;
+                            gap: 8px !important;
+                            padding: 6px 12px !important;
+                            background: #ffffff !important;
+                            border-bottom: 1px solid #f0f2f5 !important;
+                        }
+
+                        .wa-picker-search-input {
+                            all: unset !important;
+                            width: 100% !important;
+                            font-size: 0.82rem !important;
+                            color: #111b21 !important;
+                        }
+
+                        .wa-picker-search-input::placeholder {
+                            color: #8696a0 !important;
+                        }
+
+                        .wa-picker-body {
+                            flex: 1 1 0% !important;
+                            overflow-y: auto !important;
+                            padding: 8px 12px !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            gap: 10px !important;
+                        }
+
+                        .wa-section-heading {
+                            font-size: 0.68rem !important;
+                            font-weight: 700 !important;
+                            color: #8696a0 !important;
+                            letter-spacing: 0.5px !important;
+                            margin-bottom: 6px !important;
+                            text-transform: uppercase !important;
+                        }
+
+                        .wa-emoji-grid {
+                            display: grid !important;
+                            grid-template-columns: repeat(8, 1fr) !important;
+                            gap: 4px !important;
+                        }
+
+                        .wa-emoji-item {
+                            cursor: pointer !important;
+                            font-size: 1.35rem !important;
+                            width: 34px !important;
+                            height: 34px !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            border-radius: 8px !important;
+                            transition: background 0.1s ease, transform 0.1s ease !important;
+                            user-select: none !important;
+                        }
+
+                        .wa-emoji-item:hover {
+                            background: #f0f2f5 !important;
+                            transform: scale(1.2) !important;
+                        }
+
+                        .wa-emoji-item:active {
+                            transform: scale(0.95) !important;
+                        }
+
+                        .wa-picker-footer {
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: space-between !important;
+                            background: #f0f2f5 !important;
+                            border-top: 1px solid #e9edef !important;
+                            padding: 6px 12px !important;
+                            min-height: 34px !important;
+                        }
+                    </style>
+
+                    <!-- WhatsApp Web / Messenger Main Container -->
+                    <div class="wa-app-card">
+                        
+                        <!-- Left Pane: Conversation Threads Sidebar -->
+                        <div class="wa-sidebar">
+                            
+                            <!-- Sidebar Header -->
+                            <div class="wa-sidebar-header">
+                                <div class="wa-my-profile">
+                                    <div class="wa-user-avatar">
+                                        S
+                                        <div class="wa-online-dot" title="Online"></div>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark" style="font-size: 0.92rem; line-height: 1.2;">Selva (Resident)</div>
+                                        <div class="text-muted" style="font-size: 0.72rem;">Flat A-204 &bull; Maintenance Chats</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center gap-1">
+                                    <button type="button" class="wa-header-icon-btn" title="New Maintenance Chat" onclick="openMaintenanceWorkflowWizard()">
+                                        <i class="fa-solid fa-square-plus"></i>
+                                    </button>
+                                    <button type="button" class="wa-header-icon-btn" title="Refresh Messages" onclick="loadResidentChatMessages('residentChatMessagesContainer')">
+                                        <i class="fa-solid fa-rotate"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Search Input -->
+                            <div class="wa-search-container">
+                                <div class="wa-search-pill">
+                                    <i class="fa-solid fa-magnifying-glass text-muted" style="font-size:0.85rem;"></i>
+                                    <input type="text" id="waThreadSearchInput" class="wa-search-input" placeholder="Search or start new chat" oninput="filterWaThreads(this.value)">
+                                </div>
+                            </div>
+
+                            <!-- Category Filter Tabs -->
+                            <div class="wa-filter-tabs">
+                                <button type="button" class="wa-tab-chip active" onclick="setWaFilter('all', this)">All</button>
+                                <button type="button" class="wa-tab-chip" onclick="setWaFilter('technician', this)">Technicians</button>
+                                <button type="button" class="wa-tab-chip" onclick="setWaFilter('unread', this)">Unread</button>
+                            </div>
+
+                            <!-- Threads List -->
+                            <div class="wa-thread-list" id="residentChatThreadsList">
+                                
+                                <!-- Active Ticket Thread: REQ-1024 (Kumar) -->
+                                <div class="wa-thread-card active" id="thread-item-req_REQ-1024_cust" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)', false, 'Flat A-204')">
+                                    <div class="wa-thread-avatar wa-avatar-tech">
+                                        <i class="fa-solid fa-wrench"></i>
+                                        <div class="wa-online-dot"></div>
+                                    </div>
+                                    <div class="wa-thread-info">
+                                        <div class="wa-thread-row-top">
+                                            <span class="wa-thread-name">Kumar (AC Specialist)</span>
+                                            <span class="wa-thread-time" id="thread-time-req_REQ-1024_cust">Just now</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <span class="wa-thread-ticket-tag">#REQ-1024 AC Repair</span>
+                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill" style="font-size:0.65rem;">Assigned</span>
+                                        </div>
+                                        <div class="wa-thread-row-msg">
+                                            <div class="wa-thread-preview" id="thread-last-req_REQ-1024_cust">
+                                                <i class="fa-solid fa-check-double wa-read-tick"></i>
+                                                <span class="text-truncate">Approximately 15 minutes.</span>
+                                            </div>
+                                            <span class="wa-unread-badge" id="thread-badge-req_REQ-1024_cust">2</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Thread: T-102 (Ramesh) -->
+                                <div class="wa-thread-card" id="thread-item-req_T-102_cust" onclick="openResidentChat('req_T-102_cust', 'T-102', 'Bathroom Water Leakage', 'Ramesh (Plumber)', false, 'Flat A-101')">
+                                    <div class="wa-thread-avatar wa-avatar-plumb">
+                                        <i class="fa-solid fa-faucet-drip"></i>
+                                    </div>
+                                    <div class="wa-thread-info">
+                                        <div class="wa-thread-row-top">
+                                            <span class="wa-thread-name">Ramesh (Plumber)</span>
+                                            <span class="wa-thread-time">40m ago</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <span class="wa-thread-ticket-tag" style="background:#fef3c7; color:#b45309;">#T-102 Plumbing</span>
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill" style="font-size:0.65rem;">In Progress</span>
+                                        </div>
+                                        <div class="wa-thread-row-msg">
+                                            <div class="wa-thread-preview" id="thread-last-req_T-102_cust">
+                                                <i class="fa-solid fa-check-double wa-read-tick"></i>
+                                                <span class="text-truncate">On my way with sealant.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Right Pane: WhatsApp Active Conversation Window -->
+                        <div class="wa-chat-window">
+                            
+                            <!-- WhatsApp Chat Header -->
+                            <div class="wa-chat-header">
+                                <div class="wa-target-profile" onclick="showTrackWorkerModal('Kumar', 'REQ-1024')">
+                                    <div class="wa-target-avatar">
+                                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                                        <div class="wa-online-dot"></div>
+                                    </div>
+                                    <div>
+                                        <div class="wa-target-title" id="panelChatWorkerTitle">Kumar · AC Specialist</div>
+                                        <div class="wa-target-status online" id="panelChatWorkerSubtitle">
+                                            <i class="fa-solid fa-circle" style="font-size:0.55rem; color:#00a884; margin-right:3px;"></i>online · Ticket <span id="panelChatTicketBadge">#REQ-1024</span> (<span id="panelChatTitle">AC Repair</span>)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wa-header-actions">
+                                    <button type="button" class="wa-action-btn" title="Voice Call Technician" onclick="triggerVoiceCall('Kumar', 'REQ-1024')">
+                                        <i class="fa-solid fa-phone"></i>
+                                    </button>
+                                    <button type="button" class="wa-action-btn" title="Video Inspection Call" onclick="triggerVideoCall('Kumar', 'REQ-1024')">
+                                        <i class="fa-solid fa-video"></i>
+                                    </button>
+                                    <button type="button" class="wa-action-btn" title="Track Technician Live Location" onclick="showTrackWorkerModal('Kumar', 'REQ-1024')">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Pinned Ticket Context Banner -->
+                            <div class="wa-pinned-ticket">
+                                <div class="d-flex align-items-center">
+                                    <span class="wa-pinned-badge"><i class="fa-solid fa-thumbtack me-1"></i>PINNED TICKET</span>
+                                    <span id="waPinnedTicketDetails"><strong>Ticket #REQ-1024: AC Repair</strong> &bull; Worker: <strong>Kumar</strong> &bull; Status: <strong class="text-success">Worker Assigned</strong> &bull; ETA: <strong>15 Mins</strong></span>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-0.5 fw-semibold" id="waPinnedTrackBtn" style="font-size:0.75rem;" onclick="showTrackWorkerModal('Kumar', 'REQ-1024')">
+                                    Track Worker
+                                </button>
+                            </div>
+
+                            <!-- WhatsApp Messages Stream -->
+                            <div class="wa-messages-container" id="residentChatMessagesContainer">
+                                <!-- Populated dynamically from API -->
+                            </div>
+
+                            <!-- Animated Typing Indicator -->
+                            <div id="waTypingBubble" class="wa-typing-card mx-4 mb-2 d-none">
+                                <div class="wa-dots">
+                                    <div class="wa-dot"></div>
+                                    <div class="wa-dot"></div>
+                                    <div class="wa-dot"></div>
+                                </div>
+                                <span style="font-size:0.78rem; color:#667781; font-weight:550;">Kumar is typing...</span>
+                            </div>
+
+                            <!-- Quick Smart Replies (WhatsApp Style) -->
+                            <div class="wa-quick-bar">
+                                <span class="small fw-bold text-muted me-1 align-self-center" style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px;">Quick Reply:</span>
+                                <button type="button" class="wa-quick-pill" onclick="setResidentChatInput('The AC is still not cooling.')">
+                                    "The AC is still not cooling."
+                                </button>
+                                <button type="button" class="wa-quick-pill" onclick="setResidentChatInput('When will you reach my flat?')">
+                                    "When will you reach my flat?"
+                                </button>
+                                <button type="button" class="wa-quick-pill" onclick="setResidentChatInput('Okay, I am at Flat A-204 right now.')">
+                                    "I am at Flat A-204 right now."
+                                </button>
+                                <button type="button" class="wa-quick-pill" onclick="setResidentChatInput('Balcony door is unlocked.')">
+                                    "Balcony door is unlocked."
+                                </button>
+                                <button type="button" class="wa-quick-pill" onclick="setResidentChatInput('Please test the cooling before leaving.')">
+                                    "Please test cooling before leaving."
+                                </button>
+                            </div>
+
+                            <!-- Bottom Input Bar (Real WhatsApp Layout) -->
+                            <form onsubmit="handleResidentSendMessage(event)" class="wa-input-footer" id="waMessageForm">
+                                
+                                <!-- Emoji Picker Button -->
+                                <button type="button" class="wa-header-icon-btn" id="waEmojiToggleBtn" title="Insert Emoji" onclick="toggleWaEmojiTray(event)">
+                                    <i class="fa-regular fa-face-smile"></i>
+                                </button>
+
+                                <!-- Attachment Clip Button -->
+                                <button type="button" class="wa-header-icon-btn" title="Attach photo or document" onclick="simulateAttachmentUpload()">
+                                    <i class="fa-solid fa-paperclip"></i>
+                                </button>
+
+                                <!-- Text Input Field -->
+                                <input type="text" id="residentChatInput" class="wa-input-box" placeholder="Type a message..." autocomplete="off" required>
+
+                                <!-- Voice Recording Button -->
+                                <button type="button" class="wa-header-icon-btn" title="Hold to record voice note" onclick="simulateVoiceNote()">
+                                    <i class="fa-solid fa-microphone"></i>
+                                </button>
+
+                                <!-- WhatsApp Send Button -->
+                                <button type="submit" class="wa-send-circle-btn" id="waSendBtn" title="Send Message (Enter)">
+                                    <i class="fa-solid fa-paper-plane" style="font-size:1.05rem; margin-left:-2px;"></i>
+                                </button>
+
+                                <!-- Real WhatsApp Web Emoji Keyboard Popover -->
+                                <div id="waEmojiTray" class="wa-emoji-picker-container d-none">
+                                    <!-- Picker Category Tabs -->
+                                    <div class="wa-picker-tabs">
+                                        <button type="button" class="wa-picker-tab active" onclick="switchWaEmojiCategory('recent', this)" title="Quick Reactions">⚡</button>
+                                        <button type="button" class="wa-picker-tab" onclick="switchWaEmojiCategory('smileys', this)" title="Smileys & People">😊</button>
+                                        <button type="button" class="wa-picker-tab" onclick="switchWaEmojiCategory('maintenance', this)" title="Tools & Maintenance">🔧</button>
+                                        <button type="button" class="wa-picker-tab" onclick="switchWaEmojiCategory('home', this)" title="Apartment & Property">🏠</button>
+                                        <button type="button" class="wa-picker-tab" onclick="switchWaEmojiCategory('status', this)" title="Time & Status">⏰</button>
+                                        <button type="button" class="wa-picker-close-btn" onclick="closeWaEmojiTray(event)" title="Close Emoji Keyboard (Esc)"><i class="fa-solid fa-xmark"></i></button>
+                                    </div>
+
+                                    <!-- Mini Search Bar -->
+                                    <div class="wa-picker-search">
+                                        <i class="fa-solid fa-magnifying-glass text-muted" style="font-size:0.75rem;"></i>
+                                        <input type="text" id="waEmojiSearchInput" class="wa-picker-search-input" placeholder="Search emojis..." oninput="filterWaEmojis(this.value)">
+                                    </div>
+
+                                    <!-- Scrollable Emoji Body -->
+                                    <div class="wa-picker-body" id="waEmojiPickerBody">
+                                        <!-- Quick Reactions -->
+                                        <div class="wa-emoji-section" id="wa-sec-recent">
+                                            <div class="wa-section-heading">QUICK REACTIONS</div>
+                                            <div class="wa-emoji-grid">
+                                                <span class="wa-emoji-item" data-name="thumbs up like" onmouseenter="previewWaEmoji('Thumbs up', '👍')" onclick="insertWaEmoji('👍')">👍</span>
+                                                <span class="wa-emoji-item" data-name="heart love" onmouseenter="previewWaEmoji('Red heart', '❤️')" onclick="insertWaEmoji('❤️')">❤️</span>
+                                                <span class="wa-emoji-item" data-name="smiling face happy" onmouseenter="previewWaEmoji('Blushing smile', '😊')" onclick="insertWaEmoji('😊')">😊</span>
+                                                <span class="wa-emoji-item" data-name="praying thanks namaste" onmouseenter="previewWaEmoji('Thank you / Namaste', '🙏')" onclick="insertWaEmoji('🙏')">🙏</span>
+                                                <span class="wa-emoji-item" data-name="check verified done complete" onmouseenter="previewWaEmoji('Verified check', '✅')" onclick="insertWaEmoji('✅')">✅</span>
+                                                <span class="wa-emoji-item" data-name="ok sign perfect" onmouseenter="previewWaEmoji('OK sign', '👌')" onclick="insertWaEmoji('👌')">👌</span>
+                                                <span class="wa-emoji-item" data-name="clapping hands bravo" onmouseenter="previewWaEmoji('Clapping hands', '👏')" onclick="insertWaEmoji('👏')">👏</span>
+                                                <span class="wa-emoji-item" data-name="celebrate hands hooray" onmouseenter="previewWaEmoji('Celebration', '🙌')" onclick="insertWaEmoji('🙌')">🙌</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Smileys & People -->
+                                        <div class="wa-emoji-section" id="wa-sec-smileys">
+                                            <div class="wa-section-heading">SMILEYS & EXPRESSIONS</div>
+                                            <div class="wa-emoji-grid">
+                                                <span class="wa-emoji-item" data-name="grinning face" onmouseenter="previewWaEmoji('Grinning face', '😀')" onclick="insertWaEmoji('😀')">😀</span>
+                                                <span class="wa-emoji-item" data-name="smiling eyes" onmouseenter="previewWaEmoji('Smiling face', '😃')" onclick="insertWaEmoji('😃')">😃</span>
+                                                <span class="wa-emoji-item" data-name="laughing grin" onmouseenter="previewWaEmoji('Big grin', '😄')" onclick="insertWaEmoji('😄')">😄</span>
+                                                <span class="wa-emoji-item" data-name="beaming face" onmouseenter="previewWaEmoji('Beaming smile', '😁')" onclick="insertWaEmoji('😁')">😁</span>
+                                                <span class="wa-emoji-item" data-name="sweat smile relieved" onmouseenter="previewWaEmoji('Relieved smile', '😅')" onclick="insertWaEmoji('😅')">😅</span>
+                                                <span class="wa-emoji-item" data-name="joy tears" onmouseenter="previewWaEmoji('Tears of joy', '😂')" onclick="insertWaEmoji('😂')">😂</span>
+                                                <span class="wa-emoji-item" data-name="slightly smiling" onmouseenter="previewWaEmoji('Slight smile', '🙂')" onclick="insertWaEmoji('🙂')">🙂</span>
+                                                <span class="wa-emoji-item" data-name="winking face" onmouseenter="previewWaEmoji('Wink', '😉')" onclick="insertWaEmoji('😉')">😉</span>
+                                                <span class="wa-emoji-item" data-name="relieved face" onmouseenter="previewWaEmoji('Relieved', '😌')" onclick="insertWaEmoji('😌')">😌</span>
+                                                <span class="wa-emoji-item" data-name="heart eyes" onmouseenter="previewWaEmoji('Heart eyes', '😍')" onclick="insertWaEmoji('😍')">😍</span>
+                                                <span class="wa-emoji-item" data-name="smiling with hearts" onmouseenter="previewWaEmoji('Smiling with hearts', '🥰')" onclick="insertWaEmoji('🥰')">🥰</span>
+                                                <span class="wa-emoji-item" data-name="cool sunglasses" onmouseenter="previewWaEmoji('Cool sunglasses', '😎')" onclick="insertWaEmoji('😎')">😎</span>
+                                                <span class="wa-emoji-item" data-name="thinking face" onmouseenter="previewWaEmoji('Thinking face', '🤔')" onclick="insertWaEmoji('🤔')">🤔</span>
+                                                <span class="wa-emoji-item" data-name="neutral face" onmouseenter="previewWaEmoji('Neutral face', '😐')" onclick="insertWaEmoji('😐')">😐</span>
+                                                <span class="wa-emoji-item" data-name="handshake agreement deal" onmouseenter="previewWaEmoji('Handshake deal', '🤝')" onclick="insertWaEmoji('🤝')">🤝</span>
+                                                <span class="wa-emoji-item" data-name="waving hand hello" onmouseenter="previewWaEmoji('Waving hand', '👋')" onclick="insertWaEmoji('👋')">👋</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Maintenance & Repair -->
+                                        <div class="wa-emoji-section" id="wa-sec-maintenance">
+                                            <div class="wa-section-heading">MAINTENANCE & REPAIR</div>
+                                            <div class="wa-emoji-grid">
+                                                <span class="wa-emoji-item" data-name="wrench tool fix spanner" onmouseenter="previewWaEmoji('Wrench tool', '🔧')" onclick="insertWaEmoji('🔧')">🔧</span>
+                                                <span class="wa-emoji-item" data-name="hammer repair" onmouseenter="previewWaEmoji('Hammer', '🔨')" onclick="insertWaEmoji('🔨')">🔨</span>
+                                                <span class="wa-emoji-item" data-name="tools hardware" onmouseenter="previewWaEmoji('Toolbox tools', '🛠️')" onclick="insertWaEmoji('🛠️')">🛠️</span>
+                                                <span class="wa-emoji-item" data-name="faucet water tap plumbing" onmouseenter="previewWaEmoji('Water faucet tap', '🚰')" onclick="insertWaEmoji('🚰')">🚰</span>
+                                                <span class="wa-emoji-item" data-name="shower bathroom leak" onmouseenter="previewWaEmoji('Shower water', '🚿')" onclick="insertWaEmoji('🚿')">🚿</span>
+                                                <span class="wa-emoji-item" data-name="toilet sanitation" onmouseenter="previewWaEmoji('Toilet plumbing', '🚽')" onclick="insertWaEmoji('🚽')">🚽</span>
+                                                <span class="wa-emoji-item" data-name="lightbulb electricity idea" onmouseenter="previewWaEmoji('Electric lightbulb', '💡')" onclick="insertWaEmoji('💡')">💡</span>
+                                                <span class="wa-emoji-item" data-name="high voltage electricity power" onmouseenter="previewWaEmoji('High voltage electric', '⚡')" onclick="insertWaEmoji('⚡')">⚡</span>
+                                                <span class="wa-emoji-item" data-name="electric plug socket wire" onmouseenter="previewWaEmoji('Electric plug', '🔌')" onclick="insertWaEmoji('🔌')">🔌</span>
+                                                <span class="wa-emoji-item" data-name="snowflake air conditioning ac cooling" onmouseenter="previewWaEmoji('AC Cooling snowflake', '❄️')" onclick="insertWaEmoji('❄️')">❄️</span>
+                                                <span class="wa-emoji-item" data-name="fire heat heater" onmouseenter="previewWaEmoji('Fire / Heat', '🔥')" onclick="insertWaEmoji('🔥')">🔥</span>
+                                                <span class="wa-emoji-item" data-name="broom cleaning housekeeping" onmouseenter="previewWaEmoji('Broom clean', '🧹')" onclick="insertWaEmoji('🧹')">🧹</span>
+                                                <span class="wa-emoji-item" data-name="sponge wash cleaning" onmouseenter="previewWaEmoji('Cleaning sponge', '🧽')" onclick="insertWaEmoji('🧽')">🧽</span>
+                                                <span class="wa-emoji-item" data-name="door entrance unlocked" onmouseenter="previewWaEmoji('Door entrance', '🚪')" onclick="insertWaEmoji('🚪')">🚪</span>
+                                                <span class="wa-emoji-item" data-name="key lock security" onmouseenter="previewWaEmoji('Key lock', '🔑')" onclick="insertWaEmoji('🔑')">🔑</span>
+                                                <span class="wa-emoji-item" data-name="package delivery box carton" onmouseenter="previewWaEmoji('Delivery package', '📦')" onclick="insertWaEmoji('📦')">📦</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Apartment & Property -->
+                                        <div class="wa-emoji-section" id="wa-sec-home">
+                                            <div class="wa-section-heading">APARTMENT & SOCIETY</div>
+                                            <div class="wa-emoji-grid">
+                                                <span class="wa-emoji-item" data-name="house home flat unit" onmouseenter="previewWaEmoji('Home apartment', '🏠')" onclick="insertWaEmoji('🏠')">🏠</span>
+                                                <span class="wa-emoji-item" data-name="building office tower" onmouseenter="previewWaEmoji('Society building', '🏢')" onclick="insertWaEmoji('🏢')">🏢</span>
+                                                <span class="wa-emoji-item" data-name="department store estate" onmouseenter="previewWaEmoji('Complex estate', '🏬')" onclick="insertWaEmoji('🏬')">🏬</span>
+                                                <span class="wa-emoji-item" data-name="couch sofa living room hall" onmouseenter="previewWaEmoji('Living room couch', '🛋️')" onclick="insertWaEmoji('🛋️')">🛋️</span>
+                                                <span class="wa-emoji-item" data-name="bed bedroom" onmouseenter="previewWaEmoji('Bedroom', '🛏️')" onclick="insertWaEmoji('🛏️')">🛏️</span>
+                                                <span class="wa-emoji-item" data-name="window balcony glass" onmouseenter="previewWaEmoji('Window / Balcony', '🪟')" onclick="insertWaEmoji('🪟')">🪟</span>
+                                                <span class="wa-emoji-item" data-name="car vehicle parking" onmouseenter="previewWaEmoji('Resident car', '🚗')" onclick="insertWaEmoji('🚗')">🚗</span>
+                                                <span class="wa-emoji-item" data-name="parking slot symbol" onmouseenter="previewWaEmoji('Parking area', '🅿️')" onclick="insertWaEmoji('🅿️')">🅿️</span>
+                                                <span class="wa-emoji-item" data-name="tree garden landscape" onmouseenter="previewWaEmoji('Society garden', '🌳')" onclick="insertWaEmoji('🌳')">🌳</span>
+                                                <span class="wa-emoji-item" data-name="location pin map address" onmouseenter="previewWaEmoji('Flat location pin', '📍')" onclick="insertWaEmoji('📍')">📍</span>
+                                                <span class="wa-emoji-item" data-name="clipboard report work order" onmouseenter="previewWaEmoji('Work order report', '📋')" onclick="insertWaEmoji('📋')">📋</span>
+                                                <span class="wa-emoji-item" data-name="memo note invoice" onmouseenter="previewWaEmoji('Service note', '📝')" onclick="insertWaEmoji('📝')">📝</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Time & Status -->
+                                        <div class="wa-emoji-section" id="wa-sec-status">
+                                            <div class="wa-section-heading">TIME & STATUS</div>
+                                            <div class="wa-emoji-grid">
+                                                <span class="wa-emoji-item" data-name="alarm clock reminder eta" onmouseenter="previewWaEmoji('Alarm clock ETA', '⏰')" onclick="insertWaEmoji('⏰')">⏰</span>
+                                                <span class="wa-emoji-item" data-name="hourglass waiting in progress" onmouseenter="previewWaEmoji('Hourglass waiting', '⏳')" onclick="insertWaEmoji('⏳')">⏳</span>
+                                                <span class="wa-emoji-item" data-name="clock time 3pm" onmouseenter="previewWaEmoji('Clock time', '🕒')" onclick="insertWaEmoji('🕒')">🕒</span>
+                                                <span class="wa-emoji-item" data-name="calendar date schedule slot" onmouseenter="previewWaEmoji('Calendar schedule', '📅')" onclick="insertWaEmoji('📅')">📅</span>
+                                                <span class="wa-emoji-item" data-name="police siren emergency alert" onmouseenter="previewWaEmoji('Emergency siren', '🚨')" onclick="insertWaEmoji('🚨')">🚨</span>
+                                                <span class="wa-emoji-item" data-name="warning urgent hazard danger" onmouseenter="previewWaEmoji('Urgent warning', '⚠️')" onclick="insertWaEmoji('⚠️')">⚠️</span>
+                                                <span class="wa-emoji-item" data-name="loudspeaker announcement notice" onmouseenter="previewWaEmoji('Announcement', '📢')" onclick="insertWaEmoji('📢')">📢</span>
+                                                <span class="wa-emoji-item" data-name="speech bubble chat message" onmouseenter="previewWaEmoji('Chat message', '💬')" onclick="insertWaEmoji('💬')">💬</span>
+                                                <span class="wa-emoji-item" data-name="phone telephone call dial" onmouseenter="previewWaEmoji('Phone call', '📞')" onclick="insertWaEmoji('📞')">📞</span>
+                                                <span class="wa-emoji-item" data-name="hundred points perfect complete" onmouseenter="previewWaEmoji('100% complete', '💯')" onclick="insertWaEmoji('💯')">💯</span>
+                                                <span class="wa-emoji-item" data-name="ok button ready agreed" onmouseenter="previewWaEmoji('OK button', '🆗')" onclick="insertWaEmoji('🆗')">🆗</span>
+                                                <span class="wa-emoji-item" data-name="target goal resolved done" onmouseenter="previewWaEmoji('Resolved target', '🎯')" onclick="insertWaEmoji('🎯')">🎯</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Bottom Status Bar -->
+                                    <div class="wa-picker-footer">
+                                        <span id="waEmojiHoverPreview" class="text-truncate text-muted" style="font-size:0.75rem; font-weight:550;">
+                                            WhatsApp Emoji Keyboard
+                                        </span>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <button type="button" class="btn btn-sm btn-light border py-0 px-2 text-dark fw-bold rounded" onclick="removeLastCharFromResidentInput()" title="Backspace">
+                                                ⌫
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-dark py-0 px-2 fw-semibold rounded" style="font-size:0.72rem;" onclick="closeWaEmojiTray(event)" title="Done & Close">
+                                                Done ✕
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Voice Call Interactive Simulation Modal -->
+                <div id="waVoiceCallModal" style="display: none; position: fixed; inset: 0; background: rgba(11, 20, 26, 0.85); backdrop-filter: blur(8px); z-index: 1080; justify-content: center; align-items: center; padding: 1rem;">
+                    <div style="background: #111b21; color: #ffffff; width: 100%; max-width: 380px; border-radius: 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); padding: 2.2rem 1.8rem; text-align: center;" class="animate__animated animate__zoomIn">
+                        <div class="mb-3">
+                            <div style="width: 86px; height: 86px; border-radius: 50%; background: #0077b6; color: #ffffff; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 0 0 8px rgba(0, 119, 182, 0.25);" class="animate__animated animate__pulse animate__infinite">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </div>
+                        </div>
+                        <h4 class="fw-bold mb-1" id="waVoiceCallName">Kumar (AC Specialist)</h4>
+                        <div class="text-success mb-4" id="waVoiceCallStatus" style="font-size: 0.95rem;">
+                            <i class="fa-solid fa-phone-volume me-1"></i> Calling Flat Technician...
+                        </div>
+                        <div class="d-flex justify-content-center gap-4 my-4">
+                            <button type="button" class="btn btn-outline-light rounded-circle p-3" style="width:52px; height:52px;" title="Mute Microphone"><i class="fa-solid fa-microphone-slash"></i></button>
+                            <button type="button" class="btn btn-outline-light rounded-circle p-3" style="width:52px; height:52px;" title="Speaker"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                        <button type="button" class="btn btn-danger rounded-pill px-5 py-2.5 fw-bold shadow-sm" onclick="endVoiceCall()">
+                            <i class="fa-solid fa-phone-slash me-2"></i>End Call
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Video Call Interactive Simulation Modal -->
+                <div id="waVideoCallModal" style="display: none; position: fixed; inset: 0; background: rgba(11, 20, 26, 0.92); backdrop-filter: blur(10px); z-index: 1080; justify-content: center; align-items: center; padding: 1rem;">
+                    <div style="background: #111b21; color: #ffffff; width: 100%; max-width: 620px; border-radius: 28px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.6);" class="animate__animated animate__zoomIn">
+                        <!-- Simulated Video Stream -->
+                        <div style="height: 380px; background: linear-gradient(180deg, #1f2937 0%, #111827 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div class="text-center">
+                                <div style="width: 100px; height: 100px; border-radius: 50%; background: #0077b6; color: #ffffff; font-size: 2.8rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; box-shadow: 0 0 0 10px rgba(0,119,182,0.3);">
+                                    <i class="fa-solid fa-user-gear"></i>
+                                </div>
+                                <h5 class="fw-bold mb-0">Kumar (AC Specialist)</h5>
+                                <div class="text-success small mt-1"><i class="fa-solid fa-circle text-success me-1" style="font-size:0.5rem;"></i>Live HD Video Inspection &bull; 00:14</div>
+                            </div>
+                            <!-- Picture in picture (Resident Self-View) -->
+                            <div style="position: absolute; bottom: 16px; right: 16px; width: 110px; height: 140px; background: #374151; border-radius: 14px; border: 2px solid #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                                <i class="fa-solid fa-user text-white-50 fs-2 mb-1"></i>
+                                <span style="font-size: 0.65rem; color: #cbd5e1;">You (A-204)</span>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-dark d-flex justify-content-center gap-3">
+                            <button type="button" class="btn btn-outline-light rounded-circle p-3" style="width:50px; height:50px;" title="Camera Switch"><i class="fa-solid fa-camera-rotate"></i></button>
+                            <button type="button" class="btn btn-outline-light rounded-circle p-3" style="width:50px; height:50px;" title="Mute Microphone"><i class="fa-solid fa-microphone-slash"></i></button>
+                            <button type="button" class="btn btn-danger rounded-pill px-4 fw-bold" onclick="endVideoCall()">
+                                <i class="fa-solid fa-phone-slash me-2"></i>End Inspection
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pop-up Chat Modal: Chat with Maintenance (WhatsApp Theme) -->
+                <div id="residentChatModal" style="display: none; position: fixed; inset: 0; background: rgba(11, 20, 26, 0.7); backdrop-filter: blur(6px); z-index: 1060; justify-content: center; align-items: center; padding: 1rem;">
+                    <div style="background: #ffffff; width: 100%; max-width: 580px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); overflow: hidden; display: flex; flex-direction: column; height: 80vh; max-height: 680px;" class="animate__animated animate__zoomIn">
+                        <!-- Modal WhatsApp Header -->
+                        <div class="p-3 px-4 border-bottom border-light-subtle d-flex justify-content-between align-items-center" style="background:#f0f2f5;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="wa-target-avatar" style="width:42px; height:42px; font-size:1.1rem; background:#00a884; color:#fff;">
+                                    <i class="fa-solid fa-headset"></i>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="fw-bold mb-0 text-dark">Kumar (Assigned Worker)</h6>
+                                        <span class="badge bg-primary text-white font-monospace" style="font-size:0.7rem;" id="modalChatTicketBadge">#REQ-1024</span>
+                                    </div>
+                                    <div class="text-success small" style="font-size:0.75rem;"><i class="fa-solid fa-circle text-success me-1" style="font-size:0.45rem;"></i>online &bull; AC Repair</div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" onclick="closeResidentChatModal()"></button>
+                        </div>
+
+                        <!-- Modal Quick Chips -->
+                        <div class="wa-quick-bar">
+                            <span class="small fw-bold text-muted me-1 align-self-center" style="font-size:0.7rem;">Quick Ask:</span>
+                            <button type="button" class="wa-quick-pill" onclick="setModalChatInput('When will you reach?')">"When will you reach?"</button>
+                            <button type="button" class="wa-quick-pill" onclick="setModalChatInput('I will be home at that time.')">"I will be home."</button>
+                            <button type="button" class="wa-quick-pill" onclick="setModalChatInput('The AC is still not cooling.')">"AC still not cooling."</button>
+                        </div>
+
+                        <!-- Modal Messages Body -->
+                        <div class="wa-messages-container" id="modalChatMessagesContainer" style="background-color: #efeae2 !important; background-image: radial-gradient(#d5cdc1 1px, transparent 1px), radial-gradient(#d5cdc1 1px, #efeae2 1px) !important; background-size: 24px 24px !important;">
+                            <!-- Populated dynamically -->
+                        </div>
+
+                        <!-- Modal Footer / Input -->
+                        <form onsubmit="handleModalSendMessage(event)" class="wa-input-footer">
+                            <input type="text" id="modalChatInput" class="wa-input-box" placeholder="Type a message..." autocomplete="off" required>
+                            <button type="submit" class="wa-send-circle-btn" title="Send Message">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Track Worker Modal -->
+                <div id="trackWorkerModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); z-index: 1070; justify-content: center; align-items: center; padding: 1rem;">
+                    <div style="background: #ffffff; width: 100%; max-width: 520px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); padding: 2rem;" class="animate__animated animate__zoomIn">
+                        <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary text-white p-2 rounded-circle"><i class="fa-solid fa-location-dot"></i></span>
+                                <h5 class="fw-bold mb-0 text-dark">Track Worker</h5>
+                            </div>
+                            <button type="button" class="btn-close" onclick="closeTrackWorkerModal()"></button>
+                        </div>
+                        <div class="p-3 bg-light rounded-4 border mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="background:#2563eb; color:#fff; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.1rem;"><i class="fa-solid fa-user-gear"></i></div>
+                                    <div>
+                                        <strong class="text-dark d-block">Kumar (AC Specialist)</strong>
+                                        <span class="text-muted small">Assigned Worker &bull; Flat A-204</span>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success rounded-pill px-3 py-1.5"><i class="fa-solid fa-circle me-1" style="font-size:0.5rem;"></i>En Route</span>
+                            </div>
+                            <div class="d-flex justify-content-between text-muted small mt-3 pt-2 border-top">
+                                <span>Status: <strong class="text-dark">Worker Assigned (En Route)</strong></span>
+                                <span>ETA: <strong class="text-primary">15 mins</strong></span>
+                            </div>
+                        </div>
+                        <!-- Progress Tracking Stages -->
+                        <div class="py-2">
+                            <div class="d-flex align-items-center justify-content-between text-center small fw-bold">
+                                <div class="text-success"><i class="fa-solid fa-circle-check fs-5 d-block mb-1"></i>Assigned</div>
+                                <div class="flex-grow-1 border-top border-2 border-success mx-2"></div>
+                                <div class="text-primary"><i class="fa-solid fa-person-walking fs-5 d-block mb-1"></i>En Route</div>
+                                <div class="flex-grow-1 border-top border-2 border-secondary-subtle mx-2"></div>
+                                <div class="text-muted"><i class="fa-regular fa-circle fs-5 d-block mb-1"></i>Arrived</div>
+                                <div class="flex-grow-1 border-top border-2 border-secondary-subtle mx-2"></div>
+                                <div class="text-muted"><i class="fa-regular fa-circle fs-5 d-block mb-1"></i>Completed</div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-2 border-top">
+                            <button type="button" class="btn btn-light rounded-pill px-4" onclick="closeTrackWorkerModal()">Close</button>
+                            <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="closeTrackWorkerModal(); openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar', true);">
+                                <i class="fa-solid fa-comments me-2"></i>Chat with Kumar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
@@ -2054,12 +3744,479 @@
     <div id="toast" class="toast hidden bg-dark text-white p-3 rounded-3 shadow-lg position-fixed bottom-0 end-0 m-4" style="z-index: 1050;"></div>
     
     <div th:replace="~{fragments/layout :: scripts}"></div>
+    <script th:src="@{/smartapartment/js/owner-property-workflow.js}"></script>
     <script>
         const dashboardTitles = {
             overview: "Overview", billing: "My Maintenance Dues", pass: "Visitor Pre-Approval",
-            services: "Home Services", "home-services": "Maintenance Services", complaints: "Helpdesk & Complaints", amenities: "Amenity Booking", announcements: "Notice Board",
-            deliveries: "Parcel & Deliveries", profile: "My Profile"
+            services: "Carpentry & Home Services", "home-services": "Maintenance Services", complaints: "Helpdesk & Complaints",
+            "maintenance-chat": "Maintenance Chat", amenities: "Amenity Booking", announcements: "Notice Board",
+            deliveries: "Parcel & Deliveries", profile: "My Profile",
+            "post-property": "Post Property (Rent / Sale)", postProperty: "Post Property (Rent / Sale)"
         };
+
+        let activeResidentChat = {
+            conversationId: 'req_REQ-1024_cust',
+            ticketNumber: 'REQ-1024',
+            ticketTitle: 'AC Repair',
+            workerName: 'Kumar (AC Specialist)',
+            flatNumber: 'Flat A-204'
+        };
+        let residentChatPollInterval = null;
+
+        window.openResidentChat = function(convId, ticketNumber, ticketTitle, workerName, forceModal = false, flatNumber = null) {
+            activeResidentChat = {
+                conversationId: convId || 'req_REQ-1024_cust',
+                ticketNumber: ticketNumber || 'REQ-1024',
+                ticketTitle: ticketTitle || 'AC Repair',
+                workerName: workerName || 'Kumar (AC Specialist)',
+                flatNumber: flatNumber || (ticketNumber === 'REQ-1024' ? 'Flat A-204' : 'Flat A-101')
+            };
+
+            const panelTicketBadge = document.getElementById('panelChatTicketBadge');
+            if (panelTicketBadge) panelTicketBadge.textContent = '#' + activeResidentChat.ticketNumber;
+            const panelTitle = document.getElementById('panelChatTitle');
+            if (panelTitle) panelTitle.textContent = activeResidentChat.ticketTitle;
+            const workerTitle = document.getElementById('panelChatWorkerTitle');
+            if (workerTitle) workerTitle.textContent = activeResidentChat.workerName;
+            const panelWorker = document.getElementById('panelChatWorkerSubtitle');
+            if (panelWorker) panelWorker.innerHTML = `<i class="fa-solid fa-circle" style="font-size:0.55rem; color:#00a884; margin-right:3px;"></i>online · Ticket <span class="fw-bold">#${activeResidentChat.ticketNumber}</span> (${escapeHtml(activeResidentChat.ticketTitle)})`;
+
+            // Dynamically update pinned ticket context banner
+            const pinnedDetails = document.getElementById('waPinnedTicketDetails');
+            const pinnedTrackBtn = document.getElementById('waPinnedTrackBtn');
+            if (pinnedDetails) {
+                if (activeResidentChat.ticketNumber === 'T-102') {
+                    pinnedDetails.innerHTML = `<strong>Ticket #T-102: Bathroom Water Leakage</strong> &bull; Worker: <strong>Ramesh (Plumber)</strong> &bull; Status: <strong class="text-info">In Progress</strong> &bull; ETA: <strong>10 Mins</strong>`;
+                    if (pinnedTrackBtn) pinnedTrackBtn.setAttribute('onclick', "showTrackWorkerModal('Ramesh', 'T-102')");
+                } else {
+                    pinnedDetails.innerHTML = `<strong>Ticket #${escapeHtml(activeResidentChat.ticketNumber)}: ${escapeHtml(activeResidentChat.ticketTitle)}</strong> &bull; Worker: <strong>${escapeHtml(activeResidentChat.workerName)}</strong> &bull; Status: <strong class="text-success">Worker Assigned</strong> &bull; ETA: <strong>15 Mins</strong>`;
+                    if (pinnedTrackBtn) pinnedTrackBtn.setAttribute('onclick', `showTrackWorkerModal('${escapeHtml(activeResidentChat.workerName)}', '${escapeHtml(activeResidentChat.ticketNumber)}')`);
+                }
+            }
+
+            const modalTicketBadge = document.getElementById('modalChatTicketBadge');
+            if (modalTicketBadge) modalTicketBadge.textContent = '#' + activeResidentChat.ticketNumber;
+
+            document.querySelectorAll('#residentChatThreadsList .wa-thread-card').forEach(el => el.classList.remove('active'));
+            const activeThreadBtn = document.getElementById(`thread-item-${activeResidentChat.conversationId}`);
+            if (activeThreadBtn) activeThreadBtn.classList.add('active');
+
+            // Reset horizontal scroll to guarantee sidebar stays visible
+            const appCard = document.querySelector('.wa-app-card');
+            if (appCard) appCard.scrollLeft = 0;
+            const panel = document.getElementById('residentChatPanel');
+            if (panel) panel.scrollLeft = 0;
+
+            if (forceModal) {
+                const modal = document.getElementById('residentChatModal');
+                if (modal) modal.style.display = 'flex';
+                loadResidentChatMessages('modalChatMessagesContainer');
+            } else {
+                forceOpenPanel('maintenance-chat');
+                loadResidentChatMessages('residentChatMessagesContainer');
+            }
+
+            if (!residentChatPollInterval) {
+                residentChatPollInterval = setInterval(() => {
+                    const panelVisible = document.querySelector('[data-view="maintenance-chat"]:not(.d-none):not(.hidden)');
+                    const modal = document.getElementById('residentChatModal');
+                    const modalVisible = modal && modal.style.display === 'flex';
+                    if (panelVisible) {
+                        loadResidentChatMessages('residentChatMessagesContainer', true);
+                    } else if (modalVisible) {
+                        loadResidentChatMessages('modalChatMessagesContainer', true);
+                    }
+                }, 1000); // 1.0 second real-time polling!
+            }
+        };
+
+        window.closeResidentChatModal = function() {
+            const modal = document.getElementById('residentChatModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.showTrackWorkerModal = function(workerName, ticketNum) {
+            const modal = document.getElementById('trackWorkerModal');
+            if (modal) modal.style.display = 'flex';
+        };
+
+        window.closeTrackWorkerModal = function() {
+            const modal = document.getElementById('trackWorkerModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.setResidentChatInput = function(text) {
+            const inp = document.getElementById('residentChatInput');
+            if (inp) {
+                inp.value = text;
+                inp.focus({ preventScroll: true });
+            }
+        };
+
+        window.setModalChatInput = function(text) {
+            const inp = document.getElementById('modalChatInput');
+            if (inp) {
+                inp.value = text;
+                inp.focus({ preventScroll: true });
+            }
+        };
+
+        window.loadResidentChatMessages = async function(containerId, isPolling = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            try {
+                const res = await fetch(`/api/chat/messages?conversationId=${encodeURIComponent(activeResidentChat.conversationId)}&viewerRole=CUSTOMER`);
+                if (!res.ok) return;
+                const messages = await res.json();
+                
+                let html = `
+                    <div class="wa-date-divider"><span>TODAY</span></div>
+                    <div class="wa-security-notice">
+                        <i class="fa-solid fa-lock me-1 text-warning"></i> Messages and calls are end-to-end verified with Maintenance Ticket <strong>#${escapeHtml(activeResidentChat.ticketNumber)}</strong>.
+                    </div>
+                `;
+
+                if (!messages || messages.length === 0) {
+                    html += `<div class="text-center text-muted py-5"><i class="fa-regular fa-comment-dots fs-3 mb-2 d-block text-success"></i>No messages yet in this ticket. Say hello to technician ${escapeHtml(activeResidentChat.workerName)}!</div>`;
+                } else {
+                    messages.forEach(msg => {
+                        const isMe = (msg.senderRole === 'CUSTOMER');
+                        const timeStr = msg.formattedTime || 'Just now';
+                        if (isMe) {
+                            html += `
+                                <div class="wa-msg-bubble outgoing">
+                                    <div class="wa-bubble-content">${escapeHtml(msg.message)}</div>
+                                    <div class="wa-bubble-footer">
+                                        <span>${escapeHtml(timeStr)}</span>
+                                        <i class="fa-solid fa-check-double wa-read-tick" title="Read"></i>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            html += `
+                                <div class="wa-msg-bubble incoming">
+                                    <div class="wa-sender-tag">
+                                        <i class="fa-solid fa-screwdriver-wrench text-primary" style="font-size:10px;"></i>
+                                        ${escapeHtml(msg.senderName || 'Kumar (Technician)')}
+                                    </div>
+                                    <div class="wa-bubble-content">${escapeHtml(msg.message)}</div>
+                                    <div class="wa-bubble-footer">
+                                        <span>${escapeHtml(timeStr)}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+                
+                const shouldScroll = !isPolling || (container.scrollHeight - container.scrollTop <= container.clientHeight + 140);
+                container.innerHTML = html;
+                if (shouldScroll) {
+                    container.scrollTop = container.scrollHeight;
+                }
+
+                const lastSnippet = document.getElementById(`thread-last-${activeResidentChat.conversationId}`);
+                if (lastSnippet && messages.length > 0) {
+                    const lastMsg = messages[messages.length - 1];
+                    lastSnippet.innerHTML = `
+                        <i class="fa-solid fa-check-double wa-read-tick"></i>
+                        <span class="text-truncate">${escapeHtml(lastMsg.message)}</span>
+                    `;
+                }
+                const lastTime = document.getElementById(`thread-time-${activeResidentChat.conversationId}`);
+                if (lastTime && messages.length > 0) {
+                    lastTime.textContent = messages[messages.length - 1].formattedTime || 'Just now';
+                }
+            } catch (e) {
+                console.error("Error loading chat messages", e);
+            }
+        };
+
+        window.handleResidentSendMessage = async function(e) {
+            e.preventDefault();
+            const input = document.getElementById('residentChatInput');
+            if (!input || !input.value.trim()) return;
+            const text = input.value.trim();
+            input.value = '';
+            closeWaEmojiTray();
+            await postResidentChatMessage(text, 'residentChatMessagesContainer');
+        };
+
+        window.handleModalSendMessage = async function(e) {
+            e.preventDefault();
+            const input = document.getElementById('modalChatInput');
+            if (!input || !input.value.trim()) return;
+            const text = input.value.trim();
+            input.value = '';
+            await postResidentChatMessage(text, 'modalChatMessagesContainer');
+        };
+
+        async function postResidentChatMessage(text, containerId) {
+            try {
+                const payload = {
+                    conversationKey: activeResidentChat.conversationId,
+                    conversationId: (typeof activeResidentChat.conversationId === 'number' ? activeResidentChat.conversationId : null),
+                    channelType: 'CUSTOMER_MAINTENANCE',
+                    senderRole: 'CUSTOMER',
+                    senderName: 'Selva',
+                    senderEmail: 'selva@smartsociety.com',
+                    senderUnit: activeResidentChat.flatNumber || (activeResidentChat.ticketNumber === 'REQ-1024' ? 'Flat A-204' : 'Flat A-101'),
+                    ticketNumber: activeResidentChat.ticketNumber,
+                    ticketTitle: activeResidentChat.ticketTitle,
+                    message: text,
+                    priority: 'NORMAL'
+                };
+                const res = await fetch('/api/chat/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (res.ok) {
+                    await loadResidentChatMessages(containerId);
+                }
+            } catch (err) {
+                console.error("Failed to send message", err);
+            }
+        }
+
+        // WhatsApp Features: Typing Indicator & Realistic Technician Responses
+        function triggerSmartTechnicianReply(userText) {
+            const lower = userText.toLowerCase();
+            let replyText = null;
+
+            if (lower.includes("reach") || lower.includes("when") || lower.includes("time") || lower.includes("arriving")) {
+                replyText = "I am on the 2nd floor corridor right now. Reaching Flat A-204 in 3 minutes!";
+            } else if (lower.includes("cool") || lower.includes("ac") || lower.includes("leak") || lower.includes("gas") || lower.includes("refrigerant")) {
+                replyText = "Noted! I have the R-32 pressure gauge and vacuum pump ready. Will test the cooling coil thoroughly.";
+            } else if (lower.includes("balcony") || lower.includes("door") || lower.includes("open") || lower.includes("unlocked")) {
+                replyText = "Thank you! I will directly step out to inspect the outdoor condenser unit.";
+            } else if (lower.includes("thank") || lower.includes("ok") || lower.includes("okay")) {
+                replyText = "You're welcome! I will ensure complete resolution before taking your sign-off.";
+            }
+
+            if (replyText) {
+                const typingBubble = document.getElementById('waTypingBubble');
+                if (typingBubble) typingBubble.classList.remove('d-none');
+                
+                setTimeout(async () => {
+                    if (typingBubble) typingBubble.classList.add('d-none');
+                    try {
+                        const replyPayload = {
+                            conversationKey: activeResidentChat.conversationId,
+                            conversationId: (typeof activeResidentChat.conversationId === 'number' ? activeResidentChat.conversationId : null),
+                            channelType: 'CUSTOMER_MAINTENANCE',
+                            senderRole: 'MAINTENANCE',
+                            senderName: activeResidentChat.workerName || 'Kumar (AC Specialist)',
+                            senderUnit: 'Maintenance Crew',
+                            ticketNumber: activeResidentChat.ticketNumber,
+                            ticketTitle: activeResidentChat.ticketTitle,
+                            message: replyText,
+                            priority: 'NORMAL'
+                        };
+                        await fetch('/api/chat/send', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(replyPayload)
+                        });
+                        loadResidentChatMessages('residentChatMessagesContainer');
+                        loadResidentChatMessages('modalChatMessagesContainer');
+                    } catch (e) {
+                        console.error("Failed to deliver tech reply", e);
+                    }
+                }, 1800);
+            }
+        }
+
+        // WhatsApp Search Filter
+        window.filterWaThreads = function(query) {
+            const q = (query || '').toLowerCase().trim();
+            document.querySelectorAll('#residentChatThreadsList .wa-thread-card').forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(q) ? 'flex' : 'none';
+            });
+        };
+
+        // WhatsApp Category Filter Chips
+        window.setWaFilter = function(category, btn) {
+            document.querySelectorAll('.wa-filter-tabs .wa-tab-chip').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            document.querySelectorAll('#residentChatThreadsList .wa-thread-card').forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'flex';
+                } else if (category === 'technician') {
+                    card.style.display = 'flex';
+                } else if (category === 'unread') {
+                    const badge = card.querySelector('.wa-unread-badge');
+                    card.style.display = badge ? 'flex' : 'none';
+                }
+            });
+        };
+
+        // Real WhatsApp Web Emoji & Reaction Keyboard Engine
+        window.openWaEmojiTray = function() {
+            const tray = document.getElementById('waEmojiTray');
+            if (!tray) return;
+            tray.classList.remove('d-none');
+            tray.classList.add('open');
+            tray.style.setProperty('display', 'flex', 'important');
+            const search = document.getElementById('waEmojiSearchInput');
+            if (search) {
+                search.value = '';
+                filterWaEmojis('');
+            }
+        };
+
+        window.closeWaEmojiTray = function(e) {
+            if (e && typeof e.stopPropagation === 'function') {
+                e.stopPropagation();
+            }
+            const tray = document.getElementById('waEmojiTray');
+            if (!tray) return;
+            tray.classList.remove('open');
+            tray.classList.add('d-none');
+            tray.style.setProperty('display', 'none', 'important');
+        };
+
+        window.toggleWaEmojiTray = function(e) {
+            if (e && typeof e.stopPropagation === 'function') {
+                e.stopPropagation();
+            }
+            const tray = document.getElementById('waEmojiTray');
+            if (!tray) return;
+            const isVisible = (tray.style.display === 'flex' || tray.classList.contains('open')) && !tray.classList.contains('d-none');
+            if (isVisible) {
+                closeWaEmojiTray(e);
+            } else {
+                openWaEmojiTray();
+            }
+        };
+
+        window.insertWaEmoji = function(emoji) {
+            const input = document.getElementById('residentChatInput');
+            if (input) {
+                const start = input.selectionStart || input.value.length;
+                const end = input.selectionEnd || input.value.length;
+                const val = input.value;
+                input.value = val.substring(0, start) + emoji + val.substring(end);
+                const nextPos = start + emoji.length;
+                input.setSelectionRange(nextPos, nextPos);
+                input.focus({ preventScroll: true });
+            }
+            previewWaEmoji('Inserted ' + emoji, emoji);
+        };
+
+        window.removeLastCharFromResidentInput = function() {
+            const input = document.getElementById('residentChatInput');
+            if (input && input.value.length > 0) {
+                input.value = Array.from(input.value).slice(0, -1).join('');
+                input.focus({ preventScroll: true });
+            }
+        };
+
+        window.switchWaEmojiCategory = function(cat, btn) {
+            document.querySelectorAll('.wa-picker-tabs .wa-picker-tab').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            const targetSec = document.getElementById('wa-sec-' + cat);
+            if (targetSec) {
+                targetSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        };
+
+        window.previewWaEmoji = function(desc, emoji) {
+            const el = document.getElementById('waEmojiHoverPreview');
+            if (el) {
+                el.textContent = `${emoji} ${desc}`;
+            }
+        };
+
+        window.filterWaEmojis = function(query) {
+            const q = (query || '').toLowerCase().trim();
+            document.querySelectorAll('#waEmojiPickerBody .wa-emoji-item').forEach(item => {
+                const name = (item.getAttribute('data-name') || '').toLowerCase();
+                const text = item.textContent.toLowerCase();
+                const match = !q || name.includes(q) || text.includes(q);
+                item.style.display = match ? 'flex' : 'none';
+            });
+            document.querySelectorAll('#waEmojiPickerBody .wa-emoji-section').forEach(sec => {
+                const visibleItems = sec.querySelectorAll('.wa-emoji-item:not([style*="display: none"])');
+                sec.style.display = (visibleItems.length > 0) ? 'block' : 'none';
+            });
+        };
+
+        // Close emoji tray when clicking outside
+        document.addEventListener('click', function(e) {
+            const tray = document.getElementById('waEmojiTray');
+            if (!tray) return;
+            const isVisible = (tray.style.display === 'flex' || tray.classList.contains('open')) && !tray.classList.contains('d-none');
+            if (!isVisible) return;
+
+            const toggleBtn = document.getElementById('waEmojiToggleBtn');
+            const clickedInside = tray.contains(e.target);
+            const clickedToggle = toggleBtn && (toggleBtn === e.target || toggleBtn.contains(e.target));
+            const clickedAnyToggle = e.target.closest && e.target.closest('[onclick*="toggleWaEmojiTray"]');
+
+            if (!clickedInside && !clickedToggle && !clickedAnyToggle) {
+                closeWaEmojiTray(e);
+            }
+        });
+
+        // Close on Escape key press
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.key === 'Esc') {
+                closeWaEmojiTray(e);
+            }
+        });
+
+        // Simulated Voice Note
+        window.simulateVoiceNote = function() {
+            setResidentChatInput('🎙️ Voice message (0:12) - "Hi Kumar, the AC unit in the master bedroom is vibrating loudly."');
+            const form = document.getElementById('waMessageForm');
+            if (form) form.dispatchEvent(new Event('submit'));
+        };
+
+        // Simulated Attachment
+        window.simulateAttachmentUpload = function() {
+            setResidentChatInput('📎 Attached: AC_Filter_Dust_Photo.jpg (2.4 MB)');
+            const form = document.getElementById('waMessageForm');
+            if (form) form.dispatchEvent(new Event('submit'));
+        };
+
+        // Real-Life Phone & Video Call Simulation
+        window.triggerVoiceCall = function(name, ticket) {
+            const modal = document.getElementById('waVoiceCallModal');
+            const nameEl = document.getElementById('waVoiceCallName');
+            const statusEl = document.getElementById('waVoiceCallStatus');
+            if (nameEl) nameEl.textContent = `${name || 'Kumar'} (${activeResidentChat.ticketTitle})`;
+            if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-phone-volume me-1"></i> Calling Flat Technician...';
+            if (modal) modal.style.display = 'flex';
+
+            setTimeout(() => {
+                if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-circle text-success me-1" style="font-size:0.5rem;"></i> Connected (00:01) &bull; Kumar is speaking';
+            }, 2500);
+        };
+
+        window.endVoiceCall = function() {
+            const modal = document.getElementById('waVoiceCallModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.triggerVideoCall = function(name, ticket) {
+            const modal = document.getElementById('waVideoCallModal');
+            if (modal) modal.style.display = 'flex';
+        };
+
+        window.endVideoCall = function() {
+            const modal = document.getElementById('waVideoCallModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
         
         window.forceOpenPanel = function(panel) {
             document.querySelectorAll("[data-view]").forEach(view => {
@@ -2083,6 +4240,11 @@
             if (location.hash !== `#${panel}`) {
                 history.pushState(null, "", `#${panel}`);
             }
+
+            // Immediately load chat when maintenance-chat view is opened!
+            if (panel === 'maintenance-chat') {
+                loadResidentChatMessages('residentChatMessagesContainer');
+            }
         };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -2095,7 +4257,10 @@
             window.addEventListener('hashchange', () => {
                 if (window.location.hash) forceOpenPanel(window.location.hash.substring(1));
             });
-            if (window.location.hash) {
+            if (window.location.hash === '#maintenance-chat') {
+                forceOpenPanel('maintenance-chat');
+                loadResidentChatMessages('residentChatMessagesContainer');
+            } else if (window.location.hash) {
                 forceOpenPanel(window.location.hash.substring(1));
             } else {
                 forceOpenPanel("overview");
@@ -2428,11 +4593,12 @@
                 overview: "Overview",
                 billing: "My Maintenance Dues",
                 pass: "Visitor Pre-Approval",
-                services: "Home Services",
+                services: "Carpentry & Home Services",
                 complaints: "Helpdesk & Complaints",
                 amenities: "Amenity Booking",
                 announcements: "Notice Board",
                 deliveries: "Parcel & Deliveries",
+                "post-property": "Post Flat (Rent / Sale)",
                 profile: "My Profile"
             };
 

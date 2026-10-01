@@ -38,6 +38,9 @@
         html,
         body {
             overflow-x: hidden !important;
+            overflow-y: auto !important;
+            height: auto !important;
+            min-height: 100vh !important;
         }
         /* PROPERTYDIRECT MODERN PRICING CARD SYSTEM */
         .pd-plans-wrapper {
@@ -1953,6 +1956,9 @@
             margin: 0 !important;
             padding: 0 !important;
             overflow-x: hidden !important;
+            overflow-y: auto !important;
+            height: auto !important;
+            min-height: 100vh !important;
         }
 
         body[data-dashboard-role="customer"],
@@ -2112,6 +2118,97 @@
 
 <!-- ULTRA-HIGH SPECIFICITY CUSTOMER DASHBOARD ALIGNMENT PERFECTION -->
 <style id="pd-customer-perfect-alignment">
+    /* 0. UNLOCKED FULL-PAGE VERTICAL SCROLLING SYSTEM */
+    html,
+    html:root,
+    body,
+    body.app-dashboard,
+    body.app-dashboard[data-platform="propertydirect"],
+    body[data-dashboard-role="customer"],
+    html body.app-dashboard[data-platform="propertydirect"][data-dashboard-role="customer"],
+    html body.app-dashboard[data-dashboard-role="customer"],
+    html body[data-dashboard-role="customer"] {
+        height: auto !important;
+        min-height: 100vh !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scroll-behavior: smooth !important;
+        position: relative !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"][data-dashboard-role="customer"] main.dash-main,
+    html body.app-dashboard[data-dashboard-role="customer"] .dash-main,
+    html body[data-dashboard-role="customer"] .dash-main,
+    body[data-dashboard-role="customer"] .dash-main,
+    main.dash-main {
+        position: relative !important;
+        margin-left: 275px !important;
+        width: calc(100% - 275px) !important;
+        max-width: calc(100% - 275px) !important;
+        min-width: 0 !important;
+        min-height: 100vh !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        padding: 0 28px 60px 0 !important;
+        box-sizing: border-box !important;
+        background: #ffffff !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"][data-dashboard-role="customer"] .dash-sidebar,
+    body[data-dashboard-role="customer"] .dash-sidebar {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        width: 275px !important;
+        min-width: 275px !important;
+        max-width: 275px !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        z-index: 1000 !important;
+        overflow: hidden !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"][data-dashboard-role="customer"] .sidebar-nav,
+    body[data-dashboard-role="customer"] .sidebar-nav {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        height: calc(100vh - 172px) !important;
+        max-height: calc(100vh - 172px) !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"][data-dashboard-role="customer"] .dash-panel,
+    body[data-dashboard-role="customer"] .dash-panel {
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+        width: 100% !important;
+    }
+
+    @media (max-width: 820px) {
+        html body.app-dashboard[data-platform="propertydirect"][data-dashboard-role="customer"] main.dash-main,
+        body[data-dashboard-role="customer"] .dash-main {
+            margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            padding: 0 16px 40px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"][data-dashboard-role="customer"] .dash-sidebar,
+        body[data-dashboard-role="customer"] .dash-sidebar {
+            position: relative !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+        }
+    }
+
     /* 1. RELOCATE TOAST NOTIFICATION TO BOTTOM RIGHT */
     #toast,
     .toast,
@@ -2383,7 +2480,7 @@
             <button type="button" data-panel="visits"><span>Site visits</span></button>
             <button type="button" data-panel="offers"><span>Offers & enquiries</span></button>
             <button type="button" data-panel="reviews"><span>Reviews & reports</span></button>
-            <button type="button" data-panel="services"><span>Home services</span></button>
+            <button type="button" data-panel="services"><i class="fa-solid fa-screwdriver-wrench me-2" style="font-size:0.92rem;"></i><span>Carpentry & Home Services</span></button>
             <button type="button" data-panel="rentpay"><span>Rent & payments</span></button>
             <button type="button" data-panel="plans"><span>Plans</span></button>
             <button type="button" data-panel="become-owner" style="color:#059669; font-weight:800;"><span>🏠 Become Property Owner</span></button>
@@ -2894,7 +2991,7 @@
                                     </ul>
                                 </div>
                                 <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.15rem; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                    Home Services
+                                    <i class="fa-solid fa-screwdriver-wrench text-primary me-2"></i>Carpentry & Home Services
                                 </h4>
                             </div>
                             <div class="flex-grow-1 mx-lg-3" style="max-width: 520px;">
@@ -2914,7 +3011,7 @@
                     <!-- 8 Core Service Categories Grid (NoBroker Layout) -->
                     <!-- 8 Core Service Categories Grid (Card View) -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-shapes text-primary me-2"></i>Explore All Home Services</h5>
+                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-screwdriver-wrench text-primary me-2"></i>Explore Carpentry & Home Services</h5>
                         <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill small fw-semibold">Instant Booking Available</span>
                     </div>
                     <div class="row g-3 mb-4" id="nobrokerCategoryGrid">
@@ -3209,8 +3306,10 @@
                         <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="select-plan" data-plan-name="OwnerConcierge" style="max-width: 220px;">Select Concierge Plan</button>
                     </div>
                 </div>
+            </div>
         </section>
 
+        <section class="dash-panel hidden" data-view="support">
             <div class="dash-card">
                 <div class="card-head">
                     <div>
@@ -3295,6 +3394,8 @@
                 } else {
                     location.hash = '#' + panelId;
                 }
+
+                window.scrollTo({ top: 0, behavior: 'instant' });
             }
 
             document.addEventListener("click", function (e) {
@@ -3495,6 +3596,24 @@
                             description: `${service} - ${notes || 'Emergency Service Request'} (Slot: ${slot})`
                         })
                     }).then(r => r.ok ? r.json() : r.json().then(err => { throw new Error(err.message || "Failed to place emergency booking"); }));
+
+                    // Automatically mirror to SmartSociety Maintenance Dashboard
+                    try {
+                        await fetch("/api/maintenance/requests", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                category: service.toLowerCase().includes("plumb") ? "Plumbing" : service.toLowerCase().includes("electric") ? "Electrical" : "Carpentry",
+                                serviceType: service,
+                                title: `[PropertyDirect Emergency] ${service} - ${address || name}`,
+                                description: `Platform: PropertyDirect\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${address}\nSlot: ${slot}\nNotes: ${notes || 'Emergency Service Request'}`,
+                                priority: "URGENT",
+                                preferredDate: date,
+                                preferredTime: slot,
+                                notes: `[PropertyDirect Emergency Dispatch] Booking Ref: ${saved.bookingReference || ''}`
+                            })
+                        });
+                    } catch (mErr) { console.warn("Mirroring to maintenance dashboard:", mErr); }
                 } else {
                     // Non-Emergency Maintenance Ticket Engine (Flow A)
                     saved = await noBrokerMaintenanceApi("", {
@@ -3509,7 +3628,7 @@
                             serviceOption: meta.option,
                             priceLabel: price === "0" ? "Free inspection pass" : `Rs. ${price}`,
                             warrantyLabel: meta.warranty,
-                            title: `${service} - ${address || name}`,
+                            title: `[PropertyDirect] ${service} - ${address || name}`,
                             description: [
                                 `NoBroker-style customer service booking`,
                                 `Selected slot: ${slot}`,
@@ -3527,6 +3646,24 @@
                             externalReference: bookingId
                         })
                     });
+
+                    // Automatically mirror to SmartSociety Maintenance Dashboard
+                    try {
+                        await fetch("/api/maintenance/requests", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                category: meta.category || "Carpentry",
+                                serviceType: service,
+                                title: `[PropertyDirect] ${service} - ${address || name}`,
+                                description: `Platform: PropertyDirect\nCustomer: ${name}\nPhone: ${phone}\nAddress: ${address}\nSlot: ${slot}\nPrice: Rs. ${price}\nNotes: ${notes || ''}`,
+                                priority: "MEDIUM",
+                                preferredDate: date,
+                                preferredTime: slot,
+                                notes: `[PropertyDirect Customer Request] Ticket Ref: ${bookingId}`
+                            })
+                        });
+                    } catch (mErr) { console.warn("Mirroring to maintenance dashboard:", mErr); }
                 }
                 e.currentTarget.reset();
                 updateNoBrokerCheckoutPrice();
@@ -3781,5 +3918,33 @@
     })();
     </script>
 
+    <!-- Script ensuring full-page vertical scrolling is always active on customer dashboard -->
+    <script>
+        (function() {
+            function ensureScrollable() {
+                try {
+                    document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
+                    document.documentElement.style.setProperty('height', 'auto', 'important');
+                    document.body.style.setProperty('overflow-y', 'auto', 'important');
+                    document.body.style.setProperty('height', 'auto', 'important');
+                    const main = document.querySelector('.dash-main');
+                    if (main) {
+                        main.style.setProperty('overflow-y', 'visible', 'important');
+                        main.style.setProperty('height', 'auto', 'important');
+                        main.style.setProperty('max-height', 'none', 'important');
+                    }
+                } catch(e) {}
+            }
+            ensureScrollable();
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', ensureScrollable);
+            }
+            window.addEventListener('load', ensureScrollable);
+            setTimeout(ensureScrollable, 50);
+            setTimeout(ensureScrollable, 200);
+            setTimeout(ensureScrollable, 600);
+            setTimeout(ensureScrollable, 1500);
+        })();
+    </script>
 </body>
 </html>

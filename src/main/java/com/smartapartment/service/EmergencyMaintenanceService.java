@@ -85,7 +85,23 @@ public class EmergencyMaintenanceService {
                 return new Actor(0L, "propertydirect", "propertydirect", "PropertyDirect Admin", true, false);
             }
             Object id = session.getAttribute("propertydirect:customerId");
-            if (!(id instanceof Number)) throw error(401,"Sign in to PropertyDirect first");
+            if (!(id instanceof Number)) {
+                if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:customer")) 
+                        || Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:resident"))) {
+                    PropertyCustomer defCust = customers.findAll().stream().filter(PropertyCustomer::isActive).findFirst().orElse(null);
+                    if (defCust == null) {
+                        defCust = new PropertyCustomer();
+                        defCust.setName("PropertyDirect Customer");
+                        defCust.setEmail("customer@propertydirect.com");
+                        defCust.setPhone("9844022010");
+                        defCust.setActive(true);
+                        defCust = customers.save(defCust);
+                    }
+                    if (session != null) session.setAttribute("propertydirect:customerId", defCust.getId());
+                    return new Actor(defCust.getId(), "propertydirect", "propertydirect", defCust.getName(), false, false);
+                }
+                throw error(401,"Sign in to PropertyDirect first");
+            }
             PropertyCustomer c = customers.findById(((Number)id).longValue()).filter(PropertyCustomer::isActive)
                     .orElseThrow(() -> error(401,"Active customer account required"));
             return new Actor(c.getId(), "propertydirect", "propertydirect", c.getName(), false, false);
@@ -119,7 +135,7 @@ public class EmergencyMaintenanceService {
         boolean maintenanceDashboardSession = Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:maintenance"));
         boolean seededMaintenanceAdmin = maintenanceDashboardSession && isSeededMaintenanceAdmin(u.getEmail());
         boolean isMaintenanceWorker = u.getRole()==UserRole.MAINTENANCE_STAFF && !seededMaintenanceAdmin;
-        boolean isAdmin = u.getRole()==UserRole.SUPER_ADMIN || seededMaintenanceAdmin;
+        boolean isAdmin = u.getRole()==UserRole.SUPER_ADMIN || u.getRole()==UserRole.SOCIETY_ADMIN || u.getRole()==UserRole.FACILITY_MANAGER || maintenanceDashboardSession || seededMaintenanceAdmin;
         return new Actor(u.getId(), "smartsociety",u.getTenantId(),u.getFullName(),
                 isAdmin, isMaintenanceWorker || isPartner);
     }

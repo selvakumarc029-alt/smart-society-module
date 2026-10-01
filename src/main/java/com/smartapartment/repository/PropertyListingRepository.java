@@ -20,4 +20,10 @@ public interface PropertyListingRepository extends JpaRepository<PropertyListing
 
     List<PropertyListing> findByProjectId(Long projectId);
     List<PropertyListing> findByProjectIdOrderByCreatedAtDesc(Long projectId);
+
+    List<PropertyListing> findByTenantIdOrderByCreatedAtDesc(String tenantId);
+    List<PropertyListing> findByTenantIdAndStatusOrderByCreatedAtDesc(String tenantId, String status);
+    List<PropertyListing> findBySubmittedByIdOrderByCreatedAtDesc(Long submittedById);
+    List<PropertyListing> findByTenantIdAndSubmittedByIdOrderByCreatedAtDesc(String tenantId, Long submittedById);
+    List<PropertyListing> findBySubmittedByOrderByCreatedAtDesc(String submittedBy);
 }

@@ -64,8 +64,8 @@ public class MaintenanceManagerService {
         String tenantId = user.getTenantId();
         boolean isSuper = user.getRole() == UserRole.SUPER_ADMIN;
 
-        List<MaintenanceRequest> allRequests = (isSuper || tenantId == null || tenantId.isBlank())
-                ? requestRepository.findAll()
+        List<MaintenanceRequest> allRequests = (isSuper || user.getRole() != UserRole.RESIDENT || tenantId == null || tenantId.isBlank())
+                ? requestRepository.findAllByOrderByCreatedAtDesc()
                 : requestRepository.findByTenantIdOrderByCreatedAtDesc(tenantId);
 
         LocalDate today = LocalDate.now();
@@ -167,8 +167,8 @@ public class MaintenanceManagerService {
         String tenantId = user.getTenantId();
         boolean isSuper = user.getRole() == UserRole.SUPER_ADMIN;
 
-        List<MaintenanceRequest> requests = (isSuper || tenantId == null || tenantId.isBlank())
-                ? requestRepository.findAll()
+        List<MaintenanceRequest> requests = (isSuper || user.getRole() != UserRole.RESIDENT || tenantId == null || tenantId.isBlank())
+                ? requestRepository.findAllByOrderByCreatedAtDesc()
                 : requestRepository.findByTenantIdOrderByCreatedAtDesc(tenantId);
 
         return requests.stream()

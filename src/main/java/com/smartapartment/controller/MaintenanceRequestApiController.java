@@ -63,6 +63,16 @@ public class MaintenanceRequestApiController {
                         .orElseGet(this::createFallbackResident);
             }
 
+            // Check if customer session is active for PropertyDirect
+            if (session != null && Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:customer"))) {
+                return userRepository.findByEmail("customer@propertydirect")
+                        .or(() -> userRepository.findByEmail("resident@smartsociety"))
+                        .or(() -> userRepository.findAll().stream()
+                                .filter(u -> u.getRole() == UserRole.RESIDENT)
+                                .findFirst())
+                        .orElseGet(this::createFallbackCustomer);
+            }
+
             // Fallback for resident
             return userRepository.findByEmail("resident@smartsociety")
                     .or(() -> userRepository.findByEmail("resident@smartapartment"))
@@ -71,6 +81,17 @@ public class MaintenanceRequestApiController {
                             .findFirst())
                     .orElseGet(this::createFallbackResident);
         }
+    }
+
+    private AppUser createFallbackCustomer() {
+        AppUser u = new AppUser();
+        u.setTenantId("society-1");
+        u.setFullName("PropertyDirect Customer");
+        u.setEmail("customer@propertydirect");
+        u.setPhone("9844022010");
+        u.setPasswordHash("$2a$10$abcdefghijklmnopqrstuvwxyz0123456789ABCDEF");
+        u.setRole(UserRole.RESIDENT);
+        return userRepository.save(u);
     }
 
     private AppUser createFallbackResident() {

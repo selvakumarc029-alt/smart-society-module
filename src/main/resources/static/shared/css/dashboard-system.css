@@ -515,8 +515,8 @@ body.app-dashboard .dash-sidebar > .dashboard-sidebar-close:hover { background:r
 .app-dashboard .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:16px; }
 .dashboard-body label,.app-dashboard label{display:grid;gap:6px;color:var(--ds-ink);font-size:.72rem;font-weight:750;margin-bottom:12px}
 .dashboard-body .form-grid label,.app-dashboard .form-grid label{margin-bottom:0}
-.dashboard-body input,.dashboard-body select,.dashboard-body textarea,
-.app-dashboard input,.app-dashboard select,.app-dashboard textarea {
+.dashboard-body input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),.dashboard-body select,.dashboard-body textarea,
+.app-dashboard input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),.app-dashboard select,.app-dashboard textarea {
     width:100%;
     min-height:44px;
     margin:0;
@@ -756,10 +756,10 @@ html[data-theme="dark"] body.app-dashboard .dash-header {
 }
 
 /* Modern Form Field Styling & Focus Glow */
-body.dashboard-body input,
+body.dashboard-body input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 body.dashboard-body select,
 body.dashboard-body textarea,
-body.app-dashboard input,
+body.app-dashboard input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 body.app-dashboard select,
 body.app-dashboard textarea {
     border-radius: 10px;
@@ -1160,10 +1160,10 @@ html[data-theme="dark"] .app-dashboard .dash-header {
 }
 
 /* Minimalist Clean Inputs */
-.dashboard-body input,
+.dashboard-body input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 .dashboard-body select,
 .dashboard-body textarea,
-.app-dashboard input,
+.app-dashboard input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 .app-dashboard select,
 .app-dashboard textarea {
     border-radius: 8px !important;
@@ -1174,10 +1174,10 @@ html[data-theme="dark"] .app-dashboard .dash-header {
     color: #0f172a !important;
 }
 
-html[data-theme="dark"] .dashboard-body input,
+html[data-theme="dark"] .dashboard-body input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 html[data-theme="dark"] .dashboard-body select,
 html[data-theme="dark"] .dashboard-body textarea,
-html[data-theme="dark"] .app-dashboard input,
+html[data-theme="dark"] .app-dashboard input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 html[data-theme="dark"] .app-dashboard select,
 html[data-theme="dark"] .app-dashboard textarea {
     background: #1e293b !important;
@@ -1321,15 +1321,59 @@ body.app-dashboard {
     font-weight: 700 !important;
 }
 
-.dashboard-body input,
+.dashboard-body input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 .dashboard-body select,
 .dashboard-body textarea,
-.app-dashboard input,
+.app-dashboard input:not([type="checkbox"]):not([type="radio"]):not(.form-check-input),
 .app-dashboard select,
 .app-dashboard textarea {
     font-size: 0.92rem !important;
     padding: 11px 14px !important;
     min-height: 44px !important;
+}
+
+/* Ensure checkboxes, radios, and switch toggles retain correct dimensions and behavior */
+.dashboard-body .form-check-input,
+.app-dashboard .form-check-input,
+body.dashboard-body input[type="checkbox"],
+body.dashboard-body input[type="radio"],
+body.app-dashboard input[type="checkbox"],
+body.app-dashboard input[type="radio"] {
+    width: 1.15em !important;
+    min-height: 1.15em !important;
+    height: 1.15em !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex-shrink: 0;
+    vertical-align: middle;
+    cursor: pointer !important;
+}
+
+.dashboard-body .form-switch .form-check-input,
+.app-dashboard .form-switch .form-check-input,
+body.dashboard-body .form-switch input[type="checkbox"],
+body.app-dashboard .form-switch input[type="checkbox"] {
+    width: 2.75em !important;
+    min-height: 1.5em !important;
+    height: 1.5em !important;
+    border-radius: 2em !important;
+    background-color: #cbd5e1 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23ffffff'/%3e%3c/svg%3e") !important;
+    background-position: left center !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+    transition: background-position .2s ease-in-out, background-color .2s ease-in-out, border-color .2s ease-in-out !important;
+    cursor: pointer !important;
+}
+
+.dashboard-body .form-switch .form-check-input:checked,
+.app-dashboard .form-switch .form-check-input:checked,
+body.dashboard-body .form-switch input[type="checkbox"]:checked,
+body.app-dashboard .form-switch input[type="checkbox"]:checked {
+    background-color: #ef4444 !important;
+    border-color: #dc2626 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23ffffff'/%3e%3c/svg%3e") !important;
+    background-position: right center !important;
 }
 
 .dashboard-body button,

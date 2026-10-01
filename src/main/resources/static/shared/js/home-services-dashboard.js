@@ -4839,14 +4839,18 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
             // 1. Create MaintenanceRequest to trigger AutoAssignmentService and show in Maintenance Dashboard
             try {
+                const platformTag = isCustomer ? "PropertyDirect" : "SmartSociety";
                 const reqRes = await fetch("/api/maintenance/requests", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Accept": "application/json" },
                     body: JSON.stringify({
                         category: _pgOrderState.parentCategory || "Cleaning",
                         serviceType: _pgOrderState.subServiceName,
-                        title: `${_pgOrderState.subServiceName} (${_pgOrderState.packageName}) - ${address}`,
+                        title: `[${platformTag}] ${_pgOrderState.subServiceName} (${_pgOrderState.packageName}) - ${address}`,
                         description: [
+                            `Platform: ${isCustomer ? 'PropertyDirect Customer Portal' : 'SmartSociety Resident Portal'}`,
+                            `Requester: ${name}`,
+                            `Contact Phone: ${phone}`,
                             `Service: ${_pgOrderState.subServiceName} - ${_pgOrderState.packageName}`,
                             `Payment Status: ${_pgCurrentMethod === 'payafter' ? 'PAY_ON_COMPLETION' : 'PAID'}`,
                             `Transaction ID: ${txnId}`,
@@ -4854,14 +4858,13 @@ window.closeSubServicesModal = function closeSubServicesModal() {
                             `Amount: ₹${_pgOrderState.finalPayable}`,
                             `Coupon: ${_pgOrderState.coupon || 'None'}`,
                             `Time Slot: ${_pgCurrentSlot}`,
-                            `Customer Address: ${address}`,
-                            `Contact: ${name} (${phone})`,
+                            `Service Address: ${address}`,
                             `Package Scope: ${(_pgOrderState.features || []).join('; ')}`
                         ].join("\n"),
                         priority: "URGENT",
                         preferredDate: date,
                         preferredTime: _pgCurrentSlot,
-                        notes: `Paid via ${currentMethodName}. Booking Ref: ${bookingRef}`
+                        notes: `[Platform: ${platformTag}] Paid via ${currentMethodName}. Booking Ref: ${bookingRef}`
                     })
                 });
                 if (reqRes.ok) {
@@ -4882,6 +4885,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
             // 2. Also register in Emergency Geo-Dispatch pipeline so it appears on /dashboards/maintenance#dispatch
             try {
+                const platformTag = isCustomer ? "PropertyDirect" : "SmartSociety";
                 await fetch("/api/maintenance/dispatch/bookings", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Accept": "application/json" },
@@ -4891,7 +4895,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
                         city: "Chennai",
                         area: "Whitefield",
                         category: _pgOrderState.parentCategory || "Cleaning",
-                        description: `[PAID - ${txnId}] ${_pgOrderState.subServiceName} (${_pgOrderState.packageName}). Customer: ${name}, Phone: ${phone}. Slot: ${_pgCurrentSlot}. Ref: ${bookingRef}`,
+                        description: `[${platformTag} - ${txnId}] ${_pgOrderState.subServiceName} (${_pgOrderState.packageName}). Customer: ${name}, Phone: ${phone}. Slot: ${_pgCurrentSlot}. Ref: ${bookingRef}`,
                         latitude: 12.9716,
                         longitude: 77.5946
                     })
@@ -4965,13 +4969,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
         const headerArea = document.getElementById("subserviceModalHeaderArea");
         if (headerArea) {
-            headerArea.innerHTML = `
-                <div class="subservice-modal-header" style="justify-content: flex-end;">
-                    <button type="button" class="subservice-modal-close" id="subserviceModalCloseBtn" aria-label="Close" onclick="event.preventDefault(); event.stopPropagation(); window.closeSubServicesModal();">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            `;
+            headerArea.innerHTML = "";
         }
 
         const gridEl = document.getElementById("subserviceGrid");

@@ -70,13 +70,23 @@ public class BillingService {
             if (billRepository.existsByTenantIdAndApartmentIdAndBillMonth(tenantId, apartment.getId(), billMonth)) continue;
             int area = apartment.getBuiltUpAreaSqFt() == null || apartment.getBuiltUpAreaSqFt() <= 0
                     ? details.defaultAreaSqFt() : apartment.getBuiltUpAreaSqFt();
-            BigDecimal base = details.baseRatePerSqFt().multiply(BigDecimal.valueOf(area));
+            BigDecimal base;
+            if (details.baseRatePerSqFt().compareTo(BigDecimal.ZERO) > 0) {
+                base = details.baseRatePerSqFt().multiply(BigDecimal.valueOf(area));
+            } else if (details.otherCharges() != null && details.otherCharges().compareTo(BigDecimal.ZERO) > 0) {
+                base = details.otherCharges();
+            } else if (apartment.getMonthlyMaintenance() != null && apartment.getMonthlyMaintenance().compareTo(BigDecimal.ZERO) > 0) {
+                base = apartment.getMonthlyMaintenance();
+            } else {
+                base = BigDecimal.valueOf(2500);
+            }
             BigDecimal waterUnits = nonNegative(details.waterCurrentReading().subtract(details.waterPreviousReading()));
             BigDecimal waterAmount = waterUnits.multiply(details.waterRatePerUnit());
             BigDecimal parking = apartment.getParkingSlot() == null || apartment.getParkingSlot().isBlank()
                     ? BigDecimal.ZERO : details.parkingFee();
             BigDecimal taxable = sum(base, waterAmount, details.commonPowerFee(), details.sinkingFund(),
-                    details.repairReserve(), parking, details.amenityFee(), details.otherCharges());
+                    details.repairReserve(), parking, details.amenityFee(),
+                    (details.baseRatePerSqFt().compareTo(BigDecimal.ZERO) > 0 ? details.otherCharges() : BigDecimal.ZERO));
             BigDecimal cgstAmount = percent(taxable, details.cgstRate());
             BigDecimal sgstAmount = percent(taxable, details.sgstRate());
             BigDecimal total = taxable.add(cgstAmount).add(sgstAmount)

@@ -731,6 +731,39 @@
         #platformNoticeModal .notice-audience-card strong { display: block; font-size: .86rem; }
         #platformNoticeModal .notice-audience-card span { display: block; margin-top: .1rem; color: #71809a; font-size: .75rem; line-height: 1.35; }
         #platformNoticeModal .notice-footer-note { color: #71809a; font-size: .78rem; }
+        #platformNoticeModal #noticeEmergencyBox { cursor: pointer; border: 1px solid #dce3f0 !important; background: #ffffff; transition: all 0.2s ease; user-select: none; }
+        #platformNoticeModal #noticeEmergencyBox:hover { border-color: #f87171 !important; background: #fff8f8 !important; }
+        #platformNoticeModal #noticeEmergencyBox.is-escalated,
+        #platformNoticeModal #noticeEmergencyBox:has(#noticeEmergency:checked) {
+            border-color: #ef4444 !important;
+            background: #fef2f2 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+        }
+        #platformNoticeModal #noticeEmergency {
+            flex: 0 0 auto !important;
+            width: 2.75rem !important;
+            height: 1.5rem !important;
+            min-height: 1.5rem !important;
+            margin: 0 !important;
+            float: none !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 2rem !important;
+            background-color: #e2e8f0 !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%2364748b'/%3e%3c/svg%3e") !important;
+            background-position: left center !important;
+            background-repeat: no-repeat !important;
+            background-size: contain !important;
+            cursor: pointer !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            transition: background-position 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out !important;
+        }
+        #platformNoticeModal #noticeEmergency:checked {
+            background-color: #ef4444 !important;
+            border-color: #dc2626 !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23ffffff'/%3e%3c/svg%3e") !important;
+            background-position: right center !important;
+        }
         #addSocietyModal { overflow: hidden; }
         #addSocietyModal .modal-dialog { width: min(980px, calc(100vw - 2rem)); max-width: 980px; height: min(900px, calc(100dvh - 2rem)); margin: 1rem auto; }
         #addSocietyModal .modal-content { display:flex; height:100%; max-height:none; overflow:hidden; border:0; }
@@ -909,7 +942,17 @@
 
                         <div class="row g-3 mb-4">
                             <div class="col-md-6"><label for="noticeValidDays" class="notice-label">Visible for (days)</label><input class="form-control py-2" id="noticeValidDays" type="number" min="1" max="365" value="7" required></div>
-                            <div class="col-md-6 d-flex align-items-end"><div class="form-check form-switch border rounded-3 p-3 ps-5 w-100"><input class="form-check-input" id="noticeEmergency" type="checkbox"><label class="form-check-label fw-bold" for="noticeEmergency">Emergency escalation</label><small class="d-block text-muted">Highlight this notice across recipient dashboards.</small></div></div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <label class="border rounded-3 p-3 w-100 d-flex align-items-center gap-3 mb-0 shadow-xs" id="noticeEmergencyBox" for="noticeEmergency" style="cursor: pointer; background: #ffffff; min-height: 58px; transition: all 0.2s ease;">
+                                    <input class="form-check-input" id="noticeEmergency" type="checkbox" role="switch" style="cursor: pointer;">
+                                    <span class="d-block flex-grow-1">
+                                        <strong class="d-block fw-bold text-dark" id="noticeEmergencyLabel" style="font-size: 0.88rem; line-height: 1.25;">
+                                            <i class="fa-solid fa-triangle-exclamation text-danger me-1"></i> Emergency escalation
+                                        </strong>
+                                        <small class="d-block text-muted mt-1" style="font-size: 0.72rem; line-height: 1.25;">Highlight this notice across recipient dashboards.</small>
+                                    </span>
+                                </label>
+                            </div>
                         </div>
 
                         <div>
@@ -933,6 +976,124 @@
                 <div class="modal-header border-0 px-4 pt-4"><div><small class="text-primary fw-bold text-uppercase">Platform notice record</small><h5 class="modal-title fw-bold mt-1" id="platformNoticeDetailsLabel">Notice details</h5></div><button type="button" class="btn-close" data-notice-details-close aria-label="Close"></button></div>
                 <div class="modal-body px-4 pb-4"><div class="row g-3" id="platformNoticeDetailsBody"></div></div>
                 <div class="modal-footer border-0 px-4 pb-4 pt-0"><button type="button" class="btn btn-light rounded-pill px-4" data-notice-details-close>Close</button><button type="button" class="btn btn-primary rounded-pill px-4" id="btnEditNoticeFromDetails"><i class="fa-solid fa-pen me-2"></i>Edit notice</button></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Society Modal (Read-Only Detail View) -->
+    <div class="modal fade" id="viewSocietyModal" tabindex="-1" aria-labelledby="viewSocietyModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content shadow-lg border-0 rounded-4 overflow-hidden">
+                <div class="modal-header border-0 px-4 px-md-5 py-3 text-white" style="background: linear-gradient(135deg, #2563eb, #4f46e5);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle bg-white bg-opacity-20 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.25rem;">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <div>
+                            <div class="small text-white-50 text-uppercase fw-bold" style="letter-spacing: 0.5px;">Society Details</div>
+                            <h5 class="modal-title fw-bold mb-0 text-white" id="viewSocietyModalTitle">Society Profile</h5>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 p-md-5 bg-light">
+                    <!-- Society Identity Card -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-3 bg-white">
+                        <div class="d-flex justify-content-between align-items-start mb-3 border-bottom pb-3">
+                            <div>
+                                <h4 class="fw-bold text-dark mb-1" id="viewSocietyName">—</h4>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1" id="viewSocietyType">—</span>
+                            </div>
+                            <span class="badge rounded-pill px-3 py-2 fw-semibold" id="viewSocietyStatusBadge">Active</span>
+                        </div>
+                        <div class="row g-3 text-secondary" style="font-size: 0.92rem;">
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Registration Number</span>
+                                <strong class="text-dark" id="viewSocietyRegistration">—</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Official Website</span>
+                                <span id="viewSocietyWebsite">—</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Total Wings / Blocks</span>
+                                <strong class="text-dark" id="viewSocietyWings">—</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Total Units / Flats</span>
+                                <strong class="text-dark" id="viewSocietyUnits">—</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address & Location Card -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-3 bg-white">
+                        <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-location-dot text-danger me-2"></i>Location & Address</h6>
+                        <div class="row g-3" style="font-size: 0.92rem;">
+                            <div class="col-12">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Full Address</span>
+                                <span class="text-dark fw-semibold" id="viewSocietyAddress">—</span>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="text-muted d-block small fw-bold text-uppercase">City</span>
+                                <strong class="text-dark" id="viewSocietyCity">—</strong>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="text-muted d-block small fw-bold text-uppercase">State</span>
+                                <strong class="text-dark" id="viewSocietyState">—</strong>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Postal Code / Country</span>
+                                <strong class="text-dark" id="viewSocietyPostalCountry">—</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Administrator Details Card -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-3 bg-white">
+                        <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-user-shield text-primary me-2"></i>Society Administrator</h6>
+                        <div class="row g-3" style="font-size: 0.92rem;">
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Admin Name</span>
+                                <strong class="text-dark" id="viewSocietyAdminName">—</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Designation</span>
+                                <span class="text-dark" id="viewSocietyAdminDesignation">—</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Email Address</span>
+                                <a href="#" id="viewSocietyAdminEmail" class="text-primary text-decoration-none fw-semibold">—</a>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Phone Number</span>
+                                <span class="text-dark" id="viewSocietyAdminPhone">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscription & Onboarding Card -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                        <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-credit-card text-success me-2"></i>Subscription & Notes</h6>
+                        <div class="row g-3" style="font-size: 0.92rem;">
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Assigned Subscription Plan</span>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 fw-bold" id="viewSocietyPlan">—</span>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Approval State</span>
+                                <span class="fw-semibold" id="viewSocietyApprovedText">—</span>
+                            </div>
+                            <div class="col-12" id="viewSocietyNotesContainer">
+                                <span class="text-muted d-block small fw-bold text-uppercase">Onboarding Notes</span>
+                                <p class="text-muted mb-0 small" id="viewSocietyNotes">—</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 px-4 px-md-5 py-3 bg-white">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1500,7 +1661,68 @@
                 addSocietyModal.classList.remove("show");
             };
             document.getElementById("btnOpenAddSocietyModal")?.addEventListener("click", () => openAddSocietyModal());
-            window.openSocietyEditor = (society, administrator) => openAddSocietyModal(society, administrator);
+            window.openSocietyViewer = (society, administrator) => {
+                if (!society) return;
+                const modalEl = document.getElementById("viewSocietyModal");
+                if (!modalEl) return;
+                const setT = (id, val, fallback = "—") => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = val || fallback;
+                };
+                setT("viewSocietyModalTitle", society.societyName || "Society Profile");
+                setT("viewSocietyName", society.societyName || "Unnamed Society");
+                setT("viewSocietyType", society.societyType || "Apartment complex");
+                setT("viewSocietyRegistration", society.registrationNumber || "Not provided");
+                const webEl = document.getElementById("viewSocietyWebsite");
+                if (webEl) {
+                    if (society.website) {
+                        webEl.innerHTML = `<a href="${society.website}" target="_blank" class="text-primary text-decoration-none">${society.website}</a>`;
+                    } else {
+                        webEl.textContent = "Not specified";
+                    }
+                }
+                setT("viewSocietyWings", society.totalWings ? `${society.totalWings} Blocks/Wings` : "Not specified");
+                setT("viewSocietyUnits", society.totalUnits ? `${society.totalUnits} Units/Flats` : "Not specified");
+                const badge = document.getElementById("viewSocietyStatusBadge");
+                if (badge) {
+                    if (society.approved) {
+                        badge.className = "badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-semibold";
+                        badge.textContent = "Approved & Active";
+                    } else {
+                        badge.className = "badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3 py-2 fw-semibold";
+                        badge.textContent = "Pending Approval";
+                    }
+                }
+                setT("viewSocietyAddress", society.address || "No address entered");
+                setT("viewSocietyCity", society.city || "Not specified");
+                setT("viewSocietyState", society.state || "Not specified");
+                setT("viewSocietyPostalCountry", [society.postalCode, society.country || "India"].filter(Boolean).join(", ") || "India");
+                setT("viewSocietyAdminName", administrator?.name || society.contactName || "Administrator");
+                setT("viewSocietyAdminDesignation", administrator?.designation || "Society Administrator");
+                const emailEl = document.getElementById("viewSocietyAdminEmail");
+                const adminEmail = administrator?.email || society.contactEmail;
+                if (emailEl) {
+                    if (adminEmail) {
+                        emailEl.textContent = adminEmail;
+                        emailEl.href = `mailto:${adminEmail}`;
+                    } else {
+                        emailEl.textContent = "No email registered";
+                        emailEl.removeAttribute("href");
+                    }
+                }
+                setT("viewSocietyAdminPhone", administrator?.phone || society.phone || "No phone registered");
+                const plan = (window.platformPlans || []).find(p => String(p.id) === String(society.subscriptionPlanId));
+                setT("viewSocietyPlan", plan ? plan.name : "Unassigned");
+                setT("viewSocietyApprovedText", society.approved ? "Approved" : "Pending");
+                setT("viewSocietyNotes", society.onboardingNotes || "No internal onboarding notes logged.");
+                if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
+                    bootstrap.Modal.getOrCreateInstance(modalEl).show();
+                } else {
+                    modalEl.style.display = "block";
+                    modalEl.classList.add("show");
+                }
+            };
+            window.openSocietyEditor = (society, administrator) => window.openSocietyViewer(society, administrator);
             document.querySelectorAll("[data-add-society-close]").forEach(button => button.addEventListener("click", closeAddSocietyModal));
             addSocietyModal?.addEventListener("click", event => { if (event.target === addSocietyModal) closeAddSocietyModal(); });
             document.querySelector("[data-toggle-society-password]")?.addEventListener("click", event => {
@@ -1715,6 +1937,7 @@
                 setNoticeField("noticePriority", editing ? (notice.emergency ? "URGENT" : notice.priority) : "NORMAL");
                 setNoticeField("noticeValidDays", editing ? (notice.validDays || 7) : 7);
                 document.getElementById("noticeEmergency").checked = editing ? Boolean(notice.emergency) : false;
+                syncEmergencyEscalationState();
                 const target = document.getElementById("noticeTarget");
                 const specific = document.getElementById("specificSociety");
                 if (target) { target.value = editing ? (notice.targetLabel === "All registered societies" ? "ALL_REGISTERED_SOCIETIES" : "SPECIFIC_SOCIETY") : "ALL_REGISTERED_SOCIETIES"; target.disabled = editing; }
@@ -1758,6 +1981,39 @@
                 noticeModal.setAttribute("aria-hidden", "true");
                 document.body.classList.remove("modal-open");
             };
+            // Emergency switch visual sync & priority coupling
+            const noticeEmergencyCheckbox = document.getElementById("noticeEmergency");
+            const noticeEmergencyBox = document.getElementById("noticeEmergencyBox");
+            const noticePrioritySelect = document.getElementById("noticePriority");
+            const noticeCategorySelect = document.getElementById("noticeCategory");
+
+            function syncEmergencyEscalationState() {
+                if (!noticeEmergencyCheckbox) return;
+                const isChecked = Boolean(noticeEmergencyCheckbox.checked);
+                if (noticeEmergencyBox) {
+                    noticeEmergencyBox.classList.toggle("is-escalated", isChecked);
+                    if (isChecked) {
+                        noticeEmergencyBox.style.setProperty("border-color", "#ef4444", "important");
+                        noticeEmergencyBox.style.setProperty("background-color", "#fef2f2", "important");
+                    } else {
+                        noticeEmergencyBox.style.removeProperty("border-color");
+                        noticeEmergencyBox.style.removeProperty("background-color");
+                    }
+                }
+            }
+
+            if (noticeEmergencyCheckbox) {
+                noticeEmergencyCheckbox.addEventListener("change", () => {
+                    syncEmergencyEscalationState();
+                    if (noticeEmergencyCheckbox.checked) {
+                        if (noticePrioritySelect) noticePrioritySelect.value = "URGENT";
+                        if (noticeCategorySelect && noticeCategorySelect.value === "General Announcement") {
+                            noticeCategorySelect.value = "Emergency Alert";
+                        }
+                    }
+                });
+            }
+
             if (btnOpenNoticeModal) {
                 btnOpenNoticeModal.addEventListener("click", (e) => {
                     e.preventDefault();

@@ -1,6 +1,6 @@
 /* Shared flat data presentation for every authenticated dashboard. */
-body.dashboard-body .dashboard-container [data-view] .card:not(.maintenance-command-banner),
-body.dashboard-body .dashboard-container [data-view] .card:not(.maintenance-command-banner):hover,
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .card:not(.maintenance-command-banner),
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .card:not(.maintenance-command-banner):hover,
 body.app-dashboard .dash-main .dash-panel .dash-card,
 body.app-dashboard .dash-main .dash-panel .dash-card:hover {
     border: 0 !important;
@@ -11,15 +11,15 @@ body.app-dashboard .dash-main .dash-panel .dash-card:hover {
     transform: none !important;
 }
 
-body.dashboard-body .dashboard-container [data-view] .card-header,
-body.dashboard-body .dashboard-container [data-view] .card-body,
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .card-header,
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .card-body,
 body.app-dashboard .dash-main .dash-panel .card-head {
     border-radius: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
 }
 
-body.dashboard-body .dashboard-container [data-view] .card-header,
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .card-header,
 body.app-dashboard .dash-main .dash-panel .card-head {
     border-bottom: 0 !important;
 }
@@ -57,12 +57,12 @@ body.dashboard-body .dashboard-container [data-view] .stats article {
     box-shadow: 0 5px 16px rgba(29, 42, 72, .06) !important;
 }
 
-body.dashboard-body .dashboard-container [data-view] .border.rounded-3:not(.maintenance-command-banner),
-body.dashboard-body .dashboard-container [data-view] .border.rounded-4:not(.maintenance-command-banner),
-body.dashboard-body .dashboard-container [data-view] .bg-white.rounded-3:not(.maintenance-command-banner),
-body.dashboard-body .dashboard-container [data-view] .bg-white.rounded-4:not(.maintenance-command-banner),
-body.dashboard-body .dashboard-container [data-view] .bg-light.rounded-3:not(.maintenance-command-banner),
-body.dashboard-body .dashboard-container [data-view] .bg-light.rounded-4:not(.maintenance-command-banner),
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .border.rounded-3:not(.maintenance-command-banner),
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .border.rounded-4:not(.maintenance-command-banner),
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .bg-white.rounded-3:not(.maintenance-command-banner),
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .bg-white.rounded-4:not(.maintenance-command-banner),
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .bg-light.rounded-3:not(.maintenance-command-banner),
+body.dashboard-body .dashboard-container [data-view]:not([data-view="maintenance-chat"]):not([data-view="chats"]):not([data-view="live-chat"]) .bg-light.rounded-4:not(.maintenance-command-banner),
 body.app-dashboard .dash-main .dash-panel .task-list,
 body.app-dashboard .dash-main .dash-panel .report-bars {
     border: 0 !important;

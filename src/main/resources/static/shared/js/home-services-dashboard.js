@@ -768,48 +768,7 @@
     }
 
     function homeServicesMarkup() {
-        return `
-            <div data-home-services-root id="homeServicesDashboardModern">
-                <section class="hs-strip" id="nobrokerBookingsTableAnchor">
-                    <div class="hs-strip-header">
-                        <h5 class="hs-strip-title">My Service Bookings</h5>
-                        <button type="button" class="hs-mainbar-btn" style="padding: 6px 16px; font-size: 0.8rem;" onclick="loadNoBrokerMaintenanceTickets()">Refresh</button>
-                    </div>
-                    <div style="overflow-x: auto;">
-                        <table class="hs-table">
-                            <thead>
-                                <tr>
-                                    <th>Ticket #</th>
-                                    <th>Service Type</th>
-                                    <th>Schedule Date</th>
-                                    <th>Address</th>
-                                    <th>Estimated Price</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="noBrokerMaintenanceRows">
-                                <tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 24px;">Loading service bookings...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <section class="hs-strip">
-                    <div class="hs-strip-header">
-                        <h5 class="hs-strip-title">Frequently Asked Questions</h5>
-                    </div>
-                    <div class="hs-faq-list">
-                        ${faqs.map(([q, a]) => `
-                            <details>
-                                <summary>${escapeHtml(q)}</summary>
-                                <p>${escapeHtml(a)}</p>
-                            </details>
-                        `).join("")}
-                    </div>
-                </section>
-            </div>
-        `;
+        return "";
     }
 
     function enhanceSection() {
@@ -817,22 +776,6 @@
         if (!section) return;
         addStyles();
         upsertServiceOptions();
-
-        const markup = homeServicesMarkup();
-        const existingModernHub = section.querySelector("#homeServicesDashboardModern");
-        const hasLegacyNoBrokerContent = Boolean(
-            section.querySelector("#carpentryCatalogue, .nobroker-cat-item, .nb-service-thumb, [data-nb-service]")
-        );
-
-        if (hasLegacyNoBrokerContent) {
-            if (existingModernHub) {
-                existingModernHub.outerHTML = markup;
-            } else {
-                section.insertAdjacentHTML("beforeend", markup);
-            }
-        } else {
-            section.innerHTML = markup;
-        }
         section.dataset.homeServicesEnhanced = "true";
         repairLegacyNoBrokerIcons();
     }

@@ -19,11 +19,6 @@
             : remaining === null ? "Completion estimate pending" : remaining > 0 ? `About ${remaining} min remaining` : "Estimate elapsed · awaiting maintenance update";
         return `<tr><td><strong>${escapeText(ticket.ticketId || `#${ticket.id}`)}</strong></td><td>${escapeText(ticket.serviceType)}<br><small>${escapeText(ticket.description)}</small></td><td>${ticket.preferredAt ? escapeText(new Date(ticket.preferredAt).toLocaleString("en-IN")) : "Visit pending"}</td><td>${escapeText(ticket.serviceAddress)}</td><td>${escapeText(ticket.vendorName || "Awaiting technician")}<br><small>${escapeText(ticket.vendorNotes || "No work notes yet")}</small></td><td><span class="badge ${done ? "bg-success" : "bg-primary"}">${escapeText(ticket.workProgress || ticket.ticketStatus)}</span></td><td>${escapeText(time)}</td></tr>`;
     }).join("") : '<tr><td colspan="7">No service bookings yet.</td></tr>';
-    if (!document.getElementById("nobrokerServicesSection") && !document.getElementById("customerNoBrokerServicesSection")) {
-        const catalogueScript = document.createElement("script");
-        catalogueScript.src = "/shared/js/carpentry-catalogue.js?v=20260910-inline-service-images-v1";
-        document.head.appendChild(catalogueScript);
-    }
     const panelId = "services";
     const title = isPropertyDirectCustomer ? "Home services" : "Maintenance services";
     const subtitle = isPropertyDirectCustomer
@@ -153,7 +148,7 @@
     function renderPanel() {
         const panel = document.querySelector(`[data-view="${panelId}"]`);
         if (!panel || panel.dataset.catalogueReady) return;
-        if ((panel.id === "nobrokerServicesSection" || panel.id === "customerNoBrokerServicesSection") && panel.children.length) {
+        if (panel.id === "nobrokerServicesSection" || panel.id === "customerNoBrokerServicesSection" || panel.querySelector("#nobrokerCategoryGrid") || panel.children.length) {
             panel.dataset.catalogueReady = "true";
             return;
         }

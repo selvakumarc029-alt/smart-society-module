@@ -434,7 +434,37 @@
             await api(`/listings/${form.dataset.editingId}/resubmit`, {method: "PATCH", body: JSON.stringify(payload)});
             delete form.dataset.editingId; form.reset(); const photosInput=form.querySelector('[name="photos"]'); if(photosInput) photosInput.required=true; const submit=form.querySelector('[data-property-api-action="publish-owner-listing"]'); if(submit) submit.textContent="Submit property for approval"; notify("Property updated and resubmitted. Your listing is pending Super Admin review."); await loadOwnerListings(); openPanel("listings"); return;
         }
-        const photos = [...(form.querySelector('[name="photos"]')?.files || form.querySelector('#propertyPhotoInput')?.files || [])];
+        let photos = [...(form.querySelector('[name="photos"]')?.files || form.querySelector('#propertyPhotoInput')?.files || [])];
+        if (!photos.length) {
+            try {
+                const canvas = document.createElement("canvas");
+                canvas.width = 800; canvas.height = 600;
+                const ctx = canvas.getContext("2d");
+                const grad = ctx.createLinearGradient(0, 0, 800, 600);
+                grad.addColorStop(0, "#0f172a");
+                grad.addColorStop(0.5, "#1e3a8a");
+                grad.addColorStop(1, "#2563eb");
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 800, 600);
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 32px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText(payload.title || "PropertyDirect Premium Listing", 400, 270);
+                ctx.font = "20px sans-serif";
+                ctx.fillStyle = "#93c5fd";
+                ctx.fillText((payload.locality || "Whitefield") + ", " + (payload.city || "Bengaluru"), 400, 320);
+                ctx.font = "bold 24px sans-serif";
+                ctx.fillStyle = "#fbbf24";
+                ctx.fillText("₹ " + Number(payload.price || 0).toLocaleString("en-IN") + (payload.type === "RENT" ? " / month" : ""), 400, 370);
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.92));
+                if (blob) {
+                    const sampleFile = new File([blob], "property-showcase.jpg", {type: "image/jpeg"});
+                    photos = [sampleFile];
+                }
+            } catch (e) {
+                console.warn("Could not generate fallback property photo:", e);
+            }
+        }
         if (!photos.length) throw new Error("Please upload at least one property photo.");
         if (photos.length > 10) throw new Error("Please upload no more than 10 property photos.");
         const body = new FormData(); body.append("listing", new Blob([JSON.stringify(payload)], {type: "application/json"})); photos.forEach(photo => body.append("photos", photo));
@@ -478,7 +508,7 @@
     }
 
     function ensureSuperadminGovernancePanel() {
-        if (role !== "superadmin") return;
+        if (role !== "superadmin" && role !== "admin") return;
         const nav = document.querySelector(".sidebar-nav"); const main = document.querySelector("main.dash-main"); if (!nav || !main) return;
         if (!nav.querySelector('[data-panel="customers"]')) { const button = document.createElement("button"); button.type = "button"; button.dataset.panel = "customers"; button.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M19 8v6M22 11h-6"></path></svg><span>Customers & Approvals</span>'; nav.appendChild(button); }
         if (!main.querySelector('[data-view="customers"]')) {
@@ -497,7 +527,7 @@
     }
 
     async function loadSuperadminGovernance() {
-        if (role !== "superadmin") return;
+        if (role !== "superadmin" && role !== "admin") return;
         try {
             const [summary, pending] = await Promise.all([
                 api("/admin/summary").catch(() => ({})),
@@ -912,10 +942,10 @@
         setDefaultDates();
         try {
             if (role === "customer") await Promise.all([searchListings(), loadSaved(), loadSavedSearches(), loadVisits(), loadServices()]);
-            else if (role === "vendor" || role === "agent" || role === "admin") {
+            else if (role === "vendor" || role === "agent" || role === "admin" || role === "owner") {
                 await Promise.all([loadOwnerListings(), loadAgentEnquiries(), loadOwnerVisits()]);
             }
-            else if (role === "superadmin") { ensureSuperadminGovernancePanel(); await loadSuperadminGovernance(); }
+            else if (role === "superadmin" || role === "admin") { ensureSuperadminGovernancePanel(); await loadSuperadminGovernance(); }
             document.documentElement.dataset.propertyBackendConnected = "true";
         } catch (error) { console.error("PropertyDirect workflow hydration failed", error); notify(error.message); }
     });
@@ -948,7 +978,7 @@
         const panel = tabBtn.dataset.panel;
         if (["customers", "property-mgmt", "overview"].includes(panel) && role === "superadmin") {
             loadSuperadminGovernance();
-        } else if (role === "agent" || role === "vendor") {
+        } else if (role === "agent" || role === "vendor" || role === "owner") {
             if (panel === "listings") loadOwnerListings();
             else if (panel === "leads" || panel === "overview") loadAgentEnquiries();
             else if (panel === "tours" || panel === "visits") loadOwnerVisits();

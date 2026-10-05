@@ -539,172 +539,113 @@
                 </section>
 
                 <!-- Home Services & Pricing CRUD Management Panel -->
+                                <!-- Home Services & Pricing CRUD Management Panel (Resident Dashboard Card Model) -->
                 <section class="d-none animate__animated animate__fadeIn" data-view="home-services" id="home-services-panel" data-alt-view="service-pricing">
+                    <link rel="stylesheet" href="/smartapartment/css/service-category-cards.css?v=20261005-v1">
                     <style>
-                        .pricing-amount-pill {
-                            display: inline-flex;
-                            align-items: center;
-                            gap: 2px;
-                            background: #f1f5f9;
-                            border: 1px solid #cbd5e1;
-                            border-radius: 9999px;
-                            padding: 3px 12px;
-                            font-weight: 700;
-                            color: #0f172a;
-                            font-size: 0.95rem;
+                        .admin-service-card {
+                            background: #ffffff !important;
+                            border: 1px solid #e2e8f0 !important;
+                            border-radius: 16px !important;
+                            padding: 1.15rem 0.85rem 0.95rem !important;
+                            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02) !important;
+                            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                            position: relative !important;
+                            display: flex !important;
+                            flex-direction: column !important;
+                            align-items: center !important;
+                            text-align: center !important;
+                            height: 100% !important;
                         }
-                        .pricing-amount-pill .currency-symbol {
-                            color: #0284c7;
-                            font-size: 0.85rem;
-                            font-weight: 800;
+                        .admin-service-card:hover {
+                            transform: translateY(-3px) !important;
+                            box-shadow: 0 10px 22px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.04) !important;
+                            border-color: #93c5fd !important;
                         }
-                        .btn-xs {
-                            padding: 2px 7px;
-                            font-size: 0.75rem;
-                            line-height: 1.2;
-                        }
-                        #adminPricingTable tr:hover {
-                            background-color: #f8fafc;
+                        .admin-price-badge-box {
+                            background: #f8fafc;
+                            border: 1px solid #e2e8f0;
+                            border-radius: 12px;
+                            padding: 8px 12px;
+                            width: 100%;
+                            margin-top: auto;
                         }
                     </style>
 
-                    <!-- Top Summary Stats Row -->
-                    <div class="row g-4 mb-4 stats">
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card">
-                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-box-archive text-primary"></i> Active Packages
-                                </span>
-                                <strong class="fs-2 fw-bold text-dark mt-2 d-block" id="statTotalPackages">0</strong>
-                                <small class="text-muted mt-1">Across all categories</small>
-                            </article>
+                    <!-- Top Header matching Resident Dashboard style -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                        <div>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill small fw-semibold">
+                                <i class="fa-solid fa-screwdriver-wrench me-1"></i> Live Pricing Control
+                            </span>
+                            <h4 class="fw-bold mb-0 mt-2 text-dark">
+                                Home Services &amp; Pricing Management
+                            </h4>
+                            <p class="text-muted small mb-0 mt-1">
+                                Edit starting rates and service packages. Updates reflect instantly across the resident dashboard.
+                            </p>
                         </div>
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card">
-                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-layer-group text-info"></i> Categories
-                                </span>
-                                <strong class="fs-2 fw-bold text-primary mt-2 d-block" id="statCoveredCategories">0</strong>
-                                <small class="text-muted mt-1">Clean, Repair, Appliances &amp; more</small>
-                            </article>
-                        </div>
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card">
-                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-tag text-success"></i> Min Package Price
-                                </span>
-                                <strong class="fs-2 fw-bold text-success mt-2 d-block" id="statMinPrice">₹0</strong>
-                                <small class="text-muted mt-1">Entry-level services</small>
-                            </article>
-                        </div>
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card">
-                                <span class="text-muted small fw-bold text-uppercase d-flex align-items-center gap-2">
-                                    <i class="fa-solid fa-gem text-warning"></i> Max Package Price
-                                </span>
-                                <strong class="fs-2 fw-bold text-warning-emphasis mt-2 d-block" id="statMaxPrice" style="color: #d97706 !important;">₹0</strong>
-                                <small class="text-muted mt-1">Full apartment / premium plans</small>
-                            </article>
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold shadow-xs" onclick="window.loadAdminPackages()">
+                                <i class="fa-solid fa-rotate me-1"></i> Refresh
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary rounded-pill btn-sm px-3 fw-bold shadow-xs" onclick="window.resetToDefaultPricingCatalog()">
+                                <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reset Defaults
+                            </button>
+                            <button type="button" class="btn btn-primary rounded-pill btn-sm px-3 fw-bold shadow-xs" onclick="window.openAddPackageModal()">
+                                <i class="fa-solid fa-plus me-1"></i> Add Custom Package
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Main Pricing Catalog Card -->
-                    <div class="card shadow-sm border rounded-4 mb-4 overflow-hidden">
-                        <div class="card-header bg-white border-bottom pt-4 pb-3 px-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
-                            <div style="flex: 1 1 480px;">
-                                <h4 class="fw-bold mb-1 d-flex align-items-center gap-2 flex-wrap">
-                                    <i class="fa-solid fa-screwdriver-wrench text-primary"></i> Home Services &amp; Pricing Catalog
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill fw-semibold px-2.5 py-1" style="font-size: 0.72rem;">
-                                        <i class="fa-solid fa-bolt me-1"></i> Live Real-Time Sync
-                                    </span>
-                                </h4>
-                                <p class="text-muted small mb-0 mt-1" style="max-width: 820px; line-height: 1.45;">
-                                    Control live pricing for all home service packages. Changes save directly to the database and sync instantly to resident &amp; customer booking catalogs.
-                                </p>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap" style="flex: 0 0 auto;">
-                                <button type="button" class="catalog-btn-refresh shadow-xs" onclick="window.loadAdminPackages()" title="Refresh live catalog">
-                                    <i class="fa-solid fa-rotate"></i> Refresh
-                                </button>
-                                <button type="button" class="catalog-btn-reseed shadow-xs" onclick="window.resetToDefaultPricingCatalog()" title="Reset / seed missing default packages">
-                                    <i class="fa-solid fa-arrow-rotate-left"></i> Re-seed Defaults
-                                </button>
-                                <button type="button" class="catalog-btn-add shadow-xs" onclick="window.openAddPackageModal()">
-                                    <i class="fa-solid fa-plus"></i> Add New Package
-                                </button>
-                            </div>
+                    <!-- 8 Core Service Categories Grid (Card View - EXACT SAME as Resident Dashboard) -->
+                    <div class="row g-2 g-md-3 mb-4" id="adminCategoryCardsGrid">
+                        <div class="col-12 text-center py-5">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <div class="text-muted small mt-2">Loading live service categories...</div>
                         </div>
+                    </div>
 
-                        <!-- Filter Toolbar -->
-                        <div class="catalog-filter-bar">
-                            <div class="catalog-search-wrapper">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <input type="text" id="pricingSearchInput" placeholder="Search packages, services, prices..." oninput="window.filterPricingTable()">
+                    <!-- Category Packages Modal for editing sub-packages -->
+                    <div class="modal fade" id="categoryPackagesModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content rounded-4 border-0 shadow">
+                                <div class="modal-header border-0 pb-0 px-4 pt-4">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div id="catModalIconWrapper" class="service-icon-circle service-circle-red" style="width: 44px; height: 44px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                                            <i id="catModalIcon" class="fa-solid fa-house-chimney"></i>
+                                        </div>
+                                        <div>
+                                            <h5 class="modal-title fw-bold text-dark mb-0" id="catModalTitle">Category Packages</h5>
+                                            <span class="text-muted small" id="catModalSubtitle">Manage individual packages and rates</span>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body px-4 py-3">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0" style="font-size: 0.88rem;">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Package</th>
+                                                    <th>Scope / Details</th>
+                                                    <th style="width: 150px;">Live Price (₹)</th>
+                                                    <th style="width: 120px;" class="text-end">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="catModalTableBody">
+                                                <!-- Rows injected by JS -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-0 px-4 pb-4 pt-0 d-flex justify-content-between">
+                                    <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold" onclick="window.openAddPackageForCategoryModal()">
+                                        <i class="fa-solid fa-plus me-1"></i> Add Package to Category
+                                    </button>
+                                    <button type="button" class="btn btn-secondary rounded-pill btn-sm px-4 fw-bold" data-bs-dismiss="modal">Close</button>
+                                </div>
                             </div>
-                            <div class="catalog-select-wrapper">
-                                <select id="pricingCategoryFilter" onchange="window.filterPricingTable()">
-                                    <option value="ALL">All Categories</option>
-                                </select>
-                            </div>
-                            <div class="catalog-select-wrapper">
-                                <select id="pricingSortSelect" onchange="window.filterPricingTable()">
-                                    <option value="DEFAULT">Default Ordering</option>
-                                    <option value="PRICE_ASC">Price: Low to High</option>
-                                    <option value="PRICE_DESC">Price: High to Low</option>
-                                    <option value="NAME_ASC">Package Name (A-Z)</option>
-                                </select>
-                            </div>
-                            <button type="button" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1 shadow-xs" onclick="window.resetPricingFilter()" title="Clear filters" style="height: 38px; border-radius: 10px; font-size: 0.82rem; font-weight: 600; padding: 0 14px; background: #ffffff;">
-                                <i class="fa-solid fa-xmark"></i> Clear
-                            </button>
-
-                            <!-- View Mode Switcher: Cards vs Table -->
-                            <div class="catalog-view-switcher" role="group" aria-label="View toggle">
-                                <button type="button" id="pricingViewCardsBtn" class="catalog-view-btn active" onclick="window.setPricingViewMode('cards')" title="Card View">
-                                    <i class="fa-solid fa-border-all"></i> Cards
-                                </button>
-                                <button type="button" id="pricingViewTableBtn" class="catalog-view-btn" onclick="window.setPricingViewMode('table')" title="Table View">
-                                    <i class="fa-solid fa-table-list"></i> Table
-                                </button>
-                            </div>
-
-                            <div class="ms-auto">
-                                <span class="badge bg-white text-secondary border px-3 py-2 rounded-pill fw-semibold shadow-xs" id="pricingFilteredCount" style="font-size: 0.78rem;">
-                                    Loading packages...
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Card View Container (Default Active) -->
-                        <div id="adminPricingCardView" class="catalog-card-grid">
-                            <div class="text-center py-5" style="grid-column: 1 / -1;">
-                                <div class="spinner-border text-primary" role="status"></div>
-                            </div>
-                        </div>
-
-                        <!-- Pricing Table Container (Toggled) -->
-                        <div class="table-responsive" id="adminPricingTableView" style="display: none;">
-                            <table class="table table-hover align-middle mb-0" id="adminPricingTable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 60px;" class="text-center">ID</th>
-                                        <th style="width: 180px;">Service / Category</th>
-                                        <th style="width: 170px;">Designation / Type</th>
-                                        <th style="width: 210px;">Package Name</th>
-                                        <th style="width: 170px;">Live Price (₹)</th>
-                                        <th>Features &amp; Scope</th>
-                                        <th style="width: 100px;" class="text-center">Status</th>
-                                        <th style="width: 140px;" class="text-end">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminPricingTableBody">
-                                    <tr>
-                                        <td colspan="8" class="text-center py-5">
-                                            <div class="spinner-border text-primary" role="status"></div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </section>

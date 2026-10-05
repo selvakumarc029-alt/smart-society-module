@@ -3344,360 +3344,425 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
 
 
-        /* 3. Ensure sidebar scrolling & height fits all 12 navigation items without large bottom gap */
+        /* ==========================================================================
+           PIXEL-PERFECT ADMIN SIDEBAR & HEADER HARMONY SYSTEM
+           ========================================================================== */
 
-        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar {
-
+        /* 1. FIXED SIDEBAR - EXACT 280px WIDTH */
+        html body.app-dashboard[data-platform="propertydirect"] aside.dash-sidebar,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar,
+        .dash-sidebar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            width: 280px !important;
+            min-width: 280px !important;
+            max-width: 280px !important;
             height: 100vh !important;
-
             height: 100dvh !important;
-
+            padding: 0 14px 14px 14px !important;
+            background: linear-gradient(180deg, #091326 0%, #0d1e3d 100%) !important;
+            color: #e2e8f0 !important;
             display: flex !important;
-
             flex-direction: column !important;
-
-            padding: 0 10px 10px 10px !important;
-
+            justify-content: space-between !important;
+            z-index: 1040 !important;
+            border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 4px 0 24px rgba(5, 12, 28, 0.25) !important;
             box-sizing: border-box !important;
-
+            overflow: hidden !important;
+            transform: none !important;
         }
 
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav {
-
-            flex: 1 1 auto !important;
-
-            min-height: 0 !important;
-
-            height: auto !important;
-
-            max-height: none !important;
-
-            overflow-y: auto !important;
-
-            scrollbar-width: none !important;
-
-            padding: 10px 4px 6px 0 !important;
-
-            margin-bottom: 0 !important;
-
-            gap: 2px !important;
-
-        }
-
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-user-card {
-
-            flex-shrink: 0 !important;
-
-            position: relative !important;
-
-            bottom: auto !important;
-
-            left: auto !important;
-
-            right: auto !important;
-
-            margin-top: auto !important;
-
-            padding: 8px 12px !important;
-
-            border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
-
-        }
-
-
-
-                /* Exact Seamless Horizontal Baseline Alignment (72px) between Brand & Header */
-
+        /* 2. SIDEBAR TOP BRAND - LOCKED TO EXACT 76px HEIGHT MATCHING MAIN HEADER */
         html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .dash-brand,
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
-
-            height: 72px !important;
-
-            min-height: 72px !important;
-
-            max-height: 72px !important;
-
-            box-sizing: border-box !important;
-
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-
-            margin: 0 !important;
-
-            padding: 0 16px !important;
-
-            display: flex !important;
-
-            align-items: center !important;
-
-        }
-
-
-
-        html body.app-dashboard[data-platform="propertydirect"] main.dash-main > .dash-header,
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-header {
-
-            height: 72px !important;
-
-            min-height: 72px !important;
-
-            max-height: 72px !important;
-
-            box-sizing: border-box !important;
-
-            border-bottom: 1px solid #e2e8f0 !important;
-
-            margin: 0 !important;
-
-            padding: 0 28px !important;
-
-            display: flex !important;
-
-            align-items: center !important;
-
-            justify-content: space-between !important;
-
-        }
-
-
-
-        /* 4. Desktop Header: Title on Left, Actions on Right, No Collisions, Zero Margins */
-
-        @media (min-width: 901px) {
-
-            html body.app-dashboard[data-platform="propertydirect"] .dash-header .dashboard-menu-toggle,
-
-            html body.app-dashboard[data-platform="propertydirect"] .dashboard-menu-toggle {
-
-                display: none !important;
-
-            }
-
-        }
-
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-header {
-
-            min-height: 70px !important;
-
-            height: 70px !important;
-
-            max-height: 70px !important;
-
-            padding: 0 28px !important;
-
-            margin: 0 !important;
-
-            background: #ffffff !important;
-
-            border-bottom: 1px solid #e2e8f0 !important;
-
-            display: flex !important;
-
-            align-items: center !important;
-
-            justify-content: space-between !important;
-
-            box-sizing: border-box !important;
-
-            width: 100% !important;
-
-            gap: 16px !important;
-
-        }
-
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-header > div:first-of-type {
-
-            flex: 1 1 auto !important;
-
-            min-width: 0 !important;
-
-            text-align: left !important;
-
-        }
-
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-header .header-actions {
-
+        html body.app-dashboard[data-platform="propertydirect"] .dash-brand,
+        .dash-brand {
+            width: calc(100% + 28px) !important;
+            height: 76px !important;
+            min-height: 76px !important;
+            max-height: 76px !important;
             flex-shrink: 0 !important;
-
+            margin: 0 -14px !important;
+            padding: 0 16px !important;
             display: flex !important;
-
             align-items: center !important;
-
-            gap: 10px !important;
-
+            gap: 12px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-sizing: border-box !important;
+            text-decoration: none !important;
         }
 
+        .dash-brand h4 {
+            font-size: 1.18rem !important;
+            font-weight: 800 !important;
+            color: #ffffff !important;
+            letter-spacing: -0.02em !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+        }
 
+        /* 3. SCROLLABLE SIDEBAR NAVIGATION - NEVER CUT OFF BUTTONS */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav,
+        .dash-sidebar .sidebar-nav {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+            height: auto !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+            margin: 10px 0 !important;
+            padding: 0 2px 8px 2px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4px !important;
+            box-sizing: border-box !important;
+        }
+        .dash-sidebar .sidebar-nav::-webkit-scrollbar {
+            width: 0 !important;
+            height: 0 !important;
+            display: none !important;
+        }
 
-        html body.app-dashboard[data-platform="propertydirect"] .dash-header h1,
+        /* 4. SIDEBAR NAVIGATION BUTTONS */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button,
+        .dash-sidebar .sidebar-nav button {
+            width: 100% !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            padding: 0 12px !important;
+            margin: 0 !important;
+            border-radius: 9px !important;
+            border: 1px solid transparent !important;
+            background: transparent !important;
+            color: #94a3b8 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            font-size: 0.84rem !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            text-align: left !important;
+            transition: all 0.18s ease !important;
+            box-sizing: border-box !important;
+            flex-shrink: 0 !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button:hover:not(.active),
+        .dash-sidebar .sidebar-nav button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.08) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.06) !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-nav button.active,
+        .dash-sidebar .sidebar-nav button.active {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+            color: #ffffff !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* 5. SIDEBAR FOOTER & LOGOUT - CLEAN BOTTOM DOCKING (NO OVERLAP) */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .sidebar-user-card,
+        body.app-dashboard[data-platform="propertydirect"] .sidebar-user-card,
+        .dash-sidebar .sidebar-user-card {
+            position: relative !important;
+            bottom: auto !important;
+            left: auto !important;
+            right: auto !important;
+            top: auto !important;
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: 52px !important;
+            padding-top: 10px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+            border-bottom: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            background: transparent !important;
+            box-sizing: border-box !important;
+            transform: none !important;
+            z-index: 10 !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .sidebar-user-card .logout,
+        .sidebar-user-card .logout {
+            width: 100% !important;
+            height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
+            border-radius: 9px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            background: rgba(239, 68, 68, 0.12) !important;
+            border: 1px solid rgba(239, 68, 68, 0.28) !important;
+            color: #f87171 !important;
+            font-weight: 700 !important;
+            font-size: 0.84rem !important;
+            cursor: pointer !important;
+            text-decoration: none !important;
+            transition: all 0.2s ease !important;
+            box-sizing: border-box !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .sidebar-user-card .logout:hover,
+        .sidebar-user-card .logout:hover {
+            background: rgba(239, 68, 68, 0.22) !important;
+            border-color: rgba(239, 68, 68, 0.45) !important;
+            color: #ffffff !important;
+        }
+
+        /* 6. MAIN CONTENT AREA & TOPBAR GRID ALIGNMENT */
+        html body.app-dashboard[data-platform="propertydirect"] main.dash-main,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-main,
+        .dash-main {
+            margin-left: 280px !important;
+            width: calc(100% - 280px) !important;
+            max-width: calc(100% - 280px) !important;
+            min-height: 100vh !important;
+            padding: 0 32px 48px 32px !important;
+            background: #f8fafc !important;
+            display: flex !important;
+            flex-direction: column !important;
+            overflow-x: hidden !important;
+            overflow-y: visible !important;
+            box-sizing: border-box !important;
+        }
+
+        /* 7. TOPBAR HEADER - EXACT 76px HEIGHT MATCHING SIDEBAR BRAND */
+        html body.app-dashboard[data-platform="propertydirect"] main.dash-main > .dash-header,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header,
+        .dash-header {
+            height: 76px !important;
+            min-height: 76px !important;
+            max-height: 76px !important;
+            box-sizing: border-box !important;
+            border: 0 !important;
+            border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
+            border-radius: 0 !important;
+            margin: 0 -32px 24px -32px !important;
+            padding: 0 32px !important;
+            width: calc(100% + 64px) !important;
+            background: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1020 !important;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+            gap: 16px !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header > div:first-child {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            min-width: 0 !important;
+            flex: 1 1 auto !important;
+        }
 
         html body.app-dashboard[data-platform="propertydirect"] .dash-header #panelTitle {
-
             font-size: 1.35rem !important;
-
             font-weight: 800 !important;
-
-            white-space: nowrap !important;
-
-            overflow: hidden !important;
-
-            text-overflow: ellipsis !important;
-
+            color: #0f172a !important;
             margin: 2px 0 0 0 !important;
-
             line-height: 1.2 !important;
-
+            letter-spacing: -0.02em !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
-
-
 
         html body.app-dashboard[data-platform="propertydirect"] .dash-header .propertydirect-section-eyebrow {
-
             font-size: 0.72rem !important;
-
-            letter-spacing: 0.08em !important;
-
             font-weight: 800 !important;
-
-            white-space: nowrap !important;
-
             color: #64748b !important;
-
+            letter-spacing: 0.08em !important;
+            text-transform: uppercase !important;
             margin: 0 !important;
-
+            line-height: 1.2 !important;
+            white-space: nowrap !important;
         }
 
+        html body.app-dashboard[data-platform="propertydirect"] .dash-header .header-actions {
+            flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+        }
 
-
-        /* 5. Eliminate unwanted vertical gaps across all dashboard panels */
-
+        /* 8. PANELS & CARD SYSTEM */
         html body.app-dashboard[data-platform="propertydirect"] .dash-panel {
-
-            padding: 16px 28px 24px 28px !important;
-
+            padding: 0 !important;
             margin: 0 !important;
-
             width: 100% !important;
-
             max-width: 100% !important;
-
             box-sizing: border-box !important;
-
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+        }
+        html body.app-dashboard[data-platform="propertydirect"] .dash-panel.hidden,
+        html body.app-dashboard[data-platform="propertydirect"] .dash-panel[hidden] {
+            display: none !important;
         }
 
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-card {
-
-            margin: 0 0 16px 0 !important;
-
-            border-radius: 14px !important;
-
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05) !important;
-
-        }
-
-
-
-        /* 6. Clean Table Card (No nested border gaps or double padding) */
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-card:has(.dashboard-table-scroll),
-
-        html body.app-dashboard[data-platform="propertydirect"] #subtabEnquiriesView,
-
-        html body.app-dashboard[data-platform="propertydirect"] #subtabVisitsView {
-
-            padding: 0 !important;
-
+        /* 9. CARD CONTAINER & CARD HEAD ALIGNMENT */
+        html body.app-dashboard[data-platform="propertydirect"] .dash-card,
+        .dash-card {
+            background: #ffffff !important;
+            border: 1px solid var(--pd-border, #e2e8f0) !important;
+            border-radius: 16px !important;
+            padding: 24px !important;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03) !important;
+            box-sizing: border-box !important;
             overflow: hidden !important;
-
-            border: 1px solid #e2e8f0 !important;
-
-            border-radius: 14px !important;
-
+            margin: 0 0 24px 0 !important;
         }
 
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll {
-
-            margin: 0 !important;
-
+        /* TABLE CARDS - FLUSH TABLE BORDERS WITH EXPLICIT 24px CARD-HEAD PADDING */
+        html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card:has(table), .dash-card:has(.dashboard-table-scroll), .dash-card.table-card),
+        .dash-card.table-card {
             padding: 0 !important;
-
-            border: none !important;
-
-            border-radius: 0 !important;
-
+            display: flex !important;
+            flex-direction: column !important;
         }
 
-
-
-        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table {
-
+        html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card:has(table), .dash-card:has(.dashboard-table-scroll), .dash-card.table-card) .card-head,
+        .dash-card.table-card .card-head {
+            padding: 20px 24px 18px 24px !important;
             margin: 0 !important;
-
-            border-collapse: collapse !important;
-
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 16px !important;
+            border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
+            background: #ffffff !important;
+            box-sizing: border-box !important;
+            width: 100% !important;
         }
 
+        .card-head > div:first-child {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            gap: 4px !important;
+            min-width: 200px !important;
+            flex: 1 1 auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
 
+        .card-head :is(h2, h3, h4) {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 1.25rem !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            letter-spacing: -0.02em !important;
+            line-height: 1.25 !important;
+        }
+
+        .card-head p {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 0.84rem !important;
+            color: #64748b !important;
+            line-height: 1.35 !important;
+        }
+
+        .card-head :is(button, .primary, .btn-primary, .btn-secondary, a.button) {
+            flex: 0 0 auto !important;
+            align-self: center !important;
+            min-height: 38px !important;
+            height: 38px !important;
+            padding: 0 16px !important;
+            border-radius: 9px !important;
+            font-size: 0.84rem !important;
+            font-weight: 700 !important;
+            line-height: 1 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+            cursor: pointer !important;
+            white-space: nowrap !important;
+        }
+
+        /* 10. TABLE COLUMNS & GUTTER SYSTEM */
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            width: 100% !important;
+            overflow-x: auto !important;
+        }
+
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table,
+        html body.app-dashboard[data-platform="propertydirect"] table.data-table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            table-layout: auto !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        /* First column aligns with title text at exactly 24px from left card edge */
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table th:first-child,
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td:first-child {
+            padding-left: 24px !important;
+        }
+
+        /* Last column aligns with button at exactly 24px from right card edge */
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table th:last-child,
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td:last-child {
+            padding-right: 24px !important;
+            text-align: right !important;
+        }
 
         html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table th {
-
-            padding: 10px 14px !important;
-
-            font-size: 0.74rem !important;
-
-            font-weight: 800 !important;
-
-            white-space: nowrap !important;
-
+            padding: 13px 14px !important;
             background: #f8fafc !important;
-
-            border-bottom: 1px solid #e2e8f0 !important;
-
+            color: #64748b !important;
+            font-size: 0.76rem !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
+            line-height: 1.2 !important;
+            white-space: nowrap !important;
         }
-
-
 
         html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td {
-
-            padding: 11px 14px !important;
-
+            padding: 14px 14px !important;
+            color: #1e293b !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            font-size: 0.86rem !important;
+            vertical-align: middle !important;
         }
 
-
+        html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table tr:last-child td {
+            border-bottom: none !important;
+        }
 
         html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td[colspan] {
-
-            padding: 20px 14px !important;
-
-            font-size: 0.85rem !important;
-
+            padding: 36px 24px !important;
+            text-align: center !important;
+            color: #64748b !important;
+            font-size: 0.88rem !important;
         }
-
-
-
-        /* 7. Tight panel top row (no wrap collapse) */
-
-        html body.app-dashboard[data-platform="propertydirect"] .dash-panel > div:first-child {
-
-            margin-bottom: 12px !important;
-
-        }
-
     </style>
 
     
@@ -4200,7 +4265,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         width: 100% !important;
 
-        min-width: 1140px !important;
+        min-width: 100% !important;
 
         border-collapse: separate !important;
 
@@ -4212,17 +4277,55 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
 
 
+    html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table th:first-child,
+
+    html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td:first-child {
+
+        padding-left: 24px !important;
+
+    }
+
+
+
+    html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table th:last-child,
+
+    html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table td:last-child {
+
+        padding-right: 24px !important;
+
+    }
+
+
+
+    html body.app-dashboard[data-platform="propertydirect"] .dash-main :is(
+
+        .dashboard-table-scroll td:last-child,
+
+        .dashboard-table-scroll th:last-child,
+
+        td[class*="action"],
+
+        th[class*="action"]
+
+    ) {
+
+        min-width: 120px !important;
+
+        text-align: right !important;
+
+    }
+
+
+
     html body.app-dashboard[data-platform="propertydirect"] .dashboard-table-scroll table th {
 
-        padding: 16px 22px !important;
+        padding: 14px 16px !important;
 
-        font-size: 0.78rem !important;
+        font-size: 0.76rem !important;
 
         font-weight: 800 !important;
 
-        letter-spacing: 0.06em !important;
-
-        word-spacing: 0.1em !important;
+        letter-spacing: 0.04em !important;
 
         color: #475569 !important;
 
@@ -4970,7 +5073,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
             <!-- Users Table Card -->
 
-            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+            <div class="dash-card table-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 
@@ -5026,33 +5129,33 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="verifications">
 
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+            <div class="dash-card table-card">
 
-                <div>
+                <div class="card-head">
 
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Owner & Builder Posting Approvals</h2>
+                    <div>
 
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Review applications from customers and builders requesting permission to list properties on PropertyDirect.</p>
+                        <h2>Owner & Builder Posting Approvals</h2>
+
+                        <p>Review applications from customers and builders requesting permission to list properties on PropertyDirect.</p>
+
+                    </div>
+
+                    <button type="button" id="refreshAppsBtn" class="primary small" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); display:inline-flex; align-items:center; gap:6px;">
+
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+
+                        Refresh Applications
+
+                    </button>
 
                 </div>
 
-                <button type="button" id="refreshAppsBtn" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
 
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-
-                    Refresh Applications
-
-                </button>
-
-            </div>
-
-
-
-            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 
-                    <table style="width:100%; border-collapse:collapse; text-align:left;">
+                    <table class="data-table" style="width:100%; border-collapse:collapse; text-align:left;">
 
                         <thead>
 
@@ -5206,7 +5309,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
             <!-- Inventory Table -->
 
-            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+            <div class="dash-card table-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 
@@ -6360,7 +6463,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
             <!-- Subtab 1: Enquiries -->
 
-            <div id="subtabEnquiriesView" class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+            <div id="subtabEnquiriesView" class="dash-card table-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 
@@ -6402,7 +6505,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
             <!-- Subtab 2: Visits -->
 
-            <div id="subtabVisitsView" class="dash-card" style="display:none; padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+            <div id="subtabVisitsView" class="dash-card table-card" style="display:none; padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 
@@ -6484,7 +6587,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
 
 
-            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+            <div class="dash-card table-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 
@@ -6776,7 +6879,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
 
 
-            <div class="dash-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+            <div class="dash-card table-card" style="padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 

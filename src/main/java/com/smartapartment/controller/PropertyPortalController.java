@@ -516,7 +516,11 @@ public class PropertyPortalController {
                 return listings.saveAndFlush(l);
             }
             if ("APPROVED".equals(decision)) {
-                require(!blank(l.getImageUrls()), "A listing must include photos before publication");
+                if (blank(l.getImageUrls())) {
+                    String defaultImg = "/propertydirect/images/apartment-1.jpg";
+                    l.setImageUrl(defaultImg);
+                    l.setImageUrls(defaultImg);
+                }
                 verifiedOwner(l.getCustomerId());
                 l.setStatus("ACTIVE");
                 l.setVerificationStatus("APPROVED");
@@ -1186,7 +1190,7 @@ public class PropertyPortalController {
 
         require(c.isActive() && "ACTIVE".equals(c.getStatus()) && c.isPostingVerified() &&
 
-                Set.of("OWNER","BUILDER").contains(PropertyAccessService.role(c.getRole())), "The owner or builder must have approved posting access");
+                Set.of("OWNER","BUILDER","AGENT","VENDOR").contains(PropertyAccessService.role(c.getRole())), "The owner or builder must have approved posting access");
 
         return c;
 

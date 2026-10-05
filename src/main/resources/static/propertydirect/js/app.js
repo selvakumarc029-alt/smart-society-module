@@ -416,7 +416,7 @@ function inferPropertyDirectRole(username) {
     const value = String(username || "").toLowerCase();
     if (value.includes("superadmin")) return "superadmin";
     if (value.includes("builder")) return "builder";
-    if (value.includes("vendor")) return "vendor";
+    if (value.includes("vendor") || value.includes("agent") || value.includes("owner")) return "owner";
     if (value.startsWith("admin") || value.includes("admin@")) return "admin";
     return pendingDashboardLogin?.role || "customer";
 }
@@ -424,8 +424,7 @@ function inferPropertyDirectRole(username) {
 function propertyDirectDashboardTarget(role) {
     if (role === "superadmin") return "/propertydirect/dashboards/superadmin";
     if (role === "admin") return "/propertydirect/dashboards/admin";
-    if (role === "agent") return "/propertydirect/dashboards/agent";
-    if (role === "vendor") return "/propertydirect/dashboards/vendor";
+    if (role === "owner") return "/propertydirect/dashboards/owner";
     return "/propertydirect/dashboards/customer";
 }
 

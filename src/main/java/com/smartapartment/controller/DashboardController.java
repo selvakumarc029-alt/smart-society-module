@@ -385,17 +385,17 @@ public class DashboardController {
         return "propertydirect/dashboards/customer";
     }
 
-    @GetMapping("/propertydirect/dashboards/agent")
-    public String propertyDirectAgent() {
-        return "redirect:/propertydirect/dashboards/superadmin";
+    @GetMapping("/propertydirect/dashboards/owner")
+    public String propertyDirectOwner(HttpSession session) {
+        if (session != null) {
+            session.setAttribute("dashboard:propertydirect:owner", Boolean.TRUE);
+        }
+        return "propertydirect/dashboards/owner";
     }
 
-    @GetMapping({"/propertydirect/dashboards/vendor", "/propertydirect/dashboards/owner"})
-    public String propertyDirectVendor(HttpSession session) {
-        if (session != null) {
-            session.setAttribute("dashboard:propertydirect:vendor", Boolean.TRUE);
-        }
-        return "propertydirect/dashboards/vendor";
+    @GetMapping({"/propertydirect/dashboards/agent", "/propertydirect/dashboards/vendor"})
+    public String legacyAgentVendorDashboardRedirect() {
+        return "redirect:/propertydirect/dashboards/owner";
     }
 
 

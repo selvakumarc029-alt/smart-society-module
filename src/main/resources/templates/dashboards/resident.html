@@ -68,7 +68,86 @@
         body[data-dashboard-role="resident"] .dashboard-container .row.g-3.mb-4 > [class*="col-"] .card .small { display: block; line-height: 1.35; }
         body[data-dashboard-role="resident"] .dashboard-container .btn:not(.nav-link) { min-height: 34px; padding: .4rem .8rem !important; font-size: .84rem; line-height: 1.2; }
         body[data-dashboard-role="resident"] .dashboard-container .btn.btn-sm { min-height: 30px; padding: .3rem .65rem !important; font-size: .78rem; }
-        body[data-dashboard-role="resident"] .header-actions .btn { min-height: 38px; padding: .5rem 1rem !important; font-size: .88rem; }
+        /* ================================================================
+           RESIDENT TOPBAR & ALIGNMENT STYLES
+           ================================================================ */
+        body.dashboard-body[data-dashboard-role="resident"] .topbar {
+            height: 72px !important;
+            min-height: 72px !important;
+            max-height: 72px !important;
+            padding: 0 1.5rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            flex-wrap: nowrap !important;
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+            background: #ffffff !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1020 !important;
+        }
+        body.dashboard-body[data-dashboard-role="resident"] .topbar > div:first-child {
+            min-width: 0 !important;
+            flex: 0 1 auto !important;
+        }
+        body.dashboard-body[data-dashboard-role="resident"] .topbar #title {
+            font-size: clamp(1.15rem, 1.4vw, 1.45rem) !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.02em !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 280px !important;
+            line-height: 1.2 !important;
+            margin-bottom: 0 !important;
+            color: #0f172a !important;
+        }
+        body.dashboard-body[data-dashboard-role="resident"] .header-actions {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 8px !important;
+            flex-wrap: nowrap !important;
+            flex-shrink: 0 !important;
+            margin-left: auto !important;
+        }
+        body.dashboard-body[data-dashboard-role="resident"] .header-actions .btn,
+        body.dashboard-body[data-dashboard-role="resident"] .header-actions a {
+            min-height: 36px !important;
+            height: 36px !important;
+            max-height: 36px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 14px !important;
+            font-size: 0.82rem !important;
+            font-weight: 600 !important;
+            border-radius: 999px !important;
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            transition: all 0.15s ease !important;
+            line-height: 1 !important;
+            text-decoration: none !important;
+        }
+        body.dashboard-body[data-dashboard-role="resident"] .dashboard-header-meta {
+            flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            white-space: nowrap !important;
+        }
+        body.dashboard-body[data-dashboard-role="resident"] .dashboard-header-meta .workspace-pill,
+        body.dashboard-body[data-dashboard-role="resident"] .dashboard-header-meta .badge {
+            white-space: nowrap !important;
+            font-size: 0.75rem !important;
+            padding: 0.35rem 0.65rem !important;
+        }
+        #nobrokerBookingsTableAnchor {
+            scroll-margin-top: 86px !important;
+        }
         @media (max-width: 767.98px) { body[data-dashboard-role="resident"] .stats .card { min-height: 94px; } }
         #sidebar {
             pointer-events: auto !important;
@@ -1124,16 +1203,16 @@
         <!-- Main Content Area -->
         <main class="main main-content">
             <!-- Topbar -->
-            <header class="topbar p-4 d-flex justify-content-between align-items-center animate__animated animate__fadeInDown">
-                <div>
-                    <h2 class="mb-0 fw-bold text-dark" id="title">Overview</h2>
+            <header class="topbar px-4 py-0 d-flex justify-content-between align-items-center animate__animated animate__fadeInDown">
+                <div class="d-flex align-items-center me-2" style="min-width: 0;">
+                    <h2 class="mb-0 fw-bold text-dark text-truncate" id="title">Overview</h2>
                 </div>
-                <div class="d-flex align-items-center gap-3 header-actions">
-                    <button type="button" class="btn btn-outline-primary rounded-pill shadow-sm px-3 fw-semibold" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')">
-                        <i class="fa-solid fa-comments me-2 text-primary"></i>Chat with Maintenance
+                <div class="d-flex align-items-center gap-2 header-actions">
+                    <button type="button" class="btn btn-outline-primary rounded-pill shadow-sm px-3 fw-semibold text-nowrap" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')">
+                        <i class="fa-solid fa-comments me-1.5 text-primary"></i>Chat with Maintenance
                     </button>
-                    <a class="btn btn-primary rounded-pill shadow-sm px-4" href="tel:+919844022010" aria-label="Call gate guard at +91 98440 22010">
-                        <i class="fa-solid fa-phone me-2"></i>Call Gate Guard <span class="ms-1">+91 98440 22010</span>
+                    <a class="btn btn-primary rounded-pill shadow-sm px-3 fw-semibold text-nowrap" href="tel:+919844022010" aria-label="Call gate guard at +91 98440 22010" title="Gate Guard: +91 98440 22010">
+                        <i class="fa-solid fa-phone me-1.5"></i>Call Gate Guard <span class="d-none d-xxl-inline ms-1 opacity-75 small">+91 98440 22010</span>
                     </a>
                 </div>
             </header>
@@ -1565,9 +1644,9 @@
                                         <li><button type="button" class="dropdown-item d-flex align-items-center justify-content-between py-2 px-3" onclick="selectServiceCity('Kolkata')"><span>Kolkata</span> <i class="fa-solid fa-check small city-check d-none"></i></button></li>
                                     </ul>
                                 </div>
-                                <h4 class="fw-bold mb-0 text-dark" style="font-size: 1.15rem; font-family: 'Plus Jakarta Sans', sans-serif;">
-                                    <i class="fa-solid fa-screwdriver-wrench text-primary me-2"></i>Carpentry & Home Services
-                                </h4>
+                                <span class="fw-bold text-dark d-none d-lg-inline-block text-nowrap" style="font-size: 1.05rem; font-family: 'Plus Jakarta Sans', sans-serif;">
+                                    <i class="fa-solid fa-screwdriver-wrench text-primary me-2"></i>Home Services Hub
+                                </span>
                             </div>
                             <div class="flex-grow-1 mx-lg-3" style="max-width: 520px;">
                                 <div class="input-group">
@@ -1707,6 +1786,35 @@
                         </div>
                     </div>
 
+
+                    <!-- My Bookings Table -->
+                    <div class="card border-0 shadow-sm rounded-4 bg-white" id="nobrokerBookingsTableAnchor">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-list-check text-primary me-2"></i>My NoBroker Service Bookings</h5>
+                                <p class="text-muted small mb-0">Saved into the common backend database. Refreshing the page will keep these records.</p>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold" onclick="loadNoBrokerMaintenanceTickets()">Refresh</button>
+                        </div>
+                        <div class="card-body px-4 pb-4 table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Service</th>
+                                        <th>Schedule</th>
+                                        <th>Address</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="noBrokerMaintenanceRows">
+                                    <tr><td colspan="7" class="text-muted text-center py-4">Loading saved service bookings...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Complaints Section -->
@@ -2964,10 +3072,14 @@
                             background: #ffffff !important;
                             padding: 8px 14px !important;
                             border-radius: 12px !important;
-                            display: flex !important;
+                            display: none;
                             align-items: center !important;
                             gap: 8px !important;
                             box-shadow: 0 1px 1px rgba(11,20,26,0.13) !important;
+                        }
+
+                        .wa-typing-card.active, .wa-typing-card:not(.d-none) {
+                            display: flex !important;
                         }
 
                         .wa-dots {
@@ -3754,6 +3866,10 @@
             "post-property": "Post Property (Rent / Sale)", postProperty: "Post Property (Rent / Sale)"
         };
 
+        window.__residentThreadsCache = {};
+        window.__lastResidentMessageCount = {};
+        window.__lastResidentMaxMessageId = 0;
+
         let activeResidentChat = {
             conversationId: 'req_REQ-1024_cust',
             ticketNumber: 'REQ-1024',
@@ -3763,13 +3879,39 @@
         };
         let residentChatPollInterval = null;
 
-        window.openResidentChat = function(convId, ticketNumber, ticketTitle, workerName, forceModal = false, flatNumber = null) {
+        window.playWaMessageTone = function() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.06, ctx.currentTime + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.16);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.18);
+            } catch (_) {}
+        };
+
+        window.openResidentChatByKey = function(convKey, forceModal = false) {
+            const t = window.__residentThreadsCache ? window.__residentThreadsCache[convKey] : null;
+            const ticketNum = t ? (t.ticketNumber || '') : 'REQ-1024';
+            const ticketTitle = t ? (t.ticketTitle || t.title || 'AC Repair') : 'AC Repair';
+            const workerName = t ? (t.maintenanceUserName || 'Kumar (AC Specialist)') : 'Kumar (AC Specialist)';
+            const flatNum = t ? (t.customerUnit || t.unit || 'Flat A-204') : 'Flat A-204';
+
             activeResidentChat = {
-                conversationId: convId || 'req_REQ-1024_cust',
-                ticketNumber: ticketNumber || 'REQ-1024',
-                ticketTitle: ticketTitle || 'AC Repair',
-                workerName: workerName || 'Kumar (AC Specialist)',
-                flatNumber: flatNumber || (ticketNumber === 'REQ-1024' ? 'Flat A-204' : 'Flat A-101')
+                conversationId: convKey,
+                ticketNumber: ticketNum,
+                ticketTitle: ticketTitle,
+                workerName: workerName,
+                flatNumber: flatNum
             };
 
             const panelTicketBadge = document.getElementById('panelChatTicketBadge');
@@ -3779,18 +3921,16 @@
             const workerTitle = document.getElementById('panelChatWorkerTitle');
             if (workerTitle) workerTitle.textContent = activeResidentChat.workerName;
             const panelWorker = document.getElementById('panelChatWorkerSubtitle');
-            if (panelWorker) panelWorker.innerHTML = `<i class="fa-solid fa-circle" style="font-size:0.55rem; color:#00a884; margin-right:3px;"></i>online · Ticket <span class="fw-bold">#${activeResidentChat.ticketNumber}</span> (${escapeHtml(activeResidentChat.ticketTitle)})`;
+            if (panelWorker) {
+                panelWorker.innerHTML = `<i class="fa-solid fa-circle" style="font-size:0.55rem; color:#00a884; margin-right:3px;"></i>online · Ticket <span class="fw-bold">#${escapeHtml(activeResidentChat.ticketNumber)}</span> (${escapeHtml(activeResidentChat.ticketTitle)})`;
+            }
 
-            // Dynamically update pinned ticket context banner
             const pinnedDetails = document.getElementById('waPinnedTicketDetails');
             const pinnedTrackBtn = document.getElementById('waPinnedTrackBtn');
             if (pinnedDetails) {
-                if (activeResidentChat.ticketNumber === 'T-102') {
-                    pinnedDetails.innerHTML = `<strong>Ticket #T-102: Bathroom Water Leakage</strong> &bull; Worker: <strong>Ramesh (Plumber)</strong> &bull; Status: <strong class="text-info">In Progress</strong> &bull; ETA: <strong>10 Mins</strong>`;
-                    if (pinnedTrackBtn) pinnedTrackBtn.setAttribute('onclick', "showTrackWorkerModal('Ramesh', 'T-102')");
-                } else {
-                    pinnedDetails.innerHTML = `<strong>Ticket #${escapeHtml(activeResidentChat.ticketNumber)}: ${escapeHtml(activeResidentChat.ticketTitle)}</strong> &bull; Worker: <strong>${escapeHtml(activeResidentChat.workerName)}</strong> &bull; Status: <strong class="text-success">Worker Assigned</strong> &bull; ETA: <strong>15 Mins</strong>`;
-                    if (pinnedTrackBtn) pinnedTrackBtn.setAttribute('onclick', `showTrackWorkerModal('${escapeHtml(activeResidentChat.workerName)}', '${escapeHtml(activeResidentChat.ticketNumber)}')`);
+                pinnedDetails.innerHTML = `<strong>Ticket #${escapeHtml(activeResidentChat.ticketNumber)}: ${escapeHtml(activeResidentChat.ticketTitle)}</strong> &bull; Worker: <strong>${escapeHtml(activeResidentChat.workerName)}</strong> &bull; Status: <strong class="text-success">Active Thread</strong> &bull; ETA: <strong>15 Mins</strong>`;
+                if (pinnedTrackBtn) {
+                    pinnedTrackBtn.setAttribute('onclick', `showTrackWorkerModal('${escapeHtml(activeResidentChat.workerName)}', '${escapeHtml(activeResidentChat.ticketNumber)}')`);
                 }
             }
 
@@ -3798,14 +3938,8 @@
             if (modalTicketBadge) modalTicketBadge.textContent = '#' + activeResidentChat.ticketNumber;
 
             document.querySelectorAll('#residentChatThreadsList .wa-thread-card').forEach(el => el.classList.remove('active'));
-            const activeThreadBtn = document.getElementById(`thread-item-${activeResidentChat.conversationId}`);
-            if (activeThreadBtn) activeThreadBtn.classList.add('active');
-
-            // Reset horizontal scroll to guarantee sidebar stays visible
-            const appCard = document.querySelector('.wa-app-card');
-            if (appCard) appCard.scrollLeft = 0;
-            const panel = document.getElementById('residentChatPanel');
-            if (panel) panel.scrollLeft = 0;
+            const activeCard = document.getElementById(`thread-item-${convKey}`);
+            if (activeCard) activeCard.classList.add('active');
 
             if (forceModal) {
                 const modal = document.getElementById('residentChatModal');
@@ -3816,17 +3950,202 @@
                 loadResidentChatMessages('residentChatMessagesContainer');
             }
 
+            window.startResidentChatRealtime();
+        };
+
+        window.openResidentChat = function(convId, ticketNumber, ticketTitle, workerName, forceModal = false, flatNumber = null) {
+            const convKey = convId || (ticketNumber ? ('req_' + ticketNumber + '_cust') : 'req_REQ-1024_cust');
+            window.openResidentChatByKey(convKey, forceModal);
+        };
+
+        window.loadResidentChatThreads = async function(isPolling = false) {
+            const list = document.getElementById('residentChatThreadsList');
+            if (!list) return;
+            try {
+                const res = await fetch('/api/chat/threads?channelType=CUSTOMER_MAINTENANCE&viewerRole=CUSTOMER');
+                if (!res.ok) return;
+                const threads = await res.json();
+
+                window.__residentThreadsCache = {};
+                if (!threads || threads.length === 0) {
+                    list.innerHTML = `
+                        <div class="text-center text-muted py-5 px-3">
+                            <i class="fa-regular fa-comments fs-3 text-secondary mb-2 d-block"></i>
+                            <div class="fw-semibold small">No Active Conversations</div>
+                            <div class="text-muted" style="font-size:0.75rem;">Your technician chats will appear here.</div>
+                        </div>`;
+                    return;
+                }
+
+                let foundActive = false;
+                let html = '';
+                threads.forEach(t => {
+                    const convKey = String(t.conversationKey || ('req_' + t.ticketNumber + '_cust'));
+                    window.__residentThreadsCache[convKey] = t;
+                    const isActive = (convKey === activeResidentChat.conversationId || String(t.conversationId) === String(activeResidentChat.conversationId) || t.ticketNumber === activeResidentChat.ticketNumber);
+                    if (isActive) foundActive = true;
+
+                    const ticketNum = t.ticketNumber || 'REQ-1024';
+                    const ticketTitle = t.ticketTitle || t.title || 'AC Repair';
+                    const worker = t.maintenanceUserName || 'Kumar (Technician)';
+                    const unread = t.unreadCount || 0;
+                    const isPlumb = ticketTitle.toLowerCase().includes('plumb') || ticketTitle.toLowerCase().includes('water');
+                    const avatarIcon = isPlumb ? 'fa-faucet-drip' : 'fa-wrench';
+                    const avatarClass = isPlumb ? 'wa-avatar-plumb' : 'wa-avatar-tech';
+
+                    let snippet = t.lastMessage || 'Connected to maintenance team.';
+                    const lastSender = t.lastSender || '';
+                    const isLastFromResident = (lastSender.toLowerCase().includes('selva') || lastSender.toLowerCase().includes('resident'));
+
+                    html += `
+                        <div class="wa-thread-card ${isActive ? 'active' : ''}" id="thread-item-${convKey}" onclick="openResidentChatByKey('${convKey}')">
+                            <div class="wa-thread-avatar ${avatarClass}">
+                                <i class="fa-solid ${avatarIcon}"></i>
+                                <div class="wa-online-dot"></div>
+                            </div>
+                            <div class="wa-thread-info">
+                                <div class="wa-thread-row-top">
+                                    <span class="wa-thread-name">${escapeHtml(worker)}</span>
+                                    <span class="wa-thread-time" id="thread-time-${convKey}">${escapeHtml(t.formattedTime || 'Just now')}</span>
+                                </div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="wa-thread-ticket-tag">#${escapeHtml(ticketNum)} ${escapeHtml(ticketTitle)}</span>
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill" style="font-size:0.65rem;">Active</span>
+                                </div>
+                                <div class="wa-thread-row-msg">
+                                    <div class="wa-thread-preview" id="thread-last-${convKey}">
+                                        ${isLastFromResident ? '<i class="fa-solid fa-check-double wa-read-tick me-1"></i>' : ''}
+                                        <span class="text-truncate">${escapeHtml(snippet)}</span>
+                                    </div>
+                                    ${unread > 0 ? `<span class="wa-unread-badge" id="thread-badge-${convKey}">${unread}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                list.innerHTML = html;
+
+                if (!foundActive && !isPolling && threads.length > 0) {
+                    const firstKey = String(threads[0].conversationKey || ('req_' + threads[0].ticketNumber + '_cust'));
+                    window.openResidentChatByKey(firstKey);
+                }
+            } catch (e) {
+                console.error("Error loading resident threads", e);
+            }
+        };
+
+        window.loadResidentChatMessages = async function(containerId, isPolling = false) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            try {
+                const convId = activeResidentChat.conversationId || 'req_REQ-1024_cust';
+                const res = await fetch(`/api/chat/messages?conversationId=${encodeURIComponent(convId)}&viewerRole=CUSTOMER`);
+                if (!res.ok) return;
+                const messages = await res.json();
+
+                // Sound notification for new incoming messages while live
+                if (messages && messages.length > 0) {
+                    const latestMsg = messages[messages.length - 1];
+                    const latestId = latestMsg.id || 0;
+                    if (isPolling && window.__lastResidentMaxMessageId > 0 && latestId > window.__lastResidentMaxMessageId) {
+                        if (latestMsg.senderRole === 'MAINTENANCE') {
+                            window.playWaMessageTone();
+                        }
+                    }
+                    if (latestId > window.__lastResidentMaxMessageId) {
+                        window.__lastResidentMaxMessageId = latestId;
+                    }
+                }
+
+                // Hide typing bubble if fresh messages arrived
+                const typingBubble = document.getElementById('waTypingBubble');
+                if (typingBubble && !typingBubble.classList.contains('d-none')) {
+                    typingBubble.classList.add('d-none');
+                }
+
+                let html = `
+                    <div class="wa-date-divider"><span>TODAY</span></div>
+                    <div class="wa-security-notice">
+                        <i class="fa-solid fa-lock me-1 text-warning"></i> Messages and calls are end-to-end verified with Maintenance Ticket <strong>#${escapeHtml(activeResidentChat.ticketNumber)}</strong>.
+                    </div>
+                `;
+
+                if (!messages || messages.length === 0) {
+                    html += `<div class="text-center text-muted py-5"><i class="fa-regular fa-comment-dots fs-3 mb-2 d-block text-success"></i>No messages yet in this ticket. Say hello to technician ${escapeHtml(activeResidentChat.workerName)}!</div>`;
+                } else {
+                    messages.forEach(msg => {
+                        const isMe = (msg.senderRole === 'CUSTOMER');
+                        const timeStr = msg.formattedTime || 'Just now';
+                        const safeMsg = escapeHtml(msg.message).replace(/\n/g, '<br>');
+                        if (isMe) {
+                            html += `
+                                <div class="wa-msg-bubble outgoing">
+                                    <div class="wa-bubble-content">${safeMsg}</div>
+                                    <div class="wa-bubble-footer">
+                                        <span>${escapeHtml(timeStr)}</span>
+                                        <i class="fa-solid fa-check-double wa-read-tick" title="Delivered & Read"></i>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            html += `
+                                <div class="wa-msg-bubble incoming">
+                                    <div class="wa-sender-tag">
+                                        <i class="fa-solid fa-screwdriver-wrench text-primary" style="font-size:10px;"></i>
+                                        ${escapeHtml(msg.senderName || activeResidentChat.workerName || 'Kumar (Technician)')}
+                                    </div>
+                                    <div class="wa-bubble-content">${safeMsg}</div>
+                                    <div class="wa-bubble-footer">
+                                        <span>${escapeHtml(timeStr)}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+
+                const shouldScroll = !isPolling || (container.scrollHeight - container.scrollTop <= container.clientHeight + 160);
+                container.innerHTML = html;
+                if (shouldScroll) {
+                    container.scrollTop = container.scrollHeight;
+                }
+
+                const lastSnippet = document.getElementById(`thread-last-${activeResidentChat.conversationId}`);
+                if (lastSnippet && messages.length > 0) {
+                    const lastMsg = messages[messages.length - 1];
+                    const isLastFromResident = (lastMsg.senderRole === 'CUSTOMER');
+                    lastSnippet.innerHTML = `
+                        ${isLastFromResident ? '<i class="fa-solid fa-check-double wa-read-tick me-1"></i>' : ''}
+                        <span class="text-truncate">${escapeHtml(lastMsg.message)}</span>
+                    `;
+                }
+                const lastTime = document.getElementById(`thread-time-${activeResidentChat.conversationId}`);
+                if (lastTime && messages.length > 0) {
+                    lastTime.textContent = messages[messages.length - 1].formattedTime || 'Just now';
+                }
+            } catch (e) {
+                console.error("Error loading chat messages", e);
+            }
+        };
+
+        window.startResidentChatRealtime = function() {
+            loadResidentChatThreads();
+            loadResidentChatMessages('residentChatMessagesContainer');
+
             if (!residentChatPollInterval) {
                 residentChatPollInterval = setInterval(() => {
-                    const panelVisible = document.querySelector('[data-view="maintenance-chat"]:not(.d-none):not(.hidden)');
+                    const panel = document.querySelector('[data-view="maintenance-chat"]');
+                    const panelVisible = panel && !panel.classList.contains('d-none') && !panel.classList.contains('hidden') && panel.style.display !== 'none';
                     const modal = document.getElementById('residentChatModal');
                     const modalVisible = modal && modal.style.display === 'flex';
                     if (panelVisible) {
                         loadResidentChatMessages('residentChatMessagesContainer', true);
+                        loadResidentChatThreads(true);
                     } else if (modalVisible) {
                         loadResidentChatMessages('modalChatMessagesContainer', true);
                     }
-                }, 1000); // 1.0 second real-time polling!
+                }, 1000); // 1.0s real-time live WhatsApp sync!
             }
         };
 
@@ -3861,89 +4180,18 @@
             }
         };
 
-        window.loadResidentChatMessages = async function(containerId, isPolling = false) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            try {
-                const res = await fetch(`/api/chat/messages?conversationId=${encodeURIComponent(activeResidentChat.conversationId)}&viewerRole=CUSTOMER`);
-                if (!res.ok) return;
-                const messages = await res.json();
-                
-                let html = `
-                    <div class="wa-date-divider"><span>TODAY</span></div>
-                    <div class="wa-security-notice">
-                        <i class="fa-solid fa-lock me-1 text-warning"></i> Messages and calls are end-to-end verified with Maintenance Ticket <strong>#${escapeHtml(activeResidentChat.ticketNumber)}</strong>.
-                    </div>
-                `;
-
-                if (!messages || messages.length === 0) {
-                    html += `<div class="text-center text-muted py-5"><i class="fa-regular fa-comment-dots fs-3 mb-2 d-block text-success"></i>No messages yet in this ticket. Say hello to technician ${escapeHtml(activeResidentChat.workerName)}!</div>`;
-                } else {
-                    messages.forEach(msg => {
-                        const isMe = (msg.senderRole === 'CUSTOMER');
-                        const timeStr = msg.formattedTime || 'Just now';
-                        if (isMe) {
-                            html += `
-                                <div class="wa-msg-bubble outgoing">
-                                    <div class="wa-bubble-content">${escapeHtml(msg.message)}</div>
-                                    <div class="wa-bubble-footer">
-                                        <span>${escapeHtml(timeStr)}</span>
-                                        <i class="fa-solid fa-check-double wa-read-tick" title="Read"></i>
-                                    </div>
-                                </div>
-                            `;
-                        } else {
-                            html += `
-                                <div class="wa-msg-bubble incoming">
-                                    <div class="wa-sender-tag">
-                                        <i class="fa-solid fa-screwdriver-wrench text-primary" style="font-size:10px;"></i>
-                                        ${escapeHtml(msg.senderName || 'Kumar (Technician)')}
-                                    </div>
-                                    <div class="wa-bubble-content">${escapeHtml(msg.message)}</div>
-                                    <div class="wa-bubble-footer">
-                                        <span>${escapeHtml(timeStr)}</span>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    });
-                }
-                
-                const shouldScroll = !isPolling || (container.scrollHeight - container.scrollTop <= container.clientHeight + 140);
-                container.innerHTML = html;
-                if (shouldScroll) {
-                    container.scrollTop = container.scrollHeight;
-                }
-
-                const lastSnippet = document.getElementById(`thread-last-${activeResidentChat.conversationId}`);
-                if (lastSnippet && messages.length > 0) {
-                    const lastMsg = messages[messages.length - 1];
-                    lastSnippet.innerHTML = `
-                        <i class="fa-solid fa-check-double wa-read-tick"></i>
-                        <span class="text-truncate">${escapeHtml(lastMsg.message)}</span>
-                    `;
-                }
-                const lastTime = document.getElementById(`thread-time-${activeResidentChat.conversationId}`);
-                if (lastTime && messages.length > 0) {
-                    lastTime.textContent = messages[messages.length - 1].formattedTime || 'Just now';
-                }
-            } catch (e) {
-                console.error("Error loading chat messages", e);
-            }
-        };
-
         window.handleResidentSendMessage = async function(e) {
-            e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
             const input = document.getElementById('residentChatInput');
             if (!input || !input.value.trim()) return;
             const text = input.value.trim();
             input.value = '';
-            closeWaEmojiTray();
+            if (typeof closeWaEmojiTray === 'function') closeWaEmojiTray();
             await postResidentChatMessage(text, 'residentChatMessagesContainer');
         };
 
         window.handleModalSendMessage = async function(e) {
-            e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
             const input = document.getElementById('modalChatInput');
             if (!input || !input.value.trim()) return;
             const text = input.value.trim();
@@ -3955,7 +4203,6 @@
             try {
                 const payload = {
                     conversationKey: activeResidentChat.conversationId,
-                    conversationId: (typeof activeResidentChat.conversationId === 'number' ? activeResidentChat.conversationId : null),
                     channelType: 'CUSTOMER_MAINTENANCE',
                     senderRole: 'CUSTOMER',
                     senderName: 'Selva',
@@ -3973,57 +4220,10 @@
                 });
                 if (res.ok) {
                     await loadResidentChatMessages(containerId);
+                    loadResidentChatThreads(true);
                 }
             } catch (err) {
                 console.error("Failed to send message", err);
-            }
-        }
-
-        // WhatsApp Features: Typing Indicator & Realistic Technician Responses
-        function triggerSmartTechnicianReply(userText) {
-            const lower = userText.toLowerCase();
-            let replyText = null;
-
-            if (lower.includes("reach") || lower.includes("when") || lower.includes("time") || lower.includes("arriving")) {
-                replyText = "I am on the 2nd floor corridor right now. Reaching Flat A-204 in 3 minutes!";
-            } else if (lower.includes("cool") || lower.includes("ac") || lower.includes("leak") || lower.includes("gas") || lower.includes("refrigerant")) {
-                replyText = "Noted! I have the R-32 pressure gauge and vacuum pump ready. Will test the cooling coil thoroughly.";
-            } else if (lower.includes("balcony") || lower.includes("door") || lower.includes("open") || lower.includes("unlocked")) {
-                replyText = "Thank you! I will directly step out to inspect the outdoor condenser unit.";
-            } else if (lower.includes("thank") || lower.includes("ok") || lower.includes("okay")) {
-                replyText = "You're welcome! I will ensure complete resolution before taking your sign-off.";
-            }
-
-            if (replyText) {
-                const typingBubble = document.getElementById('waTypingBubble');
-                if (typingBubble) typingBubble.classList.remove('d-none');
-                
-                setTimeout(async () => {
-                    if (typingBubble) typingBubble.classList.add('d-none');
-                    try {
-                        const replyPayload = {
-                            conversationKey: activeResidentChat.conversationId,
-                            conversationId: (typeof activeResidentChat.conversationId === 'number' ? activeResidentChat.conversationId : null),
-                            channelType: 'CUSTOMER_MAINTENANCE',
-                            senderRole: 'MAINTENANCE',
-                            senderName: activeResidentChat.workerName || 'Kumar (AC Specialist)',
-                            senderUnit: 'Maintenance Crew',
-                            ticketNumber: activeResidentChat.ticketNumber,
-                            ticketTitle: activeResidentChat.ticketTitle,
-                            message: replyText,
-                            priority: 'NORMAL'
-                        };
-                        await fetch('/api/chat/send', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(replyPayload)
-                        });
-                        loadResidentChatMessages('residentChatMessagesContainer');
-                        loadResidentChatMessages('modalChatMessagesContainer');
-                    } catch (e) {
-                        console.error("Failed to deliver tech reply", e);
-                    }
-                }, 1800);
             }
         }
 
@@ -4036,7 +4236,6 @@
             });
         };
 
-        // WhatsApp Category Filter Chips
         window.setWaFilter = function(category, btn) {
             document.querySelectorAll('.wa-filter-tabs .wa-tab-chip').forEach(b => b.classList.remove('active'));
             if (btn) btn.classList.add('active');
@@ -4241,9 +4440,13 @@
                 history.pushState(null, "", `#${panel}`);
             }
 
-            // Immediately load chat when maintenance-chat view is opened!
+            // Immediately start real-time chat when maintenance-chat view is opened!
             if (panel === 'maintenance-chat') {
-                loadResidentChatMessages('residentChatMessagesContainer');
+                if (typeof window.startResidentChatRealtime === 'function') {
+                    window.startResidentChatRealtime();
+                } else if (typeof window.loadResidentChatMessages === 'function') {
+                    window.loadResidentChatMessages('residentChatMessagesContainer');
+                }
             }
         };
 
@@ -4259,7 +4462,9 @@
             });
             if (window.location.hash === '#maintenance-chat') {
                 forceOpenPanel('maintenance-chat');
-                loadResidentChatMessages('residentChatMessagesContainer');
+                if (typeof window.startResidentChatRealtime === 'function') {
+                    window.startResidentChatRealtime();
+                }
             } else if (window.location.hash) {
                 forceOpenPanel(window.location.hash.substring(1));
             } else {
@@ -4385,6 +4590,63 @@
                 showToast('Selected service: ' + serviceName + ' (₹' + price + ')');
             }
         }
+        window.selectNoBrokerService = selectNoBrokerService;
+        window.selectNoBrokerCategory = function(serviceName, price) {
+            selectNoBrokerService(serviceName, price);
+        };
+        function syncResidentCategoryStartingPrices() {
+            const catMap = [
+                { key: 'home-cleaning', title: 'Home Cleaning', default: 499, kw: 'cleaning' },
+                { key: 'packers-movers', title: 'Packers & Movers', default: 999, kw: 'packers' },
+                { key: 'painting-waterproofing', title: 'Painting & Waterproofing', default: 399, kw: 'painting' },
+                { key: 'rental-legal', title: 'Rental & Legal Agreement', default: 299, kw: 'rental' },
+                { key: 'electrician-plumber-carpenter', title: 'Electrician, Plumber & Carpenter', default: 49, kw: 'carpenter' },
+                { key: 'interior-renovation', title: 'Interior & Renovation', default: 0, kw: 'interior' },
+                { key: 'ac-appliance', title: 'AC & Appliance Repair', default: 399, kw: 'appliance' },
+                { key: 'pest-control', title: 'Pest Control', default: 299, kw: 'pest' }
+            ];
+            catMap.forEach(item => {
+                const saved = localStorage.getItem('smartapartment_cat_price_' + item.key);
+                if (saved && !isNaN(Number(saved))) {
+                    const price = Number(saved);
+                    const el = document.querySelector(`.nobroker-cat-item[data-keywords*="${item.kw}"]`);
+                    if (el) {
+                        const card = el.querySelector('.service-category-card');
+                        if (card) {
+                            card.setAttribute('onclick', `selectNoBrokerCategory('${item.title}', ${price})`);
+                        }
+                        const badge = el.querySelector('.service-cat-badge');
+                        if (badge && price > 0) {
+                            badge.textContent = 'Starts ₹' + price;
+                        }
+                    }
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', syncResidentCategoryStartingPrices);
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'smartapartment_pricing_sync' || (e.key && e.key.indexOf('smartapartment_cat_price_') === 0)) {
+                syncResidentCategoryStartingPrices();
+            }
+        });
+        window.addEventListener('home-services:pricing-updated', syncResidentCategoryStartingPrices);
+        syncResidentCategoryStartingPrices();
+
+        window.scrollToNoBrokerBookings = function() {
+            const el = document.getElementById('nobrokerBookingsTableAnchor') || document.getElementById('noBrokerMaintenanceRows');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+        window.scrollToNoBrokerBookingForm = function() {
+            const el = document.getElementById('nobrokerBookingFormAnchor') || document.getElementById('noBrokerBookingForm');
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+        window.filterNoBrokerServices = function(query) {
+            const q = (query || '').toLowerCase().trim();
+            document.querySelectorAll('#nobrokerCategoryGrid .nobroker-cat-item').forEach(el => {
+                const text = (el.textContent + ' ' + (el.dataset.keywords || '')).toLowerCase();
+                el.style.display = (!q || text.includes(q)) ? '' : 'none';
+            });
+        };
 
         function noBrokerServiceMeta(service) {
             const name = String(service || "General Inspection");
@@ -4650,6 +4912,7 @@
                 openResidentSection(document.querySelector(`[data-view="${panel}"]`) ? panel : "overview");
             });
         })();
+    </script>
     <!-- Resident 6-Step Service & Maintenance Workflow Modal -->
     <div id="residentServiceWorkflowModal" class="mw-modal-backdrop">
         <div class="mw-modal-dialog animate__animated animate__zoomIn">
@@ -5204,8 +5467,8 @@
         </div>
     </div>
 
-<script src="/shared/js/common-maintenance.js?v=20260917-progress-v1"></script>
-<script src="/shared/js/home-services-dashboard.js?v=20260925-15day-window-v1"></script>
+<script src="/shared/js/common-maintenance.js?v=20261005-nobroker-force-v3"></script>
+<script src="/shared/js/home-services-dashboard.js?v=20261005-nobroker-force-v3"></script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
 <script src="/smartapartment/js/resident-gate-approvals.js?v=20260916-multigate-v1"></script>
 <script src="/smartapartment/js/maintenance-workflow.js?v=20260925-15day-window-v1"></script>

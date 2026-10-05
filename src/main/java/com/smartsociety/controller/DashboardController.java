@@ -122,15 +122,17 @@ public class DashboardController {
         return "propertydirect/dashboards/customer";
     }
 
-    @GetMapping("/propertydirect/dashboards/agent")
-    public String propertyDirectAgent() {
-        return "redirect:/propertydirect/dashboards/superadmin";
+    @GetMapping("/propertydirect/dashboards/owner")
+    public String propertyDirectOwner(HttpSession session) {
+        if (!isLoggedIn(session, "propertydirect", "owner") && !isLoggedIn(session, "propertydirect", "agent") && !isLoggedIn(session, "propertydirect", "vendor")) {
+            return "redirect:/propertydirect?loginRequired=true";
+        }
+        return "propertydirect/dashboards/owner";
     }
 
-    @GetMapping("/propertydirect/dashboards/vendor")
-    public String propertyDirectVendor(HttpSession session) {
-        if (!isLoggedIn(session, "propertydirect", "vendor")) return "redirect:/propertydirect?loginRequired=true";
-        return "propertydirect/dashboards/vendor";
+    @GetMapping({"/propertydirect/dashboards/agent", "/propertydirect/dashboards/vendor"})
+    public String propertyDirectAgentVendorRedirect() {
+        return "redirect:/propertydirect/dashboards/owner";
     }
 
     @GetMapping("/propertydirect/property/{slug}")

@@ -2140,7 +2140,7 @@
           const val = String(u || '').toLowerCase();
           if (val.includes('superadmin')) return 'superadmin';
           if (val.includes('builder')) return 'builder';
-          if (val.includes('vendor')) return 'vendor';
+          if (val.includes('vendor') || val.includes('agent') || val.includes('owner')) return 'owner';
           if (val.startsWith('admin') || val.includes('admin@')) return 'admin';
           return 'customer';
         };

@@ -127,7 +127,7 @@ public class PropertyWorkflowController {
     }
 
     private AdminPropertyView adminView(PropertyListing item) {
-        PropertyCustomer owner = customers.findById(item.getCustomerId()).orElse(null);
+        PropertyCustomer owner = item.getCustomerId() == null ? null : customers.findById(item.getCustomerId()).orElse(null);
         List<String> images = item.getImageUrls() == null ? List.of() : item.getImageUrls().lines().filter(url -> !url.isBlank()).toList();
         return new AdminPropertyView(item.getId(), item.getApartmentCode(), item.getTitle(), owner == null ? "Unknown owner" : owner.getName(),
                 owner == null ? "" : owner.getEmail(), item.getPrice(), item.getDeposit(), item.getMaintenance(),

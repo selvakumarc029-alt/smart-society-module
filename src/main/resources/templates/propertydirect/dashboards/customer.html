@@ -3128,6 +3128,35 @@
                         </div>
                     </div>
 
+
+                    <!-- My Bookings Table -->
+                    <div class="card border-0 shadow-sm rounded-4 bg-white" id="nobrokerBookingsTableAnchor">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-list-check text-primary me-2"></i>My NoBroker Service Bookings</h5>
+                                <p class="text-muted small mb-0">Saved into the common backend database. Refreshing the page will keep these records.</p>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold" onclick="loadNoBrokerMaintenanceTickets()">Refresh</button>
+                        </div>
+                        <div class="card-body px-4 pb-4 table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Ticket</th>
+                                        <th>Service</th>
+                                        <th>Schedule</th>
+                                        <th>Address</th>
+                                        <th>Price</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="noBrokerMaintenanceRows">
+                                    <tr><td colspan="7" class="text-muted text-center py-4">Loading saved service bookings...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </section>
 
         <section class="dash-panel hidden" data-view="rentpay">
@@ -3418,7 +3447,7 @@
     <script src="/propertydirect/js/dashboard.js?v=20260909-sidebar-close-top-v3"></script>
     <script src="/propertydirect/js/dashboard-controls.js?v=20260910-end-to-end-buttons-v1"></script>
     <script src="/propertydirect/js/market-workflows.js?v=20260928-property-workflow-v5"></script>
-    <script src="/shared/js/common-maintenance.js?v=20260917-progress-v1"></script>
+    <script src="/shared/js/common-maintenance.js?v=20261005-nobroker-force-v3"></script>
     <script>
         // Saved and comparison views must never present template/demo properties.
         // They are populated from the authenticated PropertyDirect APIs only.
@@ -3760,7 +3789,7 @@
     </div>
 
     <script src="/shared/js/dashboard-system.js?v=20260916-universal-sidebar-v3"></script>
-    <script src="/shared/js/home-services-dashboard.js?v=20260925-15day-window-v1"></script>
+    <script src="/shared/js/home-services-dashboard.js?v=20261005-nobroker-force-v3"></script>
 <script>
     function toggleCustCityDropdown(event) {
         if (event) {

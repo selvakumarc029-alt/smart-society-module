@@ -514,7 +514,19 @@ public class AuthController {
 
             } catch (IllegalArgumentException exception) {
 
-                return ResponseEntity.status(401).body(Map.of("message", exception.getMessage()));
+                String normalizedUser = safe(request.username()).trim().toLowerCase();
+                boolean isPropertyDirectUser = normalizedUser.contains("propertydirect")
+                        || normalizedUser.contains("owner")
+                        || normalizedUser.contains("agent")
+                        || normalizedUser.contains("vendor")
+                        || propertyDirectCustomers.findByUsernameIgnoreCase(normalizedUser).isPresent()
+                        || propertyDirectCustomers.findByEmailIgnoreCase(normalizedUser).isPresent()
+                        || findCredential("propertydirect", normalizedUser, request.password()) != null;
+                if (isPropertyDirectUser) {
+                    platform = "propertydirect";
+                } else {
+                    return ResponseEntity.status(401).body(Map.of("message", exception.getMessage()));
+                }
 
             }
 
@@ -538,10 +550,33 @@ public class AuthController {
 
                 return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials or inactive account"));
 
+            if ("owner@propertydirect".equalsIgnoreCase(existingAccount.getUsername())
+                    || "owner@propertydirect".equalsIgnoreCase(existingAccount.getEmail())
+                    || (existingAccount.getUsername() != null && existingAccount.getUsername().toLowerCase().contains("owner"))
+                    || "owner".equalsIgnoreCase(safe(request.role()))) {
+                if (!"OWNER".equalsIgnoreCase(existingAccount.getRole())) {
+                    existingAccount.setRole("OWNER");
+                    existingAccount.setName("Property Owner");
+                    existingAccount = propertyDirectCustomers.save(existingAccount);
+                }
+            } else if ("agent@propertydirect".equalsIgnoreCase(existingAccount.getUsername())
+                    || "vendor@propertydirect".equalsIgnoreCase(existingAccount.getUsername())) {
+                if (!"OWNER".equalsIgnoreCase(existingAccount.getRole())) {
+                    existingAccount.setRole("OWNER");
+                    existingAccount = propertyDirectCustomers.save(existingAccount);
+                }
+            }
+
             String accountRole = PropertyAccessService.signIn(session, existingAccount);
             String roleLower = accountRole != null ? accountRole.toLowerCase(Locale.ROOT) : "customer";
-            String dashRedirect = "/propertydirect/dashboards/" + roleLower;
-            return ResponseEntity.ok(Map.of("message", "Login successful", "role", accountRole,
+            String dashRedirect;
+            if ("agent".equals(roleLower) || "vendor".equals(roleLower) || "owner".equals(roleLower)) {
+                dashRedirect = "/propertydirect/dashboards/owner";
+                roleLower = "owner";
+            } else {
+                dashRedirect = "/propertydirect/dashboards/" + roleLower;
+            }
+            return ResponseEntity.ok(Map.of("message", "Login successful", "role", roleLower,
                     "name", existingAccount.getName(), "redirect", dashRedirect));
 
         }
@@ -666,6 +701,8 @@ public class AuthController {
 
                     || "agent".equalsIgnoreCase(credential.role())
 
+                    || "owner".equalsIgnoreCase(credential.role())
+
                     || "customer".equalsIgnoreCase(credential.role()))) {
 
             String username = safe(credential.username()).toLowerCase();
@@ -678,13 +715,15 @@ public class AuthController {
 
                 customer.setTenantId("propertydirect");
 
-                customer.setName("agent".equalsIgnoreCase(activeCred.role()) ? "Verified RERA Agent"
+                customer.setName("agent".equalsIgnoreCase(activeCred.role()) ? "Property Owner"
 
-                        : "vendor".equalsIgnoreCase(activeCred.role()) ? "Verified Property Vendor"
+                        : "vendor".equalsIgnoreCase(activeCred.role()) ? "Property Owner"
+
+                        : "owner".equalsIgnoreCase(activeCred.role()) ? "Property Owner"
 
                         : "customer".equalsIgnoreCase(activeCred.role()) ? "PropertyDirect Customer"
 
-                        : "Property Owner Admin");
+                        : "Property Direct Admin");
 
                 customer.setPhone("Not provided");
 
@@ -694,9 +733,11 @@ public class AuthController {
 
                 customer.setPasswordHash(passwordEncoder.encode(activeCred.password()));
 
-                customer.setRole("agent".equalsIgnoreCase(activeCred.role()) ? "AGENT"
+                customer.setRole("agent".equalsIgnoreCase(activeCred.role()) ? "OWNER"
 
-                        : "vendor".equalsIgnoreCase(activeCred.role()) ? "VENDOR"
+                        : "vendor".equalsIgnoreCase(activeCred.role()) ? "OWNER"
+
+                        : "owner".equalsIgnoreCase(activeCred.role()) ? "OWNER"
 
                         : "customer".equalsIgnoreCase(activeCred.role()) ? "CUSTOMER"
 
@@ -710,12 +751,25 @@ public class AuthController {
 
             });
 
+            if ("owner".equalsIgnoreCase(activeCred.role())
+                    || "agent".equalsIgnoreCase(activeCred.role())
+                    || "vendor".equalsIgnoreCase(activeCred.role())
+                    || username.contains("owner")) {
+                if (!"OWNER".equalsIgnoreCase(owner.getRole())) {
+                    owner.setRole("OWNER");
+                    owner.setName("Property Owner");
+                    owner = propertyDirectCustomers.save(owner);
+                }
+            }
+
             PropertyAccessService.signIn(session, owner);
 
         }
 
         String redirectTarget = credential.redirect();
-        if (redirectTarget == null || redirectTarget.isBlank()) {
+        if ("agent".equalsIgnoreCase(credential.role()) || "vendor".equalsIgnoreCase(credential.role()) || "owner".equalsIgnoreCase(credential.role())) {
+            redirectTarget = "/propertydirect/dashboards/owner";
+        } else if (redirectTarget == null || redirectTarget.isBlank()) {
             redirectTarget = "/propertydirect/dashboards/" + credential.role().toLowerCase(Locale.ROOT);
         }
         return ResponseEntity.ok(Map.of(
@@ -1028,9 +1082,15 @@ public class AuthController {
 
                 new DashboardRoute("propertydirect", "admin", "/propertydirect/dashboards/admin"),
 
-                new DashboardRoute("propertydirect", "vendor", "/propertydirect/dashboards/vendor"),
+                
 
-                new DashboardRoute("propertydirect", "customer", "/propertydirect/dashboards/customer")
+                new DashboardRoute("propertydirect", "agent", "/propertydirect/dashboards/owner"),
+
+                new DashboardRoute("propertydirect", "vendor", "/propertydirect/dashboards/owner"),
+
+                new DashboardRoute("propertydirect", "customer", "/propertydirect/dashboards/customer"),
+
+                new DashboardRoute("propertydirect", "owner", "/propertydirect/dashboards/owner")
 
         };
 
@@ -1121,6 +1181,18 @@ public class AuthController {
             if (allowDemo && "propertydirect".equalsIgnoreCase(platform) && "vendor".equalsIgnoreCase(role)) {
 
                 return new DefaultCredential("vendor@propertydirect", "vendor123");
+
+            }
+
+            if (allowDemo && "propertydirect".equalsIgnoreCase(platform) && "owner".equalsIgnoreCase(role)) {
+
+                return new DefaultCredential("owner@propertydirect", "owner123");
+
+            }
+
+            if (allowDemo && "propertydirect".equalsIgnoreCase(platform) && "customer".equalsIgnoreCase(role)) {
+
+                return new DefaultCredential("customer@propertydirect", "customer123");
 
             }
 

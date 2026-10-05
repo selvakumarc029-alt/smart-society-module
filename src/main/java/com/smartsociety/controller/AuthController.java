@@ -57,9 +57,11 @@ public class AuthController {
             String un = safe(request.username()).toLowerCase();
             String pwd = safe(request.password());
             if (un.contains("agent") && "agent123".equals(pwd)) {
-                credential = new DashboardCredential("propertydirect", "agent", un, pwd, "/propertydirect/dashboards/agent");
+                credential = new DashboardCredential("propertydirect", "owner", un, pwd, "/propertydirect/dashboards/owner");
             } else if (un.contains("vendor") && "vendor123".equals(pwd)) {
-                credential = new DashboardCredential("propertydirect", "vendor", un, pwd, "/propertydirect/dashboards/vendor");
+                credential = new DashboardCredential("propertydirect", "owner", un, pwd, "/propertydirect/dashboards/owner");
+            } else if (un.contains("owner") && "owner123".equals(pwd)) {
+                credential = new DashboardCredential("propertydirect", "owner", un, pwd, "/propertydirect/dashboards/owner");
             } else if (un.contains("superadmin") && "superadmin123".equals(pwd)) {
                 credential = new DashboardCredential("propertydirect", "superadmin", un, pwd, "/propertydirect/dashboards/superadmin");
             } else if ((un.startsWith("admin") || un.contains("admin@")) && "admin123".equals(pwd)) {
@@ -166,7 +168,9 @@ public class AuthController {
                 new DashboardRoute("propertydirect", "superadmin", "/propertydirect/dashboards/superadmin"),
                 new DashboardRoute("propertydirect", "admin", "/propertydirect/dashboards/admin"),
                 new DashboardRoute("propertydirect", "customer", "/propertydirect/dashboards/customer"),
-                new DashboardRoute("propertydirect", "vendor", "/propertydirect/dashboards/vendor")
+                new DashboardRoute("propertydirect", "agent", "/propertydirect/dashboards/owner"),
+                new DashboardRoute("propertydirect", "vendor", "/propertydirect/dashboards/owner"),
+                new DashboardRoute("propertydirect", "owner", "/propertydirect/dashboards/owner")
         };
 
         private static Map<String, DashboardCredential> load(Environment environment) {
@@ -211,6 +215,7 @@ public class AuthController {
                 case "propertydirect:customer" -> new DefaultCredential("customer@propertydirect", "customer123");
                 case "propertydirect:agent" -> new DefaultCredential("agent@propertydirect", "agent123");
                 case "propertydirect:vendor" -> new DefaultCredential("vendor@propertydirect", "vendor123");
+                case "propertydirect:owner" -> new DefaultCredential("owner@propertydirect", "owner123");
                 default -> new DefaultCredential("", "");
             };
         }

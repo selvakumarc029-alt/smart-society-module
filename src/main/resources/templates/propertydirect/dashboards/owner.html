@@ -1,0 +1,1763 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Owner Portal · PropertyDirect</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/shared/css/typography.css?v=20260818-readable-type-v1">
+  <link rel="stylesheet" href="/propertydirect/css/dashboard-responsive.css?v=20260912-global-alignment-v3">
+  <link rel="stylesheet" href="/propertydirect/css/dashboard-polish.css?v=20260928-visual-v2">
+  <style>
+    :root {
+      --pd-navy: #0a1834;
+      --pd-navy-light: #172a4d;
+      --pd-blue: #2563eb;
+      --pd-blue-hover: #1d4ed8;
+      --pd-gold: #d97706;
+      --pd-gold-soft: rgba(217, 119, 6, 0.12);
+      --pd-bg: #f8fafc;
+      --pd-card-bg: #ffffff;
+      --pd-border: #e2e8f0;
+      --pd-text-primary: #0f172a;
+      --pd-text-muted: #64748b;
+      --dashboard-sidebar-width: 280px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body, body.app-dashboard {
+      margin: 0 !important;
+      padding: 0 !important;
+      font-family: 'Manrope', system-ui, -apple-system, sans-serif !important;
+      background: var(--pd-bg) !important;
+      color: var(--pd-text-primary) !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      height: auto !important;
+      min-height: 100vh !important;
+    }
+
+    /* ==========================================================================
+       SIDEBAR PIXEL-PERFECT ALIGNMENT SYSTEM
+       ========================================================================== */
+    html body.app-dashboard[data-platform="propertydirect"] .owner-sidebar,
+    .owner-sidebar,
+    .dash-sidebar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: 280px !important;
+      min-width: 280px !important;
+      max-width: 280px !important;
+      height: 100vh !important;
+      height: 100dvh !important;
+      padding: 0 16px 16px 16px !important;
+      background: linear-gradient(180deg, #091326 0%, #0d1e3d 100%) !important;
+      color: #e2e8f0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      z-index: 1040 !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 4px 0 24px rgba(5, 12, 28, 0.25) !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+
+    /* Top Brand Section - Locked to exact 76px height for seamless horizontal alignment with main header */
+    .owner-sidebar-header {
+      width: calc(100% + 32px) !important;
+      height: 76px !important;
+      min-height: 76px !important;
+      max-height: 76px !important;
+      flex-shrink: 0 !important;
+      margin: 0 -16px !important;
+      padding: 0 16px !important;
+      display: flex !important;
+      align-items: center !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-sizing: border-box !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-sidebar .owner-brand,
+    .owner-brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 0 4px !important;
+      margin: 0 !important;
+      border-bottom: none !important;
+      text-decoration: none !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      cursor: pointer !important;
+    }
+
+    .owner-brand-icon {
+      width: 36px !important;
+      min-width: 36px !important;
+      max-width: 36px !important;
+      height: 36px !important;
+      border-radius: 9px !important;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      color: #ffffff !important;
+      font-weight: 800 !important;
+      font-size: 0.95rem !important;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .owner-brand-info {
+      display: flex !important;
+      flex-direction: column !important;
+      min-width: 0 !important;
+      justify-content: center !important;
+    }
+
+    .owner-brand-text {
+      font-size: 1.18rem !important;
+      font-weight: 800 !important;
+      color: #ffffff !important;
+      letter-spacing: -0.02em !important;
+      line-height: 1.2 !important;
+    }
+
+    .owner-brand-text span {
+      color: #60a5fa !important;
+    }
+
+    .owner-brand-badge {
+      display: block !important;
+      font-size: 0.65rem !important;
+      font-weight: 700 !important;
+      color: #94a3b8 !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase !important;
+      margin-top: 3px !important;
+      line-height: 1 !important;
+    }
+
+    /* Scrollable Navigation */
+    .owner-nav {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 5px !important;
+      margin: 12px 0 !important;
+      padding: 0 !important;
+      flex: 1 1 auto !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      min-height: 0 !important;
+    }
+
+    .owner-nav::-webkit-scrollbar {
+      width: 4px;
+    }
+    .owner-nav::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+    .owner-nav::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-nav button,
+    .owner-nav button {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 7px 10px !important;
+      border-radius: 10px !important;
+      border: 1px solid transparent !important;
+      background: transparent !important;
+      color: #94a3b8 !important;
+      cursor: pointer !important;
+      text-align: left !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-nav button:hover,
+    .owner-nav button:hover {
+      background: rgba(255, 255, 255, 0.06) !important;
+      color: #ffffff !important;
+      border-color: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-nav button.active,
+    .owner-nav button.active {
+      background: #2563eb !important;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-nav button span.icon-badge,
+    .owner-nav button span.icon-badge {
+      width: 36px !important;
+      min-width: 36px !important;
+      max-width: 36px !important;
+      height: 36px !important;
+      border-radius: 9px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 0.8rem !important;
+      font-weight: 800 !important;
+      color: #cbd5e1 !important;
+      flex-shrink: 0 !important;
+      transition: all 0.2s ease !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-nav button:hover span.icon-badge,
+    .owner-nav button:hover span.icon-badge {
+      background: rgba(255, 255, 255, 0.15) !important;
+      color: #ffffff !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-nav button.active span.icon-badge,
+    .owner-nav button.active span.icon-badge {
+      background: rgba(255, 255, 255, 0.22) !important;
+      border-color: rgba(255, 255, 255, 0.3) !important;
+      color: #ffffff !important;
+    }
+
+    .owner-nav button .nav-label {
+      flex: 1 1 auto !important;
+      font-size: 0.88rem !important;
+      font-weight: 700 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      line-height: 1.2 !important;
+    }
+
+    /* Bottom User Profile Section */
+    .owner-sidebar-footer {
+      width: 100% !important;
+      flex-shrink: 0 !important;
+      margin-top: auto !important;
+      padding-top: 14px !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .owner-user-badge {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 12px !important;
+      padding: 10px 10px !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      border-radius: 12px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    .owner-avatar {
+      width: 36px !important;
+      min-width: 36px !important;
+      max-width: 36px !important;
+      height: 36px !important;
+      border-radius: 50% !important;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+      color: #ffffff !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-weight: 800 !important;
+      font-size: 0.95rem !important;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .owner-user-info {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      gap: 2px !important;
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      overflow: hidden !important;
+      text-align: left !important;
+    }
+
+    .owner-user-info strong {
+      display: block !important;
+      font-size: 0.86rem !important;
+      font-weight: 800 !important;
+      color: #ffffff !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      line-height: 1.2 !important;
+    }
+
+    .owner-user-info span {
+      display: block !important;
+      font-size: 0.72rem !important;
+      color: #94a3b8 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      line-height: 1.2 !important;
+    }
+
+    /* Explicit override for logout button so broad CSS does not set width: 100% */
+    html body.app-dashboard[data-platform="propertydirect"] .owner-sidebar .owner-logout-btn,
+    html body.app-dashboard .owner-sidebar .owner-logout-btn,
+    .owner-sidebar .owner-logout-btn {
+      width: 34px !important;
+      min-width: 34px !important;
+      max-width: 34px !important;
+      height: 34px !important;
+      min-height: 34px !important;
+      max-height: 34px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border-radius: 8px !important;
+      background: rgba(255, 255, 255, 0.06) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+      color: #94a3b8 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+      text-decoration: none !important;
+      transition: all 0.2s ease !important;
+      cursor: pointer !important;
+    }
+
+    html body.app-dashboard[data-platform="propertydirect"] .owner-sidebar .owner-logout-btn:hover,
+    .owner-sidebar .owner-logout-btn:hover {
+      background: rgba(239, 68, 68, 0.18) !important;
+      border-color: rgba(239, 68, 68, 0.35) !important;
+      color: #f87171 !important;
+      transform: scale(1.05) !important;
+    }
+
+    /* MAIN CONTENT */
+    .owner-main, .dash-main {
+      margin-left: 280px !important;
+      padding: 0 32px 48px 32px !important;
+      width: calc(100% - 280px) !important;
+      max-width: calc(100% - 280px) !important;
+      min-height: 100vh !important;
+      height: auto !important;
+      background: var(--pd-bg) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow-x: hidden !important;
+      overflow-y: visible !important;
+      box-sizing: border-box !important;
+    }
+
+    .owner-header, .dash-header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      height: 76px !important;
+      min-height: 76px !important;
+      max-height: 76px !important;
+      margin: 0 -32px 24px -32px !important;
+      background: #ffffff !important;
+      padding: 0 32px !important;
+      border: 0 !important;
+      border-bottom: 1px solid var(--pd-border) !important;
+      border-radius: 0 !important;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+      width: calc(100% + 64px) !important;
+      box-sizing: border-box !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1020 !important;
+    }
+
+    .owner-header > div:first-child,
+    .dash-header > div:first-child {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      min-width: 0 !important;
+      flex: 1 1 auto !important;
+    }
+
+    .owner-header #panelTitle,
+    .dash-header #panelTitle {
+      font-size: 1.35rem !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      margin: 0 0 2px 0 !important;
+      line-height: 1.2 !important;
+      letter-spacing: -0.02em !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .owner-header p,
+    .dash-header p {
+      font-size: 0.82rem !important;
+      color: #64748b !important;
+      margin: 0 !important;
+      line-height: 1.25 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      max-width: 720px !important;
+    }
+
+    .dash-panel {
+      margin-left: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 24px !important;
+    }
+
+    .dash-panel.hidden, [data-view].hidden {
+      display: none !important;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .stat-card {
+      background: var(--pd-card-bg);
+      border: 1px solid var(--pd-border);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+    }
+
+    .stat-card .label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--pd-text-muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-card .val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--pd-text-primary);
+    }
+
+    /* ==========================================================================
+       CARD & TABLE ALIGNMENT SYSTEM
+       ========================================================================== */
+    .dash-card {
+      background: var(--pd-card-bg, #ffffff) !important;
+      border: 1px solid var(--pd-border, #e2e8f0) !important;
+      border-radius: 16px !important;
+      padding: 24px !important;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03) !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+    }
+
+    /* Table Cards: Flush table borders with explicit card-head padding */
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card.table-card,
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card:has(table),
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card:has(.data-table),
+    .owner-main .dash-card.table-card,
+    .owner-main .dash-card:has(table),
+    .owner-main .dash-card:has(.data-table) {
+      padding: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /* Card Head inside Table Cards */
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card.table-card .card-head,
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card:has(table) .card-head,
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card:has(.data-table) .card-head,
+    .owner-main .dash-card.table-card .card-head,
+    .owner-main .dash-card:has(table) .card-head,
+    .owner-main .dash-card:has(.data-table) .card-head {
+      padding: 20px 24px 18px 24px !important;
+      margin: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
+      background: #ffffff !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+    }
+
+    /* Card Head inside Form and Regular Cards */
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card:not(.table-card):not(:has(table)):not(:has(.data-table)) .card-head,
+    .owner-main .dash-card:not(.table-card):not(:has(table)):not(:has(.data-table)) .card-head {
+      padding: 0 0 18px 0 !important;
+      margin: 0 0 20px 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+    }
+
+    .card-head > div:first-child {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      gap: 4px !important;
+      min-width: 200px !important;
+      flex: 1 1 auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .card-head h3 {
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 1.15rem !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      letter-spacing: -0.02em !important;
+      line-height: 1.25 !important;
+    }
+
+    .card-head p {
+      margin: 0 !important;
+      padding: 0 !important;
+      font-size: 0.84rem !important;
+      color: #64748b !important;
+      line-height: 1.35 !important;
+    }
+
+    /* Uniform action buttons inside card header */
+    html body.app-dashboard[data-platform="propertydirect"] .card-head :is(button, .btn-primary, .btn-secondary, a.button),
+    .owner-main .card-head :is(button, .btn-primary, .btn-secondary, a.button) {
+      flex: 0 0 auto !important;
+      align-self: center !important;
+      min-height: 38px !important;
+      height: 38px !important;
+      padding: 0 18px !important;
+      border-radius: 9px !important;
+      font-size: 0.84rem !important;
+      font-weight: 700 !important;
+      line-height: 1 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      margin: 0 !important;
+      box-sizing: border-box !important;
+      cursor: pointer !important;
+      white-space: nowrap !important;
+    }
+
+    /* Data Table - Pixel-perfect 24px left and right gutters matching card-head */
+    .data-table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      font-size: 0.88rem !important;
+      box-sizing: border-box !important;
+    }
+
+    .data-table th {
+      text-align: left !important;
+      padding: 13px 14px !important;
+      font-weight: 700 !important;
+      color: var(--pd-text-muted, #64748b) !important;
+      border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
+      background: #f8fafc !important;
+      font-size: 0.78rem !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      line-height: 1.2 !important;
+      white-space: nowrap !important;
+    }
+
+    .data-table td {
+      padding: 14px 14px !important;
+      border-bottom: 1px solid #f1f5f9 !important;
+      color: var(--pd-text-primary, #0f172a) !important;
+      font-size: 0.88rem !important;
+      vertical-align: middle !important;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none !important;
+    }
+
+    /* First column aligns with title text at exactly 24px from left card edge */
+    html body.app-dashboard[data-platform="propertydirect"] .data-table th:first-child,
+    html body.app-dashboard[data-platform="propertydirect"] .data-table td:first-child,
+    .owner-main .data-table th:first-child,
+    .owner-main .data-table td:first-child {
+      padding-left: 24px !important;
+    }
+
+    /* Last column aligns with button at exactly 24px from right card edge */
+    html body.app-dashboard[data-platform="propertydirect"] .data-table th:last-child,
+    html body.app-dashboard[data-platform="propertydirect"] .data-table td:last-child,
+    .owner-main .data-table th:last-child,
+    .owner-main .data-table td:last-child {
+      padding-right: 24px !important;
+      text-align: right !important;
+    }
+
+    .status-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 4px 10px !important;
+      border-radius: 999px !important;
+      font-size: 0.76rem !important;
+      font-weight: 700 !important;
+      line-height: 1.2 !important;
+      white-space: nowrap !important;
+    }
+
+    .status-badge.active { background: #dcfce7 !important; color: #15803d !important; }
+    .status-badge.pending { background: #fef9c3 !important; color: #a16207 !important; }
+    .status-badge.review { background: #e0e7ff !important; color: #4338ca !important; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+      color: #ffffff !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      padding: 0 18px !important;
+      min-height: 38px !important;
+      height: 38px !important;
+      border-radius: 9px !important;
+      font-weight: 700 !important;
+      font-size: 0.84rem !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 8px !important;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      text-decoration: none !important;
+      line-height: 1 !important;
+      box-sizing: border-box !important;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35) !important;
+      transform: translateY(-1px) !important;
+    }
+
+    .btn-secondary {
+      background: #ffffff !important;
+      color: #334155 !important;
+      border: 1px solid var(--pd-border, #e2e8f0) !important;
+      padding: 0 16px !important;
+      min-height: 38px !important;
+      height: 38px !important;
+      border-radius: 9px !important;
+      font-weight: 700 !important;
+      font-size: 0.84rem !important;
+      cursor: pointer !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      text-decoration: none !important;
+      line-height: 1 !important;
+      box-sizing: border-box !important;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc !important;
+      border-color: #cbd5e1 !important;
+      color: #0f172a !important;
+    }
+
+    .pd-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .pd-modal-overlay.hidden {
+      display: none !important;
+    }
+
+    /* FORM & GRID SYSTEM */
+    .form-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 20px 24px !important;
+      margin-top: 16px !important;
+    }
+
+    .form-group {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 7px !important;
+    }
+
+    .form-group.full-width,
+    .property-form-section,
+    .profile-wide,
+    .property-submit-row {
+      grid-column: 1 / -1 !important;
+    }
+
+    .property-form-section {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+      padding: 22px 0 12px 0 !important;
+      border-bottom: 2px solid #e2e8f0 !important;
+      margin-top: 12px !important;
+    }
+
+    .property-form-section:first-child {
+      padding-top: 0 !important;
+      margin-top: 0 !important;
+    }
+
+    .property-form-section .section-tag {
+      align-self: flex-start !important;
+      font-size: 0.68rem !important;
+      font-weight: 800 !important;
+      color: #2563eb !important;
+      background: #eff6ff !important;
+      border: 1px solid #dbeafe !important;
+      padding: 3px 10px !important;
+      border-radius: 999px !important;
+      letter-spacing: 0.08em !important;
+      text-transform: uppercase !important;
+      margin-bottom: 4px !important;
+    }
+
+    .property-form-section strong {
+      font-size: 1.12rem !important;
+      font-weight: 800 !important;
+      color: #0f172a !important;
+      letter-spacing: -0.01em !important;
+    }
+
+    .property-form-section small {
+      font-size: 0.83rem !important;
+      color: #64748b !important;
+      font-weight: 500 !important;
+    }
+
+    .form-group label,
+    #ownerProfileForm label {
+      font-size: 0.84rem !important;
+      font-weight: 700 !important;
+      color: #1e293b !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+    }
+
+    .form-group label span.req,
+    #ownerProfileForm label span.req {
+      color: #ef4444 !important;
+      font-weight: 800 !important;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea,
+    #ownerProfileForm input,
+    #ownerProfileForm select,
+    #ownerProfileForm textarea {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      padding: 11px 16px !important;
+      border: 1.5px solid #cbd5e1 !important;
+      border-radius: 10px !important;
+      font-size: 0.88rem !important;
+      font-weight: 600 !important;
+      font-family: 'Manrope', system-ui, sans-serif !important;
+      color: #0f172a !important;
+      background: #ffffff !important;
+      transition: all 0.2s ease !important;
+      outline: none !important;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus,
+    #ownerProfileForm input:focus,
+    #ownerProfileForm select:focus,
+    #ownerProfileForm textarea:focus {
+      border-color: #2563eb !important;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+      background: #ffffff !important;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #94a3b8 !important;
+      font-weight: 500 !important;
+    }
+
+    /* PHOTO DROPZONE */
+    .property-photo-upload {
+      border: 2px dashed #93c5fd !important;
+      background: #f8fbff !important;
+      border-radius: 14px !important;
+      padding: 30px 20px !important;
+      text-align: center !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
+      margin-bottom: 12px !important;
+    }
+
+    .property-photo-upload:hover,
+    .property-photo-upload.is-dragging {
+      border-color: #2563eb !important;
+      background: #eff6ff !important;
+      transform: translateY(-1px) !important;
+    }
+
+    .property-photo-upload input[type="file"] {
+      display: none !important;
+    }
+
+    .property-photo-upload-content {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+    }
+
+    .upload-icon-circle {
+      width: 52px !important;
+      height: 52px !important;
+      border-radius: 50% !important;
+      background: #dbeafe !important;
+      color: #2563eb !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      margin-bottom: 4px !important;
+    }
+
+    .property-photo-upload-content strong {
+      font-size: 0.95rem !important;
+      font-weight: 800 !important;
+      color: #1e293b !important;
+    }
+
+    .property-photo-upload-content span {
+      font-size: 0.8rem !important;
+      color: #64748b !important;
+    }
+
+    .photo-count-pill {
+      margin-top: 6px !important;
+      font-size: 0.82rem !important;
+      font-weight: 700 !important;
+      color: #2563eb !important;
+      background: #eff6ff !important;
+      border: 1px solid #bfdbfe !important;
+      padding: 4px 12px !important;
+      border-radius: 999px !important;
+    }
+
+    .property-photo-preview {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 12px !important;
+      margin-top: 10px !important;
+    }
+
+    .property-photo-preview img {
+      width: 90px !important;
+      height: 75px !important;
+      object-fit: cover !important;
+      border-radius: 8px !important;
+      border: 1px solid #cbd5e1 !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    }
+
+    /* AMENITIES PILLS */
+    .amenities-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 12px !important;
+      margin-top: 8px !important;
+    }
+
+    .amenity-pill-label {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      padding: 10px 14px !important;
+      border-radius: 10px !important;
+      border: 1.5px solid #e2e8f0 !important;
+      background: #ffffff !important;
+      cursor: pointer !important;
+      font-weight: 700 !important;
+      font-size: 0.84rem !important;
+      color: #334155 !important;
+      transition: all 0.2s ease !important;
+    }
+
+    .amenity-pill-label:hover {
+      border-color: #93c5fd !important;
+      background: #f8fbff !important;
+    }
+
+    .amenity-pill-label input[type="checkbox"] {
+      width: 17px !important;
+      height: 17px !important;
+      accent-color: #2563eb !important;
+      cursor: pointer !important;
+      flex-shrink: 0 !important;
+    }
+
+    /* SUBMIT ROW */
+    .property-submit-row {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      gap: 16px !important;
+      padding-top: 24px !important;
+      margin-top: 24px !important;
+      border-top: 1px solid #e2e8f0 !important;
+      flex-wrap: wrap !important;
+    }
+
+    @media (max-width: 900px) {
+      .owner-sidebar, .dash-sidebar { transform: translateX(-100%); }
+      .owner-main, .dash-main { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; padding: 0 16px 24px !important; }
+      .dash-panel { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; }
+      .form-grid { grid-template-columns: 1fr !important; }
+      .amenities-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+  </style>
+</head>
+<body class="app-dashboard" data-platform="propertydirect" data-dashboard-role="owner">
+    <!-- Owner Sidebar -->
+    <aside class="dash-sidebar owner-sidebar sidebar" id="ownerSidebar">
+      <div class="owner-sidebar-header">
+        <a href="/propertydirect" class="owner-brand">
+          <div class="owner-brand-icon">PD</div>
+          <div class="owner-brand-info">
+            <div class="owner-brand-text">Property<span>Direct</span></div>
+            <span class="owner-brand-badge">Owner &amp; Seller Portal</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="owner-nav sidebar-nav" aria-label="Owner dashboard navigation">
+        <button class="active" data-panel="overview" onclick="switchTab('overview')">
+          <span class="icon-badge">OV</span>
+          <span class="nav-label">Dashboard Overview</span>
+        </button>
+        <button data-panel="listings" onclick="switchTab('listings')">
+          <span class="icon-badge">PR</span>
+          <span class="nav-label">My Property Listings</span>
+        </button>
+        <button data-panel="post-listing" onclick="switchTab('post-listing')">
+          <span class="icon-badge">+</span>
+          <span class="nav-label">Post New Property</span>
+        </button>
+        <button data-panel="leads" onclick="switchTab('leads')">
+          <span class="icon-badge">LD</span>
+          <span class="nav-label">Client Leads &amp; Inquiries</span>
+        </button>
+        <button data-panel="tours" onclick="switchTab('tours')">
+          <span class="icon-badge">TR</span>
+          <span class="nav-label">Scheduled Site Tours</span>
+        </button>
+        <button data-panel="builder-projects" onclick="switchTab('builder-projects')">
+          <span class="icon-badge">BP</span>
+          <span class="nav-label">Builder Projects</span>
+        </button>
+        <button data-panel="earnings" onclick="switchTab('earnings')">
+          <span class="icon-badge">&#8377;</span>
+          <span class="nav-label">Financials &amp; Earnings</span>
+        </button>
+        <button data-panel="profile" onclick="switchTab('profile')">
+          <span class="icon-badge">PF</span>
+          <span class="nav-label">Owner Profile &amp; KYC</span>
+        </button>
+      </nav>
+
+      <div class="owner-sidebar-footer">
+        <div class="owner-user-badge">
+          <div class="owner-avatar">OW</div>
+          <div class="owner-user-info">
+            <strong id="sidebarOwnerName">Property Owner</strong>
+            <span id="sidebarOwnerEmail">owner@propertydirect.in</span>
+          </div>
+          <a href="/dashboards/logout?platform=propertydirect" class="owner-logout-btn" title="Sign Out">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dash-main owner-main main-content">
+      <!-- Top Header -->
+      <header class="dash-header owner-header">
+        <div>
+          <h1 id="panelTitle">Property Owner Portal</h1>
+          <p>Directly manage your property portfolio, client leads, site visit tours, builder enclaves, and rental earnings.</p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; flex-shrink: 0;">
+          <span class="status-badge active" style="font-size: 0.78rem; padding: 6px 12px; white-space: nowrap;">&#9679; Verified Owner / Partner</span>
+          <button class="btn-primary" style="white-space: nowrap; font-size: 0.84rem;" onclick="switchTab('post-listing')">+ Add New Listing</button>
+        </div>
+      </header>
+
+      <!-- Panel 1: Overview -->
+      <section class="dash-panel" data-view="overview">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="label">My Live Listings</div>
+            <div class="val" data-stat="live">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Client Inquiries &amp; Leads</div>
+            <div class="val" data-stat="leads">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Pending Verification</div>
+            <div class="val" data-stat="pending" style="color: #d97706;">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Total Portfolio Earnings</div>
+            <div class="val" style="color: #16a34a;">&#8377;4,85,000</div>
+          </div>
+        </div>
+
+        <!-- Recent Client Enquiries Overview Card -->
+        <div class="dash-card table-card">
+          <div class="card-head">
+            <div>
+              <h3>Recent Client Enquiries &amp; Leads</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Live inquiries received from prospective property buyers and tenants</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-primary" style="padding: 8px 14px; font-size: 0.82rem;" onclick="openAgentLeadModal()">+ Record Lead</button>
+              <button class="btn-secondary" onclick="switchTab('leads')">View All Leads &rsaquo;</button>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Lead Ref</th>
+                <th>Client Name &amp; Contact</th>
+                <th>Interested Property</th>
+                <th>Inquiry Type / Budget</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="agentOverviewLeadsBody">
+              <!-- Populated dynamically by market-workflows.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Quick Actions Row -->
+        <div class="dash-card" style="background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border: 1px solid #dbeafe;">
+          <h4 style="margin: 0 0 8px 0; font-size: 1.05rem; font-weight: 800; color: #1e3a8a;">Quick Operations Desk</h4>
+          <p style="margin: 0 0 16px 0; font-size: 0.82rem; color: #475569;">Unified owner tools for publishing units, managing tours, and collaborating on developments.</p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="btn-primary" onclick="switchTab('post-listing')">+ Post New Apartment / Villa</button>
+            <button class="btn-secondary" onclick="switchTab('tours')">&#128197; Scheduled Site Visits</button>
+            <button class="btn-secondary" onclick="switchTab('builder-projects')">&#127959;&#65039; Builder Projects</button>
+            <button class="btn-secondary" onclick="switchTab('earnings')">&#8377; View Rental &amp; Sale Revenue</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 2: Listings -->
+      <section class="dash-panel hidden" data-view="listings">
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="label">Active Marketplace Listings</div>
+            <div class="val" data-stat="live" style="color: #16a34a;">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Pending Super Admin Review</div>
+            <div class="val" data-stat="pending" style="color: #d97706;">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Total Portfolio Value</div>
+            <div class="val" id="agentTotalValue">&#8377;0</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Average Market Price</div>
+            <div class="val" id="agentAvgPrice">&#8377;0</div>
+          </div>
+        </div>
+
+        <div class="dash-card table-card">
+          <div class="card-head">
+            <div>
+              <h3>My Property Listings</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Directly wired to PropertyDirect listing creation and moderation review APIs</p>
+            </div>
+            <button class="btn-primary" onclick="switchTab('post-listing')">+ Create New Listing</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Property ID</th>
+                <th>Title &amp; Location</th>
+                <th>Type / BHK</th>
+                <th>Asking Price</th>
+                <th>Moderation / RERA</th>
+                <th>Portal Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="agentListingsBody">
+              <!-- Populated dynamically by market-workflows.js from /api/property/my-listings -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 3: Post Property Listing -->
+      <section class="dash-panel hidden" data-view="post-listing">
+        <div class="dash-card">
+          <div class="card-head">
+            <div>
+              <h3 id="agentFormTitle">Post New Property Listing</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Submit property details and photos directly to the PropertyDirect listing API for Super Admin moderation.</p>
+            </div>
+            <button class="btn-secondary" onclick="switchTab('listings')">&larr; Back to Listings</button>
+          </div>
+
+          <form id="postApartmentForm" data-property-api-form="true">
+            <div class="form-grid">
+              <!-- Step 1: Basic Information -->
+              <div class="property-form-section">
+                <div class="section-tag">Step 1 of 4</div>
+                <strong>Basic Property Information</strong>
+                <small>Title, location, configuration, and structural specs</small>
+              </div>
+
+              <!-- Full-width property title -->
+              <div class="form-group full-width">
+                <label>Property Title <span class="req">*</span></label>
+                <input type="text" name="title" required placeholder="e.g. Luxury 3 BHK in Prestige Shantiniketan">
+              </div>
+
+              <!-- City & Locality (2 columns) -->
+              <div class="form-group">
+                <label>City <span class="req">*</span></label>
+                <input type="text" name="city" required value="Bengaluru">
+              </div>
+
+              <div class="form-group">
+                <label>Locality / Society Name <span class="req">*</span></label>
+                <input type="text" name="locality" required placeholder="e.g. Whitefield / Brigade Metropolis">
+              </div>
+
+              <!-- BHK & Property Type (2 columns) -->
+              <div class="form-group">
+                <label>BHK Configuration <span class="req">*</span></label>
+                <select name="bhk" required>
+                  <option value="1 BHK">1 BHK</option>
+                  <option value="2 BHK" selected>2 BHK</option>
+                  <option value="3 BHK">3 BHK</option>
+                  <option value="4 BHK">4 BHK</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Property Type <span class="req">*</span></label>
+                <select name="propertyType" required>
+                  <option value="APARTMENT">Apartment</option>
+                  <option value="VILLA">Villa / Independent House</option>
+                  <option value="PENTHOUSE">Penthouse</option>
+                  <option value="PLOT">Residential Plot</option>
+                </select>
+              </div>
+
+              <!-- Step 2: Financial Terms -->
+              <div class="property-form-section">
+                <div class="section-tag">Step 2 of 4</div>
+                <strong>Financial &amp; Rental Terms</strong>
+                <small>Pricing, security deposit, maintenance, and possession details</small>
+              </div>
+
+              <!-- Listing Purpose & Price (2 columns) -->
+              <div class="form-group">
+                <label>Listing Purpose <span class="req">*</span></label>
+                <select name="type" required>
+                  <option value="RENT">For Rent / Lease</option>
+                  <option value="SALE">For Sale</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Asking Rent / Price (&#8377;) <span class="req">*</span></label>
+                <input type="number" name="price" required placeholder="e.g. 45000">
+              </div>
+
+              <!-- Deposit & Maintenance (2 columns) -->
+              <div class="form-group">
+                <label>Security Deposit (&#8377;)</label>
+                <input type="number" name="deposit" placeholder="e.g. 200000">
+              </div>
+
+              <div class="form-group">
+                <label>Maintenance Fee (&#8377;/month)</label>
+                <input type="number" name="maintenance" placeholder="e.g. 3500">
+              </div>
+
+              <!-- Area & Pincode (2 columns) -->
+              <div class="form-group">
+                <label>Super Built-up Area (sq ft)</label>
+                <input type="number" name="areaSqft" placeholder="e.g. 1450">
+              </div>
+
+              <div class="form-group">
+                <label>Pincode <span class="req">*</span></label>
+                <input type="text" name="pincode" required pattern="[0-9]{6}" maxlength="6" value="560066" placeholder="6-digit pincode">
+              </div>
+
+              <!-- Bathrooms & Furnishing (2 columns) -->
+              <div class="form-group">
+                <label>Bathrooms <span class="req">*</span></label>
+                <input type="number" name="bathrooms" required min="1" max="10" value="2">
+              </div>
+
+              <div class="form-group">
+                <label>Furnishing Status</label>
+                <select name="furnishing">
+                  <option value="Semi-Furnished" selected>Semi-Furnished</option>
+                  <option value="Fully Furnished">Fully Furnished</option>
+                  <option value="Unfurnished">Unfurnished</option>
+                </select>
+              </div>
+
+              <!-- Parking (full width) -->
+              <div class="form-group full-width">
+                <label>Reserved Parking</label>
+                <select name="parking">
+                  <option value="1 Covered Car Park" selected>1 Covered Car Park</option>
+                  <option value="2 Covered Car Parks">2 Covered Car Parks</option>
+                  <option value="Open Parking">Open Parking</option>
+                  <option value="No Parking">No Parking</option>
+                </select>
+              </div>
+
+              <!-- Step 3: Photos Upload -->
+              <div class="property-form-section">
+                <div class="section-tag">Step 3 of 4</div>
+                <strong>Property Photos (Up to 10 High Quality Photos) <span class="req">*</span></strong>
+                <small>Direct photos are stored in the PropertyDirect media vault for verified client tours</small>
+              </div>
+
+              <div class="form-group full-width">
+                <div class="property-photo-upload" id="photoDropzone" onclick="document.getElementById('propertyPhotoInput')?.click()">
+                  <input type="file" id="propertyPhotoInput" name="photos" multiple accept="image/*" required>
+                  <div class="property-photo-upload-content">
+                    <div class="upload-icon-circle">
+                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    </div>
+                    <strong>Click or Drag Photos Here to Upload</strong>
+                    <span>Supports high-resolution JPG, PNG, WEBP (Max 10 photos total)</span>
+                    <div id="propertyPhotoCount" class="photo-count-pill">No photos selected</div>
+                  </div>
+                </div>
+                <div class="property-photo-preview" id="propertyPhotoPreview"></div>
+              </div>
+
+              <!-- Step 4: Description & Amenities -->
+              <div class="property-form-section">
+                <div class="section-tag">Step 4 of 4</div>
+                <strong>Description &amp; Key Amenities</strong>
+                <small>Highlights, proximity to tech parks, metro stations, and society features</small>
+              </div>
+
+              <div class="form-group full-width">
+                <label>Property Description</label>
+                <textarea name="description" rows="3" placeholder="Describe the layout, facing, floor, ventilation, and landmark connectivity..."></textarea>
+              </div>
+
+              <div class="form-group full-width">
+                <label>Society &amp; Unit Amenities</label>
+                <div class="amenities-grid">
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="Gym" checked> <span>🏋️ Fitness Gym</span>
+                  </label>
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="Swimming Pool" checked> <span>🏊 Swimming Pool</span>
+                  </label>
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="Power Backup" checked> <span>⚡ Power Backup</span>
+                  </label>
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="Covered Parking" checked> <span>🚗 Covered Parking</span>
+                  </label>
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="Clubhouse"> <span>🏛️ Clubhouse</span>
+                  </label>
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="24x7 Security"> <span>🛡️ 24x7 Security</span>
+                  </label>
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="Children Play Area"> <span>🛝 Children's Play Area</span>
+                  </label>
+                  <label class="amenity-pill-label">
+                    <input type="checkbox" name="amenities" value="Lift"> <span>🛗 High Speed Lift</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="property-submit-row">
+              <div>
+                <span id="propertySubmissionNotice" style="display: block; font-size: 0.85rem; color: #64748b; font-weight: 600;">
+                  ⚠️ Submitted listings enter the Super Admin approval queue before going live.
+                </span>
+                <span id="propertySubmissionSuccess" class="hidden" style="color: #16a34a; font-weight: 800; font-size: 0.92rem; display: block; margin-top: 4px;"></span>
+              </div>
+              <button type="submit" class="btn-primary" style="padding: 12px 28px; font-size: 0.92rem;" data-property-api-action="publish-owner-listing">Submit Property for Approval</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Panel 4: Leads & Inquiries -->
+      <section class="dash-panel hidden" data-view="leads">
+        <div class="dash-card table-card">
+          <div class="card-head">
+            <div>
+              <h3>Client Leads &amp; Inquiries</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Directly connected to PropertyDirect property enquiry workflow APIs</p>
+            </div>
+            <button class="btn-primary" onclick="openAgentLeadModal()">+ Record New Lead</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Lead Ref</th>
+                <th>Client Name &amp; Contact</th>
+                <th>Interested Property</th>
+                <th>Inquiry Type / Budget</th>
+                <th>Received Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="agentLeadsBody">
+              <!-- Populated dynamically by market-workflows.js -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 5: Tours & Visits -->
+      <section class="dash-panel hidden" data-view="tours">
+        <div class="dash-card table-card">
+          <div class="card-head">
+            <div>
+              <h3>Scheduled Site Visit Tours &amp; Requests</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Direct requests from buyers and tenants to visit your listed properties</p>
+            </div>
+            <button class="btn-primary" type="button" data-property-api-action="refresh-owner-visits">Refresh Visits</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Scheduled Date &amp; Time</th>
+                <th>Visitor Name &amp; Contact</th>
+                <th>Notes</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="agentVisitsBody">
+              <!-- Populated dynamically by market-workflows.js loadOwnerVisits() -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 6: Builder Projects (From Vendor) -->
+      <section class="dash-panel hidden" data-view="builder-projects">
+        <div class="dash-card">
+          <div class="card-head">
+            <div>
+              <h3>Builder Projects &amp; Multi-Tower Enclaves</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Promote township launches, master floor plans, and direct builder sales contacts.</p>
+            </div>
+            <button class="btn-primary" onclick="openLaunchProjectModal()">+ Launch New Project</button>
+          </div>
+          <div id="vendorProjectsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+            <div style="grid-column: 1 / -1; padding: 36px 20px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+              No builder projects launched yet. Click &quot;+ Launch New Project&quot; to register a multi-tower project or enclave.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Panel 7: Financials & Earnings -->
+      <section class="dash-panel hidden" data-view="earnings">
+        <div class="stats-grid" style="margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="label">Total Earned</div>
+            <div class="val" style="color: #16a34a;">&#8377;4,85,000</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Pending Payouts</div>
+            <div class="val" style="color: #d97706;">&#8377;95,000</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Closed Deals / Leases</div>
+            <div class="val">12</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Average Yield / Rate</div>
+            <div class="val">5.8%</div>
+          </div>
+        </div>
+
+        <div class="dash-card table-card">
+          <div class="card-head">
+            <div>
+              <h3>Rental Payouts &amp; Commission History</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Record of rental disbursements, transaction commissions, and verified payouts</p>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Payout Ref</th>
+                <th>Property Transaction</th>
+                <th>Deal Value</th>
+                <th>Type</th>
+                <th>Earned Amount</th>
+                <th>Payout Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 24px; color: #64748b;">No commission payouts recorded yet. Completed transactions and verified owner payouts will appear here.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Panel 8: Profile & KYC -->
+      <section class="dash-panel hidden" data-view="profile">
+        <div class="dash-card">
+          <div class="card-head">
+            <div>
+              <h3>Owner / Partner Profile &amp; KYC Verification</h3>
+              <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Keep your official contact and ownership details up to date for client verification</p>
+            </div>
+            <button class="btn-primary" onclick="saveOwnerProfile()">Save Profile</button>
+          </div>
+          <form id="ownerProfileForm" onsubmit="event.preventDefault(); saveOwnerProfile();" class="form-grid">
+            <div class="form-group">
+              <label>Owner / Partner Full Name <span class="req">*</span></label>
+              <input type="text" id="ownerNameInput" value="Verified Property Owner" required>
+            </div>
+            <div class="form-group">
+              <label>Ownership / RERA Registration No</label>
+              <input type="text" id="ownerReraInput" placeholder="e.g. PRM/KA/RERA/1251/... or Deed Ref">
+            </div>
+            <div class="form-group">
+              <label>Official Email <span class="req">*</span></label>
+              <input type="email" id="ownerEmailInput" value="owner@propertydirect.in" required>
+            </div>
+            <div class="form-group">
+              <label>Contact Phone Number <span class="req">*</span></label>
+              <input type="tel" id="ownerPhoneInput" value="+91 98450 12345" required>
+            </div>
+            <div class="form-group">
+              <label>Entity / Management Firm (Optional)</label>
+              <input type="text" placeholder="Individual Owner or Entity">
+            </div>
+            <div class="form-group">
+              <label>Primary Metro Region</label>
+              <input type="text" value="Bengaluru / Karnataka">
+            </div>
+            <div class="form-group full-width" style="display: flex; justify-content: flex-end; margin-top: 10px;">
+              <button type="submit" class="btn-primary" style="padding: 12px 28px;">Save Profile Changes</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+  <!-- Record Lead Modal -->
+  <div class="pd-modal-overlay hidden" id="recordLeadModal">
+    <div style="background: #ffffff; width: 100%; max-width: 560px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; font-family: 'Manrope', sans-serif;">
+      <div style="background: #0f172a; color: #ffffff; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #ffffff;">Record Client Enquiry / Lead</h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #94a3b8;">Create a new lead connected to the PropertyDirect enquiry API</p>
+        </div>
+        <button onclick="closeAgentLeadModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="agentRecordLeadForm" data-property-api-form="true" style="padding: 24px; display: grid; gap: 16px;">
+        <div>
+          <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Interested Property Listing *</label>
+          <select name="listingId" id="leadListingSelect" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600;">
+            <option value="">Select a property listing...</option>
+          </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Full Name *</label>
+            <input type="text" name="name" required placeholder="e.g. Ramesh Kumar" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Phone Number *</label>
+            <input type="tel" name="phone" required placeholder="e.g. +91 98450 12345" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Email *</label>
+            <input type="email" name="email" required placeholder="e.g. ramesh@example.com" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Inquiry Purpose *</label>
+            <select name="type" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+              <option value="PURCHASE">Purchase Inquiry</option>
+              <option value="RENTAL">Rental Inquiry</option>
+              <option value="SITE_VISIT">Site Visit Booking</option>
+              <option value="OFFER">Price Offer / Deal</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px; font-size: 0.84rem;">Client Requirements / Budget / Notes</label>
+          <textarea name="message" rows="3" placeholder="Budget range, desired possession date, specific unit preferences..." style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;"></textarea>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 8px;">
+          <button type="button" onclick="closeAgentLeadModal()" class="btn-secondary">Cancel</button>
+          <button type="submit" class="btn-primary" data-property-api-action="record-agent-lead">Save &amp; Submit Enquiry</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Launch Builder Project Modal -->
+  <div class="pd-modal-overlay hidden" id="launchProjectModal">
+    <div style="background: #ffffff; width: 100%; max-width: 600px; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; font-family: 'Manrope', sans-serif;">
+      <div style="background: #0f172a; color: #ffffff; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between;">
+        <div>
+          <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: #ffffff;">&#127959;&#65039; Launch New Builder Township Project</h3>
+          <p style="margin: 4px 0 0 0; font-size: 0.8rem; color: #94a3b8;">Register a multi-tower project, township, or commercial enclave</p>
+        </div>
+        <button onclick="document.getElementById('launchProjectModal').classList.add('hidden')" style="background: transparent; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+      <form onsubmit="handleSaveProject(event)" style="padding: 24px; display: grid; gap: 16px; font-size: 0.88rem;">
+        <div>
+          <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Project Name *</label>
+          <input type="text" id="newProjName" required placeholder="e.g. Prestige High Line Towers" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">City &amp; Location *</label>
+            <input type="text" id="newProjLoc" required placeholder="e.g. OMR, Chennai" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Land Parcel (Acres)</label>
+            <input type="text" id="newProjAcres" placeholder="e.g. 5.8 Acres" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Starting Price (&#8377;) *</label>
+            <input type="text" id="newProjPrice" required placeholder="e.g. &#8377;95 Lakhs" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+          <div>
+            <label style="font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">Possession Date</label>
+            <input type="text" id="newProjPossession" placeholder="e.g. Q3 2028" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;">
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 12px;">
+          <button type="button" onclick="document.getElementById('launchProjectModal').classList.add('hidden')" style="padding: 10px 18px; background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 700; cursor: pointer;">Cancel</button>
+          <button type="submit" style="padding: 10px 22px; background: #2563eb; color: #ffffff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">Launch &amp; Register Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="ownerToast" style="position: fixed; bottom: 24px; right: 24px; background: #0f172a; color: #ffffff; padding: 12px 20px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: none; z-index: 9999;"></div>
+
+  <script>
+    function showOwnerToast(msg) {
+      const toast = document.getElementById('ownerToast') || document.getElementById('agentToast') || document.getElementById('toast');
+      if (toast) {
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+      }
+    }
+    window.showAgentToast = showOwnerToast;
+    window.showVendorToast = showOwnerToast;
+
+    function openAgentLeadModal() {
+      document.getElementById('recordLeadModal')?.classList.remove('hidden');
+    }
+
+    function closeAgentLeadModal() {
+      document.getElementById('recordLeadModal')?.classList.add('hidden');
+    }
+
+    function openLaunchProjectModal() {
+      document.getElementById('launchProjectModal')?.classList.remove('hidden');
+    }
+
+    function handleSaveProject(e) {
+      e.preventDefault();
+      const name = document.getElementById('newProjName')?.value || 'New Project';
+      document.getElementById('launchProjectModal')?.classList.add('hidden');
+      showOwnerToast('Builder Project "' + name + '" launched and registered successfully!');
+    }
+
+    function callAgentLead(name, phone) {
+      window.location.href = 'tel:' + String(phone || '').replace(/\s+/g, '');
+      showOwnerToast('Dialing client ' + name + ' (' + phone + ')...');
+    }
+
+    function saveOwnerProfile() {
+      const name = document.getElementById('ownerNameInput')?.value || 'Property Owner';
+      const email = document.getElementById('ownerEmailInput')?.value || 'owner@propertydirect.in';
+      
+      const badgeName = document.getElementById('sidebarOwnerName');
+      const badgeEmail = document.getElementById('sidebarOwnerEmail');
+      if (badgeName) badgeName.textContent = name;
+      if (badgeEmail) badgeEmail.textContent = email;
+
+      showOwnerToast('Owner Profile saved successfully.');
+    }
+    window.saveAgentProfile = saveOwnerProfile;
+
+    function switchTab(panelId) {
+      if (!panelId) return;
+
+      // 1. Hide all panels
+      document.querySelectorAll('.dash-panel, [data-view]').forEach(panel => {
+        panel.classList.add('hidden');
+        panel.style.setProperty('display', 'none', 'important');
+      });
+
+      // 2. Remove active state from all navigation buttons
+      document.querySelectorAll('.owner-nav button, .sidebar-nav button, [data-panel]').forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      });
+
+      // 3. Show target panel
+      const activePanel = document.querySelector(`.dash-panel[data-view="${panelId}"], [data-view="${panelId}"]`);
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+        activePanel.style.setProperty('display', 'flex', 'important');
+      }
+
+      // 4. Highlight target navigation button
+      const activeBtns = document.querySelectorAll(`[data-panel="${panelId}"]`);
+      activeBtns.forEach(btn => {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+      });
+
+      // 5. Scroll page and main container to top
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      const main = document.querySelector('.owner-main') || document.querySelector('.dash-main');
+      if (main) main.scrollTop = 0;
+
+      // 6. Sync location hash
+      if (window.location.hash !== '#' + panelId) {
+        history.replaceState(null, '', '#' + panelId);
+      }
+    }
+    window.switchTab = switchTab;
+    window.openPanel = switchTab;
+    window.PropertyDirectDashboardControls = window.PropertyDirectDashboardControls || {};
+    window.PropertyDirectDashboardControls.setPanel = switchTab;
+
+    function initOwnerDashboard() {
+      const initialTab = window.location.hash ? window.location.hash.slice(1) : 'overview';
+      switchTab(initialTab);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initOwnerDashboard);
+    } else {
+      initOwnerDashboard();
+    }
+
+    window.addEventListener('hashchange', () => {
+      const tab = window.location.hash ? window.location.hash.slice(1) : 'overview';
+      switchTab(tab);
+    });
+  </script>
+  <script src="/propertydirect/js/market-workflows.js?v=20260928-property-workflow-v5"></script>
+  <script src="/propertydirect/js/dashboard-controls.js?v=20260910-end-to-end-buttons-v1"></script>
+  <!-- Script ensuring full-page vertical scrolling is always active on owner dashboard -->
+  <script>
+    (function() {
+      function ensureScrollable() {
+        try {
+          document.documentElement.style.setProperty('overflow-y', 'auto', 'important');
+          document.documentElement.style.setProperty('height', 'auto', 'important');
+          document.body.style.setProperty('overflow-y', 'auto', 'important');
+          document.body.style.setProperty('height', 'auto', 'important');
+          const main = document.querySelector('.owner-main') || document.querySelector('.dash-main');
+          if (main) {
+            main.style.setProperty('overflow-y', 'visible', 'important');
+            main.style.setProperty('height', 'auto', 'important');
+            main.style.setProperty('max-height', 'none', 'important');
+          }
+        } catch(e) {}
+      }
+      ensureScrollable();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ensureScrollable);
+      }
+      window.addEventListener('load', ensureScrollable);
+      setTimeout(ensureScrollable, 50);
+      setTimeout(ensureScrollable, 200);
+      setTimeout(ensureScrollable, 600);
+      setTimeout(ensureScrollable, 1500);
+    })();
+  </script>
+</body>
+</html>

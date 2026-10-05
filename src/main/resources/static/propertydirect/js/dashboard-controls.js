@@ -32,8 +32,16 @@
 
         var title = document.getElementById('panelTitle');
         var navItem = document.querySelector('.sidebar-nav [data-panel="' + safeEscape(panel) + '"]');
-        if (title && navItem) title.textContent = navItem.textContent.trim();
+        if (title && navItem && !title.textContent.includes('Property Owner Portal')) {
+            title.textContent = navItem.textContent.trim();
+        }
         if (window.location.hash !== '#' + panel) history.replaceState(null, '', '#' + panel);
+        try {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            document.querySelectorAll('.dash-main, .owner-main, .main-content, main').forEach(function (m) {
+                m.scrollTop = 0;
+            });
+        } catch (_) {}
     }
 
     window.PropertyDirectDashboardControls = window.PropertyDirectDashboardControls || {};

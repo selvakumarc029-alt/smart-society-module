@@ -665,9 +665,9 @@ html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role=
 }
 
 html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
-  height: 72px !important;
-  min-height: 72px !important;
-  max-height: 72px !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  max-height: 76px !important;
   padding: 0 20px !important;
   box-sizing: border-box !important;
   display: flex !important;
@@ -681,9 +681,9 @@ html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
 html body.app-dashboard[data-platform="propertydirect"]:is([data-dashboard-role="admin"], [data-dashboard-role="customer"]) main.dash-main > .dash-header {
   width: 100% !important;
   max-width: 100% !important;
-  height: 72px !important;
-  min-height: 72px !important;
-  max-height: 72px !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  max-height: 76px !important;
   margin: 0 !important;
   padding: 0 28px !important;
   top: 0 !important;
@@ -1059,9 +1059,9 @@ html body.app-dashboard[data-platform="propertydirect"] .dash-main .dash-panel t
 
 html body.app-dashboard[data-platform="propertydirect"] .card-head {
   display: flex !important;
-  align-items: flex-start !important;
+  align-items: center !important;
   justify-content: space-between !important;
-  gap: 18px !important;
+  gap: 16px !important;
   flex-wrap: wrap !important;
 }
 
@@ -1070,10 +1070,14 @@ html body.app-dashboard[data-platform="propertydirect"] .card-head > div {
   flex: 1 1 420px !important;
 }
 
-html body.app-dashboard[data-platform="propertydirect"] .card-head > :is(button, .primary, a.button) {
+html body.app-dashboard[data-platform="propertydirect"] .card-head > :is(button, .primary, a.button, .btn-primary, .btn-secondary) {
   flex: 0 0 auto !important;
-  min-height: 42px !important;
-  align-self: flex-start !important;
+  min-height: 38px !important;
+  height: 38px !important;
+  align-self: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 html body.app-dashboard[data-platform="propertydirect"] .form-grid {
@@ -1336,9 +1340,9 @@ html body[data-platform="propertydirect"] .pd-dashboard-action-card .modal-actio
 /* 1. Sidebar Brand Container Layout */
 html body.app-dashboard[data-platform="propertydirect"] .dash-sidebar .dash-brand,
 html body.app-dashboard[data-platform="propertydirect"] .dash-brand {
-  height: 72px !important;
-  min-height: 72px !important;
-  max-height: 72px !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  max-height: 76px !important;
   padding: 0 20px !important;
   box-sizing: border-box !important;
   display: flex !important;
@@ -1546,6 +1550,26 @@ html body[data-dashboard-role="vendor"] :is(.dash-card:has(.dashboard-table-scro
   overflow: hidden !important;
 }
 
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) .card-head,
+html body[data-dashboard-role="vendor"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) .card-head {
+  padding: 20px 24px 18px 24px !important;
+  margin: 0 !important;
+  border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) table :is(th:first-child, td:first-child),
+html body[data-dashboard-role="vendor"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) table :is(th:first-child, td:first-child) {
+  padding-left: 24px !important;
+}
+
+html body.app-dashboard[data-platform="propertydirect"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) table :is(th:last-child, td:last-child),
+html body[data-dashboard-role="vendor"] :is(.dash-card:has(.dashboard-table-scroll), .dash-card.table-card, .dash-card:has(table)) table :is(th:last-child, td:last-child) {
+  padding-right: 24px !important;
+}
+
 html body.app-dashboard[data-platform="propertydirect"] #subtabEnquiriesView.hidden,
 html body.app-dashboard[data-platform="propertydirect"] #subtabVisitsView.hidden,
 html body.app-dashboard[data-platform="propertydirect"] #subtabEnquiriesView[hidden],
@@ -1736,9 +1760,9 @@ html body[data-dashboard-role="vendor"] :is(.vendor-top, .vendor-main > .vendor-
   position: sticky !important;
   top: 0 !important;
   z-index: 1020 !important;
-  height: 72px !important;
-  min-height: 72px !important;
-  max-height: 72px !important;
+  height: 76px !important;
+  min-height: 76px !important;
+  max-height: 76px !important;
   margin: 0 !important;
   padding: 0 28px !important;
   border: 0 !important;

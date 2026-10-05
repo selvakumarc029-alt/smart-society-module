@@ -10,6 +10,156 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
 
     <style>
+
+        /* ==========================================================================
+           High-Definition Card View for Emergency & Workforce KPI Cards
+           ========================================================================== */
+        .live-emergency-stats,
+        #liveEmergencySummaryCards,
+        #partnerSummaryCards,
+        #hubSummaryCards {
+            display: grid !important;
+            grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+            gap: 16px !important;
+            margin-bottom: 24px !important;
+            width: 100% !important;
+        }
+
+        @media (max-width: 1400px) {
+            .live-emergency-stats,
+            #liveEmergencySummaryCards,
+            #partnerSummaryCards,
+            #hubSummaryCards {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .live-emergency-stats,
+            #liveEmergencySummaryCards,
+            #partnerSummaryCards,
+            #hubSummaryCards {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .live-emergency-stats,
+            #liveEmergencySummaryCards,
+            #partnerSummaryCards,
+            #hubSummaryCards {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        .live-emergency-stats article.card,
+        .live-emergency-stats .card,
+        #liveEmergencySummaryCards article.card,
+        #partnerSummaryCards article.card,
+        #hubSummaryCards article.card,
+        .emergency-kpi-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 16px !important;
+            padding: 1.25rem 1.4rem !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.03) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            min-height: 140px !important;
+            position: relative !important;
+            overflow: hidden !important;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+            cursor: pointer !important;
+            box-sizing: border-box !important;
+        }
+
+        .live-emergency-stats article.card:hover,
+        .live-emergency-stats .card:hover,
+        #liveEmergencySummaryCards article.card:hover,
+        #partnerSummaryCards article.card:hover,
+        #hubSummaryCards article.card:hover,
+        .emergency-kpi-card:hover {
+            transform: translateY(-4px) !important;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1) !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        /* Distinct Top Border Accents */
+        #liveEmergencySummaryCards article.card:nth-child(1) { border-top: 4px solid #ef4444 !important; }
+        #liveEmergencySummaryCards article.card:nth-child(2) { border-top: 4px solid #f59e0b !important; }
+        #liveEmergencySummaryCards article.card:nth-child(3) { border-top: 4px solid #06b6d4 !important; }
+        #liveEmergencySummaryCards article.card:nth-child(4) { border-top: 4px solid #3b82f6 !important; }
+        #liveEmergencySummaryCards article.card:nth-child(5) { border-top: 4px solid #f43f5e !important; }
+
+        #partnerSummaryCards article.card:nth-child(1) { border-top: 4px solid #3b82f6 !important; }
+        #partnerSummaryCards article.card:nth-child(2) { border-top: 4px solid #10b981 !important; }
+        #partnerSummaryCards article.card:nth-child(3) { border-top: 4px solid #64748b !important; }
+        #partnerSummaryCards article.card:nth-child(4) { border-top: 4px solid #06b6d4 !important; }
+        #partnerSummaryCards article.card:nth-child(5) { border-top: 4px solid #f59e0b !important; }
+
+        #hubSummaryCards article.card:nth-child(1) { border-top: 4px solid #4f46e5 !important; }
+        #hubSummaryCards article.card:nth-child(2) { border-top: 4px solid #10b981 !important; }
+        #hubSummaryCards article.card:nth-child(3) { border-top: 4px solid #64748b !important; }
+        #hubSummaryCards article.card:nth-child(4) { border-top: 4px solid #3b82f6 !important; }
+        #hubSummaryCards article.card:nth-child(5) { border-top: 4px solid #f59e0b !important; }
+
+        /* Typography & Internal Ordering */
+        .live-emergency-stats article.card > div:first-child,
+        #liveEmergencySummaryCards article.card > div:first-child {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            margin-bottom: 0.4rem !important;
+            order: 1 !important;
+        }
+
+        .live-emergency-stats article.card span.text-muted,
+        #liveEmergencySummaryCards article.card span.text-muted {
+            font-size: 0.72rem !important;
+            font-weight: 750 !important;
+            letter-spacing: 0.05em !important;
+            text-transform: uppercase !important;
+            color: #64748b !important;
+            margin: 0 !important;
+        }
+
+        .live-emergency-stats article.card strong,
+        #liveEmergencySummaryCards article.card strong {
+            font-size: 2.25rem !important;
+            font-weight: 850 !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.03em !important;
+            margin: 0.15rem 0 !important;
+            order: 2 !important;
+            display: block !important;
+        }
+
+        .live-emergency-stats article.card small,
+        #liveEmergencySummaryCards article.card small {
+            font-size: 0.78rem !important;
+            font-weight: 500 !important;
+            color: #94a3b8 !important;
+            order: 3 !important;
+            display: block !important;
+            margin-top: 0.35rem !important;
+        }
+
+        /* Icon Pills */
+        .live-emergency-stats article.card .rounded-circle,
+        #liveEmergencySummaryCards article.card .rounded-circle {
+            width: 40px !important;
+            height: 40px !important;
+            min-width: 40px !important;
+            min-height: 40px !important;
+            border-radius: 12px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1.1rem !important;
+        }
+
         /* Custom Leaflet Map Markers & Mini-Cards for Live Emergency Dispatch */
         .leaflet-emergency-marker-icon,
         .leaflet-partner-marker-icon,
@@ -1010,7 +1160,7 @@
         .dashboard-container {
             width: 100% !important;
             max-width: 100% !important;
-            padding: 1.75rem 2rem 3.5rem !important;
+            padding: 1.25rem 1.25rem 3rem !important;
             margin: 0 !important;
             box-sizing: border-box !important;
             flex: 1 1 auto !important;
@@ -2441,7 +2591,7 @@
             width: 100% !important;
             max-width: 100% !important;
             min-width: 0 !important;
-            padding: 24px 36px 48px !important;
+            padding: 18px 20px 36px !important;
             margin: 0 !important;
             box-sizing: border-box !important;
         }
@@ -2862,6 +3012,92 @@
             border: 1px solid rgba(220, 38, 38, 0.28) !important;
             animation: dispatchAlertPulse 1.4s ease-in-out infinite;
         }
+    
+        /* Scoped Compact Styling for Overview KPI Cards */
+        #overviewKpiCards {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 0.75rem !important;
+            margin-bottom: 1.25rem !important;
+            width: 100% !important;
+        }
+        @media (max-width: 991.98px) {
+            #overviewKpiCards {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
+        @media (max-width: 575.98px) {
+            #overviewKpiCards {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        #overviewKpiCards article.card,
+        #overviewKpiCards .overview-metric-card {
+            min-height: 0 !important;
+            height: auto !important;
+            padding: 0.65rem 0.9rem !important;
+            border-radius: 12px !important;
+            border: 1px solid #e2e8f0 !important;
+            background: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+            transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        }
+        #overviewKpiCards article.card:hover,
+        #overviewKpiCards .overview-metric-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08) !important;
+            border-color: #cbd5e1 !important;
+        }
+        #overviewKpiCards article.card:nth-child(1) { border-top: 3.5px solid #2563eb !important; }
+        #overviewKpiCards article.card:nth-child(2) { border-top: 3.5px solid #f59e0b !important; }
+        #overviewKpiCards article.card:nth-child(3) { border-top: 3.5px solid #16a34a !important; }
+        #overviewKpiCards article.card:nth-child(4) { border-top: 3.5px solid #06b6d4 !important; }
+
+        /* Reset inherited .stats flex order overrides for #overviewKpiCards */
+        #overviewKpiCards span,
+        #overviewKpiCards div,
+        #overviewKpiCards strong,
+        #overviewKpiCards small {
+            order: initial !important;
+        }
+        #overviewKpiCards .kpi-label {
+            font-size: 0.65rem !important;
+            font-weight: 700 !important;
+            color: #64748b !important;
+            letter-spacing: 0.04em !important;
+            text-transform: uppercase !important;
+            margin: 0 !important;
+            display: inline-block !important;
+        }
+        #overviewKpiCards .kpi-icon-pill {
+            width: 26px !important;
+            height: 26px !important;
+            border-radius: 8px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.8rem !important;
+            flex-shrink: 0 !important;
+        }
+        #overviewKpiCards strong {
+            font-size: 1.35rem !important;
+            font-weight: 800 !important;
+            line-height: 1 !important;
+            letter-spacing: -0.02em !important;
+            margin: 0 !important;
+            display: inline-block !important;
+        }
+        #overviewKpiCards .kpi-subtitle {
+            font-size: 0.66rem !important;
+            color: #64748b !important;
+            margin: 0 !important;
+            line-height: 1 !important;
+            white-space: nowrap !important;
+        }
+
     </style>
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
     <div class="dashboard-layout">
@@ -3137,31 +3373,68 @@
                         </div>
                     </div>
 
-                    <div class="stats mb-4">
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <span class="text-muted small fw-bold text-uppercase">My Assigned Tickets</span>
-                            <strong class="fs-2 fw-bold text-primary mt-2 d-block" id="overviewAssignedCount">—</strong>
+                    <div class="stats mb-3" id="overviewKpiCards">
+                        <!-- 1. My Assigned Tickets -->
+                        <article class="card overview-metric-card text-start">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="kpi-label">My Assigned Tickets</span>
+                                <span class="kpi-icon-pill bg-primary-subtle text-primary">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                <strong class="text-primary font-monospace" id="overviewAssignedCount">—</strong>
+                                <span class="kpi-subtitle"><i class="fa-solid fa-user-check me-1 text-primary"></i>Active work orders</span>
+                            </div>
                         </article>
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <span class="text-muted small fw-bold text-uppercase">Work In Progress</span>
-                            <strong class="fs-2 fw-bold text-warning mt-2 d-block"
-                                id="overviewInProgressCount">—</strong>
+
+                        <!-- 2. Work In Progress -->
+                        <article class="card overview-metric-card text-start">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="kpi-label">Work In Progress</span>
+                                <span class="kpi-icon-pill bg-warning-subtle text-warning-emphasis">
+                                    <i class="fa-solid fa-clock-rotate-left"></i>
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                <strong class="text-warning font-monospace" id="overviewInProgressCount">—</strong>
+                                <span class="kpi-subtitle"><i class="fa-solid fa-screwdriver-wrench me-1 text-warning"></i>Actively progressing</span>
+                            </div>
                         </article>
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <span class="text-muted small fw-bold text-uppercase">Resolved Today</span>
-                            <strong class="fs-2 fw-bold text-success mt-2 d-block"
-                                id="overviewResolvedTodayCount">—</strong>
+
+                        <!-- 3. Resolved Today -->
+                        <article class="card overview-metric-card text-start">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="kpi-label">Resolved Today</span>
+                                <span class="kpi-icon-pill bg-success-subtle text-success">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                <strong class="text-success font-monospace" id="overviewResolvedTodayCount">—</strong>
+                                <span class="kpi-subtitle"><i class="fa-solid fa-check-double me-1 text-success"></i>Closed tickets today</span>
+                            </div>
                         </article>
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <span class="text-muted small fw-bold text-uppercase">SLA Compliance Rate</span>
-                            <strong class="fs-2 fw-bold text-info mt-2 d-block" id="overviewSlaCompliance">—</strong>
+
+                        <!-- 4. SLA Compliance Rate -->
+                        <article class="card overview-metric-card text-start">
+                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                <span class="kpi-label">SLA Compliance Rate</span>
+                                <span class="kpi-icon-pill bg-info-subtle text-info">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                </span>
+                            </div>
+                            <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                <strong class="text-info font-monospace" id="overviewSlaCompliance">—</strong>
+                                <span class="kpi-subtitle"><i class="fa-solid fa-shield-halved me-1 text-info"></i>Within SLA target</span>
+                            </div>
                         </article>
                     </div>
 
                     <!-- Row 3: Asset Health Snapshot & Team and Ticket Pool -->
                     <div class="row g-4">
                         <div class="col-lg-7">
-                            <div class="card shadow-sm border border-light-subtle rounded-4 h-100 bg-white">
+                            <div class="card shadow-sm rounded-4 h-100 bg-white" style="border: 1px solid #e2e8f0 !important; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;">
                                 <div class="card-header bg-transparent border-0 pt-4 px-4">
                                     <h4 class="fw-bold mb-1"><i class="fa-solid fa-heart-pulse text-info me-2"></i>Asset
                                         health snapshot</h4>
@@ -3215,7 +3488,7 @@
                             </div>
                         </div>
                         <div class="col-lg-5">
-                            <div class="card shadow-sm border border-light-subtle rounded-4 h-100 bg-white">
+                            <div class="card shadow-sm rounded-4 h-100 bg-white" style="border: 1px solid #e2e8f0 !important; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;">
                                 <div class="card-header bg-transparent border-0 pt-4 px-4">
                                     <h4 class="fw-bold mb-1"><i
                                             class="fa-solid fa-users-gear text-warning me-2"></i>Team and ticket pool
@@ -3297,15 +3570,15 @@
                         </div>
                     </div>
 
-                    <!-- 11 Dashboard KPI Cards -->
+                    <!-- 11 Dashboard KPI Cards (Compact Modern Layout) -->
                     <style>
                         .manager-kpi-card {
                             background: #ffffff !important;
                             border: 1px solid #e2e8f0 !important;
-                            border-radius: 16px !important;
-                            box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.03) !important;
-                            padding: 1.15rem 1.25rem !important;
-                            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+                            border-radius: 12px !important;
+                            box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.05), 0 1px 3px -1px rgba(15, 23, 42, 0.03) !important;
+                            padding: 0.65rem 0.85rem !important;
+                            transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease !important;
                             display: flex !important;
                             flex-direction: column !important;
                             justify-content: space-between !important;
@@ -3315,175 +3588,197 @@
                         }
                         .manager-kpi-card:hover {
                             transform: translateY(-2px) !important;
-                            box-shadow: 0 10px 22px -3px rgba(15, 23, 42, 0.09), 0 3px 7px -1px rgba(15, 23, 42, 0.04) !important;
+                            box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.08) !important;
                             border-color: #cbd5e1 !important;
                         }
                         .manager-kpi-card .kpi-mini-icon {
-                            width: 32px;
-                            height: 32px;
-                            border-radius: 10px;
-                            display: inline-flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 0.92rem;
-                            flex-shrink: 0;
+                            width: 26px !important;
+                            height: 26px !important;
+                            border-radius: 8px !important;
+                            display: inline-flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            font-size: 0.78rem !important;
+                            flex-shrink: 0 !important;
                         }
                         .manager-kpi-card.kpi-accent-danger {
-                            border-left: 4px solid #ef4444 !important;
+                            border-left: 3.5px solid #ef4444 !important;
                         }
                     </style>
-                    <div class="row g-3 mb-4">
+                    <div class="row g-2 mb-3">
                         <!-- Total Requests -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;">Total Requests</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;">Total Requests</span>
                                     <span class="kpi-mini-icon bg-primary-subtle text-primary">
                                         <i class="fa-solid fa-layer-group"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-primary font-monospace mt-1 mb-0" id="kpi-total-requests">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Overall logged</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-primary font-monospace mb-0 lh-1" id="kpi-total-requests">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Overall logged</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- New Requests -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;">New Requests</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;">New Requests</span>
                                     <span class="kpi-mini-icon bg-info-subtle text-info">
                                         <i class="fa-solid fa-bell"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-info font-monospace mt-1 mb-0" id="kpi-new-requests">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Awaiting triage</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-info font-monospace mb-0 lh-1" id="kpi-new-requests">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Awaiting triage</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Waiting Queue -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;">Waiting Queue</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;">Waiting Queue</span>
                                     <span class="kpi-mini-icon bg-warning-subtle text-warning-emphasis">
                                         <i class="fa-solid fa-hourglass-half"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-warning font-monospace mt-1 mb-0" id="kpi-waiting-requests">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Pending worker</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-warning font-monospace mb-0 lh-1" id="kpi-waiting-requests">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Pending worker</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Assigned -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;">Assigned</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;">Assigned</span>
                                     <span class="kpi-mini-icon bg-primary-subtle text-primary">
                                         <i class="fa-solid fa-user-check"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-primary font-monospace mt-1 mb-0" id="kpi-assigned-requests">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Worker allocated</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-primary font-monospace mb-0 lh-1" id="kpi-assigned-requests">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Worker allocated</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Travelling -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;">Travelling</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;">Travelling</span>
                                     <span class="kpi-mini-icon bg-info-subtle text-info">
                                         <i class="fa-solid fa-motorcycle"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-info font-monospace mt-1 mb-0" id="kpi-travelling-requests">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">On the way</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-info font-monospace mb-0 lh-1" id="kpi-travelling-requests">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">On the way</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- In Progress -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;">In Progress</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;">In Progress</span>
                                     <span class="kpi-mini-icon bg-success-subtle text-success">
                                         <i class="fa-solid fa-screwdriver-wrench"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-success font-monospace mt-1 mb-0" id="kpi-in-progress-requests">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Active on site</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-success font-monospace mb-0 lh-1" id="kpi-in-progress-requests">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Active on site</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Completed Today -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;">Completed Today</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;">Completed Today</span>
                                     <span class="kpi-mini-icon bg-dark-subtle text-dark">
                                         <i class="fa-solid fa-circle-check"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-dark font-monospace mt-1 mb-0" id="kpi-completed-today">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Resolved jobs</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-dark font-monospace mb-0 lh-1" id="kpi-completed-today">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Resolved jobs</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Overdue -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card kpi-accent-danger">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-danger small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;"><i class="fa-solid fa-triangle-exclamation me-1"></i>Overdue</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-danger fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;"><i class="fa-solid fa-triangle-exclamation me-1"></i>Overdue</span>
                                     <span class="kpi-mini-icon bg-danger-subtle text-danger">
                                         <i class="fa-solid fa-clock-rotate-left"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-danger font-monospace mt-1 mb-0" id="kpi-overdue-requests">0</strong>
-                                <small class="text-danger-emphasis fw-semibold mt-1" style="font-size: 0.72rem;">SLA breached</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-danger font-monospace mb-0 lh-1" id="kpi-overdue-requests">0</strong>
+                                    <small class="text-danger-emphasis fw-semibold text-truncate" style="font-size: 0.66rem;">SLA breached</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Available Workers -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;"><i class="fa-solid fa-circle text-success me-1" style="font-size: 0.55rem;"></i>Available</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;"><i class="fa-solid fa-circle text-success me-1" style="font-size: 0.5rem;"></i>Available</span>
                                     <span class="kpi-mini-icon bg-success-subtle text-success">
                                         <i class="fa-solid fa-user-shield"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-success font-monospace mt-1 mb-0" id="kpi-available-workers">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">On duty & ready</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-success font-monospace mb-0 lh-1" id="kpi-available-workers">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">On duty & ready</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Busy Workers -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;"><i class="fa-solid fa-circle text-warning me-1" style="font-size: 0.55rem;"></i>Busy</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;"><i class="fa-solid fa-circle text-warning me-1" style="font-size: 0.5rem;"></i>Busy</span>
                                     <span class="kpi-mini-icon bg-warning-subtle text-warning-emphasis">
                                         <i class="fa-solid fa-person-digging"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-warning font-monospace mt-1 mb-0" id="kpi-busy-workers">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Currently on job</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-warning font-monospace mb-0 lh-1" id="kpi-busy-workers">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Currently on job</small>
+                                </div>
                             </div>
                         </div>
 
                         <!-- On Leave -->
-                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
                             <div class="manager-kpi-card">
-                                <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.68rem; letter-spacing: 0.04em;"><i class="fa-solid fa-circle text-secondary me-1" style="font-size: 0.55rem;"></i>On Leave</span>
+                                <div class="d-flex align-items-center justify-content-between mb-0.5">
+                                    <span class="text-muted fw-bold text-uppercase text-truncate" style="font-size: 0.64rem; letter-spacing: 0.03em;"><i class="fa-solid fa-circle text-secondary me-1" style="font-size: 0.5rem;"></i>On Leave</span>
                                     <span class="kpi-mini-icon bg-secondary-subtle text-secondary">
                                         <i class="fa-solid fa-user-slash"></i>
                                     </span>
                                 </div>
-                                <strong class="fs-2 fw-bold text-secondary font-monospace mt-1 mb-0" id="kpi-workers-on-leave">0</strong>
-                                <small class="text-muted mt-1" style="font-size: 0.72rem;">Off duty today</small>
+                                <div class="d-flex align-items-baseline justify-content-between gap-1 mt-1">
+                                    <strong class="fs-4 fw-bold text-secondary font-monospace mb-0 lh-1" id="kpi-workers-on-leave">0</strong>
+                                    <small class="text-muted text-truncate" style="font-size: 0.66rem;">Off duty today</small>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -3636,65 +3931,7 @@
                         </div>
                     </div>
 
-                    <!-- Maintenance Analytics Section -->
-                    <div class="card shadow-sm border-0 rounded-4 bg-white mb-4">
-                        <div class="card-header bg-transparent border-bottom py-3 px-4">
-                            <h5 class="fw-bold text-dark mb-0"><i class="fas fa-chart-line text-primary me-2"></i>
-                                Maintenance Performance Analytics</h5>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="row g-4 text-center">
-                                <div class="col-md-2 col-6">
-                                    <div class="p-3 bg-light rounded-4">
-                                        <span class="text-muted small fw-bold text-uppercase d-block">Avg
-                                            Assignment</span>
-                                        <strong class="fs-4 text-primary mt-1 d-block" id="analytics-avg-assignment">4m
-                                            30s</strong>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-6">
-                                    <div class="p-3 bg-light rounded-4">
-                                        <span class="text-muted small fw-bold text-uppercase d-block">Avg
-                                            Response</span>
-                                        <strong class="fs-4 text-info mt-1 d-block" id="analytics-avg-response">6m
-                                            15s</strong>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-6">
-                                    <div class="p-3 bg-light rounded-4">
-                                        <span class="text-muted small fw-bold text-uppercase d-block">Avg
-                                            Completion</span>
-                                        <strong class="fs-4 text-success mt-1 d-block" id="analytics-avg-completion">1h
-                                            20m</strong>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-6">
-                                    <div class="p-3 bg-light rounded-4">
-                                        <span class="text-muted small fw-bold text-uppercase d-block">Worker
-                                            Utilization</span>
-                                        <strong class="fs-4 text-primary mt-1 d-block"
-                                            id="analytics-worker-utilization">78.5%</strong>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-6">
-                                    <div class="p-3 bg-light rounded-4">
-                                        <span class="text-muted small fw-bold text-uppercase d-block">Attendance
-                                            Rate</span>
-                                        <strong class="fs-4 text-success mt-1 d-block"
-                                            id="analytics-attendance-rate">92.0%</strong>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-6">
-                                    <div class="p-3 bg-light rounded-4">
-                                        <span class="text-danger small fw-bold text-uppercase d-block">Overdue
-                                            Rate</span>
-                                        <strong class="fs-4 text-danger mt-1 d-block"
-                                            id="analytics-overdue-rate">8.0%</strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </section>
 
                 <!-- Resident Service Requests Panel -->
@@ -3764,34 +4001,115 @@
                             </div>
                         </div>
 
-                        <div class="card-body p-0 table-responsive" style="overflow-x: auto;">
+                        <div class="card-body p-0 table-responsive" style="overflow-x: visible;">
                             <style>
                                 #adminResidentRequestsTable {
-                                    table-layout: auto;
-                                    width: 100%;
-                                    min-width: 980px;
+                                    table-layout: auto !important;
+                                    width: 100% !important;
+                                    margin-bottom: 0 !important;
+                                }
+                                html body.dashboard-body .req-action-dropdown-menu {
+                                    border: 1px solid #cbd5e1 !important;
+                                    border-radius: 12px !important;
+                                    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2), 0 8px 10px -6px rgba(15, 23, 42, 0.12) !important;
+                                    padding: 6px !important;
+                                    min-width: 200px !important;
+                                    background: #ffffff !important;
+                                    height: auto !important;
+                                    max-height: none !important;
+                                }
+                                html body.dashboard-body .req-action-dropdown-menu :is(a, button, .dropdown-item) {
+                                    background: #ffffff !important;
+                                    background-image: none !important;
+                                    color: #1e293b !important;
+                                    box-shadow: none !important;
+                                    border: none !important;
+                                    border-radius: 8px !important;
+                                    padding: 8px 12px !important;
+                                    height: auto !important;
+                                    width: 100% !important;
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    gap: 10px !important;
+                                    text-decoration: none !important;
+                                    font-size: 0.82rem !important;
+                                    font-weight: 600 !important;
+                                    cursor: pointer !important;
+                                }
+                                html body.dashboard-body .req-action-dropdown-menu :is(a, button, .dropdown-item):hover {
+                                    background: #f1f5f9 !important;
+                                    background-image: none !important;
+                                    color: #0f172a !important;
                                 }
                                 #adminResidentRequestsTable th, #adminResidentRequestsTable td {
-                                    vertical-align: middle;
+                                    vertical-align: middle !important;
+                                    padding: 12px 14px !important;
+                                }
+                                #adminResidentRequestsTable thead th {
+                                    font-size: 0.74rem !important;
+                                    font-weight: 800 !important;
+                                    text-transform: uppercase !important;
+                                    letter-spacing: 0.05em !important;
+                                    color: #64748b !important;
+                                    background: #f8fafc !important;
+                                    border-bottom: 2px solid #e2e8f0 !important;
+                                    white-space: nowrap !important;
+                                }
+                                .req-action-dropdown-menu {
+                                    border: 1px solid #cbd5e1 !important;
+                                    border-radius: 12px !important;
+                                    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2), 0 8px 10px -6px rgba(15, 23, 42, 0.12) !important;
+                                    padding: 6px !important;
+                                    min-width: 200px !important;
+                                    background: #ffffff !important;
+                                    height: auto !important;
+                                    max-height: none !important;
+                                }
+                                .req-action-dropdown-menu .dropdown-item,
+                                .req-action-dropdown-menu a.dropdown-item,
+                                .req-action-dropdown-menu button.dropdown-item {
+                                    border: none !important;
+                                    background: transparent !important;
+                                    background-image: none !important;
+                                    width: 100% !important;
+                                    height: auto !important;
+                                    text-align: left !important;
+                                    padding: 9px 12px !important;
+                                    font-size: 0.82rem !important;
+                                    font-weight: 600 !important;
+                                    border-radius: 8px !important;
+                                    cursor: pointer !important;
+                                    color: #334155 !important;
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    gap: 10px !important;
+                                    box-shadow: none !important;
+                                    margin: 0 !important;
+                                    line-height: 1.4 !important;
+                                    text-decoration: none !important;
+                                }
+                                .req-action-dropdown-menu .dropdown-item:hover,
+                                .req-action-dropdown-menu a.dropdown-item:hover,
+                                .req-action-dropdown-menu button.dropdown-item:hover {
+                                    background: #f1f5f9 !important;
+                                    background-image: none !important;
+                                    color: #0f172a !important;
                                 }
                             </style>
                             <table class="table table-hover align-middle mb-0" id="adminResidentRequestsTable">
-                                <thead class="table-light">
-                                    <tr style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                                        <th class="ps-4" style="width: 130px;">Request #</th>
-                                        <th style="width: 150px;">Resident & Unit</th>
-                                        <th style="width: 140px;">Category & Service</th>
-                                        <th style="max-width: 190px;">Service / Problem</th>
-                                        <th class="text-center" style="width: 95px;">Priority</th>
-                                        <th class="text-center" style="width: 110px;">Created Date</th>
-                                        <th class="text-center" style="width: 110px;">Status</th>
-                                        <th style="width: 140px;">Assigned Worker</th>
-                                        <th class="pe-4 text-end" style="min-width: 220px;">Action</th>
+                                <thead>
+                                    <tr>
+                                        <th class="ps-4" style="width: 130px;">Request & Date</th>
+                                        <th style="width: 170px;">Resident & Unit</th>
+                                        <th>Service & Problem</th>
+                                        <th class="text-center" style="width: 140px;">Status & Priority</th>
+                                        <th style="width: 150px;">Assigned Worker</th>
+                                        <th class="pe-4 text-end" style="width: 120px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="adminResidentRequestsTbody" class="border-top-0">
                                     <tr>
-                                        <td colspan="9" class="text-center text-muted py-5">
+                                        <td colspan="6" class="text-center text-muted py-5">
                                             <div class="spinner-border spinner-border-sm text-primary me-2"></div>
                                             Loading requests...
                                         </td>
@@ -4115,7 +4433,7 @@
 
                             filterAdminResidentRequests();
                         } catch (err) {
-                            tbody.innerHTML = `<tr><td colspan="9" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>${err.message}</td></tr>`;
+                            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>${err.message}</td></tr>`;
                         }
                     }
 
@@ -4167,11 +4485,29 @@
                             .replace(/'/g, '&#39;');
                     }
 
+                    window.toggleReqActionMenu = function (e, id) {
+                        e.stopPropagation();
+                        document.querySelectorAll('.req-action-dropdown-menu').forEach(m => {
+                            if (m.id !== 'reqActionMenu_' + id) m.style.display = 'none';
+                        });
+                        const menu = document.getElementById('reqActionMenu_' + id);
+                        if (!menu) return;
+                        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                    };
+
+                    document.addEventListener('click', function (e) {
+                        if (!e.target.closest('.req-action-dropdown-container')) {
+                            document.querySelectorAll('.req-action-dropdown-menu').forEach(m => {
+                                m.style.display = 'none';
+                            });
+                        }
+                    });
+
                     function renderAdminResidentTable(list) {
                         const tbody = document.getElementById('adminResidentRequestsTbody');
                         if (!tbody) return;
                         if (!list || list.length === 0) {
-                            tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fs-3 d-block mb-2"></i>No resident requests found in this view.</td></tr>`;
+                            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fs-3 d-block mb-2"></i>No resident requests found in this view.</td></tr>`;
                             return;
                         }
 
@@ -4184,47 +4520,70 @@
                                     req.status === 'IN_PROGRESS' ? 'badge bg-warning text-dark' : 'badge bg-primary';
 
                             const shortTitle = req.serviceType || req.title || 'Service Request';
+                            const canAutoAssign = !req.assignedWorkerName && req.status !== 'COMPLETED' && req.status !== 'CLOSED' && req.status !== 'CANCELLED';
 
                             return `
                                 <tr>
                                     <td class="ps-4">
-                                        <strong class="font-monospace text-primary">${escapeText(req.requestNumber)}</strong>
+                                        <strong class="font-monospace text-primary d-block" style="font-size:0.86rem;">${escapeText(req.requestNumber || '#' + req.id)}</strong>
+                                        <span class="small text-muted font-monospace" style="font-size:0.75rem;">${(req.createdAt || '').substring(0, 10)}</span>
                                     </td>
                                     <td>
-                                        <strong class="text-dark d-block text-truncate" style="max-width:140px;">${escapeText(req.residentName || 'Resident')}</strong>
-                                        <span class="small text-muted text-truncate d-block" style="max-width:140px;">${escapeText(req.apartmentUnit || 'Unit')} &bull; ${escapeText(req.buildingName || 'Block')}</span>
+                                        <strong class="text-dark d-block text-truncate" style="max-width:160px; font-size:0.88rem;" title="${escapeText(req.residentName || 'Resident')}">${escapeText(req.residentName || 'Resident')}</strong>
+                                        <span class="small text-muted text-truncate d-block" style="max-width:160px; font-size:0.76rem;">${escapeText(req.apartmentUnit || 'Unit')} &bull; ${escapeText(req.buildingName || 'Block')}</span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-light text-dark border px-2 py-1">${escapeText(req.category)}</span>
-                                        <div class="small text-muted mt-1 text-truncate" style="max-width:130px;">${escapeText(req.serviceType)}</div>
-                                    </td>
-                                    <td>
-                                        <div class="fw-bold text-dark text-truncate" style="max-width:180px;" title="${escapeText(req.title || shortTitle)}">${escapeText(shortTitle)}</div>
+                                        <div class="d-flex align-items-center gap-1.5 mb-1 flex-wrap">
+                                            <span class="badge bg-light text-dark border px-2 py-0.5" style="font-size:0.72rem;">${escapeText(req.category || 'General')}</span>
+                                            <span class="small text-secondary text-truncate" style="max-width:140px; font-size:0.78rem;">${escapeText(req.serviceType || '')}</span>
+                                        </div>
+                                        <div class="fw-semibold text-dark text-truncate mb-1" style="max-width:240px; font-size:0.85rem;" title="${escapeText(req.title || shortTitle)}">${escapeText(shortTitle)}</div>
                                         <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-primary fw-semibold" style="font-size:0.75rem;" onclick="viewResidentRequestDetails(${req.id})">
                                             <i class="fa-solid fa-circle-info me-1"></i>View Details
                                         </button>
                                     </td>
-                                    <td class="text-center"><span class="${priorityClass}">${escapeText(req.priority)}</span></td>
-                                    <td class="text-center"><span class="small text-muted font-monospace">${(req.createdAt || '').substring(0, 10)}</span></td>
-                                    <td class="text-center"><span class="${statusClass}">${escapeText(req.status)}</span></td>
+                                    <td class="text-center">
+                                        <div class="d-inline-flex flex-column align-items-center gap-1">
+                                            <span class="${statusClass} px-2.5 py-1 rounded-pill" style="font-size:0.74rem; font-weight:700;">${escapeText(req.status)}</span>
+                                            <span class="${priorityClass} px-2 py-0.5 rounded-pill" style="font-size:0.68rem; font-weight:700;">${escapeText(req.priority)}</span>
+                                        </div>
+                                    </td>
                                     <td>
-                                        ${req.assignedWorkerName ? `<strong class="small text-dark d-block text-truncate" style="max-width:130px;"><i class="fa-solid fa-user-gear text-primary me-1"></i>${escapeText(req.assignedWorkerName)}</strong>` : '<span class="badge bg-light text-muted border">Unassigned</span>'}
+                                        ${req.assignedWorkerName ? `
+                                            <strong class="small text-dark d-block text-truncate" style="max-width:140px; font-size:0.84rem;">
+                                                <i class="fa-solid fa-user-gear text-primary me-1"></i>${escapeText(req.assignedWorkerName)}
+                                            </strong>
+                                        ` : '<span class="badge bg-light text-muted border px-2.5 py-1" style="font-size:0.76rem;">Unassigned</span>'}
                                     </td>
                                     <td class="pe-4 text-end" style="white-space: nowrap;">
-                                        <button type="button" class="btn btn-sm btn-outline-info rounded-pill px-2.5 fw-bold me-1" onclick="viewResidentRequestDetails(${req.id})" title="View Details">
-                                            <i class="fa-solid fa-eye me-1"></i>View
-                                        </button>
-                                        ${!req.assignedWorkerName && req.status !== 'COMPLETED' && req.status !== 'CLOSED' && req.status !== 'CANCELLED' ? `
-                                            <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-2.5 fw-bold me-1" onclick="window.autoAssignWorkerToRequest(${req.id})" title="Auto-assign available on-duty worker">
-                                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i>Auto-Assign
-                                            </button>
-                                        ` : ''}
-                                        <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-2.5 fw-bold me-1 shadow-sm" onclick="openWorkerLiveStageModal(${req.id})" title="Technician Live Stage Progress Control">
-                                            <i class="fa-solid fa-route me-1"></i>Update Stage
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 fw-bold" onclick="openAdminAssignModal(${req.id})">
-                                            <i class="fa-solid fa-pen-to-square me-1"></i>Manage
-                                        </button>
+                                        <div class="req-action-dropdown-container position-relative d-inline-block">
+                                            <div class="btn-group btn-group-sm shadow-sm" role="group">
+                                                <button type="button" class="btn btn-sm btn-primary rounded-start-pill px-2.5 py-1 fw-bold d-inline-flex align-items-center gap-1" onclick="openAdminAssignModal(${req.id})" title="Manage Request">
+                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                    <span>Manage</span>
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split rounded-end-pill px-2 py-1" onclick="toggleReqActionMenu(event, ${req.id})" title="All Actions" aria-expanded="false">
+                                                    <span class="visually-hidden">Toggle Actions</span>
+                                                </button>
+                                            </div>
+                                            <div id="reqActionMenu_${req.id}" class="req-action-dropdown-menu position-absolute end-0 mt-1 bg-white" style="display:none; z-index:1050;">
+                                                <a href="javascript:void(0)" class="dropdown-item text-dark" onclick="viewResidentRequestDetails(${req.id})">
+                                                    <i class="fa-solid fa-eye text-info" style="width:16px;"></i> View Details
+                                                </a>
+                                                ${canAutoAssign ? `
+                                                    <a href="javascript:void(0)" class="dropdown-item text-success fw-bold" onclick="window.autoAssignWorkerToRequest(${req.id})">
+                                                        <i class="fa-solid fa-wand-magic-sparkles text-success" style="width:16px;"></i> Auto-Assign Worker
+                                                    </a>
+                                                ` : ''}
+                                                <a href="javascript:void(0)" class="dropdown-item text-warning-emphasis fw-bold" onclick="openWorkerLiveStageModal(${req.id})">
+                                                    <i class="fa-solid fa-route text-warning" style="width:16px;"></i> Update Live Stage
+                                                </a>
+                                                <hr class="my-1 border-secondary border-opacity-25">
+                                                <a href="javascript:void(0)" class="dropdown-item text-primary fw-bold" onclick="openAdminAssignModal(${req.id})">
+                                                    <i class="fa-solid fa-user-gear text-primary" style="width:16px;"></i> Manage & Assign
+                                                </a>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             `;
@@ -4546,7 +4905,7 @@
                             gap: 16px !important;
                             width: 100% !important;
                             max-width: 100% !important;
-                            height: 680px !important;
+                            height: calc(100vh - 210px) !important; min-height: 520px !important; max-height: 840px !important;
                             box-sizing: border-box !important;
                             overflow: hidden !important;
                         }
@@ -4874,7 +5233,7 @@
                     </style>
 
                     <!-- Top Summary Card with Tabs -->
-                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <div class="card border-0 shadow-sm rounded-4 p-3 px-4 mb-3 bg-white">
                         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                             <div>
                                 <div class="d-flex align-items-center gap-2 mb-1">
@@ -4996,7 +5355,7 @@
                             <span class="badge bg-secondary rounded-pill px-2.5 py-1 font-monospace text-uppercase" style="font-size:0.68rem;">Encrypted</span>
                         </div>
 
-                        <div class="maint-chat-deck" style="height:620px;">
+                        <div class="maint-chat-deck">
                             <!-- Left: Admin Escalated Threads List -->
                             <div class="maint-chat-sidebar-card">
                                 <div class="p-3 border-bottom bg-white flex-shrink-0">
@@ -5060,7 +5419,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                     </div>
                 </section>
 
@@ -5589,71 +5947,56 @@
                     </div>
                     <!-- Live Emergency Summary Cards (Reuses existing dashboard card styling & layout) -->
                     <div class="stats live-emergency-stats mb-4" id="liveEmergencySummaryCards">
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <div class="d-flex align-items-center justify-content-between w-100 mb-1">
+                        <article class="card p-4 text-start h-100 shadow-sm emergency-kpi-card" style="border-top: 4px solid #ef4444 !important;">
+                            <div class="d-flex align-items-center justify-content-between w-100 mb-2">
                                 <span class="text-muted small fw-bold text-uppercase">Pending Assignment</span>
-                                <span
-                                    class="rounded-circle bg-danger-subtle text-danger p-2 d-inline-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">
+                                <span class="rounded-circle bg-danger-subtle text-danger d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-size: 1.1rem;">
                                     <i class="fa-solid fa-truck-fast"></i>
                                 </span>
                             </div>
-                            <strong class="fs-2 fw-bold text-danger mt-1 d-block"
-                                id="cardCriticalDispatchCount">0</strong>
+                            <strong class="fs-1 fw-bold text-danger my-1 d-block" id="cardCriticalDispatchCount">0</strong>
                             <small class="text-muted mt-1">Pending dispatch / escalated</small>
                         </article>
-                        <article class="card p-4 text-start h-100 shadow-sm border-0"
+                        <article class="card p-4 text-start h-100 shadow-sm emergency-kpi-card"
                             onclick="document.getElementById('unassignedActionQueueContainer')?.scrollIntoView({behavior: 'smooth'})"
-                            style="cursor: pointer;" title="Jump directly to Unassigned & Failed Assignment Queue">
-                            <div class="d-flex align-items-center justify-content-between w-100 mb-1">
+                            style="cursor: pointer; border-top: 4px solid #f59e0b !important;" title="Jump directly to Unassigned & Failed Assignment Queue">
+                            <div class="d-flex align-items-center justify-content-between w-100 mb-2">
                                 <span class="text-muted small fw-bold text-uppercase">Active Jobs In-Flight</span>
-                                <span
-                                    class="rounded-circle bg-warning-subtle text-warning-emphasis p-2 d-inline-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">
+                                <span class="rounded-circle bg-warning-subtle text-warning-emphasis d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-size: 1.1rem;">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                 </span>
                             </div>
-                            <strong class="fs-2 fw-bold text-warning mt-1 d-block" id="cardActiveFieldCount">0</strong>
-                            <small class="text-muted fw-semibold mt-1"><i class="fa-solid fa-route me-1"></i>Accepted →
-                                In Progress</small>
+                            <strong class="fs-1 fw-bold text-warning my-1 d-block" id="cardActiveFieldCount">0</strong>
+                            <small class="text-muted fw-semibold mt-1"><i class="fa-solid fa-route me-1"></i>Accepted → In Progress</small>
                         </article>
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <div class="d-flex align-items-center justify-content-between w-100 mb-1">
+                        <article class="card p-4 text-start h-100 shadow-sm emergency-kpi-card" style="border-top: 4px solid #06b6d4 !important;">
+                            <div class="d-flex align-items-center justify-content-between w-100 mb-2">
                                 <span class="text-muted small fw-bold text-uppercase">Available Technicians</span>
-                                <span
-                                    class="rounded-circle bg-info-subtle text-info p-2 d-inline-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">
+                                <span class="rounded-circle bg-info-subtle text-info d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-size: 1.1rem;">
                                     <i class="fa-solid fa-location-dot"></i>
                                 </span>
                             </div>
-                            <strong class="fs-2 fw-bold text-info mt-1 d-block"
-                                id="cardWorkforceAvailability">0</strong>
-                            <small class="text-muted mt-1 text-truncate d-block" id="cardWorkforceBreakdown"
-                                title="Idle / total by trade">Idle / total by trade</small>
+                            <strong class="fs-1 fw-bold text-info my-1 d-block" id="cardWorkforceAvailability">0</strong>
+                            <small class="text-muted mt-1 text-truncate d-block" id="cardWorkforceBreakdown" title="Idle / total by trade">Idle / total by trade</small>
                         </article>
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <div class="d-flex align-items-center justify-content-between w-100 mb-1">
+                        <article class="card p-4 text-start h-100 shadow-sm emergency-kpi-card" style="border-top: 4px solid #3b82f6 !important;">
+                            <div class="d-flex align-items-center justify-content-between w-100 mb-2">
                                 <span class="text-muted small fw-bold text-uppercase">Live Emergencies</span>
-                                <span
-                                    class="rounded-circle bg-primary-subtle text-primary p-2 d-inline-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">
+                                <span class="rounded-circle bg-primary-subtle text-primary d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-size: 1.1rem;">
                                     <i class="fa-solid fa-screwdriver-wrench"></i>
                                 </span>
                             </div>
-                            <strong class="fs-2 fw-bold text-primary mt-1 d-block"
-                                id="cardLiveEmergencyTotal">0</strong>
+                            <strong class="fs-1 fw-bold text-primary my-1 d-block" id="cardLiveEmergencyTotal">0</strong>
                             <small class="text-muted mt-1">All active emergency orders</small>
                         </article>
-                        <article class="card p-4 text-start h-100 shadow-sm border-0">
-                            <div class="d-flex align-items-center justify-content-between w-100 mb-1">
+                        <article class="card p-4 text-start h-100 shadow-sm emergency-kpi-card" style="border-top: 4px solid #f43f5e !important;">
+                            <div class="d-flex align-items-center justify-content-between w-100 mb-2">
                                 <span class="text-muted small fw-bold text-uppercase">SLA Risk / Breached</span>
-                                <span
-                                    class="rounded-circle bg-danger-subtle text-danger p-2 d-inline-flex align-items-center justify-content-center"
-                                    style="width: 32px; height: 32px;">
+                                <span class="rounded-circle bg-danger-subtle text-danger d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px; font-size: 1.1rem;">
                                     <i class="fa-solid fa-hourglass-half"></i>
                                 </span>
                             </div>
-                            <strong class="fs-2 fw-bold text-danger mt-1 d-block" id="cardSlaRiskCount">0</strong>
+                            <strong class="fs-1 fw-bold text-danger my-1 d-block" id="cardSlaRiskCount">0</strong>
                             <small class="text-muted mt-1">Urgent response timer</small>
                         </article>
                     </div>
@@ -5763,15 +6106,19 @@
                                 </div>
                                 <div class="d-flex align-items-center gap-2 flex-wrap">
                                     <!-- View Switcher: List/Grid View vs Map View -->
-                                    <div class="btn-group btn-group-sm rounded-pill shadow-xs" role="group"
+                                    <div class="btn-group btn-group-sm rounded-pill shadow-xs bg-light border p-0.5" role="group"
                                         id="dispatchViewSwitcher">
-                                        <button type="button" class="btn btn-sm btn-primary text-white"
-                                            id="btnDispatchViewList" onclick="window.switchDispatchLayout('list')">
-                                            <i class="fa-solid fa-list-check"></i><span>List/Grid View</span>
+                                        <button type="button" class="btn btn-sm rounded-pill btn-primary text-white fw-semibold px-3"
+                                            id="btnDispatchViewCards" onclick="window.switchDispatchLayout('cards')">
+                                            <i class="fa-solid fa-table-cells-large me-1"></i><span>Cards View</span>
                                         </button>
-                                        <button type="button" class="btn btn-sm text-secondary" id="btnDispatchViewMap"
-                                            onclick="window.switchDispatchLayout('map')">
-                                            <i class="fa-solid fa-map-location-dot"></i><span>Map View</span>
+                                        <button type="button" class="btn btn-sm rounded-pill text-secondary fw-semibold px-3"
+                                            id="btnDispatchViewList" onclick="window.switchDispatchLayout('list')">
+                                            <i class="fa-solid fa-table-list me-1"></i><span>Table View</span>
+                                        </button>
+                                        <button type="button" class="btn btn-sm rounded-pill text-secondary fw-semibold px-3"
+                                            id="btnDispatchViewMap" onclick="window.switchDispatchLayout('map')">
+                                            <i class="fa-solid fa-map-location-dot me-1"></i><span>Map View</span>
                                         </button>
                                     </div>
 
@@ -5950,8 +6297,20 @@
                             </div>
                         </div>
 
-                        <!-- 1. List / Grid View -->
-                        <div id="dispatchListView">
+                        <!-- 1. Cards View (Primary Default) -->
+                        <div id="dispatchCardsView">
+                            <div class="card-body px-3 px-md-4 pb-4">
+                                <div class="row g-3" id="dispatchCardsContainer">
+                                    <div class="col-12 text-center py-5 text-muted">
+                                        <div class="spinner-border text-primary mb-2" role="status" style="width: 2rem; height: 2rem;"></div>
+                                        <div class="fw-semibold text-dark small mt-1">Loading emergency operations cards...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. List / Table View -->
+                        <div id="dispatchListView" class="d-none">
                             <div class="card-body px-4 pb-4 table-responsive">
                                 <table class="table table-hover align-middle text-nowrap is-empty"
                                     id="liveDispatchTable">
@@ -7473,6 +7832,17 @@
         }
 
         let currentMaintChatChannel = 'CUSTOMER';
+        window.__maintCustThreadsCache = {};
+        window.__maintAdminThreadsCache = {};
+
+        function escapeMaintHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+            });
+        }
+        window.escapeMaintHtml = escapeMaintHtml;
+
         let activeMaintCustomerChat = {
             conversationId: 'req_REQ-1024_cust',
             ticketNumber: 'REQ-1024',
@@ -7482,6 +7852,7 @@
             workerName: 'Kumar (AC Specialist)',
             status: 'Assigned'
         };
+
         let activeMaintAdminChat = {
             conversationId: 'req_REQ-1024_admin',
             ticketNumber: 'REQ-1024',
@@ -7515,70 +7886,102 @@
 
             if (isCust) {
                 loadMaintCustomerThreads();
-                loadMaintCustomerMessages(activeMaintCustomerChat.conversationId);
+                if (activeMaintCustomerChat && activeMaintCustomerChat.conversationId) {
+                    loadMaintCustomerMessages(activeMaintCustomerChat.conversationId);
+                }
             } else {
                 loadMaintAdminThreads();
-                loadMaintAdminMessages(activeMaintAdminChat.conversationId);
+                if (activeMaintAdminChat && activeMaintAdminChat.conversationId) {
+                    loadMaintAdminMessages(activeMaintAdminChat.conversationId);
+                }
             }
         };
 
-        window.openMaintCustomerThread = function(convId, ticketNumber, ticketTitle, residentName, residentUnit, workerName, status) {
+        window.openMaintCustomerThreadByKey = function(convKey) {
+            const t = window.__maintCustThreadsCache ? window.__maintCustThreadsCache[convKey] : null;
+            const ticketNum = t ? (t.ticketNumber || '') : '';
+            const ticketTitle = t ? (t.ticketTitle || t.title || 'Service Request') : 'Service Request';
+            const resident = t ? (t.customerName || 'Resident') : 'Resident';
+            const unit = t ? (t.customerUnit || t.unit || '') : '';
+            const worker = t ? (t.maintenanceUserName || 'Kumar (AC Specialist)') : 'Kumar (AC Specialist)';
+            const status = t ? (t.status || 'Assigned') : 'Assigned';
+
             activeMaintCustomerChat = {
-                conversationId: convId,
-                ticketNumber: ticketNumber || '',
-                ticketTitle: ticketTitle || 'Maintenance Request',
-                residentName: residentName || 'Resident',
-                residentUnit: residentUnit || '',
-                workerName: workerName || 'Duty Technician',
-                status: status || 'Assigned'
+                conversationId: convKey,
+                ticketNumber: ticketNum,
+                ticketTitle: ticketTitle,
+                residentName: resident,
+                residentUnit: unit,
+                workerName: worker,
+                status: status
             };
 
             const badge = document.getElementById('maintActiveCustTicketBadge');
-            if (badge) badge.textContent = '#' + (activeMaintCustomerChat.ticketNumber || 'TICKET');
+            if (badge) badge.textContent = '#' + (ticketNum || 'REQ');
             const title = document.getElementById('maintActiveCustTitle');
-            if (title) title.textContent = activeMaintCustomerChat.ticketTitle;
+            if (title) title.textContent = ticketTitle;
             const statusEl = document.getElementById('maintActiveCustStatus');
-            if (statusEl) statusEl.textContent = activeMaintCustomerChat.status;
+            if (statusEl) statusEl.textContent = status;
             const sub = document.getElementById('maintActiveCustSubtitle');
-            if (sub) sub.innerHTML = `Resident: <strong class="text-dark">${escapeMaintHtml(activeMaintCustomerChat.residentName)}</strong> · ${escapeMaintHtml(activeMaintCustomerChat.residentUnit)} · Duty Worker: <strong class="text-dark">${escapeMaintHtml(activeMaintCustomerChat.workerName)}</strong>`;
+            if (sub) {
+                sub.innerHTML = `Resident: <strong class="text-dark">${escapeMaintHtml(resident)}</strong> · ${escapeMaintHtml(unit)} · Duty Worker: <strong class="text-dark">${escapeMaintHtml(worker)}</strong>`;
+            }
 
             document.querySelectorAll('#maintCustomerThreadsList .chat-thread-card').forEach(el => el.classList.remove('active'));
-            const activeItem = document.getElementById(`maint-cust-thread-${convId}`);
-            if (activeItem) activeItem.classList.add('active');
+            if (t && t.conversationId) {
+                const activeItem = document.getElementById(`maint-cust-thread-${t.conversationId}`);
+                if (activeItem) activeItem.classList.add('active');
+            }
 
-            loadMaintCustomerMessages(convId);
+            loadMaintCustomerMessages(convKey);
         };
 
-        window.openMaintAdminThread = function(convId, ticketNumber, ticketTitle, category) {
+        window.openMaintCustomerThread = function(convId, ticketNumber, ticketTitle, residentName, residentUnit, workerName, status) {
+            window.openMaintCustomerThreadByKey(convId);
+        };
+
+        window.openMaintAdminThreadByKey = function(convKey) {
+            const t = window.__maintAdminThreadsCache ? window.__maintAdminThreadsCache[convKey] : null;
+            const ticketNum = t ? (t.ticketNumber || '') : '';
+            const ticketTitle = t ? (t.ticketTitle || t.title || 'Board Escalation') : 'Board Escalation';
+            const category = t ? (t.category || 'General') : 'General';
+
             activeMaintAdminChat = {
-                conversationId: convId,
-                ticketNumber: ticketNumber || '',
-                ticketTitle: ticketTitle || 'Board Escalation',
-                category: category || 'General'
+                conversationId: convKey,
+                ticketNumber: ticketNum,
+                ticketTitle: ticketTitle,
+                category: category
             };
 
             const badge = document.getElementById('maintActiveAdminTicketBadge');
-            if (badge) badge.textContent = '#' + (activeMaintAdminChat.ticketNumber || 'INTERNAL');
+            if (badge) badge.textContent = '#' + (ticketNum || 'INTERNAL');
             const title = document.getElementById('maintActiveAdminTitle');
-            if (title) title.textContent = activeMaintAdminChat.ticketTitle;
+            if (title) title.textContent = ticketTitle;
 
             document.querySelectorAll('#maintAdminThreadsList .chat-thread-card').forEach(el => el.classList.remove('active'));
-            const activeItem = document.getElementById(`maint-admin-thread-${convId}`);
-            if (activeItem) activeItem.classList.add('active');
+            if (t && t.conversationId) {
+                const activeItem = document.getElementById(`maint-admin-thread-${t.conversationId}`);
+                if (activeItem) activeItem.classList.add('active');
+            }
 
-            loadMaintAdminMessages(convId);
+            loadMaintAdminMessages(convKey);
+        };
+
+        window.openMaintAdminThread = function(convId, ticketNumber, ticketTitle, category) {
+            window.openMaintAdminThreadByKey(convId);
         };
 
         window.escalateCurrentTicketToAdmin = function() {
-            escalateTicketToAdmin(activeMaintCustomerChat.ticketNumber, activeMaintCustomerChat.ticketTitle);
+            window.escalateTicketToAdmin(activeMaintCustomerChat.ticketNumber, activeMaintCustomerChat.ticketTitle);
         };
 
         window.escalateTicketToAdmin = function(ticketNumber, ticketTitle) {
             switchMaintChatChannel('ADMIN');
-            const adminConvId = 'req_' + (ticketNumber || 'REQ-1024').trim() + '_admin';
+            const num = (ticketNumber || 'REQ-1024').trim();
+            const adminConvId = 'req_' + num + '_admin';
             activeMaintAdminChat = {
                 conversationId: adminConvId,
-                ticketNumber: ticketNumber || 'REQ-1024',
+                ticketNumber: num,
                 ticketTitle: (ticketTitle || 'Maintenance Request') + ' · Part Replacement Approval',
                 category: 'Part Replacement'
             };
@@ -7593,7 +7996,7 @@
 
             const input = document.getElementById('maintAdminReplyInput');
             if (input) {
-                input.value = `Inspected AC for Flat A-101 (Ticket #${activeMaintAdminChat.ticketNumber}). Part replacement required. Requesting board approval.`;
+                input.value = `Inspected issue for ticket #${activeMaintAdminChat.ticketNumber}. Spare part replacement required. Requesting society admin approval.`;
                 input.focus({ preventScroll: true });
             }
         };
@@ -7615,16 +8018,17 @@
         };
 
         window.openChatFromRequestDetails = function(channel) {
-            closeResidentRequestDetailsModal();
-            const ticketNum = (document.getElementById('viewModalReqNumber').textContent || '').replace('#', '').trim();
-            const ticketTitle = document.getElementById('viewModalTitle').textContent || 'Service Request';
+            if (typeof closeResidentRequestDetailsModal === 'function') closeResidentRequestDetailsModal();
+            const ticketNum = (document.getElementById('viewModalReqNumber')?.textContent || '').replace('#', '').trim();
+            const ticketTitle = document.getElementById('viewModalTitle')?.textContent || 'Service Request';
 
             window.openPanel('live-chat');
             if (channel === 'ADMIN') {
-                escalateTicketToAdmin(ticketNum, ticketTitle);
+                window.escalateTicketToAdmin(ticketNum, ticketTitle);
             } else {
-                switchMaintChatChannel('CUSTOMER');
-                openMaintCustomerThread('req_' + ticketNum + '_cust', ticketNum, ticketTitle, 'Resident', 'Unit', 'Kumar', 'Assigned');
+                window.switchMaintChatChannel('CUSTOMER');
+                const convKey = 'req_' + (ticketNum || 'REQ-1024') + '_cust';
+                window.openMaintCustomerThreadByKey(convKey);
             }
         };
 
@@ -7633,10 +8037,14 @@
         window.startMaintChatRealtime = function() {
             if (currentMaintChatChannel === 'CUSTOMER') {
                 loadMaintCustomerThreads();
-                loadMaintCustomerMessages(activeMaintCustomerChat.conversationId);
+                if (activeMaintCustomerChat && activeMaintCustomerChat.conversationId) {
+                    loadMaintCustomerMessages(activeMaintCustomerChat.conversationId);
+                }
             } else {
                 loadMaintAdminThreads();
-                loadMaintAdminMessages(activeMaintAdminChat.conversationId);
+                if (activeMaintAdminChat && activeMaintAdminChat.conversationId) {
+                    loadMaintAdminMessages(activeMaintAdminChat.conversationId);
+                }
             }
 
             if (!maintChatPollInterval) {
@@ -7644,15 +8052,21 @@
                     const section = document.querySelector('[data-view="live-chat"]:not(.d-none):not(.hidden)');
                     if (section) {
                         if (currentMaintChatChannel === 'CUSTOMER') {
-                            loadMaintCustomerMessages(activeMaintCustomerChat.conversationId, true);
+                            if (activeMaintCustomerChat && activeMaintCustomerChat.conversationId) {
+                                loadMaintCustomerMessages(activeMaintCustomerChat.conversationId, true);
+                            }
                             loadMaintCustomerThreads(true);
                         } else {
-                            loadMaintAdminMessages(activeMaintAdminChat.conversationId, true);
+                            if (activeMaintAdminChat && activeMaintAdminChat.conversationId) {
+                                loadMaintAdminMessages(activeMaintAdminChat.conversationId, true);
+                            }
                             loadMaintAdminThreads(true);
                         }
                     }
-                }, 1000); // 1.0s real-time live sync!
+                }, 1500);
             }
+        };
+
         window.filterMaintCustomerThreads = function(query) {
             const q = (query || '').toLowerCase().trim();
             const cards = document.querySelectorAll('#maintCustomerThreadsList .chat-thread-card');
@@ -7670,7 +8084,6 @@
                 if (!res.ok) return;
                 const threads = await res.json();
 
-                // Update unread count badges in real-time
                 let totalUnread = 0;
                 threads.forEach(t => totalUnread += (t.unreadCount || 0));
                 const totalBadge = document.getElementById('maintChatTotalBadge');
@@ -7683,29 +8096,50 @@
                     custBadge.textContent = totalUnread > 0 ? totalUnread : '0';
                     custBadge.style.display = totalUnread > 0 ? 'inline-block' : 'none';
                 }
+                const headerBadge = document.getElementById('maintHeaderChatBadge');
+                if (headerBadge) {
+                    headerBadge.textContent = totalUnread > 0 ? totalUnread : '0';
+                    headerBadge.style.display = totalUnread > 0 ? 'inline-block' : 'none';
+                }
 
+                window.__maintCustThreadsCache = {};
+                if (!threads || threads.length === 0) {
+                    list.innerHTML = `
+                        <div class="text-center text-muted py-5 px-3">
+                            <i class="fa-regular fa-comments fs-3 text-secondary mb-2 d-block"></i>
+                            <div class="fw-semibold small">No Resident Inquiries</div>
+                            <div class="text-muted" style="font-size:0.75rem;">New resident requests with chat will appear here.</div>
+                        </div>`;
+                    return;
+                }
+
+                let foundActive = false;
                 let html = '<div class="chat-threads-container">';
                 threads.forEach(t => {
-                    const isActive = (t.conversationId === activeMaintCustomerChat.conversationId || t.ticketNumber === activeMaintCustomerChat.ticketNumber);
+                    const convKey = String(t.conversationKey || ('req_' + t.ticketNumber + '_cust'));
+                    window.__maintCustThreadsCache[convKey] = t;
+                    const isActive = (convKey === activeMaintCustomerChat.conversationId || String(t.conversationId) === String(activeMaintCustomerChat.conversationId) || t.ticketNumber === activeMaintCustomerChat.ticketNumber);
+                    if (isActive) foundActive = true;
+
                     const ticketNum = t.ticketNumber || 'REQ-1024';
-                    const ticketTitle = t.ticketTitle || t.title || 'AC Repair';
-                    const unit = t.customerUnit || t.unit || 'Flat A-204';
-                    const resident = t.customerName || 'Selva';
+                    const ticketTitle = t.ticketTitle || t.title || 'Service Request';
+                    const unit = t.customerUnit || t.unit || 'Unit';
+                    const resident = t.customerName || 'Resident';
                     const unread = t.unreadCount || 0;
                     const snippet = t.lastMessage ? `${t.lastSender || 'Resident'}: ${t.lastMessage}` : `Resident: ${resident} · ${unit}`;
 
                     html += `
-                        <div role="button" tabindex="0" class="chat-thread-card ${isActive ? 'active' : ''}" id="maint-cust-thread-${t.conversationId}" onclick="openMaintCustomerThread('${t.conversationId}', '${ticketNum}', '${escapeMaintHtml(ticketTitle)}', '${escapeMaintHtml(resident)}', '${escapeMaintHtml(unit)}', 'Kumar', 'Assigned')">
+                        <div role="button" tabindex="0" class="chat-thread-card ${isActive ? 'active' : ''}" id="maint-cust-thread-${t.conversationId}" onclick="openMaintCustomerThreadByKey('${convKey}')">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="thread-badge">#${ticketNum}</span>
-                                <span class="thread-time">${t.formattedTime || ''}</span>
+                                <span class="thread-badge">#${escapeMaintHtml(ticketNum)}</span>
+                                <span class="thread-time">${escapeMaintHtml(t.formattedTime || '')}</span>
                             </div>
                             <div class="thread-title">${escapeMaintHtml(ticketTitle)}</div>
                             <div class="thread-snippet text-truncate">${escapeMaintHtml(snippet)}</div>
                             ${unread > 0 ? `
                                 <div class="mt-2">
                                     <span class="badge bg-danger text-white rounded-pill px-2.5 py-1 fw-bold" style="font-size:0.72rem;">
-                                        &bull; ${unread} unread message${unread > 1 ? 's' : ''}
+                                        &bull; ${unread} unread
                                     </span>
                                 </div>
                             ` : ''}
@@ -7714,6 +8148,11 @@
                 });
                 html += '</div>';
                 list.innerHTML = html;
+
+                if (!foundActive && !isPolling && threads.length > 0) {
+                    const firstKey = String(threads[0].conversationKey || ('req_' + threads[0].ticketNumber + '_cust'));
+                    openMaintCustomerThreadByKey(firstKey);
+                }
             } catch (e) {
                 console.error("Failed to load customer threads", e);
             }
@@ -7726,17 +8165,42 @@
                 const res = await fetch('/api/chat/threads?channelType=MAINTENANCE_ADMIN&viewerRole=MAINTENANCE');
                 if (!res.ok) return;
                 const threads = await res.json();
+
+                let totalUnread = 0;
+                threads.forEach(t => totalUnread += (t.unreadCount || 0));
+                const adminBadge = document.getElementById('maintAdminUnreadBadge');
+                if (adminBadge) {
+                    adminBadge.textContent = totalUnread > 0 ? totalUnread : '0';
+                    adminBadge.style.display = totalUnread > 0 ? 'inline-block' : 'none';
+                }
+
+                window.__maintAdminThreadsCache = {};
+                if (!threads || threads.length === 0) {
+                    list.innerHTML = `
+                        <div class="text-center text-muted py-5 px-3">
+                            <i class="fa-solid fa-shield-halved fs-3 text-warning mb-2 d-block"></i>
+                            <div class="fw-semibold small">No Active Escalations</div>
+                            <div class="text-muted" style="font-size:0.75rem;">Escalated tickets to Society Admin will appear here.</div>
+                        </div>`;
+                    return;
+                }
+
+                let foundActive = false;
                 let html = '<div class="chat-threads-container">';
                 threads.forEach(t => {
-                    const isActive = (t.conversationId === activeMaintAdminChat.conversationId);
+                    const convKey = String(t.conversationKey || ('req_' + t.ticketNumber + '_admin'));
+                    window.__maintAdminThreadsCache[convKey] = t;
+                    const isActive = (convKey === activeMaintAdminChat.conversationId || String(t.conversationId) === String(activeMaintAdminChat.conversationId) || t.ticketNumber === activeMaintAdminChat.ticketNumber);
+                    if (isActive) foundActive = true;
+
                     html += `
-                        <div role="button" tabindex="0" class="chat-thread-card ${isActive ? 'active' : ''}" id="maint-admin-thread-${t.conversationId}" onclick="openMaintAdminThread('${t.conversationId}', '${t.ticketNumber || ''}', '${escapeMaintHtml(t.ticketTitle || t.title)}', '${t.category || ''}')">
+                        <div role="button" tabindex="0" class="chat-thread-card ${isActive ? 'active' : ''}" id="maint-admin-thread-${t.conversationId}" onclick="openMaintAdminThreadByKey('${convKey}')">
                             <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="thread-badge"><i class="fa-solid fa-lock me-1"></i>#${t.ticketNumber || 'ESCALATE'}</span>
-                                <span class="thread-time">${t.formattedTime || ''}</span>
+                                <span class="thread-badge"><i class="fa-solid fa-lock me-1"></i>#${escapeMaintHtml(t.ticketNumber || 'INTERNAL')}</span>
+                                <span class="thread-time">${escapeMaintHtml(t.formattedTime || '')}</span>
                             </div>
-                            <div class="thread-title">${escapeMaintHtml(t.title)}</div>
-                            <div class="thread-snippet text-truncate">${escapeMaintHtml(t.lastSender)}: ${escapeMaintHtml(t.lastMessage)}</div>
+                            <div class="thread-title">${escapeMaintHtml(t.title || t.ticketTitle || 'Escalation')}</div>
+                            <div class="thread-snippet text-truncate">${escapeMaintHtml(t.lastSender || 'Admin')}: ${escapeMaintHtml(t.lastMessage || '')}</div>
                             <div class="mt-2 d-flex align-items-center justify-content-between">
                                 <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2 py-0.5" style="font-size:0.65rem;">INTERNAL ADMIN</span>
                                 ${t.unreadCount > 0 ? `<span class="badge bg-danger rounded-pill">${t.unreadCount} new</span>` : ''}
@@ -7746,6 +8210,11 @@
                 });
                 html += '</div>';
                 list.innerHTML = html;
+
+                if (!foundActive && !isPolling && threads.length > 0) {
+                    const firstKey = String(threads[0].conversationKey || ('req_' + threads[0].ticketNumber + '_admin'));
+                    openMaintAdminThreadByKey(firstKey);
+                }
             } catch (e) {
                 console.error("Failed to load admin threads", e);
             }
@@ -7760,18 +8229,19 @@
                 const msgs = await res.json();
                 let html = '';
                 if (!msgs || msgs.length === 0) {
-                    html = `<div class="text-center text-muted py-5"><i class="fa-regular fa-comment-dots fs-3 mb-2 d-block"></i>No messages yet in this ticket conversation.</div>`;
+                    html = `<div class="text-center text-muted my-auto py-5"><i class="fa-regular fa-comment-dots fs-3 mb-2 d-block text-secondary"></i>No messages yet in this ticket conversation.<div class="small text-muted mt-1">Send a quick reply below to get started.</div></div>`;
                 } else {
                     msgs.forEach(m => {
                         const isMaintenance = (m.senderRole === 'MAINTENANCE');
+                        const safeMsg = escapeMaintHtml(m.message).replace(/\n/g, '<br>');
                         if (isMaintenance) {
                             html += `
                                 <div class="maint-msg-row maint-msg-out">
                                     <div class="maint-bubble maint-bubble-out">
                                         <div class="maint-bubble-sender">You (${escapeMaintHtml(m.senderName || 'Kumar')})</div>
-                                        <div class="maint-bubble-text">${escapeMaintHtml(m.message)}</div>
+                                        <div class="maint-bubble-text">${safeMsg}</div>
                                         <div class="maint-bubble-meta">
-                                            <span>${m.formattedTime || ''}</span>
+                                            <span>${escapeMaintHtml(m.formattedTime || '')}</span>
                                             <i class="fa-solid fa-check-double text-info ms-1" style="font-size:0.65rem;"></i>
                                         </div>
                                     </div>
@@ -7784,9 +8254,9 @@
                                         <div class="maint-bubble-sender maint-sender-resident">
                                             <i class="fa-solid fa-user me-1" style="font-size:0.65rem;"></i>${escapeMaintHtml(m.senderName || 'Resident')} (${escapeMaintHtml(m.senderUnit || 'Flat')})
                                         </div>
-                                        <div class="maint-bubble-text">${escapeMaintHtml(m.message)}</div>
+                                        <div class="maint-bubble-text">${safeMsg}</div>
                                         <div class="maint-bubble-meta">
-                                            <span>${m.formattedTime || ''}</span>
+                                            <span>${escapeMaintHtml(m.formattedTime || '')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -7794,7 +8264,7 @@
                         }
                     });
                 }
-                const shouldScroll = !isPolling || (container.scrollHeight - container.scrollTop <= container.clientHeight + 100);
+                const shouldScroll = !isPolling || (container.scrollHeight - container.scrollTop <= container.clientHeight + 120);
                 container.innerHTML = html;
                 if (shouldScroll) {
                     container.scrollTop = container.scrollHeight;
@@ -7813,18 +8283,19 @@
                 const msgs = await res.json();
                 let html = '';
                 if (!msgs || msgs.length === 0) {
-                    html = `<div class="text-center text-muted py-5"><i class="fa-solid fa-lock fs-3 mb-2 d-block text-warning"></i>Internal admin thread. Send an escalation or approval request to start!</div>`;
+                    html = `<div class="text-center text-muted my-auto py-5"><i class="fa-solid fa-lock fs-3 mb-2 d-block text-warning"></i>Internal admin thread.<div class="small text-muted mt-1">Send an escalation or approval request to start!</div></div>`;
                 } else {
                     msgs.forEach(m => {
                         const isMaintenance = (m.senderRole === 'MAINTENANCE');
+                        const safeMsg = escapeMaintHtml(m.message).replace(/\n/g, '<br>');
                         if (isMaintenance) {
                             html += `
                                 <div class="maint-msg-row maint-msg-out">
                                     <div class="maint-bubble maint-bubble-out" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important; border-left: 3px solid #f59e0b !important;">
                                         <div class="maint-bubble-sender" style="color:#fde047;">You (${escapeMaintHtml(m.senderName || 'Kumar')})</div>
-                                        <div class="maint-bubble-text">${escapeMaintHtml(m.message)}</div>
+                                        <div class="maint-bubble-text">${safeMsg}</div>
                                         <div class="maint-bubble-meta">
-                                            <span>${m.formattedTime || ''}</span>
+                                            <span>${escapeMaintHtml(m.formattedTime || '')}</span>
                                             <i class="fa-solid fa-check-double text-warning ms-1" style="font-size:0.65rem;"></i>
                                         </div>
                                     </div>
@@ -7832,14 +8303,14 @@
                             `;
                         } else {
                             html += `
-                                <div class="maint-msg-row maint-msg-in">
-                                    <div class="maint-bubble maint-bubble-in" style="border-left: 3px solid #10b981 !important;">
+                                <div class="maint-msg-row maint-msg-in" style="border-left: 3px solid #10b981 !important;">
+                                    <div class="maint-bubble maint-bubble-in">
                                         <div class="maint-bubble-sender maint-sender-admin">
                                             <i class="fa-solid fa-building-shield me-1"></i>${escapeMaintHtml(m.senderName || 'Society Admin')}
                                         </div>
-                                        <div class="maint-bubble-text">${escapeMaintHtml(m.message)}</div>
+                                        <div class="maint-bubble-text">${safeMsg}</div>
                                         <div class="maint-bubble-meta">
-                                            <span>${m.formattedTime || ''}</span>
+                                            <span>${escapeMaintHtml(m.formattedTime || '')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -7847,7 +8318,7 @@
                         }
                     });
                 }
-                const shouldScroll = !isPolling || (container.scrollHeight - container.scrollTop <= container.clientHeight + 100);
+                const shouldScroll = !isPolling || (container.scrollHeight - container.scrollTop <= container.clientHeight + 120);
                 container.innerHTML = html;
                 if (shouldScroll) {
                     container.scrollTop = container.scrollHeight;
@@ -7858,7 +8329,7 @@
         };
 
         window.handleMaintCustomerSend = async function(e) {
-            e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
             const input = document.getElementById('maintCustomerReplyInput');
             if (!input || !input.value.trim()) return;
             const text = input.value.trim();
@@ -7866,10 +8337,9 @@
             try {
                 const payload = {
                     conversationKey: activeMaintCustomerChat.conversationId,
-                    conversationId: (typeof activeMaintCustomerChat.conversationId === 'number' ? activeMaintCustomerChat.conversationId : null),
                     channelType: 'CUSTOMER_MAINTENANCE',
                     senderRole: 'MAINTENANCE',
-                    senderName: 'Kumar (AC Specialist)',
+                    senderName: activeMaintCustomerChat.workerName || 'Kumar (AC Specialist)',
                     senderUnit: 'Maintenance Crew',
                     ticketNumber: activeMaintCustomerChat.ticketNumber,
                     ticketTitle: activeMaintCustomerChat.ticketTitle,
@@ -7883,6 +8353,7 @@
                 });
                 if (res.ok) {
                     await loadMaintCustomerMessages(activeMaintCustomerChat.conversationId);
+                    loadMaintCustomerThreads(true);
                 }
             } catch (err) {
                 console.error("Failed to send customer reply", err);
@@ -7890,7 +8361,7 @@
         };
 
         window.handleMaintAdminSend = async function(e) {
-            e.preventDefault();
+            if (e && e.preventDefault) e.preventDefault();
             const input = document.getElementById('maintAdminReplyInput');
             if (!input || !input.value.trim()) return;
             const text = input.value.trim();
@@ -7898,15 +8369,14 @@
             try {
                 const payload = {
                     conversationKey: activeMaintAdminChat.conversationId,
-                    conversationId: (typeof activeMaintAdminChat.conversationId === 'number' ? activeMaintAdminChat.conversationId : null),
                     channelType: 'MAINTENANCE_ADMIN',
                     senderRole: 'MAINTENANCE',
-                    senderName: 'Lead Engineer Suresh',
-                    senderUnit: 'Maintenance Dept',
+                    senderName: 'Kumar (Maintenance Team)',
+                    senderUnit: 'Maintenance Crew',
                     ticketNumber: activeMaintAdminChat.ticketNumber,
                     ticketTitle: activeMaintAdminChat.ticketTitle,
                     message: text,
-                    priority: 'HIGH'
+                    priority: 'NORMAL'
                 };
                 const res = await fetch('/api/chat/send', {
                     method: 'POST',
@@ -7915,18 +8385,12 @@
                 });
                 if (res.ok) {
                     await loadMaintAdminMessages(activeMaintAdminChat.conversationId);
+                    loadMaintAdminThreads(true);
                 }
             } catch (err) {
                 console.error("Failed to send admin escalation message", err);
             }
         };
-
-        function escapeMaintHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>"']/g, function(m) {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-            });
-        }
 
         window.switchQueuePipeline = function (pipeline) {
             if (pipeline === "live-bookings" || pipeline === "emergency" || pipeline === "dispatch") {
@@ -8355,6 +8819,112 @@
                     </tr>
                 `;
             }).join("");
+
+            if (cardsContainer) {
+                cardsContainer.innerHTML = filtered.map(b => {
+                    const distanceStr = b.distance || (b.distanceKm != null ? (b.distanceKm + ' km') : 'Hub area');
+                    const beforePhotoUrl = b.beforePhotoUrl || (b.hasBeforePhoto ? ('/api/maintenance/dispatch/bookings/' + b.id + '/photos/before') : null);
+                    const afterPhotoUrl = b.afterPhotoUrl || (b.hasAfterPhoto ? ('/api/maintenance/dispatch/bookings/' + b.id + '/photos/after') : null);
+                    const beforePhotoBtn = beforePhotoUrl ? ('<button type="button" class="btn btn-xs btn-outline-primary rounded-pill me-1 shadow-xs" onclick="window.openPhotoLightbox(\'' + beforePhotoUrl + '\',\'Before Photo (Initial Damage)\',\'' + b.id + '\',\'' + (b.photoStartAt || '') + '\',\'' + beforePhotoUrl + '\',\'' + (afterPhotoUrl || '') + '\')"><i class="fa-solid fa-image me-1"></i>Before</button>') : '';
+                    const afterPhotoBtn = afterPhotoUrl ? ('<button type="button" class="btn btn-xs btn-outline-success rounded-pill me-1 shadow-xs" onclick="window.openPhotoLightbox(\'' + afterPhotoUrl + '\',\'After Photo (Completion Evidence)\',\'' + b.id + '\',\'' + (b.photoEndAt || '') + '\',\'' + (beforePhotoUrl || '') + '\',\'' + afterPhotoUrl + '\')"><i class="fa-solid fa-image me-1"></i>After</button>') : '';
+                    const compareBtn = (beforePhotoUrl && afterPhotoUrl) ? ('<button class="btn btn-xs btn-outline-dark rounded-pill" onclick="window.comparePhotos(\'' + beforePhotoUrl + '\',\'' + afterPhotoUrl + '\',\'' + (b.orderReference || b.bookingReference || ('#EP-' + b.id)) + '\')"><i class="fa-solid fa-code-compare me-1"></i>Compare</button>') : '';
+                    const canReassignBooking = ['FAILED_ASSIGNMENT', 'UNASSIGNED', 'OFFERED', 'ASSIGNED', 'ACCEPTED', 'EN_ROUTE'].includes(String(b.jobStatus || '').toUpperCase());
+                    let cardActionControls = '';
+                    if (b.jobStatus === 'OFFERED') {
+                        cardActionControls = '<div class="d-flex gap-1.5 mt-1 w-100"><button class="btn btn-xs btn-success rounded-pill flex-grow-1" onclick="window.submitBookingAction(' + b.id + ',\'ACCEPT\')"><i class="fa-solid fa-check me-1"></i>Accept</button><button class="btn btn-xs btn-outline-danger rounded-pill flex-grow-1" onclick="window.submitBookingAction(' + b.id + ',\'DECLINE\')"><i class="fa-solid fa-xmark me-1"></i>Decline</button></div>';
+                    } else if (b.jobStatus === 'ACCEPTED' || b.jobStatus === 'ASSIGNED' || b.jobStatus === 'EN_ROUTE') {
+                        cardActionControls = '<div class="mt-1 w-100"><button class="btn btn-xs btn-primary rounded-pill w-100" onclick="window.submitBookingAction(' + b.id + ',\'REACHED\')"><i class="fa-solid fa-location-dot me-1"></i>Reached Location</button></div>';
+                    } else if (b.jobStatus === 'REACHED_LOCATION') {
+                        cardActionControls = '<div class="border rounded-3 p-2 bg-light shadow-sm mt-1 w-100"><div class="small fw-bold text-dark mb-1"><i class="fa-solid fa-camera text-warning me-1"></i>Mandatory Proof</div><label class="btn btn-xs btn-warning w-100 rounded-pill fw-semibold cursor-pointer mb-0"><i class="fa-solid fa-upload me-1"></i>Upload Before Photo<input type="file" accept="image/png,image/jpeg,image/jpg" class="d-none" onchange="window.uploadBookingPhoto(' + b.id + ',\'before\',this)"></label><div class="text-muted text-center mt-1" style="font-size:0.68rem;"><i class="fa-solid fa-shield-halved me-1 text-warning"></i>Before photo required before starting</div></div>';
+                    } else if (b.jobStatus === 'PHOTO_START' || b.jobStatus === 'BEFORE_PHOTO_UPLOADED') {
+                        cardActionControls = '<div class="mt-1 w-100"><button class="btn btn-xs btn-warning rounded-pill w-100 fw-bold" onclick="window.submitBookingAction(' + b.id + ',\'IN_PROGRESS\')"><i class="fa-solid fa-play me-1"></i>Start Repair Work</button></div>';
+                    } else if (b.jobStatus === 'IN_PROGRESS') {
+                        cardActionControls = '<div class="border rounded-3 p-2 bg-light shadow-sm mt-1 w-100"><div class="small fw-bold text-dark mb-1"><i class="fa-solid fa-camera-rotate text-success me-1"></i>Completion Proof</div><label class="btn btn-xs btn-success w-100 rounded-pill fw-semibold cursor-pointer mb-0"><i class="fa-solid fa-upload me-1"></i>Upload After Photo<input type="file" accept="image/png,image/jpeg,image/jpg" class="d-none" onchange="window.uploadBookingPhoto(' + b.id + ',\'after\',this)"></label><div class="text-muted text-center mt-1" style="font-size:0.68rem;"><i class="fa-solid fa-shield-halved me-1 text-warning"></i>After photo required to complete</div></div>';
+                    } else if (b.jobStatus === 'COMPLETED') {
+                        cardActionControls = '<div class="mt-1 w-100"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 mb-1 d-inline-block"><i class="fa-solid fa-flag-checkered me-1"></i>Work Completed</span>' + ((beforePhotoUrl && afterPhotoUrl) ? ('<button class="btn btn-xs btn-outline-dark rounded-pill w-100 mt-1" onclick="window.comparePhotos(\'' + beforePhotoUrl + '\',\'' + afterPhotoUrl + '\',\'' + (b.orderReference || b.bookingReference || ('#EP-' + b.id)) + '\')"><i class="fa-solid fa-code-compare me-1"></i>Compare Proof</button>') : '') + '<button class="btn btn-xs btn-outline-primary rounded-pill w-100 mt-1" onclick="window.sendEmergencyReviewLink(' + b.id + ')"><i class="fa-solid fa-paper-plane me-1"></i>' + (b.reviewLinkSentAt ? 'Resend Review Link' : 'Send Review Link') + '</button></div>';
+                    }
+                    const slaHtml = calculateSlaBadgeHtml(b);
+                    const statusBadgeHtml = window.getEmergencyStatusBadge(((b.operationalStatus || '').toUpperCase() === 'UNASSIGNED_ESCALATED' ? b.operationalStatus : (b.jobStatus || b.currentStatus || b.operationalStatus)), b.slaBreached, b.slaRisk);
+                    const customerName = escapeHtml(b.customer || b.customerName || b.requesterName || 'Resident Customer');
+                    const customerPhone = escapeHtml(b.phone || b.customerPhone || b.requesterPhone || '');
+                    const areaLocation = escapeHtml(b.location || (b.area ? (b.area + (b.city ? ', ' + b.city : '')) : (b.city || 'Hub Area')));
+                    const addressStr = escapeHtml(b.serviceAddress || b.address || '');
+                    const hubStr = escapeHtml(b.resolvedHub || b.hubName || 'Hub');
+                    const partnerStr = escapeHtml(b.assignedPartner || '');
+                    const partnerPhoneStr = escapeHtml(b.partnerPhone || '');
+                    const refStr = escapeHtml(b.orderReference || b.bookingReference || ('ORD-EMG-' + String(b.id).padStart(4, '0')));
+                    const catName = escapeHtml(b.serviceCategory || b.category || b.issueType || 'Emergency');
+                    const catIcon = typeof getCategoryIcon === 'function' ? getCategoryIcon(b.serviceCategory || b.category || b.issueType) : 'fa-solid fa-wrench';
+                    const desc = escapeHtml(b.description || b.issueDescription || '');
+                    const isManual = b.assignmentType === 'Manual';
+                    const hasPartner = b.assignedPartner && b.assignedPartner !== 'Unassigned';
+                    return '<div class="col-12 col-md-6 col-xl-4 d-flex">' +
+                        '<div class="card emergency-booking-card w-100 shadow-sm border rounded-4 overflow-hidden d-flex flex-column" data-booking-id="' + b.id + '">' +
+                            '<div class="card-header bg-white border-bottom py-3 px-3.5 d-flex align-items-center justify-content-between flex-wrap gap-2">' +
+                                '<div class="d-flex align-items-center gap-2">' +
+                                    '<a href="javascript:void(0)" class="fw-bold text-dark fs-6 text-decoration-none" onclick="window.openBookingDetailsDrawer(' + b.id + ')" title="View Details">' + refStr + '</a>' +
+                                    '<span class="badge bg-light text-primary border font-monospace" style="font-size: 0.72rem; cursor: pointer;" onclick="window.openBookingDetailsDrawer(' + b.id + ')">#EP-' + b.id + '</span>' +
+                                '</div>' +
+                                '<div>' + statusBadgeHtml + '</div>' +
+                            '</div>' +
+                            '<div class="card-body p-3.5 d-flex flex-column gap-2.5 flex-grow-1">' +
+                                '<div class="d-flex align-items-center justify-content-between gap-2">' +
+                                    '<span class="badge bg-primary-subtle text-primary border px-2.5 py-1.5 fw-semibold d-inline-flex align-items-center">' +
+                                        '<i class="' + catIcon + ' me-1.5"></i>' + catName +
+                                    '</span>' +
+                                    '<span class="badge ' + (isManual ? 'bg-info-subtle text-info-emphasis border border-info-subtle' : 'bg-light text-secondary border') + ' rounded-pill px-2.5 py-1" style="font-size: 0.72rem;">' +
+                                        '<i class="' + (isManual ? 'fa-solid fa-hand' : 'fa-solid fa-robot') + ' me-1"></i>' + (b.assignmentType || 'Auto') +
+                                    '</span>' +
+                                '</div>' +
+                                (desc ? ('<div class="p-2.5 rounded-3 bg-light text-secondary small" style="border: 1px dashed #cbd5e1; font-size: 0.8rem; line-height: 1.35;"><i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>' + desc + '</div>') : '') +
+                                '<div class="row g-2">' +
+                                    '<div class="col-6">' +
+                                        '<div class="p-2.5 rounded-3 border bg-light bg-opacity-50 h-100">' +
+                                            '<div class="text-uppercase text-muted fw-bold" style="font-size: 0.65rem; letter-spacing: 0.05em;"><i class="fa-solid fa-user me-1 text-primary"></i>Customer</div>' +
+                                            (b.contactUnlocked ? ('<div class="fw-semibold text-dark text-truncate mt-1" style="font-size: 0.84rem;" title="' + customerName + '">' + customerName + '</div>' + (customerPhone ? ('<div class="font-monospace text-muted mt-0.5 small text-truncate" style="font-size: 0.76rem;">' + customerPhone + '</div><a href="tel:' + customerPhone + '" class="btn btn-xs btn-outline-success rounded-pill mt-1.5 w-100" onclick="window.triggerCallCustomer(' + b.id + ')"><i class="fa-solid fa-phone me-1"></i>Call</a>') : '')) : '<div class="text-muted small mt-1"><i class="fa-solid fa-lock text-warning me-1"></i>Protected</div>') +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="col-6">' +
+                                        '<div class="p-2.5 rounded-3 border bg-light bg-opacity-50 h-100">' +
+                                            '<div class="text-uppercase text-muted fw-bold" style="font-size: 0.65rem; letter-spacing: 0.05em;"><i class="fa-solid fa-location-dot me-1 text-danger"></i>Location</div>' +
+                                            '<div class="fw-semibold text-dark text-truncate mt-1" style="font-size: 0.84rem;" title="' + areaLocation + '">' + areaLocation + '</div>' +
+                                            (addressStr ? ('<div class="text-muted text-truncate mt-0.5" style="font-size: 0.74rem;" title="' + addressStr + '">' + addressStr + '</div>') : '') +
+                                            '<div class="d-flex align-items-center gap-1 mt-1.5 flex-wrap">' +
+                                                '<span class="badge bg-secondary-subtle text-dark border rounded-pill px-2 py-0.5" style="font-size: 0.67rem;"><i class="fa-solid fa-warehouse me-1 text-primary"></i>' + hubStr + '</span>' +
+                                                '<span class="badge bg-light text-dark border rounded-pill px-2 py-0.5 font-monospace" style="font-size: 0.67rem;"><i class="fa-solid fa-route me-1 text-info"></i>' + distanceStr + '</span>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="p-2.5 rounded-3 border bg-light bg-opacity-50">' +
+                                    '<div class="d-flex align-items-center justify-content-between mb-1">' +
+                                        '<span class="text-uppercase text-muted fw-bold" style="font-size: 0.65rem; letter-spacing: 0.05em;"><i class="fa-solid fa-user-gear me-1 text-success"></i>Assigned Partner</span>' +
+                                        (hasPartner && canReassignBooking ? '<button type="button" class="btn btn-xs btn-link p-0 text-decoration-none text-primary fw-semibold" onclick="window.openAssignPartnerModal(' + b.id + ')"><i class="fa-solid fa-arrows-rotate me-1"></i>Reassign</button>' : '') +
+                                    '</div>' +
+                                    (hasPartner ? ('<div class="d-flex align-items-center justify-content-between"><div><div class="fw-semibold text-dark" style="font-size: 0.88rem;">' + partnerStr + '</div>' + (partnerPhoneStr ? ('<div class="text-muted font-monospace" style="font-size: 0.74rem;"><i class="fa-solid fa-phone me-1"></i>' + partnerPhoneStr + '</div>') : '') + '</div></div>') : '<div class="d-flex align-items-center justify-content-between"><span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-0.5" style="font-size: 0.72rem;"><i class="fa-solid fa-triangle-exclamation me-1"></i>Unassigned</span><button type="button" class="btn btn-xs btn-primary rounded-pill px-2.5 py-0.5 fw-bold shadow-xs" onclick="window.openAssignPartnerModal(' + b.id + ')"><i class="fa-solid fa-user-plus me-1"></i>Assign Partner</button></div>') +
+                                '</div>' +
+                                '<div class="p-2.5 rounded-3 border bg-light bg-opacity-30">' +
+                                    '<div class="sla-countdown-badge" data-booking-id="' + b.id + '" data-created="' + (b.createdAt || '') + '" data-due="' + (b.arrivalDueAt || '') + '" data-status="' + b.jobStatus + '" data-reached="' + (b.reachedAt || '') + '" data-breached="' + (b.slaBreached || false) + '">' +
+                                        slaHtml +
+                                    '</div>' +
+                                    '<div class="d-flex align-items-center justify-content-between text-muted mt-2 pt-1 border-top" style="font-size: 0.70rem; border-color: #f1f5f9 !important;">' +
+                                        '<span><i class="fa-regular fa-clock me-1 text-primary"></i>' + formatBookingDateTime(b.createdAt) + '</span>' +
+                                        '<span class="badge bg-light text-dark border rounded-pill px-2 py-0.5 font-monospace"><i class="fa-solid fa-stopwatch me-1 text-primary"></i>' + escapeHtml(b.timeElapsedFormatted || formatBookingRelativeTime(b.createdAt)) + '</span>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="card-footer bg-light bg-opacity-50 border-top p-3 d-flex flex-column gap-2">' +
+                                '<div class="d-flex gap-1.5 align-items-center">' +
+                                    '<button class="btn btn-xs btn-primary rounded-pill fw-semibold shadow-xs flex-grow-1" onclick="window.openBookingDetailsDrawer(' + b.id + ')" title="Open Booking Details Drawer"><i class="fa-solid fa-file-lines me-1"></i>Details</button>' +
+                                    '<button class="btn btn-xs btn-outline-secondary rounded-pill fw-semibold flex-grow-1" onclick="window.viewLifecycleTimeline(' + b.id + ')" title="View Lifecycle Timeline"><i class="fa-solid fa-timeline me-1 text-primary"></i>Timeline</button>' +
+                                    ((beforePhotoBtn || afterPhotoBtn || compareBtn) ? ('<div class="d-flex gap-1">' + beforePhotoBtn + afterPhotoBtn + compareBtn + '</div>') : '') +
+                                '</div>' +
+                                (cardActionControls ? ('<div>' + cardActionControls + '</div>') : '') +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                }).join("");
+            }
         };
 
         // =========================================================================
@@ -8369,30 +8939,35 @@
         window.__mapMarkersByBookingId = {};
 
         window.switchDispatchLayout = function (layout) {
+            const cardsBtn = document.getElementById("btnDispatchViewCards");
             const listBtn = document.getElementById("btnDispatchViewList");
             const mapBtn = document.getElementById("btnDispatchViewMap");
+            const cardsView = document.getElementById("dispatchCardsView");
             const listView = document.getElementById("dispatchListView");
             const mapView = document.getElementById("dispatchMapView");
-            if (!listView || !mapView) return;
+
+            [cardsBtn, listBtn, mapBtn].forEach(b => {
+                b?.classList.remove("btn-primary", "text-white");
+                b?.classList.add("text-secondary");
+            });
+            if (cardsView) cardsView.classList.add("d-none");
+            if (listView) listView.classList.add("d-none");
+            if (mapView) mapView.classList.add("d-none");
 
             if (layout === "map") {
-                listBtn?.classList.remove("btn-primary", "text-white");
-                listBtn?.classList.add("text-secondary");
                 mapBtn?.classList.remove("text-secondary");
                 mapBtn?.classList.add("btn-primary", "text-white");
-
-                listView.classList.add("d-none");
-                mapView.classList.remove("d-none");
-
-                initOrUpdateEmergencyMap();
-            } else {
-                mapBtn?.classList.remove("btn-primary", "text-white");
-                mapBtn?.classList.add("text-secondary");
+                if (mapView) mapView.classList.remove("d-none");
+                if (typeof initOrUpdateEmergencyMap === "function") initOrUpdateEmergencyMap();
+            } else if (layout === "list") {
                 listBtn?.classList.remove("text-secondary");
                 listBtn?.classList.add("btn-primary", "text-white");
-
-                mapView.classList.add("d-none");
-                listView.classList.remove("d-none");
+                if (listView) listView.classList.remove("d-none");
+            } else {
+                // Default cards view
+                cardsBtn?.classList.remove("text-secondary");
+                cardsBtn?.classList.add("btn-primary", "text-white");
+                if (cardsView) cardsView.classList.remove("d-none");
             }
         };
 

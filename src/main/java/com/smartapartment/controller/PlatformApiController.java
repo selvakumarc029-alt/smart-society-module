@@ -123,12 +123,113 @@ public class PlatformApiController {
     }
 
     @GetMapping("/plans")
+    @Transactional
     public List<SubscriptionPlan> plans() {
+        ensureDefaultPlans();
         return plans.findAll().stream()
                 .filter(plan -> "platform".equalsIgnoreCase(plan.getTenantId()))
                 .filter(plan -> plan.getPlanCode() != null && !plan.getPlanCode().isBlank())
                 .sorted(java.util.Comparator.comparing(SubscriptionPlan::getId))
                 .toList();
+    }
+
+    private synchronized void ensureDefaultPlans() {
+        boolean hasGold = plans.findAll().stream().anyMatch(p -> "GOLD".equalsIgnoreCase(p.getPlanCode()));
+        boolean hasPlatinum = plans.findAll().stream().anyMatch(p -> "PLATINUM".equalsIgnoreCase(p.getPlanCode()));
+        boolean hasDiamond = plans.findAll().stream().anyMatch(p -> "DIAMOND".equalsIgnoreCase(p.getPlanCode()));
+
+        if (!hasGold) {
+            SubscriptionPlan gold = new SubscriptionPlan();
+            gold.setTenantId("platform");
+            gold.setName("Gold Plan");
+            gold.setPlanCode("GOLD");
+            gold.setDescription("Essential apartment society management for small to mid-sized gated communities.");
+            gold.setMonthlyPrice(new BigDecimal("2999"));
+            gold.setMaxApartments(150);
+            gold.setMaxResidents(500);
+            gold.setMaxAdmins(2);
+            gold.setMaxSecurityStaff(5);
+            gold.setMaxMaintenanceStaff(5);
+            gold.setStorageGb(10);
+            gold.setAuditHistoryDays(90);
+            gold.setSupportLevel("STANDARD");
+            gold.setBillingCycle("MONTHLY");
+            gold.setActive(true);
+            gold.setFeatured(false);
+            gold.setVisitorManagement(true);
+            gold.setComplaintManagement(true);
+            gold.setAnnouncementManagement(true);
+            gold.setBillingManagement(true);
+            gold.setAmenityBooking(false);
+            gold.setExpenseManagement(false);
+            gold.setAnalytics(false);
+            gold.setPaymentGateway(true);
+            gold.setApiAccess(false);
+            gold.setPrioritySupport(false);
+            plans.save(gold);
+        }
+
+        if (!hasPlatinum) {
+            SubscriptionPlan plat = new SubscriptionPlan();
+            plat.setTenantId("platform");
+            plat.setName("Platinum Plan");
+            plat.setPlanCode("PLATINUM");
+            plat.setDescription("Advanced automation and amenities management for growing residential complexes.");
+            plat.setMonthlyPrice(new BigDecimal("5999"));
+            plat.setMaxApartments(400);
+            plat.setMaxResidents(1500);
+            plat.setMaxAdmins(5);
+            plat.setMaxSecurityStaff(15);
+            plat.setMaxMaintenanceStaff(15);
+            plat.setStorageGb(30);
+            plat.setAuditHistoryDays(180);
+            plat.setSupportLevel("PRIORITY");
+            plat.setBillingCycle("MONTHLY");
+            plat.setActive(true);
+            plat.setFeatured(true);
+            plat.setVisitorManagement(true);
+            plat.setComplaintManagement(true);
+            plat.setAnnouncementManagement(true);
+            plat.setBillingManagement(true);
+            plat.setAmenityBooking(true);
+            plat.setExpenseManagement(true);
+            plat.setAnalytics(true);
+            plat.setPaymentGateway(true);
+            plat.setApiAccess(false);
+            plat.setPrioritySupport(true);
+            plans.save(plat);
+        }
+
+        if (!hasDiamond) {
+            SubscriptionPlan dia = new SubscriptionPlan();
+            dia.setTenantId("platform");
+            dia.setName("Diamond Plan");
+            dia.setPlanCode("DIAMOND");
+            dia.setDescription("Enterprise society operating system with full API access, unlimited scale, and dedicated SLA.");
+            dia.setMonthlyPrice(new BigDecimal("9999"));
+            dia.setMaxApartments(1000);
+            dia.setMaxResidents(4000);
+            dia.setMaxAdmins(15);
+            dia.setMaxSecurityStaff(50);
+            dia.setMaxMaintenanceStaff(50);
+            dia.setStorageGb(100);
+            dia.setAuditHistoryDays(365);
+            dia.setSupportLevel("24_7_DEDICATED");
+            dia.setBillingCycle("MONTHLY");
+            dia.setActive(true);
+            dia.setFeatured(false);
+            dia.setVisitorManagement(true);
+            dia.setComplaintManagement(true);
+            dia.setAnnouncementManagement(true);
+            dia.setBillingManagement(true);
+            dia.setAmenityBooking(true);
+            dia.setExpenseManagement(true);
+            dia.setAnalytics(true);
+            dia.setPaymentGateway(true);
+            dia.setApiAccess(true);
+            dia.setPrioritySupport(true);
+            plans.save(dia);
+        }
     }
 
     @PostMapping("/plans")
@@ -143,8 +244,11 @@ public class PlatformApiController {
     @PutMapping("/plans/{id}")
     @Transactional
     public SubscriptionPlan updatePlan(@PathVariable Long id, @Valid @RequestBody PlanRequest request) {
-        SubscriptionPlan plan = plans.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Plan was not found"));
+        SubscriptionPlan plan = plans.findById(id).orElseGet(() -> {
+            SubscriptionPlan newPlan = new SubscriptionPlan();
+            newPlan.setTenantId("platform");
+            return newPlan;
+        });
         updatePlanFields(plan, request);
         return plans.save(plan);
     }

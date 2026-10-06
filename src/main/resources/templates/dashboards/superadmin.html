@@ -44,61 +44,30 @@
             box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06) !important;
             transform: translateY(-1px) !important;
         }
-        section[data-view="monitoring"] .stats {
-            display: flex !important;
-            width: 100% !important;
-            gap: 1rem !important;
-            margin-bottom: 1.5rem !important;
-        }
-        section[data-view="monitoring"] .stats > div {
-            flex: 1 1 0px !important;
-            min-width: 0 !important;
-        }
-        section[data-view="monitoring"] .monitoring-card,
-        section[data-view="monitoring"] .card {
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 16px !important;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
-            background: #ffffff !important;
-        }
-        section[data-view="monitoring"] .card-header {
-            padding: 1.25rem 1.5rem !important;
-            border-bottom: 1px solid #e2e8f0 !important;
-            background: #ffffff !important;
-        }
-        section[data-view="monitoring"] .card-body {
-            padding: 1.25rem 1.5rem !important;
-        }
-        section[data-view="monitoring"] .table th,
-        section[data-view="monitoring"] .table td {
-            padding: 12px 16px !important;
-            vertical-align: middle !important;
-        }
-        section[data-view="monitoring"] .resident-inbox-card {
-            width: 100% !important;
-            max-width: none !important;
-            margin-top: 1.5rem !important;
+        /* Completely eliminate injected header meta (Live workspace, SA avatar) on Super Admin */
+        .dashboard-header-meta,
+        .dashboard-live-status,
+        .dashboard-avatar,
+        body[data-dashboard-role="superadmin"] .dashboard-header-meta,
+        body[data-dashboard-role="superadmin"] .dashboard-live-status,
+        body[data-dashboard-role="superadmin"] .dashboard-avatar,
+        body.dashboard-body .topbar .dashboard-header-meta,
+        body.dashboard-body .topbar .dashboard-live-status,
+        body.dashboard-body .topbar .dashboard-avatar,
+        #dashboardTopbar .dashboard-header-meta,
+        #dashboardTopbar .dashboard-live-status,
+        #dashboardTopbar .dashboard-avatar,
+        .header-actions .dashboard-header-meta,
+        .header-actions .dashboard-live-status,
+        .header-actions .dashboard-avatar {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            margin: 0 !important;
             padding: 0 !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 16px !important;
-            background: #ffffff !important;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03) !important;
-            overflow: hidden !important;
-        }
-        section[data-view="monitoring"] .resident-inbox-card .card-head {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            padding: 1.25rem 1.5rem !important;
-            border-bottom: 1px solid #e2e8f0 !important;
-            background: #ffffff !important;
-            margin: 0 !important;
-        }
-        section[data-view="monitoring"] .resident-inbox-card .card-head h2 {
-            margin: 0 !important;
-            font-size: 1.15rem !important;
-            font-weight: 700 !important;
-            color: #0f172a !important;
         }
         @media (max-width: 820px) {
             #sidebar { width: 74px !important; min-width: 74px; }
@@ -107,6 +76,167 @@
             .main-content .topbar { padding: 0 16px !important; }
             .dashboard-container { padding: 16px !important; }
         }
+
+        /* ==========================================================================
+           SUPERADMIN OVERVIEW COMPACT KPI CARDS
+           ========================================================================== */
+        .superadmin-kpi-grid,
+        body.dashboard-body .dashboard-container [data-view="overview"] .superadmin-kpi-grid,
+        body.dashboard-body .stats.superadmin-kpi-grid,
+        .stats.superadmin-kpi-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 14px !important;
+            margin-bottom: 1.5rem !important;
+            width: 100% !important;
+        }
+
+        @media (max-width: 1100px) {
+            .superadmin-kpi-grid,
+            body.dashboard-body .dashboard-container [data-view="overview"] .superadmin-kpi-grid,
+            body.dashboard-body .stats.superadmin-kpi-grid,
+            .stats.superadmin-kpi-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 12px !important;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .superadmin-kpi-grid,
+            body.dashboard-body .dashboard-container [data-view="overview"] .superadmin-kpi-grid,
+            body.dashboard-body .stats.superadmin-kpi-grid,
+            .stats.superadmin-kpi-grid {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+            }
+        }
+
+        /* Compact Card Container */
+        body.dashboard-body .dashboard-container [data-view="overview"] .stats article.superadmin-compact-card,
+        body.dashboard-body .stats article.superadmin-compact-card,
+        .stats article.superadmin-compact-card,
+        article.superadmin-compact-card {
+            position: relative !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            min-height: 94px !important;
+            height: auto !important;
+            padding: 14px 18px !important;
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+            text-align: left !important;
+            overflow: hidden !important;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease !important;
+            cursor: default !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        body.dashboard-body .dashboard-container [data-view="overview"] .stats article.superadmin-compact-card:hover,
+        body.dashboard-body .stats article.superadmin-compact-card:hover,
+        article.superadmin-compact-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        /* Pseudo-element reset */
+        body.dashboard-body .stats article.superadmin-compact-card::before,
+        body.dashboard-body .stats article.superadmin-compact-card::after,
+        article.superadmin-compact-card::before,
+        article.superadmin-compact-card::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        /* Card Header */
+        .superadmin-compact-card .kpi-card-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            margin-bottom: 6px !important;
+            order: 1 !important;
+        }
+
+        body.dashboard-body .stats article.superadmin-compact-card .kpi-card-header span.kpi-card-label,
+        .superadmin-compact-card .kpi-card-label {
+            color: #64748b !important;
+            font-size: 0.7rem !important;
+            font-weight: 750 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            display: inline-block !important;
+            order: unset !important;
+        }
+
+        .superadmin-compact-card .kpi-card-icon {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 9px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 0.9rem !important;
+            flex-shrink: 0 !important;
+            transition: transform 0.2s ease !important;
+            order: unset !important;
+        }
+
+        .superadmin-compact-card:hover .kpi-card-icon {
+            transform: scale(1.06) !important;
+        }
+
+        /* Icon Badges */
+        .superadmin-compact-card .kpi-card-icon.icon-societies {
+            background: #eff6ff !important;
+            color: #2563eb !important;
+            border: 1px solid #dbeafe !important;
+        }
+
+        .superadmin-compact-card .kpi-card-icon.icon-revenue {
+            background: #ecfdf5 !important;
+            color: #059669 !important;
+            border: 1px solid #d1fae5 !important;
+        }
+
+        .superadmin-compact-card .kpi-card-icon.icon-trial {
+            background: #fffbeb !important;
+            color: #d97706 !important;
+            border: 1px solid #fef3c7 !important;
+        }
+
+        .superadmin-compact-card .kpi-card-icon.icon-tickets {
+            background: #fff1f2 !important;
+            color: #e11d48 !important;
+            border: 1px solid #ffe4e6 !important;
+        }
+
+        /* Card Body & Value */
+        .superadmin-compact-card .kpi-card-body {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            order: 2 !important;
+        }
+
+        body.dashboard-body .stats article.superadmin-compact-card .kpi-card-body strong.kpi-card-val,
+        .superadmin-compact-card strong.kpi-card-val {
+            font-size: 1.85rem !important;
+            font-weight: 850 !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.03em !important;
+            margin: 0 !important;
+            display: block !important;
+            order: 1 !important;
+        }
+
     </style>
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
     <div class="dashboard-layout">
@@ -119,8 +249,6 @@
             </div>
             <nav class="nav flex-column py-3 sidebar-nav" aria-label="Dashboard sections">
                 <a href="#overview" class="nav-link btn btn-link text-start text-decoration-none active" data-panel="overview" onclick="openPanel('overview'); return false;"><i class="fa-solid fa-house me-2"></i> Overview</a>
-                <a href="#monitoring" class="nav-link btn btn-link text-start text-decoration-none" data-panel="monitoring" onclick="openPanel('monitoring'); return false;"><i class="fa-solid fa-chart-line me-2"></i> Apartment Command Watch</a>
-                <a href="#audit-logs" class="nav-link btn btn-link text-start text-decoration-none" data-panel="audit-logs" onclick="openPanel('audit-logs'); return false;"><i class="fa-solid fa-list-check me-2"></i> Granular Audit Logs</a>
                 <a href="#societies" class="nav-link btn btn-link text-start text-decoration-none" data-panel="societies" onclick="openPanel('societies'); return false;"><i class="fa-solid fa-city me-2"></i> Societies</a>
                 <a href="#subscriptions" class="nav-link btn btn-link text-start text-decoration-none" data-panel="subscriptions" onclick="openPanel('subscriptions'); return false;"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Subscriptions</a>
                 <a href="#users" class="nav-link btn btn-link text-start text-decoration-none" data-panel="users" onclick="openPanel('users'); return false;"><i class="fa-solid fa-users me-2"></i> Users</a>
@@ -149,7 +277,6 @@
                     <h2 class="mb-0 fw-bold text-dark" id="title">Overview</h2>
                 </div>
                 <div class="d-flex align-items-center gap-3 header-actions" id="overviewHeaderActions">
-                    <span class="badge badge-soft-success px-3 py-2 rounded-pill inline-state" id="platformNoticeState"><i class="fa-solid fa-check-circle me-1"></i> Ready to notify</span>
                     <button class="btn btn-primary rounded-pill shadow-sm px-4" id="btnOpenPlatformNoticeModal" data-bs-toggle="modal" data-bs-target="#platformNoticeModal"><i class="fa-solid fa-paper-plane me-2"></i>Send Platform Notice</button>
                 </div>
             </header>
@@ -159,33 +286,53 @@
                 
                 <!-- Overview Panel -->
                 <section data-view="overview" class="animate__animated animate__fadeIn">
-                    <div class="row g-3 mb-4 stats">
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Active Societies</span>
-                                <strong class="fs-4 fw-bold text-primary d-block" id="overviewActiveSocieties">...</strong>
-                            </article>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Monthly Revenue</span>
-                                <strong class="fs-4 fw-bold text-success d-block" id="overviewMonthlyRevenue">...</strong>
-                            </article>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Trial Accounts</span>
-                                <strong class="fs-4 fw-bold text-warning d-block" id="overviewTrialAccounts">...</strong>
-                            </article>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Open Tickets</span>
-                                <strong class="fs-4 fw-bold text-danger d-block" id="overviewOpenTickets">...</strong>
-                            </article>
-                        </div>
+                    <div class="superadmin-kpi-grid stats mb-4" id="superadminOverviewStats">
+                        <article class="overview-kpi-card superadmin-compact-card" title="Active Societies">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Active Societies</span>
+                                <div class="kpi-card-icon icon-societies">
+                                    <i class="fa-solid fa-city"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-primary" id="overviewActiveSocieties">0</strong>
+                            </div>
+                        </article>
+                        <article class="overview-kpi-card superadmin-compact-card" title="Monthly Revenue">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Monthly Revenue</span>
+                                <div class="kpi-card-icon icon-revenue">
+                                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-success" id="overviewMonthlyRevenue">Rs. 0</strong>
+                            </div>
+                        </article>
+                        <article class="overview-kpi-card superadmin-compact-card" title="Trial Accounts">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Trial Accounts</span>
+                                <div class="kpi-card-icon icon-trial">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-warning" id="overviewTrialAccounts">0</strong>
+                            </div>
+                        </article>
+                        <article class="overview-kpi-card superadmin-compact-card" title="Open Tickets">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Open Tickets</span>
+                                <div class="kpi-card-icon icon-tickets">
+                                    <i class="fa-solid fa-ticket"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-danger" id="overviewOpenTickets">0</strong>
+                            </div>
+                        </article>
                     </div>
-                    <div class="card shadow-sm border-0 rounded-4 mb-4">
+                    <div class="card shadow-sm border rounded-4 mb-4 bg-white">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
                             <div><h4 class="fw-bold mb-1"><i class="fa-solid fa-paper-plane text-primary me-2"></i>Sent Platform Notices</h4><p class="text-muted small mb-0">Complete broadcast history with sender, recipients, delivery and timing.</p></div>
                             <span class="badge badge-soft-primary inline-state" id="platformNoticeHistoryCount">0 sent</span>
@@ -211,80 +358,6 @@
                     </div>
                 </section>
 
-                <!-- Monitoring Panel -->
-                <section class="d-none" data-view="monitoring">
-                    <div class="row g-3 mb-4 stats">
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Gate Entries Today</span>
-                                <strong class="fs-4 fw-bold text-primary d-block">...</strong>
-                            </article>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Bills Pending</span>
-                                <strong class="fs-4 fw-bold text-warning d-block">...</strong>
-                            </article>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Admin Approvals</span>
-                                <strong class="fs-4 fw-bold text-info d-block">...</strong>
-                            </article>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-3">
-                            <article class="card p-3 text-center h-100 shadow-sm border-0 rounded-4">
-                                <span class="text-muted small fw-bold text-uppercase d-block mb-1">Open Risks</span>
-                                <strong class="fs-4 fw-bold text-danger d-block">...</strong>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="card shadow-sm border-0 rounded-4 mb-4 monitoring-card">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <h4 class="fw-bold mb-0"><i class="fa-solid fa-satellite-dish text-primary me-2"></i>Apartment Command Watch</h4>
-                            <button class="btn btn-outline-primary btn-sm rounded-pill px-3" id="monitoringExportButton" type="button"><i class="fa-solid fa-download me-2"></i>Export Summary</button>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <p class="text-muted small mb-4">Super Admin gets read-level visibility across every important apartment workflow. Approval and assignment buttons stay with the society Admin so daily operations remain controlled by the local authorized team.</p>
-                            <div class="table-responsive dashboard-table-scroll">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light"><tr><th>Module</th><th>Live Metrics & Trends</th><th>Action</th></tr></thead>
-                                    <tbody id="commandWatchGrid"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Audit Logs -->
-                <section class="d-none" data-view="audit-logs">
-                    <!-- Similar translation for audit logs, omitting some stats for brevity, ensuring table IDs match -->
-                    <div class="card shadow-sm border-0 rounded-4 mb-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <h4 class="fw-bold mb-0"><i class="fa-solid fa-timeline text-secondary me-2"></i>Minute-by-Minute System Stream</h4>
-                            <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="auditLogExportButton" type="button"><i class="fa-solid fa-download me-2"></i>Export Log Stream</button>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <div class="row g-3 mb-4 form-grid">
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold">Filter Society</label>
-                                    <select id="auditSocietyFilter" class="form-select shadow-none border-light-subtle"><option value="ALL">All Societies</option></select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label text-muted small fw-bold">Filter Module</label>
-                                    <select id="auditModuleFilter" class="form-select shadow-none border-light-subtle"><option value="ALL">All Modules</option><option value="SECURITY">Security</option><option value="FINANCE">Finance</option><option value="HELPDESK">Helpdesk</option><option value="ADMIN_CTRL">Admin Control</option><option value="AUTH">Authentication</option></select>
-                                </div>
-                            </div>
-                            <div class="table-responsive dashboard-table-scroll">
-                                <table class="table table-hover align-middle table-sm">
-                                    <thead class="table-light"><tr><th>Time</th><th>Society</th><th>Module</th><th>Actor</th><th>Detail</th><th>IP</th><th>Status</th></tr></thead>
-                                    <tbody id="minuteAuditStreamBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 <!-- Societies -->
                 <section class="d-none" data-view="societies">
                     <div class="card shadow-sm border-0 rounded-4">
@@ -303,7 +376,7 @@
 
                 <!-- Subscriptions -->
                 <section class="d-none subscriptions-panel" data-view="subscriptions">
-                    <div class="subscription-simple-heading"><div><span>PLAN CATALOGUE</span><h3>Gold, Platinum and Diamond plans</h3><p>Manage the three current SmartSociety subscription tiers.</p></div><div class="subscription-catalogue-count"><strong id="subscriptionPlanCount">3</strong><small>available plans</small></div></div>
+                    <div class="subscription-simple-heading"><div><span>PLAN CATALOGUE</span><h3>Gold, Platinum and Diamond plans</h3><p>Manage the three current SmartSociety subscription tiers.</p></div><div class="d-flex align-items-center gap-3"><div class="subscription-catalogue-count"><strong id="subscriptionPlanCount">3</strong><small>available plans</small></div><button type="button" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm fw-bold" id="btnAddSubscriptionPlan"><i class="fa-solid fa-plus me-1"></i>Add Plan</button></div></div>
                     <div class="subscription-plan-catalogue" id="subscriptionPlanCards"></div>
                     <div class="subscription-mapping-section">
                         <div class="subscription-simple-heading"><div><span>SOCIETY SUBSCRIPTIONS</span><h3>Society-to-plan details</h3><p>Review each registered society’s current plan and change the assignment when required.</p></div><div class="subscription-mapping-summary"><strong id="assignedSocietyCount">0</strong><small>societies assigned</small></div></div>
@@ -1032,7 +1105,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-0 px-4 px-md-5 py-3 bg-white">
+                <div class="modal-footer border-0 px-4 px-md-5 py-3 bg-white d-flex justify-content-between align-items-center">
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-success rounded-pill px-3 fw-semibold" id="btnModalApproveSociety">
+                            <i class="fa-solid fa-circle-check me-1"></i>Approve Society
+                        </button>
+                        <button type="button" class="btn btn-outline-danger rounded-pill px-3 fw-semibold" id="btnModalSuspendSociety">
+                            <i class="fa-solid fa-ban me-1"></i>Suspend Society
+                        </button>
+                    </div>
                     <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -1321,8 +1402,20 @@
 
     <div th:replace="~{fragments/layout :: scripts}"></div>
     <!-- Make sure dashboard.js functions map correctly - keeping old dashboard CSS around for things not overwritten -->    <script>
+        // Ensure injected floating header meta (Live workspace, duplicate SA avatar) is completely stripped
+        function purgeHeaderMeta() {
+            document.querySelectorAll(".dashboard-header-meta, .dashboard-live-status, .dashboard-avatar").forEach(el => el.remove());
+        }
+        purgeHeaderMeta();
+        document.addEventListener("DOMContentLoaded", purgeHeaderMeta);
+        window.addEventListener("load", purgeHeaderMeta);
+        const topbarElement = document.getElementById("dashboardTopbar");
+        if (topbarElement) {
+            new MutationObserver(purgeHeaderMeta).observe(topbarElement, { childList: true, subtree: true });
+        }
+
         const dashboardTitles = {
-            overview: "Overview", monitoring: "Apartment Command Watch", "audit-logs": "Granular Audit Logs",
+            overview: "Overview", "audit-logs": "Granular Audit Logs",
             societies: "Societies", subscriptions: "Subscriptions", users: "Users", analytics: "Analytics",
             "access-roles": "Roles & Access", "privacy-data": "Database & Privacy",
             "finance-setup": "Subscription Payments", "service-requests": "Service & Maintenance Requests",
@@ -1656,6 +1749,38 @@
                 setT("viewSocietyPlan", plan ? plan.name : "Unassigned");
                 setT("viewSocietyApprovedText", society.approved ? "Approved" : "Pending");
                 setT("viewSocietyNotes", society.onboardingNotes || "No internal onboarding notes logged.");
+                const approveBtn = document.getElementById("btnModalApproveSociety");
+                const suspendBtn = document.getElementById("btnModalSuspendSociety");
+                if (approveBtn) {
+                    approveBtn.onclick = async () => {
+                        try {
+                            approveBtn.disabled = true;
+                            const res = await fetch(`/api/platform/tenants/${society.id}/approval?approved=true`, { method: "PATCH", headers: { Accept: "application/json" } });
+                            if (!res.ok) throw new Error("Could not approve society");
+                            society.approved = true;
+                            if (badge) { badge.className = "badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-semibold"; badge.textContent = "Approved & Active"; }
+                            setT("viewSocietyApprovedText", "Approved");
+                            showToast(`✓ ${society.societyName || "Society"} approved and activated.`);
+                            if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
+                        } catch (err) { showToast(err.message || "Failed to approve society"); }
+                        finally { approveBtn.disabled = false; }
+                    };
+                }
+                if (suspendBtn) {
+                    suspendBtn.onclick = async () => {
+                        try {
+                            suspendBtn.disabled = true;
+                            const res = await fetch(`/api/platform/tenants/${society.id}/approval?approved=false`, { method: "PATCH", headers: { Accept: "application/json" } });
+                            if (!res.ok) throw new Error("Could not suspend society");
+                            society.approved = false;
+                            if (badge) { badge.className = "badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3 py-2 fw-semibold"; badge.textContent = "Pending Approval"; }
+                            setT("viewSocietyApprovedText", "Pending");
+                            showToast(`✓ ${society.societyName || "Society"} suspended.`);
+                            if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
+                        } catch (err) { showToast(err.message || "Failed to suspend society"); }
+                        finally { suspendBtn.disabled = false; }
+                    };
+                }
                 if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
                     bootstrap.Modal.getOrCreateInstance(modalEl).show();
                 } else {

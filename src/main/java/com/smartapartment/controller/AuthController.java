@@ -494,7 +494,19 @@ public class AuthController {
 
 
 
-                String redirectTarget = (isSuperAdmin && requestedMaintenance) ? "/dashboards/maintenance" : dashboardRedirect(user.getRole());
+                String redirectTarget;
+                if (isSuperAdmin && requestedMaintenance) {
+                    redirectTarget = "/dashboards/maintenance";
+                } else if (user.getRole() == UserRole.MAINTENANCE_STAFF) {
+                    String email = user.getEmail() == null ? "" : user.getEmail().trim().toLowerCase();
+                    boolean isLead = "maintenance@smartapartment".equals(email)
+                            || "maintenance@smartsociety".equals(email)
+                            || (user.getDesignation() != null && user.getDesignation().toLowerCase().contains("lead"))
+                            || (user.getDesignation() != null && user.getDesignation().toLowerCase().contains("manager"));
+                    redirectTarget = isLead ? "/dashboards/maintenance" : "/dashboards/maintenance-worker";
+                } else {
+                    redirectTarget = dashboardRedirect(user.getRole());
+                }
 
                 String effectiveRole = (isSuperAdmin && requestedMaintenance) ? "maintenance" : dashboardRole;
 

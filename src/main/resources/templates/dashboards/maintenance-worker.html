@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head('Maintenance Worker Dashboard')}"></head>
+
+<body class="dashboard-body bg-light" data-platform="smartapartment" data-dashboard-role="maintenance-worker">
+    <style>
+        .worker-kpi-card {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 16px !important;
+            padding: 1.25rem 1.35rem !important;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05) !important;
+            transition: all 0.2s ease !important;
+            height: 100% !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+        }
+
+        .worker-kpi-card:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        .worker-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .duty-action-btn {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-weight: 700 !important;
+            padding: 0.65rem 1.4rem !important;
+            font-size: 0.88rem !important;
+            letter-spacing: 0.01em !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .task-card-active {
+            border-left: 5px solid #f59e0b !important;
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06) !important;
+        }
+    </style>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar bg-dark text-white shadow-lg animate__animated animate__fadeInLeft" id="sidebar">
+            <div class="sidebar-header p-4 border-bottom border-secondary d-flex align-items-center gap-3">
+                <span class="sidebar-home-mark" aria-hidden="true">
+                    <svg viewBox="0 0 32 32"><path d="M4 14.5 16 4l12 10.5V28h-8v-8h-8v8H4Z"/><path d="M9.5 9V5.5h4"/></svg>
+                </span>
+                <h4 class="mb-0 fw-bold">Smart<span class="text-primary">Apartment</span></h4>
+            </div>
+            <div class="px-3 py-3 border-bottom border-secondary text-center">
+                <div class="d-flex align-items-center gap-3 text-start px-2">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem;">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <div style="min-width:0;">
+                        <strong class="d-block text-white text-truncate" id="workerSidebarName" th:text="${worker != null ? worker.fullName : 'Field Technician'}">Worker Name</strong>
+                        <span class="small text-info text-truncate d-block" id="workerSidebarTrade" th:text="${worker != null && worker.designation != null ? worker.designation : 'General Maintenance'}">Trade</span>
+                    </div>
+                </div>
+                <div class="mt-2 text-start px-2">
+                    <span class="badge bg-secondary-subtle text-secondary border font-monospace small" id="workerSidebarEmpId" th:text="${worker != null && worker.employeeId != null ? worker.employeeId : 'EMP-FIELD'}">EMP-001</span>
+                </div>
+            </div>
+            <nav class="nav flex-column py-3 sidebar-nav" aria-label="Dashboard sections">
+                <a href="#duty" class="nav-link text-white active" data-panel="duty">
+                    <i class="fa-solid fa-user-clock me-2 text-primary"></i> Duty & Attendance
+                </a>
+                <a href="#tasks" class="nav-link text-white" data-panel="tasks">
+                    <i class="fa-solid fa-list-check me-2 text-warning"></i> My Assigned Tasks 
+                    <span class="badge bg-warning text-dark ms-auto" id="workerSidebarActiveTaskCount" style="display:none;">0</span>
+                </a>
+                <a href="#history" class="nav-link text-white" data-panel="history">
+                    <i class="fa-solid fa-clock-rotate-left me-2 text-info"></i> Completed History
+                </a>
+                <a href="/dashboards/maintenance" class="nav-link text-white" th:if="${session['dashboard:smartapartment:maintenance']}">
+                    <i class="fa-solid fa-gauge-high me-2 text-success"></i> Command Center
+                </a>
+            </nav>
+            <div class="sidebar-footer p-3 mt-auto border-top border-secondary text-center">
+                <a class="btn btn-outline-light w-100 rounded-pill" href="/dashboards/logout">
+                    <i class="fa-solid fa-sign-out-alt me-2"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main main-content">
+            <!-- Topbar -->
+            <header class="topbar px-4 py-0 d-flex justify-content-between align-items-center animate__animated animate__fadeInDown">
+                <div class="d-flex align-items-center gap-3">
+                    <h3 class="mb-0 fw-bold text-dark" id="title">Worker Duty & Attendance</h3>
+                    <div id="workerAvailBadgeContainer" class="d-inline-block">
+                        <span class="badge bg-secondary text-white rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-circle-minus me-1"></i>OFFLINE</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-end d-none d-sm-block">
+                        <span class="small text-muted d-block">Shift Assigned</span>
+                        <strong class="text-dark small" id="workerShiftLabel" th:text="${worker != null && worker.workShift != null ? worker.workShift : 'General Shift'}">General Shift</strong>
+                    </div>
+                    <div id="workerAttBadgeContainer">
+                        <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-power-off me-1"></i>OFFLINE</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="container-fluid p-4 dashboard-container">
+                <!-- DUTY & ATTENDANCE PANEL -->
+                <section data-view="duty" id="viewDuty" class="animate__animated animate__fadeIn">
+                    <!-- Duty & Attendance Control Card -->
+                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                            <div>
+                                <h4 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-fingerprint text-primary me-2"></i>Daily Attendance & Shift Tracker</h4>
+                                <p class="text-muted mb-0 small">Mark your attendance to become eligible for automated resident service task assignments.</p>
+                            </div>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <button type="button" class="btn btn-success duty-action-btn rounded-pill shadow-sm" id="btnWorkerClockIn" onclick="window.workerClockIn()">
+                                    <i class="fa-solid fa-right-to-bracket"></i> Clock In
+                                </button>
+                                <button type="button" class="btn btn-outline-info duty-action-btn rounded-pill" id="btnWorkerStartBreak" onclick="window.workerStartBreak()" disabled>
+                                    <i class="fa-solid fa-mug-hot"></i> Start Break
+                                </button>
+                                <button type="button" class="btn btn-outline-success duty-action-btn rounded-pill" id="btnWorkerEndBreak" onclick="window.workerEndBreak()" disabled>
+                                    <i class="fa-solid fa-play"></i> End Break
+                                </button>
+                                <button type="button" class="btn btn-danger duty-action-btn rounded-pill shadow-sm" id="btnWorkerClockOut" onclick="window.workerClockOut()" disabled>
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Clock Out
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4-Column Hours Tracker Grid -->
+                        <div class="row g-3">
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="worker-kpi-card">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small fw-bold text-uppercase text-muted">Today's Work</span>
+                                        <div class="worker-stat-icon bg-primary-subtle text-primary"><i class="fa-solid fa-stopwatch"></i></div>
+                                    </div>
+                                    <strong class="fs-2 fw-bold text-primary d-block my-1" id="workerTodayHours">0m</strong>
+                                    <span class="small text-muted"><i class="fa-solid fa-circle-check text-success me-1"></i>Active shift session</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="worker-kpi-card">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small fw-bold text-uppercase text-muted">Weekly Total</span>
+                                        <div class="worker-stat-icon bg-success-subtle text-success"><i class="fa-solid fa-calendar-week"></i></div>
+                                    </div>
+                                    <strong class="fs-2 fw-bold text-success d-block my-1" id="workerWeeklyHours">0m</strong>
+                                    <span class="small text-muted"><i class="fa-solid fa-calendar-check text-success me-1"></i>Current work week</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="worker-kpi-card">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small fw-bold text-uppercase text-muted">Monthly Hours</span>
+                                        <div class="worker-stat-icon bg-info-subtle text-info"><i class="fa-solid fa-chart-line"></i></div>
+                                    </div>
+                                    <strong class="fs-2 fw-bold text-info d-block my-1" id="workerMonthlyHours">0m</strong>
+                                    <span class="small text-muted"><i class="fa-solid fa-bolt text-warning me-1"></i>Logged this month</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="worker-kpi-card">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small fw-bold text-uppercase text-muted">Current Shift</span>
+                                        <div class="worker-stat-icon bg-warning-subtle text-warning"><i class="fa-solid fa-business-time"></i></div>
+                                    </div>
+                                    <strong class="fs-5 fw-bold text-dark d-block my-1" th:text="${worker != null && worker.workShift != null ? worker.workShift : 'General Shift'}">General Shift</strong>
+                                    <span class="small text-muted"><i class="fa-solid fa-shield-halved text-primary me-1"></i>Standard Schedule</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Task Banner -->
+                    <div id="workerActiveTaskBanner" class="mb-4" style="display:none;"></div>
+
+                    <!-- Quick Task Queue Preview -->
+                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-briefcase text-warning me-2"></i>My Incoming Work Orders</h5>
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="window.loadWorkerDashboardSummary()">
+                                <i class="fa-solid fa-rotate me-1"></i> Refresh Tasks
+                            </button>
+                        </div>
+                        <div id="workerTasksQueuePreview" class="d-grid gap-3">
+                            <div class="text-center text-muted py-4"><i class="fa-solid fa-inbox fa-2x mb-2 d-block text-secondary"></i>No pending task assignments right now. Make sure you are Clocked In to receive auto-assigned resident service requests!</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- MY TASKS PANEL -->
+                <section data-view="tasks" id="viewTasks" class="d-none animate__animated animate__fadeIn">
+                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="fw-bold mb-1 text-dark">Assigned Maintenance Tasks</h4>
+                                <p class="text-muted small mb-0">Tasks auto-assigned based on your trade expertise, attendance, and workload.</p>
+                            </div>
+                            <button class="btn btn-outline-primary rounded-pill" onclick="window.loadWorkerDashboardSummary()">
+                                <i class="fa-solid fa-rotate me-2"></i>Refresh List
+                            </button>
+                        </div>
+                        <div id="workerFullTasksList" class="d-grid gap-3">
+                            <div class="text-center text-muted py-5"><span class="spinner-border spinner-border-sm me-2"></span>Loading assigned tasks...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COMPLETED HISTORY PANEL -->
+                <section data-view="history" id="viewHistory" class="d-none animate__animated animate__fadeIn">
+                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
+                        <h4 class="fw-bold mb-1 text-dark">Completed Work Orders (History)</h4>
+                        <p class="text-muted small mb-4">Past maintenance tickets you have resolved and closed.</p>
+                        <div id="workerCompletedTasksList" class="d-grid gap-3">
+                            <div class="text-center text-muted py-5"><span class="spinner-border spinner-border-sm me-2"></span>Loading task history...</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
+    <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
+    <script src="/smartapartment/js/worker-attendance-module.js?v=20260919-v1"></script>
+    <script>
+        // Tab switching logic for Worker Dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            const panels = document.querySelectorAll('[data-panel]');
+            const views = document.querySelectorAll('[data-view]');
+
+            function switchView(panelName) {
+                panels.forEach(p => p.classList.toggle('active', p.dataset.panel === panelName));
+                views.forEach(v => {
+                    const match = v.dataset.view === panelName;
+                    v.classList.toggle('d-none', !match);
+                });
+                const titles = {
+                    'duty': 'Worker Duty & Attendance',
+                    'tasks': 'My Assigned Tasks',
+                    'history': 'Completed Work Orders'
+                };
+                const t = document.getElementById('title');
+                if (t && titles[panelName]) t.textContent = titles[panelName];
+            }
+
+            panels.forEach(p => {
+                p.addEventListener('click', (e) => {
+                    if (p.getAttribute('href')?.startsWith('#')) {
+                        e.preventDefault();
+                        const target = p.dataset.panel;
+                        switchView(target);
+                        window.location.hash = target;
+                    }
+                });
+            });
+
+            if (window.location.hash) {
+                const h = window.location.hash.substring(1);
+                if (document.querySelector(`[data-view="${h}"]`)) switchView(h);
+            }
+
+            // Load worker summary on startup
+            if (typeof window.loadWorkerDashboardSummary === 'function') {
+                window.loadWorkerDashboardSummary();
+            }
+
+            // Sync tasks preview into custom containers
+            setInterval(async () => {
+                if (typeof window.loadWorkerDashboardSummary === 'function') {
+                    const data = await window.loadWorkerDashboardSummary();
+                    if (data && data.pendingTasks) {
+                        const countBadge = document.getElementById('workerSidebarActiveTaskCount');
+                        if (countBadge) {
+                            countBadge.textContent = data.pendingTasks.length + (data.currentTask ? 1 : 0);
+                            countBadge.style.display = countBadge.textContent > 0 ? 'inline-block' : 'none';
+                        }
+                    }
+                }
+            }, 10000);
+        });
+    </script>
+</body>
+</html>

@@ -358,7 +358,9 @@
         if (header) header.prepend(menuButton);
     }
 
-    if (header && !header.querySelector(".dashboard-header-meta")) {
+    if (role === "superadmin" || roleName === "Super Admin" || body.dataset.dashboardRole === "superadmin") {
+        header?.querySelectorAll(".dashboard-header-meta, .dashboard-live-status, .dashboard-avatar").forEach(el => el.remove());
+    } else if (header && !header.querySelector(".dashboard-header-meta")) {
         const meta = document.createElement("div");
         meta.className = "dashboard-header-meta";
         const status = document.createElement("span");
@@ -373,6 +375,10 @@
     }
 
     function placeThemeToggle() {
+        if (role === "superadmin" || roleName === "Super Admin" || body.dataset.dashboardRole === "superadmin") {
+            header?.querySelectorAll(".dashboard-header-meta, .dashboard-live-status, .dashboard-avatar").forEach(el => el.remove());
+            return;
+        }
         const meta = header?.querySelector(".dashboard-header-meta");
         const themeToggle = document.getElementById("themeToggle");
         if (themeToggle && meta && !themeToggle.closest("#electricalSwitchFixed, .fixed-electrical-switch") && !meta.contains(themeToggle)) {

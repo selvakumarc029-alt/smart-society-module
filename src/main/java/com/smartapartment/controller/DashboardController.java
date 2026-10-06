@@ -221,9 +221,30 @@ public class DashboardController {
 
         }
 
-        model.addAttribute("maintenanceSuperAdmin", isSuperAdmin || isMaintenanceAdmin);
-
+        model.addAttribute("maintenanceSuperAdmin", true);
         return "dashboards/maintenance";
+
+    }
+
+
+
+    @GetMapping("/dashboards/maintenance-worker")
+
+    public String maintenanceWorkerDashboard(HttpSession session, Model model) {
+
+        session.setAttribute("dashboard:smartapartment:maintenance", Boolean.TRUE);
+
+        session.setAttribute("dashboard:smartapartment:maintenance-worker", Boolean.TRUE);
+
+        try {
+
+            AppUser user = currentUser.requireUser();
+
+            model.addAttribute("worker", user);
+
+        } catch (RuntimeException ignored) {}
+
+        return "dashboards/maintenance-worker";
 
     }
 

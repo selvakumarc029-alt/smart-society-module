@@ -43,13 +43,39 @@ public class DataLoader {
             String residentEmail = environment.getProperty("SEED_RESIDENT_EMAIL", "resident@localhost.invalid");
             String residentPassword = environment.getProperty("SEED_RESIDENT_PASSWORD", UUID.randomUUID().toString());
 
-            plans.findFirstByTenantIdAndNameOrderByIdAsc("platform", "Premium Plan").orElseGet(() -> {
+            plans.findFirstByTenantIdAndNameOrderByIdAsc("platform", "Gold Plan").orElseGet(() -> {
                 SubscriptionPlan plan = new SubscriptionPlan();
                 plan.setTenantId("platform");
-                plan.setName("Premium Plan");
-                plan.setMonthlyPrice(new BigDecimal("4999"));
-                plan.setMaxApartments(500);
+                plan.setName("Gold Plan");
+                plan.setMonthlyPrice(new BigDecimal("2999"));
+                plan.setMaxApartments(150);
+                plan.setMaxResidents(500);
+                plan.setVisitorManagement(true);
+                plan.setAmenityBooking(false);
+                plan.setAnalytics(false);
+                return plans.save(plan);
+            });
+
+            plans.findFirstByTenantIdAndNameOrderByIdAsc("platform", "Platinum Plan").orElseGet(() -> {
+                SubscriptionPlan plan = new SubscriptionPlan();
+                plan.setTenantId("platform");
+                plan.setName("Platinum Plan");
+                plan.setMonthlyPrice(new BigDecimal("5999"));
+                plan.setMaxApartments(400);
                 plan.setMaxResidents(1500);
+                plan.setVisitorManagement(true);
+                plan.setAmenityBooking(true);
+                plan.setAnalytics(true);
+                return plans.save(plan);
+            });
+
+            plans.findFirstByTenantIdAndNameOrderByIdAsc("platform", "Diamond Plan").orElseGet(() -> {
+                SubscriptionPlan plan = new SubscriptionPlan();
+                plan.setTenantId("platform");
+                plan.setName("Diamond Plan");
+                plan.setMonthlyPrice(new BigDecimal("9999"));
+                plan.setMaxApartments(1000);
+                plan.setMaxResidents(4000);
                 plan.setVisitorManagement(true);
                 plan.setAmenityBooking(true);
                 plan.setAnalytics(true);

@@ -83,6 +83,8 @@ a { color: inherit; }
 }
 .header-login { min-width: 88px; min-height: 42px; padding: 10px 20px; border-radius: 10px; font-weight: 750; }
 .header-login:hover, .button-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 42px rgba(67, 97, 238, .46); filter: saturate(1.08); }
+.header-login:active, .button-primary:active { transform: translateY(1px) scale(0.985); box-shadow: 0 4px 14px rgba(67, 97, 238, .35); }
+.header-login:focus-visible, .button-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(67, 97, 238, .35); }
 .menu-button { width: 44px; height: 44px; padding: 10px; display: none; border: 1px solid var(--landing-line); border-radius: 10px; background: white; cursor: pointer; }
 .menu-button span { height: 2px; display: block; margin: 5px 0; border-radius: 3px; background: var(--landing-ink); transition: transform .3s, opacity .3s; }
 .menu-button.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -99,9 +101,11 @@ a { color: inherit; }
 .hero-copy h1 em { color: var(--landing-amber); font-style: normal; }
 .hero-copy > p { max-width: 610px; margin: 0 0 34px; color: var(--landing-copy); font-size: clamp(1rem, 1.25vw, 1.16rem); line-height: 1.78; animation: heroTitleIn .8s var(--landing-ease) both .38s; }
 .hero-actions { display: flex; gap: 13px; flex-wrap: wrap; animation: heroTitleIn .8s var(--landing-ease) both .52s; }
-.button-primary, .button-ghost { min-height: 52px; padding: 14px 23px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; border-radius: 11px; font-size: .9rem; font-weight: 780; text-decoration: none; }
-.button-ghost { border: 1px solid rgba(30, 58, 138, .18); color: #354052; background: rgba(255,255,255,.56); box-shadow: 0 5px 18px rgba(30,58,138,.04); transition: transform .25s, border-color .25s, color .25s, background .25s; }
-.button-ghost:hover { transform: translateY(-2px); border-color: rgba(67,97,238,.55); color: var(--landing-blue); background: white; }
+.button-primary, .button-ghost { min-height: 52px; padding: 14px 23px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; border-radius: 11px; font-size: .9rem; font-weight: 780; text-decoration: none; cursor: pointer; user-select: none; }
+.button-ghost { border: 1px solid rgba(30, 58, 138, .18); color: #354052; background: rgba(255,255,255,.56); box-shadow: 0 5px 18px rgba(30,58,138,.04); transition: transform .25s, border-color .25s, color .25s, background .25s, box-shadow .25s; }
+.button-ghost:hover { transform: translateY(-2px); border-color: rgba(67,97,238,.55); color: var(--landing-blue); background: white; box-shadow: 0 8px 22px rgba(67,97,238,.12); }
+.button-ghost:active { transform: translateY(1px) scale(0.985); background: #f8fafc; }
+.button-ghost:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(67, 97, 238, .2); }
 .hero-trust { margin-top: 48px; padding-top: 28px; display: flex; align-items: center; gap: 27px; border-top: 1px solid var(--landing-line); animation: heroTitleIn .8s var(--landing-ease) both .68s; }
 .hero-trust div { display: grid; gap: 2px; }
 .hero-trust strong { font-size: 1.65rem; line-height: 1; }

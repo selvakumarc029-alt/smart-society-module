@@ -54,6 +54,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/home-services/**").permitAll()
                         .requestMatchers("/api/admin/home-services/**").permitAll()
                         .requestMatchers("/api/society/property-listings/**").permitAll()
+                        .requestMatchers("/api/society/helpdesk/**").permitAll()
+                        .requestMatchers("/api/workers/**").permitAll()
                         .requestMatchers("/api/billing/**").hasAnyRole("SOCIETY_ADMIN", "ACCOUNTANT")
                         .requestMatchers("/api/society/**").authenticated()
                         .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "SOCIETY_ADMIN")

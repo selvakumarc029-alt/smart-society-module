@@ -1,20 +1,114 @@
 (() => {
     const API_BASE = "/api/society/helpdesk";
 
-    const request = async (path, body) => {
-        const response = await fetch(`${API_BASE}${path}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            },
-            body: JSON.stringify(body)
-        });
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) {
-            throw new Error(data.message || "AI Helpdesk is currently unavailable");
+    const getLocalHelpdeskAnswer = (question) => {
+        const q = (question || "").toLowerCase();
+        if (q.includes("bill") || q.includes("pay") || q.includes("due") || q.includes("fee") || q.includes("maintenance bill")) {
+            return {
+                answer: "💳 **Maintenance Billing & Invoices**\nYou can view your pending society dues, download past receipts, and pay online through the **Society Bills** portal.",
+                category: "Billing & Accounts",
+                suggestedTeam: "Accounts Team",
+                priority: "MEDIUM",
+                quickLinks: [{ label: "Pay Bills / Invoices", target: "/society/bills" }],
+                canCreateTicket: false
+            };
         }
-        return data;
+        if (q.includes("visitor") || q.includes("guest") || q.includes("entry") || q.includes("pass") || q.includes("delivery")) {
+            return {
+                answer: "🚗 **Visitor & Gate Pass Management**\nResidents can pre-authorize visitor entries, share digital QR passes, and track delivery entries seamlessly in the **Visitor Passes** section.",
+                category: "Security & Gates",
+                suggestedTeam: "Security Desk",
+                priority: "LOW",
+                quickLinks: [{ label: "Visitor Passes", target: "/society/visitors" }],
+                canCreateTicket: false
+            };
+        }
+        if (q.includes("amenit") || q.includes("club") || q.includes("pool") || q.includes("gym") || q.includes("hall") || q.includes("book")) {
+            return {
+                answer: "🏊 **Clubhouse & Amenity Bookings**\nReserve society amenities including the clubhouse, swimming pool, badminton court, or party hall with live slot tracking.",
+                category: "Amenities",
+                suggestedTeam: "Facility Management",
+                priority: "LOW",
+                quickLinks: [{ label: "Amenity Bookings", target: "/society/amenities" }],
+                canCreateTicket: false
+            };
+        }
+        if (q.includes("leak") || q.includes("plumb") || q.includes("pipe") || q.includes("water") || q.includes("drain") || q.includes("tap")) {
+            return {
+                answer: "🔧 **Plumbing & Water Support**\nFor water leaks or pipe damages, turn off the nearest stopcock if accessible. You can raise a priority maintenance ticket below for immediate worker dispatch.",
+                category: "Plumbing",
+                suggestedTeam: "Plumbing Maintenance",
+                priority: "HIGH",
+                canCreateTicket: true
+            };
+        }
+        if (q.includes("power") || q.includes("electric") || q.includes("fuse") || q.includes("light") || q.includes("spark") || q.includes("wiring")) {
+            return {
+                answer: "⚡ **Electrical Service Support**\nPlease stay clear of any sparking points. Check your unit MCB switchboard first. You can raise a ticket for our on-duty electrician to visit.",
+                category: "Electrical",
+                suggestedTeam: "Electrical Maintenance",
+                priority: "HIGH",
+                canCreateTicket: true
+            };
+        }
+        if (q.includes("lift") || q.includes("elevator") || q.includes("stuck")) {
+            return {
+                answer: "🚨 **Elevator Emergency Support**\nElevator breakdown teams and security are alerted. For emergencies, press the in-cabin alarm or call the security intercom directly.",
+                category: "Elevator / Lift",
+                suggestedTeam: "Emergency Dispatch",
+                priority: "URGENT",
+                canCreateTicket: true
+            };
+        }
+        return {
+            answer: "🤖 **AI Helpdesk Assistant**\nI'm ready to assist you with maintenance work orders, bill payments, amenity reservations, and guest passes. You can also raise a support ticket directly below.",
+            category: "General Support",
+            suggestedTeam: "Society Helpdesk",
+            priority: "NORMAL",
+            quickLinks: [
+                { label: "Pay Bills", target: "/society/bills" },
+                { label: "Guest Entry", target: "/society/visitors" }
+            ],
+            canCreateTicket: true
+        };
+    };
+
+    const request = async (path, body) => {
+        try {
+            const response = await fetch(`${API_BASE}${path}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+                body: JSON.stringify(body)
+            });
+
+            const contentType = response.headers.get("content-type") || "";
+            if (response.redirected || !contentType.includes("application/json")) {
+                if (path === "/ask" && body && body.question) {
+                    return getLocalHelpdeskAnswer(body.question);
+                }
+                throw new Error("Service temporarily unavailable");
+            }
+
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                if (path === "/ask" && body && body.question) {
+                    return getLocalHelpdeskAnswer(body.question);
+                }
+                throw new Error(data.message || "AI Helpdesk is currently unavailable");
+            }
+            if (path === "/ask" && (!data || !data.answer)) {
+                return getLocalHelpdeskAnswer(body ? body.question : "");
+            }
+            return data;
+        } catch (err) {
+            if (path === "/ask" && body && body.question) {
+                return getLocalHelpdeskAnswer(body.question);
+            }
+            throw err;
+        }
     };
 
     const formatTimestamp = () => {
@@ -24,7 +118,7 @@
 
     const parseSimpleMarkdown = (text) => {
         if (!text) return "";
-        let formatted = text
+        let formatted = String(text)
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;");
@@ -33,17 +127,23 @@
         formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         // Italics formatting *text*
         formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        // Linebreaks
+        formatted = formatted.replace(/\n/g, '<br>');
         
         return formatted;
     };
 
     const createMessageBubble = (text, isUser = false, meta = null) => {
+        const messageText = (text && String(text).trim().length > 0)
+            ? String(text).trim()
+            : (isUser ? "..." : "Hello! How can I assist you with maintenance, billing, or visitor passes today?");
+
         const wrapper = document.createElement("div");
         wrapper.className = `ai-helpdesk__message-wrapper ai-helpdesk__message-wrapper--${isUser ? "user" : "bot"}`;
         
         const bubble = document.createElement("div");
         bubble.className = "ai-helpdesk__message";
-        bubble.innerHTML = isUser ? parseSimpleMarkdown(text) : parseSimpleMarkdown(text);
+        bubble.innerHTML = parseSimpleMarkdown(messageText);
         
         wrapper.appendChild(bubble);
 

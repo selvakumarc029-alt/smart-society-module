@@ -424,11 +424,104 @@ function subscriptionTierDepth(plan) {
     return { key: "gold", featureLimit: 4, detailLimit: 4, label: "Essential" };
 }
 
+const defaultSmartSocietyPlans = [
+    {
+        id: 1,
+        name: "Gold Plan",
+        planCode: "GOLD",
+        description: "Essential apartment society management for small to mid-sized gated communities.",
+        monthlyPrice: 2999,
+        billingCycle: "MONTHLY",
+        trialDays: 14,
+        graceDays: 7,
+        maxApartments: 150,
+        maxResidents: 500,
+        maxAdmins: 2,
+        maxSecurityStaff: 5,
+        maxMaintenanceStaff: 5,
+        storageGb: 10,
+        auditHistoryDays: 90,
+        supportLevel: "STANDARD",
+        active: true,
+        featured: false,
+        visitorManagement: true,
+        complaintManagement: true,
+        announcementManagement: true,
+        billingManagement: true,
+        paymentGateway: true
+    },
+    {
+        id: 2,
+        name: "Platinum Plan",
+        planCode: "PLATINUM",
+        description: "Advanced automation and amenities management for growing residential complexes.",
+        monthlyPrice: 5999,
+        billingCycle: "MONTHLY",
+        trialDays: 14,
+        graceDays: 7,
+        maxApartments: 400,
+        maxResidents: 1500,
+        maxAdmins: 5,
+        maxSecurityStaff: 15,
+        maxMaintenanceStaff: 15,
+        storageGb: 30,
+        auditHistoryDays: 180,
+        supportLevel: "PRIORITY",
+        active: true,
+        featured: true,
+        visitorManagement: true,
+        complaintManagement: true,
+        announcementManagement: true,
+        billingManagement: true,
+        amenityBooking: true,
+        expenseManagement: true,
+        analytics: true,
+        paymentGateway: true,
+        prioritySupport: true
+    },
+    {
+        id: 3,
+        name: "Diamond Plan",
+        planCode: "DIAMOND",
+        description: "Enterprise society operating system with full API access, unlimited scale, and dedicated SLA.",
+        monthlyPrice: 9999,
+        billingCycle: "MONTHLY",
+        trialDays: 30,
+        graceDays: 15,
+        maxApartments: 1000,
+        maxResidents: 4000,
+        maxAdmins: 15,
+        maxSecurityStaff: 50,
+        maxMaintenanceStaff: 50,
+        storageGb: 100,
+        auditHistoryDays: 365,
+        supportLevel: "24_7_DEDICATED",
+        active: true,
+        featured: false,
+        visitorManagement: true,
+        complaintManagement: true,
+        announcementManagement: true,
+        billingManagement: true,
+        amenityBooking: true,
+        expenseManagement: true,
+        analytics: true,
+        paymentGateway: true,
+        apiAccess: true,
+        prioritySupport: true
+    }
+];
+
 function renderSubscriptionCatalogue(plans, tenants) {
     const cards = document.getElementById("subscriptionPlanCards");
     const assignmentBody = document.getElementById("societyPlanAssignmentTable");
     if (!assignmentBody) return;
-    const cataloguePlans = plans.filter(plan => ["gold", "platinum", "diamond"].some(tier => String(plan.name || plan.planCode || "").toLowerCase().includes(tier)));
+    let cataloguePlans = (plans || []).filter(plan => ["gold", "platinum", "diamond"].some(tier => String(plan.name || plan.planCode || "").toLowerCase().includes(tier)));
+    if (!cataloguePlans.length) {
+        cataloguePlans = defaultSmartSocietyPlans;
+        if (!window.platformPlans || !window.platformPlans.length) {
+            window.platformPlans = defaultSmartSocietyPlans;
+        }
+    }
     const money = value => `Rs. ${Number(value || 0).toLocaleString("en-IN")}`;
     const featureLabels = plan => [
         plan.complaintManagement && "Complaints", plan.announcementManagement && "Announcements",
@@ -456,7 +549,7 @@ function renderSubscriptionCatalogue(plans, tenants) {
     }));
     const planCount = document.getElementById("subscriptionPlanCount");
     if (planCount) planCount.textContent = cataloguePlans.length;
-    const planById = new Map(plans.map(plan => [String(plan.id), plan]));
+    const planById = new Map((window.platformPlans || plans).map(plan => [String(plan.id), plan]));
     let assigned = 0;
     assignmentBody.replaceChildren(...tenants.map(tenant => {
         const current = planById.get(String(tenant.subscriptionPlanId)); if (current) assigned++;
@@ -472,7 +565,10 @@ function renderSubscriptionCatalogue(plans, tenants) {
 function renderOverviewPlanCards(plans) {
     const root = document.getElementById("overviewPlanCards");
     if (!root) return;
-    const cataloguePlans = plans.filter(plan => ["gold", "platinum", "diamond"].some(tier => String(plan.name || plan.planCode || "").toLowerCase().includes(tier)));
+    let cataloguePlans = (plans || []).filter(plan => ["gold", "platinum", "diamond"].some(tier => String(plan.name || plan.planCode || "").toLowerCase().includes(tier)));
+    if (!cataloguePlans.length) {
+        cataloguePlans = defaultSmartSocietyPlans;
+    }
     const safe = value => String(value ?? "").replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);
     const money = value => `Rs. ${Number(value || 0).toLocaleString("en-IN")}`;
     const featureLabels = plan => [
@@ -854,7 +950,22 @@ async function loadPlatformBackendData(){
             tenants.forEach(tenant => noticeSocietySelect.add(new Option(tenant.societyName, tenant.id)));
             if ([...noticeSocietySelect.options].some(option => option.value === selectedSociety)) noticeSocietySelect.value = selectedSociety;
         }
-        fill('table[data-table="societies"]',tenants,t=>{const r=document.createElement("tr");r.dataset.recordId=t.id;td(r,t.societyName);td(r,[t.city,t.state].filter(Boolean).join(", "));td(r,planById.get(String(t.subscriptionPlanId))?.name||"Unassigned");td(r,t.approved?"Approved":"Pending");const c=document.createElement("td");c.innerHTML=`<button class="btn btn-sm btn-outline-primary me-1" data-backend-action="view-society">View</button><button class="btn btn-sm ${t.approved?'btn-outline-danger':'btn-outline-success'}" data-backend-action="${t.approved?'suspend-society':'approve-society'}">${t.approved?'Suspend':'Approve'}</button>`;r.appendChild(c);return r;});
+        fill('table[data-table="societies"]',tenants,t=>{
+            const r=document.createElement("tr");
+            r.dataset.recordId=t.id;
+            td(r,t.societyName);
+            td(r,[t.city,t.state].filter(Boolean).join(", "));
+            td(r,planById.get(String(t.subscriptionPlanId))?.name||"Unassigned");
+            const statusCell = document.createElement("td");
+            statusCell.innerHTML = t.approved 
+                ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Approved</span>'
+                : '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-clock me-1"></i>Pending / Suspended</span>';
+            r.appendChild(statusCell);
+            const c=document.createElement("td");
+            c.innerHTML=`<button class="btn btn-sm btn-outline-primary me-1" data-backend-action="view-society" title="View society details"><i class="fa-solid fa-eye me-1"></i>View</button><button class="btn btn-sm ${t.approved ? 'btn-outline-success' : 'btn-success'} me-1" data-backend-action="approve-society" title="${t.approved ? 'Society is approved and active (click to re-verify)' : 'Approve and activate society'}"><i class="fa-solid fa-check me-1"></i>Approve</button><button class="btn btn-sm ${t.approved ? 'btn-outline-danger' : 'btn-outline-secondary'}" data-backend-action="suspend-society" title="${t.approved ? 'Suspend this society' : 'Society is currently suspended'}"><i class="fa-solid fa-ban me-1"></i>Suspend</button>`;
+            r.appendChild(c);
+            return r;
+        });
         fill('table[data-table="users"]',users,u=>{const r=document.createElement("tr");r.dataset.userId=u.id;td(r,u.name);td(r,u.role);td(r,u.tenantId);td(r,u.locked?"Locked":"Active");const c=document.createElement("td");c.innerHTML=`<button type="button" class="btn btn-sm btn-outline-primary" data-platform-user-edit>Edit User</button>`;r.appendChild(c);return r;});
         window.platformPlans = plans;
         renderOverviewPlanCards(plans);
@@ -1526,6 +1637,8 @@ document.addEventListener("click",event=>{
             const message=result.message || "Platform action completed.";
             showToast("✓ " + message);
             if("Notification" in window && Notification.permission === "granted") new Notification("SmartSociety alert sent", {body: message, icon: "/favicon.svg"});
+        if (typeof loadPlatformBackendData === "function") {
+            try { await loadPlatformBackendData(); } catch (e) { console.error(e); }
         }
         return loadSocietyBackendData();
     }).catch(error=>showToast(error.message)).finally(()=>button.disabled=false);

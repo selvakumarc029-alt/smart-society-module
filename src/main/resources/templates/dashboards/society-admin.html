@@ -688,6 +688,181 @@
             color: #166534 !important;
         }
 
+        /* ==========================================================================
+           OVERVIEW KPI CARDS (PREMIUM CARD VIEW)
+           ========================================================================== */
+        .overview-kpi-grid,
+        body.dashboard-body .dashboard-container [data-view="overview"] .stats.overview-kpi-grid,
+        body.dashboard-body .stats.overview-kpi-grid,
+        .stats.overview-kpi-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 1.25rem !important;
+            margin-bottom: 1.5rem !important;
+            width: 100% !important;
+        }
+
+        @media (max-width: 1100px) {
+            .overview-kpi-grid,
+            body.dashboard-body .dashboard-container [data-view="overview"] .stats.overview-kpi-grid,
+            body.dashboard-body .stats.overview-kpi-grid,
+            .stats.overview-kpi-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 1rem !important;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .overview-kpi-grid,
+            body.dashboard-body .dashboard-container [data-view="overview"] .stats.overview-kpi-grid,
+            body.dashboard-body .stats.overview-kpi-grid,
+            .stats.overview-kpi-grid {
+                grid-template-columns: 1fr !important;
+                gap: 0.85rem !important;
+            }
+        }
+
+        /* Card Container Styling with High Specificity */
+        body.dashboard-body .dashboard-container [data-view="overview"] .stats article.overview-kpi-card,
+        body.dashboard-body .dashboard-container [data-view] .stats article.overview-kpi-card,
+        body.dashboard-body .stats article.overview-kpi-card,
+        .stats article.overview-kpi-card,
+        article.overview-kpi-card {
+            position: relative !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            min-height: 120px !important;
+            height: auto !important;
+            padding: 1.25rem 1.4rem !important;
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 16px !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+            text-align: left !important;
+            overflow: hidden !important;
+            transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease !important;
+            cursor: pointer !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        body.dashboard-body .dashboard-container [data-view="overview"] .stats article.overview-kpi-card:hover,
+        body.dashboard-body .stats article.overview-kpi-card:hover,
+        article.overview-kpi-card:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.1), 0 3px 8px rgba(0, 0, 0, 0.04) !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        /* Reset inherited pseudo-elements */
+        body.dashboard-body .stats article.overview-kpi-card::before,
+        body.dashboard-body .stats article.overview-kpi-card::after,
+        article.overview-kpi-card::before,
+        article.overview-kpi-card::after {
+            display: none !important;
+            content: none !important;
+        }
+
+        /* Card Header & Elements */
+        .overview-kpi-card .kpi-card-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            margin-bottom: 0.75rem !important;
+            order: 1 !important;
+        }
+
+        body.dashboard-body .stats article.overview-kpi-card .kpi-card-header span.kpi-card-label,
+        .overview-kpi-card .kpi-card-label {
+            color: #64748b !important;
+            font-size: 0.72rem !important;
+            font-weight: 750 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.06em !important;
+            line-height: 1.2 !important;
+            margin: 0 !important;
+            display: inline-block !important;
+            order: unset !important;
+        }
+
+        .overview-kpi-card .kpi-card-icon {
+            width: 38px !important;
+            height: 38px !important;
+            border-radius: 11px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1rem !important;
+            flex-shrink: 0 !important;
+            transition: transform 0.2s ease !important;
+            order: unset !important;
+        }
+
+        .overview-kpi-card:hover .kpi-card-icon {
+            transform: scale(1.08) !important;
+        }
+
+        /* Icon Colors */
+        .overview-kpi-card .kpi-card-icon.icon-flats {
+            background: #eff6ff !important;
+            color: #2563eb !important;
+            border: 1px solid #dbeafe !important;
+        }
+
+        .overview-kpi-card .kpi-card-icon.icon-residents {
+            background: #ecfdf5 !important;
+            color: #059669 !important;
+            border: 1px solid #d1fae5 !important;
+        }
+
+        .overview-kpi-card .kpi-card-icon.icon-bills {
+            background: #fffbeb !important;
+            color: #d97706 !important;
+            border: 1px solid #fef3c7 !important;
+        }
+
+        .overview-kpi-card .kpi-card-icon.icon-complaints {
+            background: #fff1f2 !important;
+            color: #e11d48 !important;
+            border: 1px solid #ffe4e6 !important;
+        }
+
+        /* Card Body & Metric */
+        .overview-kpi-card .kpi-card-body {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 0.2rem !important;
+            order: 2 !important;
+        }
+
+        body.dashboard-body .stats article.overview-kpi-card .kpi-card-body strong.kpi-card-val,
+        .overview-kpi-card strong.kpi-card-val {
+            font-size: 2.15rem !important;
+            font-weight: 850 !important;
+            line-height: 1.05 !important;
+            letter-spacing: -0.035em !important;
+            margin: 0 !important;
+            display: block !important;
+            order: 1 !important;
+        }
+
+        body.dashboard-body .stats article.overview-kpi-card .kpi-card-body small.kpi-card-sub,
+        .overview-kpi-card small.kpi-card-sub {
+            color: #94a3b8 !important;
+            font-size: 0.72rem !important;
+            font-weight: 550 !important;
+            line-height: 1.25 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.3rem !important;
+            margin-top: 0.2rem !important;
+            order: 2 !important;
+        }
+
     </style>
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
     <div class="dashboard-layout">
@@ -700,9 +875,7 @@
             </div>
             <nav class="nav flex-column py-3 sidebar-nav" aria-label="Dashboard sections">
                 <a href="#overview" class="nav-link btn btn-link text-start text-decoration-none active" data-panel="overview" onclick="openPanel('overview'); return false;"><i class="fa-solid fa-house me-2"></i> Overview</a>
-                <a href="#flats" class="nav-link btn btn-link text-start text-decoration-none" data-panel="flats" onclick="openPanel('flats'); return false;"><i class="fa-solid fa-building me-2"></i> Blocks & Flats</a>
                 <a href="#residents" class="nav-link btn btn-link text-start text-decoration-none" data-panel="residents" onclick="openPanel('residents'); return false;"><i class="fa-solid fa-users me-2"></i> Residents</a>
-                <a href="#property-approvals" class="nav-link btn btn-link text-start text-decoration-none" data-panel="property-approvals" onclick="openPanel('property-approvals'); return false;"><i class="fa-solid fa-house-circle-check me-2 text-warning"></i> Owner Property Approvals <span class="badge bg-warning text-dark ms-auto" id="adminPendingPropertiesBadge" style="display:none;">0</span></a>
                 <a href="#billing" class="nav-link btn btn-link text-start text-decoration-none" data-panel="billing" onclick="openPanel('billing'); return false;"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Billing</a>
                 <a href="#visitors" class="nav-link btn btn-link text-start text-decoration-none" data-panel="visitors" onclick="openPanel('visitors'); return false;"><i class="fa-solid fa-address-card me-2"></i> Visitors</a>
                 <a href="#complaints" class="nav-link btn btn-link text-start text-decoration-none" data-panel="complaints" onclick="openPanel('complaints'); return false;"><i class="fa-solid fa-triangle-exclamation me-2"></i> Complaints</a>
@@ -751,41 +924,64 @@
                 
                 <!-- Overview Panel -->
                 <section id="overview" data-view="overview" class="animate__animated animate__fadeIn">
-                    <div class="row g-4 mb-4 stats">
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card p-4 h-100 shadow-sm border-0">
-                                <span class="text-muted small fw-bold text-uppercase">Total Flats</span>
-                                <strong class="fs-2 fw-bold text-primary mt-2 d-block">320</strong>
-                            </article>
-                        </div>
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card p-4 h-100 shadow-sm border-0">
-                                <span class="text-muted small fw-bold text-uppercase">Residents</span>
-                                <strong class="fs-2 fw-bold text-success mt-2 d-block">912</strong>
-                            </article>
-                        </div>
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card p-4 h-100 shadow-sm border-0">
-                                <span class="text-muted small fw-bold text-uppercase">Unpaid Bills</span>
-                                <strong class="fs-2 fw-bold text-warning mt-2 d-block">46</strong>
-                            </article>
-                        </div>
-                        <div class="col-xl-3 col-md-6">
-                            <article class="card p-4 h-100 shadow-sm border-0">
-                                <span class="text-muted small fw-bold text-uppercase">Open Complaints</span>
-                                <strong class="fs-2 fw-bold text-danger mt-2 d-block">12</strong>
-                            </article>
-                        </div>
+                    <div class="overview-kpi-grid stats mb-4" id="overviewStatsGrid">
+                        <article class="overview-kpi-card kpi-card-flats" title="View flats and units">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Total Flats</span>
+                                <div class="kpi-card-icon icon-flats">
+                                    <i class="fa-solid fa-building"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-primary">0</strong>
+                                <small class="kpi-card-sub"><i class="fa-solid fa-layer-group me-1"></i>Society units</small>
+                            </div>
+                        </article>
+                        <article class="overview-kpi-card kpi-card-residents" title="View registered residents">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Residents</span>
+                                <div class="kpi-card-icon icon-residents">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-success">0</strong>
+                                <small class="kpi-card-sub"><i class="fa-solid fa-user-check me-1"></i>Active occupants</small>
+                            </div>
+                        </article>
+                        <article class="overview-kpi-card kpi-card-bills" title="View billing dues">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Unpaid Bills</span>
+                                <div class="kpi-card-icon icon-bills">
+                                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-warning">0</strong>
+                                <small class="kpi-card-sub"><i class="fa-solid fa-clock me-1"></i>Pending dues</small>
+                            </div>
+                        </article>
+                        <article class="overview-kpi-card kpi-card-complaints" title="View complaints">
+                            <div class="kpi-card-header">
+                                <span class="kpi-card-label">Open Complaints</span>
+                                <div class="kpi-card-icon icon-complaints">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                            </div>
+                            <div class="kpi-card-body">
+                                <strong class="kpi-card-val text-danger">0</strong>
+                                <small class="kpi-card-sub"><i class="fa-solid fa-circle-exclamation me-1"></i>Requires action</small>
+                            </div>
+                        </article>
                     </div>
                     
-                    <div class="card shadow-sm border-0 rounded-4 mb-4">
+                    <div class="card shadow-sm border rounded-4 mb-4 bg-white">
                         <div class="card-body p-4">
                             <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
                                 <div><span class="small text-primary fw-bold text-uppercase">Operational snapshot</span><h4 class="fw-bold mb-1 mt-1">Today</h4><p class="text-muted mb-0">Open the right workspace to act on the latest society activity.</p></div>
                                 <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle rounded-pill px-3 py-2"><i class="fa-solid fa-circle-check me-1"></i>Live data</span>
                             </div>
                             <div class="d-flex flex-wrap gap-2 pill-row" aria-label="Today’s operational priorities">
-                                <button type="button" class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="property-approvals" onclick="openPanel('property-approvals'); return false;"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewPendingPropertyApprovals">0</span> pending property approvals</button>
                                 <button type="button" class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="visitors"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewVisitorRecords">0 visitor records</span></button>
                                 <button type="button" class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="amenities"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewAmenityBookings">0 amenity bookings</span></button>
                                 <button type="button" class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="expenses"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewExpenseRecords">0 expense records</span></button>
@@ -864,24 +1060,6 @@
                     </div>
                 </section>
 
-                <!-- Flats -->
-                <section id="flats" class="d-none animate__animated animate__fadeIn" data-view="flats">
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <h4 class="fw-bold mb-0">Blocks and Flats</h4>
-                            <button class="btn btn-primary rounded-pill btn-sm" data-action="add" data-table="flats"><i class="fa-solid fa-plus me-1"></i> Add Flat</button>
-                        </div>
-                        <div class="card-body px-4 pb-4 table-responsive">
-                            <table class="table table-hover align-middle" data-table="flats">
-                                <thead class="table-light"><tr><th>Flat</th><th>Owner</th><th>Contact</th><th>Block / Floor</th><th>Unit</th><th>Area</th><th>Parking</th><th>Occupancy</th><th>Action</th></tr></thead>
-                                <tbody>
-                                    <tr><td>A-101</td><td>Ramesh</td><td>—</td><td>Block A · Floor 1</td><td>2BHK</td><td>—</td><td>—</td><td><span class="badge bg-success status active">Occupied</span></td><td><button class="btn btn-sm btn-light" data-action="save">Edit</button></td></tr>
-                                    <tr><td>B-204</td><td>Meena</td><td>—</td><td>Block B · Floor 2</td><td>2BHK</td><td>—</td><td>—</td><td><span class="badge bg-secondary status pending">Vacant</span></td><td><button class="btn btn-sm btn-primary" data-action="approve">Activate</button></td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
 
                 <!-- Residents -->
                 <section id="residents" class="d-none animate__animated animate__fadeIn" data-view="residents">
@@ -1864,139 +2042,6 @@
                                     <button type="button" class="btn btn-secondary rounded-pill btn-sm px-4 fw-bold" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Owner Property Approvals Section -->
-                <section id="property-approvals" data-view="property-approvals" class="d-none animate__animated animate__fadeIn">
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-                        <div>
-                            <span class="small text-primary fw-bold text-uppercase"><i class="fa-solid fa-house-circle-check me-1"></i> Society Marketplace Governance</span>
-                            <h3 class="fw-bold mb-1 mt-1 text-dark">Owner Property Approvals</h3>
-                            <p class="text-muted mb-0">Verify and approve flats posted for rent or resale by verified society owners before they go live.</p>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="button" class="btn btn-outline-primary rounded-pill px-3 shadow-sm" onclick="window.refreshPropertyApprovals()">
-                                <i class="fa-solid fa-rotate me-1"></i> Refresh Queue
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- KPI Statistics -->
-                    <div class="row g-3 mb-4">
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 border-start border-primary border-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="text-muted small fw-bold text-uppercase">Total Submissions</span>
-                                        <h3 class="fw-bold text-dark mb-0 mt-1" id="adminPropStatTotal">0</h3>
-                                    </div>
-                                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 text-primary">
-                                        <i class="fa-solid fa-list-check fs-4"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 border-start border-warning border-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="text-muted small fw-bold text-uppercase">Pending Approval</span>
-                                        <h3 class="fw-bold text-warning mb-0 mt-1" id="adminPropStatPending">0</h3>
-                                    </div>
-                                    <div class="rounded-circle bg-warning bg-opacity-10 p-3 text-warning">
-                                        <i class="fa-solid fa-hourglass-half fs-4"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 border-start border-success border-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="text-muted small fw-bold text-uppercase">Approved & Live</span>
-                                        <h3 class="fw-bold text-success mb-0 mt-1" id="adminPropStatApproved">0</h3>
-                                    </div>
-                                    <div class="rounded-circle bg-success bg-opacity-10 p-3 text-success">
-                                        <i class="fa-solid fa-circle-check fs-4"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white h-100 border-start border-danger border-4">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="text-muted small fw-bold text-uppercase">Needs Changes</span>
-                                        <h3 class="fw-bold text-danger mb-0 mt-1" id="adminPropStatRejected">0</h3>
-                                    </div>
-                                    <div class="rounded-circle bg-danger bg-opacity-10 p-3 text-danger">
-                                        <i class="fa-solid fa-circle-xmark fs-4"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Toolbar Filters -->
-                    <div class="card border-0 shadow-sm rounded-4 mb-4">
-                        <div class="card-body p-3">
-                            <div class="row g-3 align-items-center">
-                                <div class="col-lg-5">
-                                    <div class="btn-group w-100" role="group" aria-label="Status filter">
-                                        <button type="button" class="btn btn-primary active rounded-start-pill px-3 text-nowrap" data-admin-prop-filter="ALL">All Listings</button>
-                                        <button type="button" class="btn btn-outline-secondary px-3 text-nowrap" data-admin-prop-filter="PENDING_APPROVAL">Pending Review</button>
-                                        <button type="button" class="btn btn-outline-secondary px-3 text-nowrap" data-admin-prop-filter="ACTIVE">Approved</button>
-                                        <button type="button" class="btn btn-outline-secondary rounded-end-pill px-3 text-nowrap" data-admin-prop-filter="REJECTED">Rejected</button>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-sm-5">
-                                    <select class="form-select rounded-pill" id="adminPropTypeSelect">
-                                        <option value="ALL">All Types (Rent & Sale)</option>
-                                        <option value="RENT">For Rent Only</option>
-                                        <option value="SALE">For Sale Only</option>
-                                    </select>
-                                </div>
-                                <div class="col-lg-4 col-sm-7">
-                                    <div class="input-group">
-                                        <span class="input-group-text bg-white border-end-0 rounded-start-pill text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-                                        <input type="text" class="form-control border-start-0 rounded-end-pill" id="adminPropSearchInput" placeholder="Search flat, owner, specs...">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Approvals Queue Table -->
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="ps-4">Property & Configuration</th>
-                                        <th>Unit & Tower</th>
-                                        <th>Owner Contact</th>
-                                        <th>Pricing</th>
-                                        <th>Status</th>
-                                        <th class="text-end pe-4">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="adminPropertyApprovalTableBody">
-                                    <!-- Rendered dynamically by owner-property-workflow.js -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Workflow Informational Callout -->
-                    <div class="alert alert-info border-0 rounded-4 shadow-sm p-4 d-flex align-items-start gap-3">
-                        <div class="fs-3 text-info mt-1"><i class="fa-solid fa-shield-halved"></i></div>
-                        <div>
-                            <h6 class="fw-bold mb-1 text-info-emphasis">Society Admin Verification Guidelines</h6>
-                            <p class="mb-0 small text-muted">
-                                Only verified flat owners have authorization to list properties for rent or resale. Once you click <strong>Approve</strong>, the property becomes active on the internal resident board and public society portal. If there are discrepancies in pricing, parking allocation, or floor details, use <strong>Reject</strong> to return the post to the owner with your notes for correction.
-                            </p>
                         </div>
                     </div>
                 </section>

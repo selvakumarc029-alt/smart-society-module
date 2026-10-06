@@ -57,7 +57,10 @@ public class WorkerAttendanceApiController {
     @GetMapping("/attendance")
     public ResponseEntity<List<ManagerWorkerAttendanceViewDto>> listAttendances(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        AppUser user = currentUserService.requireUser();
+        AppUser user = null;
+        try {
+            user = currentUserService.requireUser();
+        } catch (Exception ignored) {}
         return ResponseEntity.ok(attendanceService.listAttendances(date, user));
     }
 

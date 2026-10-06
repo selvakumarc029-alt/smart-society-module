@@ -58,6 +58,8 @@ public class SocietyApiController {
     private com.smartapartment.repository.MaintenanceHubRepository maintenanceHubs;
     @org.springframework.beans.factory.annotation.Autowired(required = false)
     private com.smartapartment.service.MailService mailService;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private WorkerAvailabilityRepository workerAvailabilityRepository;
 
     public SocietyApiController(CurrentUserService currentUser, DashboardService dashboards,
                                 ApartmentRepository apartments, ResidentRepository residents,
@@ -291,7 +293,18 @@ public class SocietyApiController {
         user.setRole(role);
         user.setStatus("ACTIVE");
         user.setPasswordHash(passwordEncoder.encode(request.temporaryPassword()));
-        return teamUserView(users.save(user));
+        AppUser saved = users.save(user);
+        if (role == UserRole.MAINTENANCE_STAFF && workerAvailabilityRepository != null) {
+            if (workerAvailabilityRepository.findByWorkerId(saved.getId()).isEmpty()) {
+                WorkerAvailability wa = new WorkerAvailability();
+                wa.setWorkerId(saved.getId());
+                wa.setTenantId(tenant);
+                wa.setStatus("OFFLINE");
+                wa.setLastUpdatedAt(LocalDateTime.now());
+                workerAvailabilityRepository.save(wa);
+            }
+        }
+        return teamUserView(saved);
     }
 
     @GetMapping("/residents")

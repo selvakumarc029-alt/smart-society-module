@@ -359,26 +359,414 @@ html[data-bs-theme="dark"] body.dashboard-body .dashboard-container [data-view] 
 html[data-bs-theme="dark"] body.dashboard-body .dashboard-container [data-view] .stats article { border-color:#334057 !important; background:#192235 !important; }
 @media (max-width:767px) { body.dashboard-body .dashboard-container { padding:.85rem !important; } body.dashboard-body .main-content > .topbar { padding:.85rem 1rem !important; } body.dashboard-body .dashboard-container [data-view] .card-header,body.dashboard-body .dashboard-container [data-view] .card-body { padding:.8rem !important; } }
 
-/* Buttons */
+/* ==========================================================================
+   GLOBAL PREMIUM BUTTON DESIGN SYSTEM (Tactile, Accessible, Micro-Physics)
+   Applied across SmartSociety & PropertyDirect dashboards with zero code changes.
+   ========================================================================== */
 .btn {
-    border-radius: 0.5rem;
-    transition: all 0.3s ease;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.82rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    padding: 0.5rem 1rem;
+    border-radius: 9px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.18s ease,
+                background 0.18s ease,
+                border-color 0.18s ease,
+                color 0.18s ease,
+                filter 0.18s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1.5px);
 }
 
 .btn:active {
-    transform: scale(0.95);
+    transform: translateY(1px) scale(0.985) !important;
 }
 
+.btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35) !important;
+}
+
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.55 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+}
+
+.btn i,
+.btn svg {
+    font-size: 0.94em;
+    transition: transform 0.16s ease;
+}
+
+.btn:hover i.fa-arrow-right {
+    transform: translateX(2px);
+}
+
+/* Primary Button - Luminous Modern Cobalt */
 .btn-primary {
-    background-color: var(--bs-primary);
-    border-color: var(--bs-primary);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 55%, #1d4ed8 100%) !important;
+    border-color: rgba(37, 99, 235, 0.4) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(37, 99, 235, 0.22),
+                0 4px 14px rgba(37, 99, 235, 0.18) !important;
 }
 
 .btn-primary:hover {
-    background-color: #3f37c9;
-    border-color: #3f37c9;
-    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 55%, #2563eb 100%) !important;
+    border-color: rgba(37, 99, 235, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(37, 99, 235, 0.3),
+                0 8px 22px rgba(37, 99, 235, 0.25) !important;
+    filter: brightness(1.02);
+}
+
+.btn-primary:active {
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(37, 99, 235, 0.3) !important;
+}
+
+/* Secondary Button - Crisp Satin Neutral */
+.btn-secondary {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+.btn-secondary:hover {
+    background: #ffffff !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+}
+
+.btn-secondary:active {
+    background: #f1f5f9 !important;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Success Button - Vibrant Emerald */
+.btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 55%, #047857 100%) !important;
+    border-color: rgba(5, 150, 105, 0.35) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(16, 185, 129, 0.22),
+                0 4px 14px rgba(16, 185, 129, 0.18) !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 55%, #059669 100%) !important;
+    border-color: rgba(5, 150, 105, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(16, 185, 129, 0.3),
+                0 8px 22px rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Danger Button - Rich Crimson */
+.btn-danger {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 55%, #be123c 100%) !important;
+    border-color: rgba(225, 29, 72, 0.35) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(225, 29, 72, 0.22),
+                0 4px 14px rgba(225, 29, 72, 0.18) !important;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #fb7185 0%, #f43f5e 55%, #e11d48 100%) !important;
+    border-color: rgba(225, 29, 72, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(225, 29, 72, 0.3),
+                0 8px 22px rgba(225, 29, 72, 0.25) !important;
+}
+
+/* Warning Button - Radiant Warm Amber */
+.btn-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    border-color: rgba(217, 119, 6, 0.35) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(245, 158, 11, 0.22),
+                0 4px 14px rgba(245, 158, 11, 0.18) !important;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+    border-color: rgba(217, 119, 6, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(245, 158, 11, 0.3),
+                0 8px 22px rgba(245, 158, 11, 0.25) !important;
+}
+
+/* Info Button - Vibrant Cyan */
+.btn-info {
+    background: linear-gradient(135deg, #06b6d4 0%, #0284c7 100%) !important;
+    border-color: rgba(2, 132, 199, 0.35) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(6, 182, 212, 0.22),
+                0 4px 14px rgba(6, 182, 212, 0.18) !important;
+}
+
+.btn-info:hover {
+    background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%) !important;
+    border-color: rgba(2, 132, 199, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(6, 182, 212, 0.3),
+                0 8px 22px rgba(6, 182, 212, 0.25) !important;
+}
+
+/* Dark Button - Deep Slate Navy */
+.btn-dark {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+    border-color: rgba(15, 23, 42, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25) !important;
+}
+
+.btn-dark:hover {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%) !important;
+    border-color: rgba(15, 23, 42, 0.7) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.35) !important;
+}
+
+/* Light Button - Crisp Soft Gray */
+.btn-light {
+    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+.btn-light:hover {
+    background: #ffffff !important;
+    border-color: #cbd5e1 !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Outline Buttons - Ultra Refined & Luminous on Hover */
+.btn-outline-primary {
+    border: 1.5px solid #2563eb !important;
+    color: #2563eb !important;
+    background: transparent !important;
+}
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28) !important;
+}
+
+.btn-outline-secondary {
+    border: 1.5px solid #94a3b8 !important;
+    color: #475569 !important;
+    background: transparent !important;
+}
+.btn-outline-secondary:hover {
+    background: #f1f5f9 !important;
+    border-color: #64748b !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+}
+
+.btn-outline-success {
+    border: 1.5px solid #059669 !important;
+    color: #059669 !important;
+    background: transparent !important;
+}
+.btn-outline-success:hover {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.28) !important;
+}
+
+.btn-outline-danger {
+    border: 1.5px solid #e11d48 !important;
+    color: #e11d48 !important;
+    background: transparent !important;
+}
+.btn-outline-danger:hover {
+    background: linear-gradient(135deg, #f43f5e, #e11d48) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(225, 29, 72, 0.28) !important;
+}
+
+.btn-outline-warning {
+    border: 1.5px solid #d97706 !important;
+    color: #d97706 !important;
+    background: transparent !important;
+}
+.btn-outline-warning:hover {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.28) !important;
+}
+
+.btn-outline-info {
+    border: 1.5px solid #0284c7 !important;
+    color: #0284c7 !important;
+    background: transparent !important;
+}
+.btn-outline-info:hover {
+    background: linear-gradient(135deg, #06b6d4, #0284c7) !important;
+    border-color: transparent !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(6, 182, 212, 0.28) !important;
+}
+
+.btn-outline-dark {
+    border: 1.5px solid #334155 !important;
+    color: #1e293b !important;
+    background: transparent !important;
+}
+.btn-outline-dark:hover {
+    background: #0f172a !important;
+    border-color: #0f172a !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.22) !important;
+}
+
+/* Soft Buttons - Frosted Tinted Badges with Interactive Glow */
+.btn-soft-primary {
+    background: rgba(37, 99, 235, 0.08) !important;
+    border: 1px solid rgba(37, 99, 235, 0.16) !important;
+    color: #2563eb !important;
+}
+.btn-soft-primary:hover {
+    background: rgba(37, 99, 235, 0.16) !important;
+    border-color: rgba(37, 99, 235, 0.3) !important;
+    color: #1d4ed8 !important;
+}
+
+.btn-soft-success {
+    background: rgba(16, 185, 129, 0.09) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    color: #059669 !important;
+}
+.btn-soft-success:hover {
+    background: rgba(16, 185, 129, 0.18) !important;
+    border-color: rgba(16, 185, 129, 0.32) !important;
+    color: #047857 !important;
+}
+
+.btn-soft-danger {
+    background: rgba(225, 29, 72, 0.08) !important;
+    border: 1px solid rgba(225, 29, 72, 0.2) !important;
+    color: #e11d48 !important;
+}
+.btn-soft-danger:hover {
+    background: rgba(225, 29, 72, 0.16) !important;
+    border-color: rgba(225, 29, 72, 0.32) !important;
+    color: #be123c !important;
+}
+
+.btn-soft-warning {
+    background: rgba(245, 158, 11, 0.09) !important;
+    border: 1px solid rgba(245, 158, 11, 0.2) !important;
+    color: #d97706 !important;
+}
+.btn-soft-warning:hover {
+    background: rgba(245, 158, 11, 0.18) !important;
+    border-color: rgba(245, 158, 11, 0.32) !important;
+    color: #b45309 !important;
+}
+
+.btn-soft-info {
+    background: rgba(6, 182, 212, 0.09) !important;
+    border: 1px solid rgba(6, 182, 212, 0.2) !important;
+    color: #0284c7 !important;
+}
+.btn-soft-info:hover {
+    background: rgba(6, 182, 212, 0.18) !important;
+    border-color: rgba(6, 182, 212, 0.32) !important;
+    color: #0369a1 !important;
+}
+
+/* Button Sizing & Morphologies */
+.btn-sm {
+    min-height: 31px !important;
+    padding: 0.32rem 0.72rem !important;
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    gap: 0.35rem !important;
+}
+
+.btn-lg {
+    min-height: 48px !important;
+    padding: 0.72rem 1.6rem !important;
+    font-size: 0.98rem !important;
+    font-weight: 700 !important;
+    border-radius: 12px !important;
+    gap: 0.6rem !important;
+}
+
+.btn.rounded-pill {
+    border-radius: 9999px !important;
+    padding-inline: 1.15rem !important;
+}
+
+.btn-close {
+    transition: transform 0.18s ease, opacity 0.18s ease !important;
+}
+.btn-close:hover {
+    transform: scale(1.15) rotate(90deg) !important;
+    opacity: 0.85 !important;
+}
+
+/* Dark Mode Button Overrides */
+html[data-bs-theme="dark"] .btn-secondary {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+}
+html[data-bs-theme="dark"] .btn-secondary:hover {
+    background: #253347 !important;
+    border-color: #475569 !important;
+    color: #ffffff !important;
+}
+html[data-bs-theme="dark"] .btn-light {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+}
+html[data-bs-theme="dark"] .btn-outline-secondary {
+    border-color: #475569 !important;
+    color: #cbd5e1 !important;
+}
+html[data-bs-theme="dark"] .btn-outline-secondary:hover {
+    background: #1e293b !important;
+    color: #ffffff !important;
 }
 
 /* Table Hover animations */

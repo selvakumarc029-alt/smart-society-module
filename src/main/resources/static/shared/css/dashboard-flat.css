@@ -24,9 +24,9 @@ body.app-dashboard .dash-main .dash-panel .card-head {
     border-bottom: 0 !important;
 }
 
-body.dashboard-body .dashboard-container [data-view] .stats .card,
-body.dashboard-body .dashboard-container [data-view] .stats article,
-body.app-dashboard .dash-main .dash-panel .dash-grid article {
+body.dashboard-body .dashboard-container [data-view] .stats .card:not(.overview-kpi-card),
+body.dashboard-body .dashboard-container [data-view] .stats article:not(.overview-kpi-card),
+body.app-dashboard .dash-main .dash-panel .dash-grid article:not(.overview-kpi-card) {
     padding: 12px 16px !important;
     border: 0 !important;
     border-right: 1px solid #dfe4ec !important;
@@ -37,9 +37,9 @@ body.app-dashboard .dash-main .dash-panel .dash-grid article {
     transform: none !important;
 }
 
-body.dashboard-body .dashboard-container [data-view] .stats > :last-child .card,
-body.dashboard-body .dashboard-container [data-view] .stats > :last-child article,
-body.app-dashboard .dash-main .dash-panel .dash-grid > :last-child {
+body.dashboard-body .dashboard-container [data-view] .stats > :last-child .card:not(.overview-kpi-card),
+body.dashboard-body .dashboard-container [data-view] .stats > :last-child article:not(.overview-kpi-card),
+body.app-dashboard .dash-main .dash-panel .dash-grid > :last-child:not(.overview-kpi-card) {
     border-right: 0 !important;
 }
 

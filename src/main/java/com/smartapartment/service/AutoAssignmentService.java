@@ -60,38 +60,22 @@ public class AutoAssignmentService {
     public void scheduleAssignment(MaintenanceRequest request) {
         if (request == null) return;
 
-        AutoAssignmentConfig config = getOrCreateConfig(request.getTenantId());
-        String priority = request.getPriority() != null ? request.getPriority().toUpperCase(Locale.ROOT) : "MEDIUM";
-
-        if ("URGENT".equals(priority)) {
-            log.info("Urgent request {} bypasses auto-assignment delay. Searching for workers immediately.", request.getRequestNumber());
-            request.setAutoAssignDeadline(null);
-            assignNextEligibleWorker(request);
-        } else {
-            int delayMinutes = (config.getAutoAssignmentDelayMinutes() != null && config.getAutoAssignmentDelayMinutes() > 0)
-                    ? config.getAutoAssignmentDelayMinutes() : 5;
-            LocalDateTime deadline = LocalDateTime.now().plusMinutes(delayMinutes);
-            request.setAutoAssignDeadline(deadline);
-            request.setRequestStatus("AUTO_ASSIGN_PENDING");
-            requestRepository.save(request);
-
-            recordStatusHistory(request.getId(), "REQUESTED", "AUTO_ASSIGN_PENDING", "Auto-Assignment Engine",
-                    "Auto-assignment scheduled in " + delayMinutes + " minutes (Deadline: " + deadline + ")");
-            log.info("Request {} scheduled for auto-assignment in {} minutes (at {})", request.getRequestNumber(), delayMinutes, deadline);
-
-            trackingService.broadcastEvent(com.smartapartment.dto.RealTimeTrackingDtos.TrackingEventDto.of(
-                    "AUTO_ASSIGNMENT_PENDING",
-                    request.getId(),
-                    request.getRequestNumber(),
-                    "AUTO_ASSIGN_PENDING",
-                    request.getTenantId(),
-                    null,
-                    null,
-                    request.getResidentId(),
-                    "Auto-assignment scheduled in " + delayMinutes + " minutes",
-                    request
-            ));
+        // Attempt immediate auto-assignment based on attendance, workload, and trade availability
+        Optional<AppUser> assigned = assignNextEligibleWorker(request);
+        if (assigned.isPresent()) {
+            log.info("Request {} auto-assigned immediately to worker {}", request.getRequestNumber(), assigned.get().getFullName());
+            return;
         }
+
+        // If no eligible worker is currently available, place in waiting queue
+        String oldStatus = request.getRequestStatus() != null ? request.getRequestStatus() : "REQUESTED";
+        request.setRequestStatus("WAITING_FOR_WORKER");
+        request.setAutoAssignDeadline(null);
+        requestRepository.save(request);
+
+        recordStatusHistory(request.getId(), oldStatus, "WAITING_FOR_WORKER", "Auto-Assignment Engine",
+                "No eligible clocked-in workers currently available. Request queued for auto-assignment upon worker check-in.");
+        log.info("Request {} queued as WAITING_FOR_WORKER awaiting available clocked-in worker.", request.getRequestNumber());
     }
 
     /**
@@ -199,21 +183,12 @@ public class AutoAssignmentService {
         List<AppUser> available = new ArrayList<>();
 
         for (AppUser worker : workers) {
-            // Check attendance (auto-initialize for active maintenance staff if needed)
+            // Check attendance: worker MUST have marked attendance today (clocked in and not clocked out)
             WorkerAttendance attendance = attendanceRepository
                     .findFirstByWorkerIdAndDateOrderByCreatedAtDesc(worker.getId(), today)
-                    .orElseGet(() -> {
-                        WorkerAttendance a = new WorkerAttendance();
-                        a.setWorkerId(worker.getId());
-                        a.setTenantId(worker.getTenantId() != null ? worker.getTenantId() : "default");
-                        a.setDate(today);
-                        a.setShiftId("ALL_DAY");
-                        a.setAttendanceStatus("PRESENT");
-                        a.setClockIn(LocalDateTime.now().minusHours(1));
-                        return attendanceRepository.save(a);
-                    });
+                    .orElse(null);
 
-            if (attendance.getClockIn() == null || attendance.getClockOut() != null) {
+            if (attendance == null || attendance.getClockIn() == null || attendance.getClockOut() != null) {
                 continue;
             }
 
@@ -226,24 +201,17 @@ public class AutoAssignmentService {
             String shiftStr = (attendance.getShiftId() != null && !attendance.getShiftId().isBlank())
                     ? attendance.getShiftId() : worker.getWorkShift();
             WorkerShift shift = WorkerShift.fromString(shiftStr);
-            if (shift != WorkerShift.ALL_DAY && !shift.isWithinShift(now)) {
+            if (shift != null && shift != WorkerShift.ALL_DAY && !shift.isWithinShift(now)) {
                 continue;
             }
 
-            // Check availability (auto-initialize if needed)
-            WorkerAvailability availability = availabilityRepository.findByWorkerId(worker.getId()).orElseGet(() -> {
-                WorkerAvailability a = new WorkerAvailability();
-                a.setWorkerId(worker.getId());
-                a.setTenantId(worker.getTenantId() != null ? worker.getTenantId() : "default");
-                a.setStatus("AVAILABLE");
-                a.setLastUpdatedAt(LocalDateTime.now());
-                return availabilityRepository.save(a);
-            });
+            // Check availability: worker must be explicitly AVAILABLE (not OFFLINE, ON_BREAK, or BUSY)
+            WorkerAvailability availability = availabilityRepository.findByWorkerId(worker.getId()).orElse(null);
             if (availability == null || !"AVAILABLE".equalsIgnoreCase(availability.getStatus())) {
                 continue;
             }
 
-            // Check active task count (never assign to busy worker)
+            // Check active task count (never assign to busy worker with an active task)
             if (availability.getCurrentTaskId() != null) {
                 continue;
             }

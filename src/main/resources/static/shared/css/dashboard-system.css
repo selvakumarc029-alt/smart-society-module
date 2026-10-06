@@ -666,6 +666,22 @@ body.app-dashboard .dash-sidebar > .dashboard-sidebar-close:hover { background:r
     .dashboard-body .form-grid,.app-dashboard .form-grid{grid-template-columns:1fr}
 }
 
+body[data-dashboard-role="superadmin"] .dashboard-header-meta,
+body[data-dashboard-role="superadmin"] .dashboard-live-status,
+body[data-dashboard-role="superadmin"] .dashboard-avatar,
+#dashboardTopbar .dashboard-header-meta,
+#dashboardTopbar .dashboard-live-status,
+#dashboardTopbar .dashboard-avatar {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 @media (max-width:620px){
     .dashboard-body .main,.app-dashboard .dash-main{padding:9px 10px 32px !important}
     .dashboard-body .header,.app-dashboard .dash-header{border-radius:15px}
@@ -1586,4 +1602,137 @@ body.app-dashboard :is(input:not([type="checkbox"]):not([type="radio"]), select,
 body.dashboard-body :is(.form-grid, .dashboard-form-grid, .field-grid),
 body.app-dashboard :is(.form-grid, .dashboard-form-grid, .field-grid) {
     min-width: 0 !important;
+}
+
+/* ==========================================================================
+   UNIVERSAL DASHBOARD BUTTON ELEVATION (Non-invasive, Pure Visual Enhancement)
+   Enhances buttons across SmartSociety & PropertyDirect dashboards with tactile
+   micro-physics, smooth depth shadows, and responsive states without changing
+   any IDs, onclick handlers, or business logic.
+   ========================================================================== */
+
+/* Buttons in main content, topbar, cards, and modals (excluding sidebar navigation links) */
+body.dashboard-body :is(.main-content, .dashboard-container, .modal, .topbar, .header-actions, .card) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]),
+body.app-dashboard :is(.dash-main, .main-wrap, .vendor-main, .agent-main, .modal, .card, .dash-header) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]) {
+    font-family: inherit;
+    font-weight: 600;
+    border-radius: 9px;
+    cursor: pointer;
+    text-decoration: none;
+    user-select: none;
+    transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.18s ease,
+                background 0.18s ease,
+                border-color 0.18s ease,
+                color 0.18s ease,
+                filter 0.18s ease !important;
+}
+
+body.dashboard-body :is(.main-content, .dashboard-container, .modal, .topbar, .header-actions, .card) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]):hover,
+body.app-dashboard :is(.dash-main, .main-wrap, .vendor-main, .agent-main, .modal, .card, .dash-header) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]):hover {
+    transform: translateY(-1.5px);
+}
+
+body.dashboard-body :is(.main-content, .dashboard-container, .modal, .topbar, .header-actions, .card) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]):active,
+body.app-dashboard :is(.dash-main, .main-wrap, .vendor-main, .agent-main, .modal, .card, .dash-header) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]):active {
+    transform: translateY(1px) scale(0.985) !important;
+}
+
+body.dashboard-body :is(.main-content, .dashboard-container, .modal, .topbar, .header-actions, .card) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]):focus-visible,
+body.app-dashboard :is(.dash-main, .main-wrap, .vendor-main, .agent-main, .modal, .card, .dash-header) :is(button, [role="button"], .btn):not(.nav-link):not(.sidebar-link):not([data-nav]):focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.35) !important;
+}
+
+/* Primary buttons */
+:is(body.dashboard-body, body.app-dashboard) :is(.btn-primary, .primary, .btn-main, button.primary):not(.nav-link) {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 55%, #1d4ed8 100%) !important;
+    border: 1px solid rgba(37, 99, 235, 0.4) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(37, 99, 235, 0.22),
+                0 4px 14px rgba(37, 99, 235, 0.18) !important;
+}
+
+:is(body.dashboard-body, body.app-dashboard) :is(.btn-primary, .primary, .btn-main, button.primary):not(.nav-link):hover {
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 55%, #2563eb 100%) !important;
+    border-color: rgba(37, 99, 235, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(37, 99, 235, 0.3),
+                0 8px 22px rgba(37, 99, 235, 0.25) !important;
+}
+
+/* Secondary & Ghost buttons */
+:is(body.dashboard-body, body.app-dashboard) :is(.btn-secondary, .secondary, .ghost, button.secondary, button.ghost):not(.nav-link) {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+:is(body.dashboard-body, body.app-dashboard) :is(.btn-secondary, .secondary, .ghost, button.secondary, button.ghost):not(.nav-link):hover {
+    background: #ffffff !important;
+    border-color: #94a3b8 !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Success buttons */
+:is(body.dashboard-body, body.app-dashboard) .btn-success:not(.nav-link) {
+    background: linear-gradient(135deg, #10b981 0%, #059669 55%, #047857 100%) !important;
+    border: 1px solid rgba(5, 150, 105, 0.35) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(16, 185, 129, 0.22),
+                0 4px 14px rgba(16, 185, 129, 0.18) !important;
+}
+
+:is(body.dashboard-body, body.app-dashboard) .btn-success:not(.nav-link):hover {
+    background: linear-gradient(135deg, #34d399 0%, #10b981 55%, #059669 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(16, 185, 129, 0.3),
+                0 8px 22px rgba(16, 185, 129, 0.25) !important;
+}
+
+/* Danger buttons */
+:is(body.dashboard-body, body.app-dashboard) .btn-danger:not(.nav-link) {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 55%, #be123c 100%) !important;
+    border: 1px solid rgba(225, 29, 72, 0.35) !important;
+    color: #ffffff !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                0 2px 5px rgba(225, 29, 72, 0.22),
+                0 4px 14px rgba(225, 29, 72, 0.18) !important;
+}
+
+:is(body.dashboard-body, body.app-dashboard) .btn-danger:not(.nav-link):hover {
+    background: linear-gradient(135deg, #fb7185 0%, #f43f5e 55%, #e11d48 100%) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                0 4px 10px rgba(225, 29, 72, 0.3),
+                0 8px 22px rgba(225, 29, 72, 0.25) !important;
+}
+
+/* Action pills in tables, cards, and toolbars */
+:is(body.dashboard-body, body.app-dashboard) :is(.btn-table-action, .action-btn, .btn-action) {
+    min-height: 31px !important;
+    padding: 0.32rem 0.75rem !important;
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.35rem !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: all 0.16s ease !important;
+}
+
+:is(body.dashboard-body, body.app-dashboard) :is(.btn-table-action, .action-btn, .btn-action):hover {
+    transform: translateY(-1.5px) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+}
+
+:is(body.dashboard-body, body.app-dashboard) :is(.btn-table-action, .action-btn, .btn-action):active {
+    transform: translateY(1px) scale(0.985) !important;
 }

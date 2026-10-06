@@ -40,38 +40,41 @@
     }
 
     // Availability badge styling
-    function getAvailabilityBadge(status) {
+    function getAvailabilityBadge(status, isCompact = false) {
         const s = (status || "OFFLINE").toUpperCase();
+        const pClass = isCompact ? "px-2 py-0.5 small" : "px-3 py-1.5";
         switch (s) {
             case "AVAILABLE":
-                return `<span class="badge bg-success text-white rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-circle-check me-1.5"></i>AVAILABLE</span>`;
+                return `<span class="badge bg-success text-white rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-circle-check me-1"></i>AVAILABLE</span>`;
             case "BUSY":
-                return `<span class="badge bg-warning text-dark rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-person-digging me-1.5"></i>BUSY</span>`;
+                return `<span class="badge bg-warning text-dark rounded-pill ${pClass} fw-bold text-nowrap shadow-xs"><i class="fa-solid fa-screwdriver-wrench me-1"></i>BUSY</span>`;
             case "ON_BREAK":
-                return `<span class="badge bg-info text-dark rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-mug-hot me-1.5"></i>ON BREAK</span>`;
+                return `<span class="badge bg-info text-dark rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-mug-hot me-1"></i>ON BREAK</span>`;
             default:
-                return `<span class="badge bg-secondary text-white rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-circle-minus me-1.5"></i>OFFLINE</span>`;
+                return `<span class="badge bg-secondary text-white rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-circle-minus me-1"></i>OFFLINE</span>`;
         }
     }
 
     // Attendance badge styling
-    function getAttendanceBadge(status) {
+    function getAttendanceBadge(status, isCompact = false) {
         const s = (status || "OFFLINE").toUpperCase();
+        const pClass = isCompact ? "px-2 py-0.5 small" : "px-3 py-1.5";
+        const iconSize = isCompact ? 'style="font-size:0.5rem;"' : '';
         switch (s) {
             case "PRESENT":
-                return `<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-user-check me-1.5"></i>PRESENT</span>`;
+                return `<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-circle text-success me-1 fa-fade" ${iconSize}></i>PRESENT</span>`;
             case "LATE":
-                return `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-clock me-1.5"></i>LATE</span>`;
+                return `<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-clock me-1" ${iconSize}></i>LATE</span>`;
             case "HALF_DAY":
-                return `<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-hourglass-half me-1.5"></i>HALF DAY</span>`;
+                return `<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-hourglass-half me-1" ${iconSize}></i>HALF DAY</span>`;
             case "ON_LEAVE":
-                return `<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-calendar-xmark me-1.5"></i>ON LEAVE</span>`;
+                return `<span class="badge bg-info-subtle text-info-emphasis border border-info-subtle rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-calendar-xmark me-1" ${iconSize}></i>ON LEAVE</span>`;
             case "ABSENT":
-                return `<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-user-xmark me-1.5"></i>ABSENT</span>`;
+                return `<span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-user-xmark me-1" ${iconSize}></i>ABSENT</span>`;
             case "CLOCKED_OUT":
-                return `<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-arrow-right-from-bracket me-1.5"></i>CLOCKED OUT</span>`;
+                return `<span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-arrow-right-from-bracket me-1" ${iconSize}></i>CLOCKED OUT</span>`;
             default:
-                return `<span class="badge bg-light text-muted border rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-power-off me-1.5"></i>OFFLINE</span>`;
+                return `<span class="badge bg-light text-muted border rounded-pill ${pClass} fw-bold text-nowrap"><i class="fa-solid fa-power-off me-1" ${iconSize}></i>OFFLINE</span>`;
         }
     }
 
@@ -517,8 +520,10 @@
                 const clockInStr = formatTime(w.clockIn);
                 const clockOutStr = formatTime(w.clockOut);
                 const taskDisplay = w.currentTaskNumber 
-                    ? `<span class="badge bg-warning text-dark font-monospace" title="${escapeHtml(w.currentTaskTitle || '')}"><i class="fa-solid fa-briefcase me-1"></i>${escapeHtml(w.currentTaskNumber)}</span>`
-                    : `<span class="text-muted small">— None —</span>`;
+                    ? `<div class="fw-bold text-dark small"><span class="badge bg-warning text-dark font-monospace mb-1"><i class="fa-solid fa-briefcase me-1"></i>${escapeHtml(w.currentTaskNumber)}</span></div><div class="text-muted small text-truncate" style="max-width:210px;" title="${escapeHtml(w.currentTaskTitle || '')}">${escapeHtml(w.currentTaskTitle || 'Job in Progress')}</div>`
+                    : (w.availabilityStatus === 'AVAILABLE' 
+                        ? `<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 small"><i class="fa-solid fa-check me-1"></i>Idle / Ready</span>`
+                        : `<span class="text-muted small">— None —</span>`);
 
                 return `
                     <tr>
@@ -558,10 +563,110 @@
             // Update worker count badge if present
             const countBadge = document.getElementById("maintenanceWorkerCount");
             if (countBadge) countBadge.textContent = workers.length;
+            const detailedBadge = document.getElementById("detailedWorkerCountBadge");
+            if (detailedBadge) detailedBadge.textContent = `${workers.length} Workers`;
+
+            // Render detailed worker cards
+            renderWorkerDetailCards(workers);
 
         } catch (e) {
             table.innerHTML = `<tr><td colspan="9" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load attendance: ${escapeHtml(e.message)}</td></tr>`;
         }
+    }
+
+    function renderWorkerDetailCards(workers) {
+        const grid = document.getElementById("workerDetailCardsGrid");
+        if (!grid || !Array.isArray(workers) || workers.length === 0) return;
+
+        const tradeStyles = {
+            "plumbing": { border: "#2563eb", bg: "bg-primary-subtle text-primary", icon: "fa-faucet-drip" },
+            "electrical": { border: "#d97706", bg: "bg-warning-subtle text-warning-emphasis", icon: "fa-bolt" },
+            "carpentry": { border: "#475569", bg: "bg-secondary-subtle text-secondary", icon: "fa-hammer" },
+            "cleaning": { border: "#0284c7", bg: "bg-info-subtle text-info", icon: "fa-broom" },
+            "housekeeping": { border: "#0284c7", bg: "bg-info-subtle text-info", icon: "fa-broom" }
+        };
+
+        grid.innerHTML = workers.map((w, idx) => {
+            const deptLower = (w.department || "maintenance").toLowerCase();
+            let style = tradeStyles["plumbing"];
+            for (const key of Object.keys(tradeStyles)) {
+                if (deptLower.includes(key)) {
+                    style = tradeStyles[key];
+                    break;
+                }
+            }
+            if (idx === 1 && !deptLower.includes("electric")) style = tradeStyles["electrical"];
+            if (idx === 2 && !deptLower.includes("carpent")) style = tradeStyles["carpentry"];
+            if (idx === 3 && !deptLower.includes("clean")) style = tradeStyles["cleaning"];
+
+            const attBadge = getAttendanceBadge(w.attendanceStatus, true);
+            const availBadge = getAvailabilityBadge(w.availabilityStatus, true);
+            const clockInStr = formatTime(w.clockIn);
+            const taskDisplay = w.currentTaskNumber 
+                ? `<span class="badge bg-warning-subtle text-warning-emphasis font-monospace px-2 py-0.5">${escapeHtml(w.currentTaskNumber)}</span>`
+                : (w.availabilityStatus === 'AVAILABLE' ? '<span class="text-success small fw-semibold">Idle / Ready</span>' : '<span class="text-muted small">— None —</span>');
+
+            return `
+                <div class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3">
+                    <div class="worker-detail-card" style="border-top: 3.5px solid ${style.border};">
+                        <div class="d-flex align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
+                                <div class="worker-avatar ${style.bg} flex-shrink-0">
+                                    <i class="fa-solid ${style.icon}"></i>
+                                </div>
+                                <div class="overflow-hidden" style="min-width: 0;">
+                                    <h6 class="fw-bold mb-0 text-dark text-truncate" style="font-size: 0.92rem;" title="${escapeHtml(w.workerName)}">${escapeHtml(w.workerName)}</h6>
+                                    <div class="small text-muted font-monospace text-truncate" style="font-size: 0.72rem;">
+                                        <span class="fw-semibold text-secondary">${escapeHtml(w.employeeId || 'EMP-00' + (idx+1))}</span>
+                                        <span class="text-black-50 mx-1">·</span>
+                                        <span>${escapeHtml(w.department || 'Maintenance')}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-shrink-0">${attBadge}</div>
+                        </div>
+                        <div class="worker-info-list mb-3">
+                            <div class="worker-info-row">
+                                <span class="worker-info-label"><i class="fa-solid fa-toolbox text-primary"></i>Trade</span>
+                                <span class="worker-info-val fw-bold text-dark text-truncate">${escapeHtml(w.department || 'Technician')}</span>
+                            </div>
+                            <div class="worker-info-row">
+                                <span class="worker-info-label"><i class="fa-regular fa-clock text-primary"></i>Shift</span>
+                                <span class="worker-info-val fw-semibold text-dark text-truncate">${escapeHtml(w.shift || 'General Shift')}</span>
+                            </div>
+                            <div class="worker-info-row">
+                                <span class="worker-info-label"><i class="fa-solid fa-stopwatch text-primary"></i>Clock In</span>
+                                <span class="worker-info-val font-monospace text-success fw-bold text-nowrap">
+                                    ${clockInStr} <span class="text-muted fw-normal small ms-1">(${escapeHtml(w.workingHours || '0m')})</span>
+                                </span>
+                            </div>
+                            <div class="worker-info-row">
+                                <span class="worker-info-label"><i class="fa-solid fa-signal text-primary"></i>Availability</span>
+                                <div class="worker-info-val">${availBadge}</div>
+                            </div>
+                            <div class="worker-info-row">
+                                <span class="worker-info-label"><i class="fa-solid fa-briefcase text-primary"></i>Current Task</span>
+                                <div class="worker-info-val text-truncate">${taskDisplay}</div>
+                            </div>
+                            <div class="worker-info-row">
+                                <span class="worker-info-label"><i class="fa-solid fa-envelope text-primary"></i>Email</span>
+                                <span class="worker-info-val font-monospace text-dark small text-truncate" title="${escapeHtml(w.email || '')}">${escapeHtml(w.email || 'worker@smartapartment')}</span>
+                            </div>
+                            <div class="worker-info-row bg-light rounded-2 px-2.5 py-1.5 mt-1 border-0">
+                                <span class="worker-info-label small"><i class="fa-solid fa-key text-primary"></i>Login Pass</span>
+                                <span class="worker-info-val font-monospace text-primary fw-bold small">password123</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto pt-2 border-top">
+                            <a href="/login?email=${encodeURIComponent(w.email || '')}" target="_blank"
+                                class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-semibold" style="font-size: 0.78rem;">
+                                <i class="fa-solid fa-right-to-bracket me-1"></i>Login as Worker
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join("");
     }
 
     // Worker Task Workflow APIs

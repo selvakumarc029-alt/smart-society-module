@@ -367,7 +367,7 @@ public class WorkerAttendanceService {
     @Transactional(readOnly = true)
     public List<ManagerWorkerAttendanceViewDto> listAttendances(LocalDate date, AppUser requester) {
         LocalDate targetDate = date != null ? date : LocalDate.now();
-        String tenantId = requester.getTenantId();
+        String tenantId = requester != null ? requester.getTenantId() : null;
 
         List<AppUser> workers;
         if (tenantId == null || "platform".equalsIgnoreCase(tenantId)) {

@@ -461,6 +461,7 @@
     syncNavigation();
 
     document.querySelectorAll("table").forEach(table => {
+        if (table.closest(".modal")) return;
         if (table.parentElement?.classList.contains("dashboard-table-scroll")) return;
         const wrapper = document.createElement("div");
         wrapper.className = "dashboard-table-scroll";

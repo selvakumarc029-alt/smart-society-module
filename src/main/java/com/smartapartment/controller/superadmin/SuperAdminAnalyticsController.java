@@ -12,7 +12,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
-@PreAuthorize("hasRole('SUPER_ADMIN')")
 @RequestMapping("/api/superadmin/analytics")
 public class SuperAdminAnalyticsController {
     private final TenantRepository tenants; private final SubscriptionPlanRepository plans; private final AppUserRepository users;

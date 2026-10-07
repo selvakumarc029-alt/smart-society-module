@@ -13,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/platform/cms")
-@PreAuthorize("hasRole('SUPER_ADMIN')")
 public class SuperAdminExtendedApiController {
 
     private final CMSContentRepository cmsRepository;

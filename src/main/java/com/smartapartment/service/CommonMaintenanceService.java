@@ -114,7 +114,8 @@ public class CommonMaintenanceService {
     private static String normalizeStatus(String value) {
         String normalized = text(value, "REQUESTED").trim().toUpperCase(Locale.ROOT).replace(' ', '_');
         return switch (normalized) {
-            case "REQUESTED", "ASSIGNED", "DISPATCHED", "IN_PROGRESS", "ON_HOLD", "RESOLVED", "INVOICED", "CLOSED", "CANCELLED" -> normalized;
+            case "PENDING", "OPEN", "REQUESTED" -> "REQUESTED";
+            case "ASSIGNED", "DISPATCHED", "IN_PROGRESS", "ON_HOLD", "RESOLVED", "INVOICED", "CLOSED", "CANCELLED" -> normalized;
             default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unsupported maintenance status");
         };
     }

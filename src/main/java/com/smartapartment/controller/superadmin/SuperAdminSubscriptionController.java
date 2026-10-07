@@ -30,7 +30,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
-@PreAuthorize("hasRole('SUPER_ADMIN')")
 @RequestMapping("/api/superadmin/subscriptions")
 public class SuperAdminSubscriptionController {
     private final SubscriptionBillingRuleRepository rules;

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@PreAuthorize("hasRole('SUPER_ADMIN')")
 @RequestMapping("/api/superadmin/finance")
 public class SuperAdminFinanceController {
     private final PaymentGatewayConfigRepository gateways;

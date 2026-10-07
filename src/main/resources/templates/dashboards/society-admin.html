@@ -1937,34 +1937,57 @@
                 <!-- Home Services & Pricing CRUD Management Panel -->
                                 <!-- Home Services & Pricing CRUD Management Panel (Resident Dashboard Card Model) -->
                 <section class="d-none animate__animated animate__fadeIn" data-view="home-services" id="home-services-panel" data-alt-view="service-pricing">
-                    <link rel="stylesheet" href="/smartapartment/css/service-category-cards.css?v=20261005-v1">
+                    <link rel="stylesheet" href="/smartapartment/css/service-category-cards.css?v=20261007-v5">
                     <style>
+                        .admin-category-cards-grid,
+                        #adminCategoryCardsGrid {
+                            display: grid !important;
+                            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+                            gap: 1.5rem !important;
+                            width: 100% !important;
+                            margin: 0 0 1.5rem 0 !important;
+                            padding: 0 !important;
+                            box-sizing: border-box !important;
+                        }
+                        .admin-category-cards-grid > .col-12,
+                        #adminCategoryCardsGrid > .col-12 {
+                            grid-column: 1 / -1 !important;
+                            width: 100% !important;
+                        }
+                        @media (max-width: 768px) {
+                            .admin-category-cards-grid,
+                            #adminCategoryCardsGrid {
+                                grid-template-columns: 1fr !important;
+                                gap: 1.15rem !important;
+                            }
+                        }
+                        .service-catalog-card-col {
+                            display: flex !important;
+                            flex-direction: column !important;
+                            min-width: 0 !important;
+                            height: 100% !important;
+                            box-sizing: border-box !important;
+                        }
+                        .superadmin-service-card,
                         .admin-service-card {
                             background: #ffffff !important;
-                            border: 1px solid #e2e8f0 !important;
-                            border-radius: 16px !important;
-                            padding: 1.15rem 0.85rem 0.95rem !important;
-                            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02) !important;
-                            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+                            border: 1.5px solid #e2e8f0 !important;
+                            border-radius: 20px !important;
+                            padding: 1.5rem 1.45rem 1.35rem 1.45rem !important;
+                            box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02) !important;
+                            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
                             position: relative !important;
                             display: flex !important;
                             flex-direction: column !important;
-                            align-items: center !important;
-                            text-align: center !important;
                             height: 100% !important;
+                            box-sizing: border-box !important;
+                            text-align: left !important;
                         }
+                        .superadmin-service-card:hover,
                         .admin-service-card:hover {
-                            transform: translateY(-3px) !important;
-                            box-shadow: 0 10px 22px -4px rgba(15, 23, 42, 0.1), 0 4px 8px -2px rgba(15, 23, 42, 0.04) !important;
+                            transform: translateY(-4px) !important;
+                            box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.09), 0 4px 14px -2px rgba(37, 99, 235, 0.1) !important;
                             border-color: #93c5fd !important;
-                        }
-                        .admin-price-badge-box {
-                            background: #f8fafc;
-                            border: 1px solid #e2e8f0;
-                            border-radius: 12px;
-                            padding: 8px 12px;
-                            width: 100%;
-                            margin-top: auto;
                         }
                     </style>
 
@@ -1994,8 +2017,8 @@
                         </div>
                     </div>
 
-                    <!-- 8 Core Service Categories Grid (Card View - EXACT SAME as Resident Dashboard) -->
-                    <div class="row g-2 g-md-3 mb-4" id="adminCategoryCardsGrid">
+                    <!-- 8 Core Service Categories Grid -->
+                    <div class="admin-category-cards-grid mb-4" id="adminCategoryCardsGrid">
                         <div class="col-12 text-center py-5">
                             <div class="spinner-border text-primary" role="status"></div>
                             <div class="text-muted small mt-2">Loading live service categories...</div>
@@ -2004,9 +2027,9 @@
 
                     <!-- Category Packages Modal for editing sub-packages -->
                     <div class="modal fade" id="categoryPackagesModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
                             <div class="modal-content rounded-4 border-0 shadow">
-                                <div class="modal-header border-0 pb-0 px-4 pt-4">
+                                <div class="modal-header border-bottom pb-3 px-4 pt-4">
                                     <div class="d-flex align-items-center gap-3">
                                         <div id="catModalIconWrapper" class="service-icon-circle service-circle-red" style="width: 44px; height: 44px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
                                             <i id="catModalIcon" class="fa-solid fa-house-chimney"></i>
@@ -2016,30 +2039,28 @@
                                             <span class="text-muted small" id="catModalSubtitle">Manage individual packages and rates</span>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-category-packages-close onclick="window.closeCategoryPackagesModal()" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body px-4 py-3">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover align-middle mb-0" style="font-size: 0.88rem;">
-                                            <thead class="table-light">
-                                                <tr>
-                                                    <th>Package</th>
-                                                    <th>Scope / Details</th>
-                                                    <th style="width: 150px;">Live Price (₹)</th>
-                                                    <th style="width: 120px;" class="text-end">Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="catModalTableBody">
-                                                <!-- Rows injected by JS -->
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                <div class="modal-body px-0 py-0">
+                                    <table class="table table-hover align-middle mb-0" style="font-size: 0.88rem; width: 100%;">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="padding-left: 1.5rem;">Package</th>
+                                                <th>Scope / Details</th>
+                                                <th style="width: 150px;">Live Price (₹)</th>
+                                                <th style="width: 120px; padding-right: 1.5rem;" class="text-end">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="catModalTableBody">
+                                            <!-- Rows injected by JS -->
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="modal-footer border-0 px-4 pb-4 pt-0 d-flex justify-content-between">
+                                <div class="modal-footer border-top px-4 py-3 d-flex justify-content-between">
                                     <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold" onclick="window.openAddPackageForCategoryModal()">
                                         <i class="fa-solid fa-plus me-1"></i> Add Package to Category
                                     </button>
-                                    <button type="button" class="btn btn-secondary rounded-pill btn-sm px-4 fw-bold" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary rounded-pill btn-sm px-4 fw-bold" data-bs-dismiss="modal" data-category-packages-close onclick="window.closeCategoryPackagesModal()">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -2048,14 +2069,14 @@
 
                 <!-- Add / Edit Service Package Modal -->
                 <div class="modal fade hidden" id="homeServicePackageModal" tabindex="-1" aria-labelledby="modalPackageTitle" aria-hidden="true" style="display: none !important; z-index: 1065;">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
                         <div class="modal-content rounded-4 border-0 shadow-lg">
                             <div class="modal-header border-bottom px-4 pt-4 pb-3">
                                 <div>
                                     <h5 class="modal-title fw-bold text-dark mb-0" id="modalPackageTitle">Add Service Package</h5>
                                     <p class="text-muted small mb-0">Changes save directly to the database and sync instantly to resident & customer dashboards.</p>
                                 </div>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" data-add-package-close onclick="window.closeAddPackageModal()" aria-label="Close"></button>
                             </div>
                             <div class="modal-body px-4 py-3">
                                 <form id="modalPackageForm" onsubmit="event.preventDefault(); window.savePackageModal();">
@@ -2139,7 +2160,7 @@
                                 </form>
                             </div>
                             <div class="modal-footer border-top px-4 py-3 bg-light d-flex justify-content-between">
-                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal" data-add-package-close onclick="window.closeAddPackageModal()">Cancel</button>
                                 <button type="button" class="btn btn-primary rounded-pill px-5 fw-bold shadow-sm" id="btnSavePackageModal" onclick="window.savePackageModal()">
                                     <i class="fa-solid fa-floppy-disk me-1"></i> Save Package
                                 </button>
@@ -2891,6 +2912,6 @@
 <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
 <script src="/smartapartment/js/gate-management.js?v=20260916-multigate-v1"></script>
-<script src="/smartapartment/js/home-services-pricing-admin.js"></script>
+<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261007-cards-v3"></script>
 </body>
 </html>

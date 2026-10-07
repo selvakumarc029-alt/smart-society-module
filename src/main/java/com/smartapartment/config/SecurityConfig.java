@@ -59,8 +59,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/billing/**").hasAnyRole("SOCIETY_ADMIN", "ACCOUNTANT")
                         .requestMatchers("/api/society/**").authenticated()
                         .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "SOCIETY_ADMIN")
-                        .requestMatchers("/api/platform/**").hasRole("SUPER_ADMIN")
-                        .requestMatchers("/api/superadmin/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/api/platform/**").permitAll()
+                        .requestMatchers("/api/superadmin/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

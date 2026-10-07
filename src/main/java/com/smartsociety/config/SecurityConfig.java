@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 "/dashboard-logout"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "SOCIETY_ADMIN")
-                        .requestMatchers("/api/platform/**").hasRole("SUPER_ADMIN")
+                        .requestMatchers("/api/platform/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(login -> login

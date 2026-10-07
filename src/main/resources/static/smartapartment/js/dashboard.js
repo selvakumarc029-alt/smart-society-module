@@ -50,7 +50,7 @@ const residentProfileStorageKey = "smartapartment-resident-profile:v1";
 const residentAdminInboxKey = "smartapartment-resident-admin-inbox:v1";
 const residentPaymentProofsKey = "smartapartment-resident-payment-proofs:v1";
 const rolePanelRoutes = {
-    superadmin: ["monitoring", "audit-logs", "societies", "subscriptions", "analytics"],
+    superadmin: ["monitoring", "audit-logs", "societies", "subscriptions"],
     admin: ["residents", "billing", "visitors", "complaints"],
     resident: ["maintenance", "billing", "pass", "services", "complaints", "amenities", "announcements", "deliveries", "profile"],
     security: ["entries", "pass", "visitors", "entries"],
@@ -512,54 +512,163 @@ const defaultSmartSocietyPlans = [
 ];
 
 function renderSubscriptionCatalogue(plans, tenants) {
+    if (typeof window !== "undefined" && typeof window.renderSubscriptionCatalogue === "function" && window.renderSubscriptionCatalogue !== renderSubscriptionCatalogue) {
+        return window.renderSubscriptionCatalogue(plans, tenants);
+    }
     const cards = document.getElementById("subscriptionPlanCards");
     const assignmentBody = document.getElementById("societyPlanAssignmentTable");
-    if (!assignmentBody) return;
-    let cataloguePlans = (plans || []).filter(plan => ["gold", "platinum", "diamond"].some(tier => String(plan.name || plan.planCode || "").toLowerCase().includes(tier)));
-    if (!cataloguePlans.length) {
-        cataloguePlans = defaultSmartSocietyPlans;
-        if (!window.platformPlans || !window.platformPlans.length) {
-            window.platformPlans = defaultSmartSocietyPlans;
+    
+    const rawPlans = (Array.isArray(plans) && plans.length > 0) 
+        ? plans 
+        : (window.platformPlans && window.platformPlans.length ? window.platformPlans : (window.defaultSmartSocietyPlans || defaultSmartSocietyPlans));
+        
+    const tierKeys = ["gold", "platinum", "diamond"];
+    const cataloguePlans = [];
+    
+    for (const tier of tierKeys) {
+        const matches = rawPlans.filter(p => 
+            (p.planCode && p.planCode.toLowerCase() === tier) ||
+            (p.name && p.name.toLowerCase().includes(tier))
+        );
+        if (matches.length > 0) {
+            matches.sort((a, b) => {
+                if (a.updatedAt && b.updatedAt) return b.updatedAt.localeCompare(a.updatedAt);
+                return (Number(b.id) || 0) - (Number(a.id) || 0);
+            });
+            cataloguePlans.push(matches[0]);
+        } else {
+            const def = (window.defaultSmartSocietyPlans || defaultSmartSocietyPlans || []).find(p => (p.planCode && p.planCode.toLowerCase() === tier) || (p.name && p.name.toLowerCase().includes(tier)));
+            if (def) cataloguePlans.push(def);
         }
     }
-    const money = value => `Rs. ${Number(value || 0).toLocaleString("en-IN")}`;
-    const featureLabels = plan => [
-        plan.complaintManagement && "Complaints", plan.announcementManagement && "Announcements",
-        plan.billingManagement && "Maintenance billing", plan.visitorManagement && "Visitor management",
-        plan.amenityBooking && "Amenity booking", plan.expenseManagement && "Expense approvals",
-        plan.analytics && "Advanced analytics", plan.paymentGateway && "Online payments",
-        plan.apiAccess && "API access", plan.prioritySupport && "Priority support"
-    ].filter(Boolean);
-    if (cards) cards.replaceChildren(...cataloguePlans.map((plan, index) => {
-        const card = document.createElement("article");
-        const depth = subscriptionTierDepth(plan);
-        const details = [
-            ["Flats", Number(plan.maxApartments || 0).toLocaleString("en-IN")],
-            ["Residents", Number(plan.maxResidents || 0).toLocaleString("en-IN")],
-            ["Audit history", `${plan.auditHistoryDays || 0} days`],
-            ["Administrators", Number(plan.maxAdmins || 0).toLocaleString("en-IN")],
-            ["Security staff", Number(plan.maxSecurityStaff || 0).toLocaleString("en-IN")],
-            ["Maintenance staff", Number(plan.maxMaintenanceStaff || 0).toLocaleString("en-IN")],
-            ["Storage", `${plan.storageGb || 0} GB`],
-            ["Support", String(plan.supportLevel || "Standard").replaceAll("_", " ")]
-        ].slice(0, depth.detailLimit);
-        card.className = `subscription-catalogue-card plan-${depth.key}${plan.featured ? " featured" : ""}`;
-        card.innerHTML = `<div class="subscription-catalogue-card__top"><span>${plan.featured ? "MOST POPULAR" : depth.label.toUpperCase()}</span><em class="${plan.active === false ? "is-inactive" : ""}">${plan.active === false ? "Inactive" : "Active"}</em></div><h4>${plan.name}</h4><p>${plan.description || "SmartSociety subscription plan"}</p><div class="subscription-price"><strong>${money(plan.monthlyPrice)}</strong><span>/ ${String(plan.billingCycle || "MONTHLY").toLowerCase()}</span></div><dl>${details.map(([label,value])=>`<div><dt>${label}</dt><dd>${value}</dd></div>`).join("")}</dl><ul>${featureLabels(plan).slice(0, depth.featureLimit).map(feature => `<li><i class="fa-solid fa-check"></i>${feature}</li>`).join("") || "<li>No additional modules enabled</li>"}</ul><button type="button" data-catalogue-plan-edit="${plan.id}"><i class="fa-solid fa-pen-to-square"></i>Edit ${plan.name} plan</button>`;
-        return card;
-    }));
+    
+    const extraPlans = rawPlans.filter(p => 
+        p.active !== false && 
+        p.planCode !== "PREMIUM" && 
+        !tierKeys.some(tier => 
+            (p.planCode && p.planCode.toLowerCase() === tier) ||
+            (p.name && p.name.toLowerCase().includes(tier))
+        )
+    );
+    cataloguePlans.push(...extraPlans);
+
     const planCount = document.getElementById("subscriptionPlanCount");
     if (planCount) planCount.textContent = cataloguePlans.length;
-    const planById = new Map((window.platformPlans || plans).map(plan => [String(plan.id), plan]));
-    let assigned = 0;
-    assignmentBody.replaceChildren(...tenants.map(tenant => {
-        const current = planById.get(String(tenant.subscriptionPlanId)); if (current) assigned++;
-        const row = document.createElement("tr"); row.dataset.tenantId = tenant.id;
-        const options = cataloguePlans.map(plan => `<option value="${plan.id}" ${String(plan.id) === String(tenant.subscriptionPlanId) ? "selected" : ""}>${plan.name}</option>`).join("");
-        row.innerHTML = `<td><strong>${tenant.societyName || "Unnamed society"}</strong><small>${tenant.contactEmail || "No contact email"}</small></td><td>${[tenant.city, tenant.state].filter(Boolean).join(", ") || "Not provided"}</td><td><span class="subscription-current-plan ${current ? `plan-${current.name.toLowerCase()}` : "unassigned"}">${current?.name || "Unassigned"}</span></td><td>${tenant.subscriptionStartedOn || "—"}</td><td>${tenant.subscriptionRenewsOn || "—"}</td><td><span class="subscription-assignment-status ${tenant.subscriptionStatus === "ACTIVE" ? "active" : ""}">${tenant.subscriptionStatus || "Not assigned"}</span></td><td><div class="subscription-assignment-control"><select aria-label="Select plan for ${tenant.societyName}"><option value="">Select plan</option>${options}</select><button type="button" data-assign-society-plan>Save</button></div></td>`;
-        return row;
-    }));
-    if (!tenants.length) { const row=document.createElement("tr");row.innerHTML='<td colspan="7" class="text-center text-muted py-5">No registered societies are available for subscription assignment.</td>';assignmentBody.appendChild(row); }
-    document.getElementById("assignedSocietyCount").textContent = assigned;
+
+    const money = value => `Rs. ${Number(value || 0).toLocaleString("en-IN")}`;
+    const escapeText = str => String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    if (cards) {
+        cards.replaceChildren(...cataloguePlans.map(plan => {
+            const card = document.createElement("article");
+            const nameLower = String(plan.name || plan.planCode || "").toLowerCase();
+            const tierKey = nameLower.includes("diamond") ? "diamond" : nameLower.includes("platinum") ? "platinum" : "gold";
+            const isFeatured = !!plan.featured || tierKey === "platinum";
+            
+            card.className = `subscription-catalogue-card plan-${tierKey}${isFeatured ? " featured" : ""}`;
+            
+            let tierTagHtml = '<span class="tier-tag tier-tag-gold"><i class="fa-solid fa-crown text-warning me-1"></i>ESSENTIAL TIER</span>';
+            let btnClass = "btn btn-outline-primary rounded-pill w-100 fw-bold btn-edit-plan";
+            
+            if (tierKey === "platinum") {
+                tierTagHtml = '<span class="tier-tag tier-tag-platinum"><i class="fa-solid fa-bolt me-1"></i>MOST POPULAR</span>';
+                btnClass = "btn btn-primary rounded-pill w-100 fw-bold shadow-sm btn-edit-plan";
+            } else if (tierKey === "diamond") {
+                tierTagHtml = '<span class="tier-tag tier-tag-diamond"><i class="fa-solid fa-gem text-info me-1"></i>ENTERPRISE TIER</span>';
+                btnClass = "btn btn-dark rounded-pill w-100 fw-bold btn-edit-plan";
+            }
+            
+            const statusHtml = plan.active === false
+                ? '<span class="status-tag text-secondary"><i class="fa-solid fa-circle-xmark text-danger me-1"></i>Inactive</span>'
+                : '<span class="status-tag"><i class="fa-solid fa-circle-check me-1"></i>Active</span>';
+
+            let featureItems = [];
+            if (tierKey === "gold") {
+                featureItems = [
+                    plan.visitorManagement !== false && "Visitor management",
+                    plan.billingManagement !== false && "Maintenance billing",
+                    plan.complaintManagement !== false && "Complaint management",
+                    plan.announcementManagement !== false && "Announcements"
+                ].filter(Boolean);
+            } else if (tierKey === "platinum") {
+                featureItems = [
+                    "Everything in Gold",
+                    plan.amenityBooking !== false && "Amenity booking",
+                    plan.expenseManagement !== false && "Expense approvals",
+                    plan.analytics !== false && "Advanced analytics",
+                    plan.prioritySupport !== false && "Priority support"
+                ].filter(Boolean);
+            } else {
+                featureItems = [
+                    "Everything in Platinum",
+                    plan.apiAccess !== false && "Custom API access",
+                    plan.prioritySupport !== false && "24/7 dedicated support",
+                    "Multi-society governance"
+                ].filter(Boolean);
+            }
+            
+            card.innerHTML = `
+                <div class="subscription-catalogue-card__top">
+                    ${tierTagHtml}
+                    ${statusHtml}
+                </div>
+                <h4>${escapeText(plan.name)}</h4>
+                <p class="plan-desc">${escapeText(plan.description || "SmartSociety subscription plan")}</p>
+                <div class="subscription-price">
+                    <strong>${money(plan.monthlyPrice)}</strong>
+                    <span>/ ${String(plan.billingCycle || "MONTHLY").toLowerCase()}</span>
+                </div>
+                <div class="subscription-specs-grid">
+                    <div class="subscription-spec-box"><dt>Flats</dt><dd>${Number(plan.maxApartments || 0).toLocaleString("en-IN")}</dd></div>
+                    <div class="subscription-spec-box"><dt>Residents</dt><dd>${Number(plan.maxResidents || 0).toLocaleString("en-IN")}</dd></div>
+                    <div class="subscription-spec-box"><dt>Storage</dt><dd>${plan.storageGb || 0} GB</dd></div>
+                    <div class="subscription-spec-box"><dt>Audit History</dt><dd>${plan.auditHistoryDays || 0} days</dd></div>
+                </div>
+                <ul class="subscription-feature-list">
+                    ${featureItems.map(f => `<li><i class="fa-solid fa-circle-check"></i>${escapeText(f)}</li>`).join("")}
+                </ul>
+                <button type="button" class="${btnClass}" data-catalogue-plan-edit="${plan.id}" onclick="openPlanEditorModal('${plan.id}')">
+                    <i class="fa-solid fa-pen-to-square me-1.5"></i>Edit ${escapeText(plan.name)}
+                </button>
+            `;
+            return card;
+        }));
+    }
+
+    if (assignmentBody) {
+        const tenantsList = Array.isArray(tenants) ? tenants : (window.platformTenants || []);
+        const planById = new Map(rawPlans.map(plan => [String(plan.id), plan]));
+        let assigned = 0;
+        if (tenantsList.length > 0) {
+            assignmentBody.replaceChildren(...tenantsList.map(tenant => {
+                const current = planById.get(String(tenant.subscriptionPlanId)); 
+                if (current) assigned++;
+                const row = document.createElement("tr"); 
+                row.dataset.tenantId = tenant.id;
+                const options = cataloguePlans.map(p => `<option value="${p.id}" ${String(p.id) === String(tenant.subscriptionPlanId) ? "selected" : ""}>${escapeText(p.name)}</option>`).join("");
+                row.innerHTML = `
+                    <td><strong>${escapeText(tenant.societyName || "Unnamed society")}</strong><br><small class="text-muted">${escapeText(tenant.contactEmail || "No contact email")}</small></td>
+                    <td>${escapeText([tenant.city, tenant.state].filter(Boolean).join(", ") || "Not provided")}</td>
+                    <td><span class="subscription-current-plan ${current ? `plan-${current.name.toLowerCase()}` : "unassigned"}">${escapeText(current?.name || "Unassigned")}</span></td>
+                    <td>${tenant.subscriptionStartedOn || "—"}</td>
+                    <td>${tenant.subscriptionRenewsOn || "—"}</td>
+                    <td><span class="badge ${tenant.subscriptionStatus === "ACTIVE" ? "bg-success" : "bg-secondary"}">${tenant.subscriptionStatus || "Not assigned"}</span></td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <select class="form-select form-select-sm" style="min-width: 140px;" aria-label="Select plan for ${escapeText(tenant.societyName)}">
+                                <option value="">Select plan</option>
+                                ${options}
+                            </select>
+                            <button type="button" class="btn btn-sm btn-outline-primary fw-bold" data-assign-society-plan>Save</button>
+                        </div>
+                    </td>
+                `;
+                return row;
+            }));
+        }
+        const assignedEl = document.getElementById("assignedSocietyCount");
+        if (assignedEl) assignedEl.textContent = assigned;
+    }
 }
 
 function renderOverviewPlanCards(plans) {
@@ -910,7 +1019,10 @@ async function loadPlatformBackendData(){
     try{
         const get=async p=>{const r=await fetch(`/api/${p}`,{headers:{Accept:"application/json"}});if(!r.ok)throw new Error("Platform data unavailable");return r.json();};
         const [overview,tenants,users, plans, roles, privacyReqs, gateways, monitoring, audit, subscriptions, analytics, sentNotices]=await Promise.all([
-            get("platform/overview"),get("platform/tenants"),get("platform/users"),get("platform/plans"),
+            get("platform/overview").catch(()=>({})),
+            get("platform/tenants").catch(()=>[]),
+            get("platform/users").catch(()=>[]),
+            get("platform/plans").catch(()=>defaultSmartSocietyPlans),
             get("superadmin/roles/list").catch(()=>[]),
             get("superadmin/data/privacy/requests").catch(()=>[]),
             get("superadmin/finance/payment-gateways").catch(()=>[]),
@@ -938,9 +1050,14 @@ async function loadPlatformBackendData(){
         const fill=(selector,items,rowBuilder)=>document.querySelectorAll(selector).forEach(table=>{const body=table;if(table.tagName==="TABLE") { const tb=table.tBodies[0]; if(tb) tb.replaceChildren(...items.map(rowBuilder)); } else { table.replaceChildren(...items.map(rowBuilder)); }});
         const td=(row,value)=>{const cell=document.createElement("td");cell.textContent=value??"";row.appendChild(cell);};
         const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,character=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);
-        const planById = new Map(plans.map(plan => [String(plan.id), plan]));
-        window.platformTenants = tenants;
-        window.platformUsers = users;
+        window.escapeHtml = escapeHtml;
+        const safePlans = (Array.isArray(plans) && plans.length > 0) ? plans : defaultSmartSocietyPlans;
+        const safeTenants = Array.isArray(tenants) ? tenants : [];
+        const planById = new Map(safePlans.map(plan => [String(plan.id), plan]));
+        window.platformPlans = safePlans;
+        window.platformTenants = safeTenants;
+        window.renderSubscriptionCatalogue = renderSubscriptionCatalogue;
+        window.defaultSmartSocietyPlans = defaultSmartSocietyPlans;
         window.platformBillingRules = subscriptions.rules || [];
         window.platformGateways = gateways || [];
         const noticeSocietySelect = document.getElementById("specificSociety");
@@ -966,7 +1083,14 @@ async function loadPlatformBackendData(){
             r.appendChild(c);
             return r;
         });
+        if (typeof window.syncSocietiesCardViews === "function") {
+            window.syncSocietiesCardViews(tenants);
+        }
         fill('table[data-table="users"]',users,u=>{const r=document.createElement("tr");r.dataset.userId=u.id;td(r,u.name);td(r,u.role);td(r,u.tenantId);td(r,u.locked?"Locked":"Active");const c=document.createElement("td");c.innerHTML=`<button type="button" class="btn btn-sm btn-outline-primary" data-platform-user-edit>Edit User</button>`;r.appendChild(c);return r;});
+        window.platformUsers = users || [];
+        if (typeof window.syncUsersCardViews === "function") {
+            window.syncUsersCardViews(users);
+        }
         window.platformPlans = plans;
         renderOverviewPlanCards(plans);
         renderSubscriptionCatalogue(plans, tenants);
@@ -974,6 +1098,9 @@ async function loadPlatformBackendData(){
         
         window.platformRolePolicies = roles;
         fill('#accessRolesTable', roles, ro=>{const r=document.createElement("tr");r.dataset.rolePolicyId=ro.id;td(r,ro.role);td(r,ro.permissions);const status=document.createElement("td");status.innerHTML=`<span class="badge ${ro.status==='Active'?'bg-success':'bg-secondary'}">${ro.status}</span>`;r.appendChild(status);const c=document.createElement("td");c.innerHTML="<button type='button' class='btn btn-sm btn-outline-primary' data-role-policy-edit>Edit</button>";r.appendChild(c);return r;});
+        if (typeof window.syncRolesCardViews === "function") {
+            window.syncRolesCardViews(roles);
+        }
         fill('#privacyRequestsTable', privacyReqs, p=>{const r=document.createElement("tr");r.dataset.privacyRequestId=p.id;td(r,`PRQ-${p.id}`);td(r,p.details);td(r,p.requestType);const status=document.createElement("td");status.innerHTML=`<span class="badge ${p.status==='Pending'?'bg-warning text-dark':p.status==='Processed'?'bg-success':'bg-secondary'}">${p.status}</span>`;r.appendChild(status);const c=document.createElement("td");c.innerHTML=p.status==='Pending'?"<button type='button' class='btn btn-sm btn-outline-danger' data-privacy-review>Review</button>":"<span class='small text-muted'>Completed</span>";r.appendChild(c);return r;});
         fill('#paymentGatewaysTable', gateways, g=>{const r=document.createElement("tr");r.dataset.gatewayId=g.id;td(r,g.providerName);td(r,g.environment || "Sandbox");const status=document.createElement("td");status.innerHTML=`<span class="badge ${g.active?'bg-success':'bg-secondary'}">${g.active?'Active':'Disabled'}</span>`;r.appendChild(status);td(r,g.transactionFee || "—");const c=document.createElement("td");c.innerHTML=`<button type="button" class="btn btn-sm btn-outline-primary" data-gateway-config>Configure</button>`;r.appendChild(c);return r;});
         
@@ -1057,6 +1184,10 @@ async function loadPlatformBackendData(){
                     td(row,localDate(payment.subscriptionStartedOn));td(row,localDate(payment.nextRenewalOn));return row;
                 }));
             }
+        }
+        window.platformSubscriptionPayments = subscriptionPayments;
+        if (typeof window.syncFinanceCardViews === "function") {
+            window.syncFinanceCardViews(subscriptionPayments);
         }
 
         window.platformAnalytics = analytics;
@@ -1619,7 +1750,7 @@ document.addEventListener("click",event=>{
     }
     else operation=Promise.reject(new Error(`Unsupported dashboard action: ${action}`));
     
-    operation.then(result=>{
+    operation.then(async result=>{
         if (action === "add-society") showToast(`✓ ${result.societyName || "Society"} added and ready for approval.`);
         if (action === "edit-society") showToast(`✓ ${result.societyName || "Society"} updated.`);
         if (action === "announcement-publish") {
@@ -1637,6 +1768,7 @@ document.addEventListener("click",event=>{
             const message=result.message || "Platform action completed.";
             showToast("✓ " + message);
             if("Notification" in window && Notification.permission === "granted") new Notification("SmartSociety alert sent", {body: message, icon: "/favicon.svg"});
+        }
         if (typeof loadPlatformBackendData === "function") {
             try { await loadPlatformBackendData(); } catch (e) { console.error(e); }
         }

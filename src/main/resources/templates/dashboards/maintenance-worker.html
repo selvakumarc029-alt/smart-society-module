@@ -5,13 +5,314 @@
 
 <body class="dashboard-body bg-light" data-platform="smartapartment" data-dashboard-role="maintenance-worker">
     <style>
+        /* ==========================================================================
+           WORKER DASHBOARD HIGH-CONTRAST & REFINED TYPOGRAPHY SYSTEM
+           ========================================================================== */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --dashboard-sidebar-width: 300px;
+            --dashboard-topbar-height: 72px;
+            --dashboard-content-gutter: 28px;
+        }
+
+        body.dashboard-body[data-dashboard-role="maintenance-worker"] {
+            height: 100dvh;
+            min-height: 100dvh;
+            overflow: hidden;
+            background: #f8fafc !important;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
+            text-rendering: optimizeLegibility !important;
+            color: #0f172a !important;
+        }
+
+        body.dashboard-body[data-dashboard-role="maintenance-worker"] .dashboard-layout {
+            height: 100dvh;
+            overflow: hidden;
+        }
+
+        body.dashboard-body[data-dashboard-role="maintenance-worker"] .main-content {
+            height: 100dvh;
+            overflow-y: auto !important;
+            overflow-x: hidden;
+            background: #f8fafc;
+        }
+
+        body.dashboard-body[data-dashboard-role="maintenance-worker"] .topbar {
+            height: var(--dashboard-topbar-height) !important;
+            min-height: var(--dashboard-topbar-height) !important;
+            max-height: var(--dashboard-topbar-height) !important;
+            padding: 0 var(--dashboard-content-gutter) !important;
+            background: #ffffff !important;
+            border-bottom: 1.5px solid #e2e8f0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1020 !important;
+            box-sizing: border-box !important;
+        }
+
+        .worker-page-title {
+            color: #0f172a !important;
+            font-size: 1.42rem !important;
+            font-weight: 850 !important;
+            letter-spacing: -0.025em !important;
+            margin: 0 !important;
+            line-height: 1.2 !important;
+        }
+
+        body.dashboard-body[data-dashboard-role="maintenance-worker"] .dashboard-container {
+            padding: 24px var(--dashboard-content-gutter) 40px !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Unified Status Pills in Topbar */
+        .topbar-status-cluster {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            flex-shrink: 0 !important;
+        }
+
+        #workerAttBadgeContainer,
+        #workerAvailBadgeContainer,
+        .worker-shift-pill {
+            display: inline-flex !important;
+            align-items: center !important;
+        }
+
+        #workerAttBadgeContainer .badge,
+        #workerAvailBadgeContainer .badge,
+        .worker-shift-pill {
+            height: 38px !important;
+            min-height: 38px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 7px !important;
+            padding: 0 16px !important;
+            font-size: 0.8rem !important;
+            font-weight: 800 !important;
+            border-radius: 9999px !important;
+            line-height: 1 !important;
+            vertical-align: middle !important;
+            box-sizing: border-box !important;
+            letter-spacing: 0.02em !important;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+        }
+
+        .worker-shift-pill {
+            background: #ffffff !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+
+        .worker-shift-pill span {
+            color: #475569 !important;
+            font-weight: 650 !important;
+        }
+
+        .worker-shift-pill strong {
+            color: #0f172a !important;
+            font-weight: 800 !important;
+        }
+
+        /* Control Cards */
+        .worker-control-card {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            padding: 1.5rem 1.75rem !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .worker-control-title {
+            color: #0f172a !important;
+            font-size: 1.25rem !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.02em !important;
+            margin: 0 !important;
+        }
+
+        .worker-control-desc {
+            color: #334155 !important;
+            font-size: 0.88rem !important;
+            line-height: 1.5 !important;
+            font-weight: 500 !important;
+            max-width: 560px !important;
+            margin: 0 !important;
+        }
+
+        .live-punch-badge {
+            background: #dbeafe !important;
+            color: #1e40af !important;
+            border: 1.5px solid #93c5fd !important;
+            font-weight: 800 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.03em !important;
+            padding: 0.2rem 0.65rem !important;
+            border-radius: 9999px !important;
+        }
+
+        .worker-section-card {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            padding: 1.5rem 1.75rem !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        .worker-section-title {
+            color: #0f172a !important;
+            font-size: 1.18rem !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.015em !important;
+            margin: 0 !important;
+        }
+
+        /* 2x2 Button Matrix with High Contrast & Clear Letters */
+        .duty-dock-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+        }
+
+        .duty-buttons-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 142px) !important;
+            gap: 10px 12px !important;
+            justify-content: end !important;
+        }
+
+        @media (max-width: 991px) {
+            .duty-dock-container {
+                width: 100% !important;
+                justify-content: stretch !important;
+            }
+            .duty-buttons-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                width: 100% !important;
+            }
+        }
+
+        .duty-action-btn {
+            font-family: inherit !important;
+            font-weight: 800 !important;
+            width: 100% !important;
+            height: 40px !important;
+            min-height: 40px !important;
+            padding: 0 0.9rem !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.02em !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.55rem !important;
+            border-radius: 9999px !important;
+            box-sizing: border-box !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            white-space: nowrap !important;
+        }
+
+        /* Enabled High-Contrast Buttons */
+        .btn-clock-in {
+            background: #059669 !important;
+            border: 1.5px solid #047857 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3) !important;
+        }
+        .btn-clock-in:hover:not(:disabled) {
+            background: #047857 !important;
+            border-color: #065f46 !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4) !important;
+        }
+
+        .btn-start-break {
+            background: #ffffff !important;
+            border: 2px solid #0284c7 !important;
+            color: #0284c7 !important;
+        }
+        .btn-start-break:hover:not(:disabled) {
+            background: #0284c7 !important;
+            color: #ffffff !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3) !important;
+        }
+
+        .btn-end-break {
+            background: #ffffff !important;
+            border: 2px solid #059669 !important;
+            color: #059669 !important;
+        }
+        .btn-end-break:hover:not(:disabled) {
+            background: #059669 !important;
+            color: #ffffff !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
+        }
+
+        .btn-clock-out {
+            background: #dc2626 !important;
+            border: 1.5px solid #b91c1c !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3) !important;
+        }
+        .btn-clock-out:hover:not(:disabled) {
+            background: #b91c1c !important;
+            border-color: #991b1b !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+        }
+
+        /* High-Contrast Legible Disabled States (No Faded Letters) */
+        .duty-action-btn:disabled {
+            opacity: 0.72 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
+        }
+
+        .btn-clock-in:disabled {
+            background: #d1fae5 !important;
+            border: 1.5px solid #a7f3d0 !important;
+            color: #065f46 !important;
+        }
+
+        .btn-start-break:disabled {
+            background: #f8fafc !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #475569 !important;
+        }
+
+        .btn-end-break:disabled {
+            background: #f8fafc !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #475569 !important;
+        }
+
+        .btn-clock-out:disabled {
+            background: #fee2e2 !important;
+            border: 1.5px solid #fecaca !important;
+            color: #991b1b !important;
+        }
+
+        /* 4 KPI Cards: High Contrast & High Legibility */
         .worker-kpi-card {
             background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
+            border: 1.5px solid #e2e8f0 !important;
             border-radius: 16px !important;
-            padding: 1.25rem 1.35rem !important;
+            padding: 1.3rem 1.45rem !important;
             box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05) !important;
-            transition: all 0.2s ease !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            min-height: 158px !important;
             height: 100% !important;
             display: flex !important;
             flex-direction: column !important;
@@ -21,39 +322,152 @@
         .worker-kpi-card:hover {
             transform: translateY(-2px) !important;
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08) !important;
-            border-color: #cbd5e1 !important;
+            border-color: #94a3b8 !important;
+        }
+
+        .kpi-header {
+            height: 38px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            margin-bottom: 0.25rem !important;
+        }
+
+        .kpi-label {
+            font-size: 0.74rem !important;
+            font-weight: 850 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.08em !important;
+            color: #1e293b !important;
         }
 
         .worker-stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1.1rem !important;
+            flex-shrink: 0 !important;
         }
 
-        .duty-action-btn {
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
-            font-weight: 700 !important;
-            padding: 0.65rem 1.4rem !important;
-            font-size: 0.88rem !important;
-            letter-spacing: 0.01em !important;
-            display: inline-flex !important;
+        .kpi-value-container {
+            height: 50px !important;
+            display: flex !important;
+            align-items: center !important;
+            margin: 0.15rem 0 !important;
+        }
+
+        .kpi-value-num {
+            font-size: 2.1rem !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
+            letter-spacing: -0.03em !important;
+        }
+
+        .kpi-value-blue {
+            color: #1d4ed8 !important;
+        }
+
+        .kpi-value-green {
+            color: #047857 !important;
+        }
+
+        .kpi-value-teal {
+            color: #0284c7 !important;
+        }
+
+        .kpi-value-text {
+            font-size: 1.45rem !important;
+            font-weight: 850 !important;
+            line-height: 1.2 !important;
+            letter-spacing: -0.02em !important;
+            color: #0f172a !important;
+        }
+
+        .kpi-footer {
+            padding-top: 0.75rem !important;
+            border-top: 1.5px solid #f1f5f9 !important;
+            margin-top: auto !important;
+            font-size: 0.82rem !important;
+            font-weight: 650 !important;
+            line-height: 1.2 !important;
+            color: #334155 !important;
+            display: flex !important;
             align-items: center !important;
             gap: 0.5rem !important;
-            transition: all 0.2s ease !important;
         }
 
-        .task-card-active {
-            border-left: 5px solid #f59e0b !important;
-            background: #ffffff !important;
-            border-radius: 18px !important;
-            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06) !important;
+        .kpi-footer i {
+            font-size: 0.9rem !important;
+            flex-shrink: 0 !important;
+        }
+
+        /* Compact Empty State Container */
+        .worker-empty-state {
+            background: #f8fafc !important;
+            border: 2px dashed #94a3b8 !important;
+            border-radius: 16px !important;
+            padding: 2.25rem 1.5rem !important;
+        }
+
+        .worker-empty-icon {
+            width: 52px !important;
+            height: 52px !important;
+            font-size: 1.35rem !important;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08) !important;
+            border: 1.5px solid #cbd5e1 !important;
+            color: #475569 !important;
+        }
+
+        .worker-empty-title {
+            color: #0f172a !important;
+            font-size: 1.05rem !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.01em !important;
+            margin-bottom: 0.35rem !important;
+        }
+
+        .worker-empty-desc {
+            color: #334155 !important;
+            font-size: 0.88rem !important;
+            line-height: 1.55 !important;
+            font-weight: 500 !important;
+            max-width: 500px !important;
+            margin: 0 auto !important;
+        }
+
+        /* Sidebar Nav Styles */
+        .sidebar-nav .nav-link {
+            margin: 3px 12px !important;
+            padding: 10px 14px !important;
+            border-radius: 12px !important;
+            font-weight: 650 !important;
+            font-size: 0.9rem !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            color: #e2e8f0 !important;
+            transition: all 0.2s ease !important;
+            text-decoration: none !important;
+        }
+        .sidebar-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #ffffff !important;
+        }
+        .sidebar-nav .nav-link.active {
+            background: #2563eb !important;
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4) !important;
+        }
+        .sidebar-nav .nav-link.active i {
+            color: #ffffff !important;
         }
     </style>
 
+    <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
     <div class="dashboard-layout">
         <!-- Sidebar Navigation -->
         <aside class="sidebar bg-dark text-white shadow-lg animate__animated animate__fadeInLeft" id="sidebar">
@@ -63,23 +477,23 @@
                 </span>
                 <h4 class="mb-0 fw-bold">Smart<span class="text-primary">Apartment</span></h4>
             </div>
-            <div class="px-3 py-3 border-bottom border-secondary text-center">
-                <div class="d-flex align-items-center gap-3 text-start px-2">
-                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 44px; height: 44px; font-size: 1.1rem;">
+            <div class="sidebar-user-profile-box px-3 py-3 border-bottom border-secondary">
+                <div class="d-flex align-items-center gap-3 p-2.5 rounded-3" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
+                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm flex-shrink-0" style="width: 42px; height: 42px; font-size: 1.1rem;">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
-                    <div style="min-width:0;">
-                        <strong class="d-block text-white text-truncate" id="workerSidebarName" th:text="${worker != null ? worker.fullName : 'Field Technician'}">Worker Name</strong>
-                        <span class="small text-info text-truncate d-block" id="workerSidebarTrade" th:text="${worker != null && worker.designation != null ? worker.designation : 'General Maintenance'}">Trade</span>
+                    <div style="min-width:0; flex: 1;">
+                        <strong class="d-block text-white text-truncate fw-bold" style="font-size: 0.95rem; letter-spacing: -0.01em;" id="workerSidebarName" th:text="${worker != null ? worker.fullName : 'Field Technician'}">Field Technician</strong>
+                        <div class="d-flex align-items-center justify-content-between gap-1 mt-1">
+                            <span class="text-info text-truncate small" style="font-size: 0.78rem; font-weight: 600;" id="workerSidebarTrade" th:text="${worker != null && worker.designation != null ? worker.designation : 'General Maintenance'}">General Maintenance</span>
+                            <span class="badge font-monospace flex-shrink-0" id="workerSidebarEmpId" th:text="${worker != null && worker.employeeId != null ? worker.employeeId : 'EMP-FIELD'}" style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.25); font-size: 0.68rem; padding: 0.2rem 0.5rem; letter-spacing: 0.04em;">EMP-FIELD</span>
+                        </div>
                     </div>
-                </div>
-                <div class="mt-2 text-start px-2">
-                    <span class="badge bg-secondary-subtle text-secondary border font-monospace small" id="workerSidebarEmpId" th:text="${worker != null && worker.employeeId != null ? worker.employeeId : 'EMP-FIELD'}">EMP-001</span>
                 </div>
             </div>
             <nav class="nav flex-column py-3 sidebar-nav" aria-label="Dashboard sections">
                 <a href="#duty" class="nav-link text-white active" data-panel="duty">
-                    <i class="fa-solid fa-user-clock me-2 text-primary"></i> Duty & Attendance
+                    <i class="fa-solid fa-user-clock me-2 text-primary"></i> Duty &amp; Attendance
                 </a>
                 <a href="#tasks" class="nav-link text-white" data-panel="tasks">
                     <i class="fa-solid fa-list-check me-2 text-warning"></i> My Assigned Tasks 
@@ -88,12 +502,12 @@
                 <a href="#history" class="nav-link text-white" data-panel="history">
                     <i class="fa-solid fa-clock-rotate-left me-2 text-info"></i> Completed History
                 </a>
-                <a href="/dashboards/maintenance" class="nav-link text-white" th:if="${session['dashboard:smartapartment:maintenance']}">
+                <a href="#command" class="nav-link text-white" data-panel="command">
                     <i class="fa-solid fa-gauge-high me-2 text-success"></i> Command Center
                 </a>
             </nav>
             <div class="sidebar-footer p-3 mt-auto border-top border-secondary text-center">
-                <a class="btn btn-outline-light w-100 rounded-pill" href="/dashboards/logout">
+                <a class="btn btn-outline-light w-100 rounded-pill" href="/dashboards/logout" style="font-weight: 700;">
                     <i class="fa-solid fa-sign-out-alt me-2"></i> Logout
                 </a>
             </div>
@@ -102,90 +516,123 @@
         <!-- Main Content Area -->
         <main class="main main-content">
             <!-- Topbar -->
-            <header class="topbar px-4 py-0 d-flex justify-content-between align-items-center animate__animated animate__fadeInDown">
-                <div class="d-flex align-items-center gap-3">
-                    <h3 class="mb-0 fw-bold text-dark" id="title">Worker Duty & Attendance</h3>
-                    <div id="workerAvailBadgeContainer" class="d-inline-block">
-                        <span class="badge bg-secondary text-white rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-circle-minus me-1"></i>OFFLINE</span>
-                    </div>
+            <header class="topbar d-flex justify-content-between align-items-center animate__animated animate__fadeInDown">
+                <div class="d-flex align-items-center">
+                    <h3 class="worker-page-title mb-0" id="title">Worker Duty &amp; Attendance</h3>
                 </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="text-end d-none d-sm-block">
-                        <span class="small text-muted d-block">Shift Assigned</span>
-                        <strong class="text-dark small" id="workerShiftLabel" th:text="${worker != null && worker.workShift != null ? worker.workShift : 'General Shift'}">General Shift</strong>
+                <div class="topbar-status-cluster">
+                    <div class="worker-shift-pill d-none d-sm-flex align-items-center gap-2 rounded-pill">
+                        <i class="fa-regular fa-clock text-primary"></i>
+                        <span>Shift:</span>
+                        <strong id="workerShiftLabel" th:text="${worker != null && worker.workShift != null ? worker.workShift : 'General Shift'}">General Shift</strong>
                     </div>
-                    <div id="workerAttBadgeContainer">
-                        <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5 fw-bold"><i class="fa-solid fa-power-off me-1"></i>OFFLINE</span>
+                    <div id="workerAttBadgeContainer" class="d-inline-flex align-items-center">
+                        <span class="badge bg-light text-muted border rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5"><i class="fa-solid fa-power-off"></i>OFFLINE</span>
+                    </div>
+                    <div id="workerAvailBadgeContainer" class="d-inline-flex align-items-center">
+                        <span class="badge bg-secondary text-white rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5"><i class="fa-solid fa-circle-minus"></i>OFFLINE</span>
                     </div>
                 </div>
             </header>
 
-            <div class="container-fluid p-4 dashboard-container">
+            <div class="container-fluid dashboard-container">
                 <!-- DUTY & ATTENDANCE PANEL -->
                 <section data-view="duty" id="viewDuty" class="animate__animated animate__fadeIn">
                     <!-- Duty & Attendance Control Card -->
-                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
-                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-                            <div>
-                                <h4 class="fw-bold mb-1 text-dark"><i class="fa-solid fa-fingerprint text-primary me-2"></i>Daily Attendance & Shift Tracker</h4>
-                                <p class="text-muted mb-0 small">Mark your attendance to become eligible for automated resident service task assignments.</p>
+                    <div class="worker-control-card" id="workerAttendanceControlBar">
+                        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-4">
+                            <!-- Left: Icon + Title & Description -->
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 52px; height: 52px; font-size: 1.4rem; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
+                                    <i class="fa-solid fa-fingerprint"></i>
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <h4 class="worker-control-title">Daily Attendance &amp; Shift Tracker</h4>
+                                        <span class="live-punch-badge">Live Punch</span>
+                                    </div>
+                                    <p class="worker-control-desc">Mark your attendance to receive automated resident service task assignments and track shift hours.</p>
+                                </div>
                             </div>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <button type="button" class="btn btn-success duty-action-btn rounded-pill shadow-sm" id="btnWorkerClockIn" onclick="window.workerClockIn()">
-                                    <i class="fa-solid fa-right-to-bracket"></i> Clock In
-                                </button>
-                                <button type="button" class="btn btn-outline-info duty-action-btn rounded-pill" id="btnWorkerStartBreak" onclick="window.workerStartBreak()" disabled>
-                                    <i class="fa-solid fa-mug-hot"></i> Start Break
-                                </button>
-                                <button type="button" class="btn btn-outline-success duty-action-btn rounded-pill" id="btnWorkerEndBreak" onclick="window.workerEndBreak()" disabled>
-                                    <i class="fa-solid fa-play"></i> End Break
-                                </button>
-                                <button type="button" class="btn btn-danger duty-action-btn rounded-pill shadow-sm" id="btnWorkerClockOut" onclick="window.workerClockOut()" disabled>
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Clock Out
-                                </button>
+                            <!-- Right: 2x2 Action Buttons Matrix in Clean Dock -->
+                            <div class="duty-dock-container flex-shrink-0">
+                                <div class="duty-buttons-grid">
+                                    <button type="button" class="btn duty-action-btn btn-clock-in" id="btnWorkerClockIn" onclick="window.workerClockIn()">
+                                        <i class="fa-solid fa-right-to-bracket"></i> <span>Clock In</span>
+                                    </button>
+                                    <button type="button" class="btn duty-action-btn btn-start-break" id="btnWorkerStartBreak" onclick="window.workerStartBreak()" disabled>
+                                        <i class="fa-solid fa-mug-hot"></i> <span>Start Break</span>
+                                    </button>
+                                    <button type="button" class="btn duty-action-btn btn-end-break" id="btnWorkerEndBreak" onclick="window.workerEndBreak()" disabled>
+                                        <i class="fa-solid fa-play"></i> <span>End Break</span>
+                                    </button>
+                                    <button type="button" class="btn duty-action-btn btn-clock-out" id="btnWorkerClockOut" onclick="window.workerClockOut()" disabled>
+                                        <i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Clock Out</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- 4-Column Hours Tracker Grid -->
-                        <div class="row g-3">
-                            <div class="col-sm-6 col-xl-3">
-                                <div class="worker-kpi-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="small fw-bold text-uppercase text-muted">Today's Work</span>
-                                        <div class="worker-stat-icon bg-primary-subtle text-primary"><i class="fa-solid fa-stopwatch"></i></div>
-                                    </div>
-                                    <strong class="fs-2 fw-bold text-primary d-block my-1" id="workerTodayHours">0m</strong>
-                                    <span class="small text-muted"><i class="fa-solid fa-circle-check text-success me-1"></i>Active shift session</span>
+                    <!-- 4-Column Hours Tracker Grid -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="worker-kpi-card">
+                                <div class="kpi-header">
+                                    <span class="kpi-label">Today's Work</span>
+                                    <div class="worker-stat-icon" style="background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe;"><i class="fa-solid fa-stopwatch"></i></div>
+                                </div>
+                                <div class="kpi-value-container">
+                                    <strong class="kpi-value-num kpi-value-blue" id="workerTodayHours">0m</strong>
+                                </div>
+                                <div class="kpi-footer">
+                                    <i class="fa-solid fa-circle-check text-success"></i>
+                                    <span>Active shift session</span>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-xl-3">
-                                <div class="worker-kpi-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="small fw-bold text-uppercase text-muted">Weekly Total</span>
-                                        <div class="worker-stat-icon bg-success-subtle text-success"><i class="fa-solid fa-calendar-week"></i></div>
-                                    </div>
-                                    <strong class="fs-2 fw-bold text-success d-block my-1" id="workerWeeklyHours">0m</strong>
-                                    <span class="small text-muted"><i class="fa-solid fa-calendar-check text-success me-1"></i>Current work week</span>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="worker-kpi-card">
+                                <div class="kpi-header">
+                                    <span class="kpi-label">Weekly Total</span>
+                                    <div class="worker-stat-icon" style="background: #d1fae5; color: #047857; border: 1px solid #a7f3d0;"><i class="fa-solid fa-calendar-week"></i></div>
+                                </div>
+                                <div class="kpi-value-container">
+                                    <strong class="kpi-value-num kpi-value-green" id="workerWeeklyHours">0m</strong>
+                                </div>
+                                <div class="kpi-footer">
+                                    <i class="fa-solid fa-calendar-check text-success"></i>
+                                    <span>Current work week</span>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-xl-3">
-                                <div class="worker-kpi-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="small fw-bold text-uppercase text-muted">Monthly Hours</span>
-                                        <div class="worker-stat-icon bg-info-subtle text-info"><i class="fa-solid fa-chart-line"></i></div>
-                                    </div>
-                                    <strong class="fs-2 fw-bold text-info d-block my-1" id="workerMonthlyHours">0m</strong>
-                                    <span class="small text-muted"><i class="fa-solid fa-bolt text-warning me-1"></i>Logged this month</span>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="worker-kpi-card">
+                                <div class="kpi-header">
+                                    <span class="kpi-label">Monthly Hours</span>
+                                    <div class="worker-stat-icon" style="background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;"><i class="fa-solid fa-chart-line"></i></div>
+                                </div>
+                                <div class="kpi-value-container">
+                                    <strong class="kpi-value-num kpi-value-teal" id="workerMonthlyHours">0m</strong>
+                                </div>
+                                <div class="kpi-footer">
+                                    <i class="fa-solid fa-bolt text-warning"></i>
+                                    <span>Logged this month</span>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-xl-3">
-                                <div class="worker-kpi-card">
-                                    <div class="d-flex align-items-center justify-content-between mb-2">
-                                        <span class="small fw-bold text-uppercase text-muted">Current Shift</span>
-                                        <div class="worker-stat-icon bg-warning-subtle text-warning"><i class="fa-solid fa-business-time"></i></div>
-                                    </div>
-                                    <strong class="fs-5 fw-bold text-dark d-block my-1" th:text="${worker != null && worker.workShift != null ? worker.workShift : 'General Shift'}">General Shift</strong>
-                                    <span class="small text-muted"><i class="fa-solid fa-shield-halved text-primary me-1"></i>Standard Schedule</span>
+                        </div>
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="worker-kpi-card">
+                                <div class="kpi-header">
+                                    <span class="kpi-label">Current Shift</span>
+                                    <div class="worker-stat-icon" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;"><i class="fa-solid fa-business-time"></i></div>
+                                </div>
+                                <div class="kpi-value-container">
+                                    <strong class="kpi-value-text" id="workerCardShiftName" th:text="${worker != null && worker.workShift != null ? worker.workShift : 'General Shift'}">General Shift</strong>
+                                </div>
+                                <div class="kpi-footer">
+                                    <i class="fa-solid fa-shield-halved text-primary"></i>
+                                    <span>Standard Schedule</span>
                                 </div>
                             </div>
                         </div>
@@ -195,44 +642,156 @@
                     <div id="workerActiveTaskBanner" class="mb-4" style="display:none;"></div>
 
                     <!-- Quick Task Queue Preview -->
-                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="fw-bold mb-0 text-dark"><i class="fa-solid fa-briefcase text-warning me-2"></i>My Incoming Work Orders</h5>
-                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="window.loadWorkerDashboardSummary()">
-                                <i class="fa-solid fa-rotate me-1"></i> Refresh Tasks
+                    <div class="worker-section-card">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2.5">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1rem; background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                </div>
+                                <h5 class="worker-section-title">My Incoming Work Orders</h5>
+                                <span class="badge rounded-pill px-2.5 py-1 small fw-bold" id="workerIncomingCountBadge" style="background: #f1f5f9; border: 1.5px solid #cbd5e1; color: #0f172a;">0 Pending</span>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3.5 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5" style="border-width: 1.5px;" onclick="window.loadWorkerDashboardSummary()">
+                                <i class="fa-solid fa-rotate"></i> <span>Refresh Tasks</span>
                             </button>
                         </div>
                         <div id="workerTasksQueuePreview" class="d-grid gap-3">
-                            <div class="text-center text-muted py-4"><i class="fa-solid fa-inbox fa-2x mb-2 d-block text-secondary"></i>No pending task assignments right now. Make sure you are Clocked In to receive auto-assigned resident service requests!</div>
+                            <div class="worker-empty-state text-center">
+                                <div class="worker-empty-icon rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3">
+                                    <i class="fa-solid fa-inbox"></i>
+                                </div>
+                                <h6 class="worker-empty-title">No Pending Task Assignments</h6>
+                                <p class="worker-empty-desc">
+                                    No pending task assignments right now. Make sure you are <strong>Clocked In</strong> to receive auto-assigned resident service requests!
+                                </p>
+                            </div>
                         </div>
+                        <!-- Synchronized container for module scripts -->
+                        <div id="workerPendingTasksList" style="display:none;"></div>
                     </div>
                 </section>
 
                 <!-- MY TASKS PANEL -->
                 <section data-view="tasks" id="viewTasks" class="d-none animate__animated animate__fadeIn">
-                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h4 class="fw-bold mb-1 text-dark">Assigned Maintenance Tasks</h4>
-                                <p class="text-muted small mb-0">Tasks auto-assigned based on your trade expertise, attendance, and workload.</p>
+                    <div class="worker-section-card">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; font-size: 1rem;">
+                                    <i class="fa-solid fa-list-check"></i>
+                                </div>
+                                <div>
+                                    <h4 class="fw-bold mb-0 text-dark" style="color: #0f172a !important;">Assigned Maintenance Tasks</h4>
+                                    <p class="text-muted small mb-0">Tasks auto-assigned based on your trade expertise, attendance, and workload.</p>
+                                </div>
                             </div>
-                            <button class="btn btn-outline-primary rounded-pill" onclick="window.loadWorkerDashboardSummary()">
-                                <i class="fa-solid fa-rotate me-2"></i>Refresh List
+                            <button class="btn btn-outline-primary rounded-pill px-3.5 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5" onclick="window.loadWorkerDashboardSummary()">
+                                <i class="fa-solid fa-rotate"></i> <span>Refresh List</span>
                             </button>
                         </div>
                         <div id="workerFullTasksList" class="d-grid gap-3">
-                            <div class="text-center text-muted py-5"><span class="spinner-border spinner-border-sm me-2"></span>Loading assigned tasks...</div>
+                            <div class="worker-empty-state text-center">
+                                <div class="worker-empty-icon rounded-circle bg-white shadow-xs d-inline-flex align-items-center justify-content-center mb-3">
+                                    <i class="fa-solid fa-list-check text-secondary"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important;">No Assigned Tasks</h6>
+                                <p class="text-muted small mb-0 mx-auto" style="max-width: 480px;">No maintenance requests assigned at this moment.</p>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <!-- COMPLETED HISTORY PANEL -->
                 <section data-view="history" id="viewHistory" class="d-none animate__animated animate__fadeIn">
-                    <div class="card shadow-sm border-0 rounded-4 p-4 mb-4 bg-white">
-                        <h4 class="fw-bold mb-1 text-dark">Completed Work Orders (History)</h4>
-                        <p class="text-muted small mb-4">Past maintenance tickets you have resolved and closed.</p>
+                    <div class="worker-section-card">
+                        <div class="d-flex align-items-center gap-2 mb-4">
+                            <div class="rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; font-size: 1rem;">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <div>
+                                <h4 class="fw-bold mb-0 text-dark" style="color: #0f172a !important;">Completed Work Orders (History)</h4>
+                                <p class="text-muted small mb-0">Past maintenance tickets you have resolved and closed.</p>
+                            </div>
+                        </div>
                         <div id="workerCompletedTasksList" class="d-grid gap-3">
-                            <div class="text-center text-muted py-5"><span class="spinner-border spinner-border-sm me-2"></span>Loading task history...</div>
+                            <div class="worker-empty-state text-center">
+                                <div class="worker-empty-icon rounded-circle bg-white shadow-xs d-inline-flex align-items-center justify-content-center mb-3">
+                                    <i class="fa-solid fa-check-double text-secondary"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important;">No Completed Tasks Yet</h6>
+                                <p class="text-muted small mb-0 mx-auto" style="max-width: 480px;">Completed maintenance jobs will appear here in your work order history.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- COMMAND CENTER PANEL -->
+                <section data-view="command" id="viewCommand" class="d-none animate__animated animate__fadeIn">
+                    <div class="worker-section-card mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                    <i class="fa-solid fa-gauge-high"></i>
+                                </div>
+                                <div>
+                                    <h4 class="fw-bold mb-0 text-dark" style="color: #0f172a !important;">Field Technician Command Center</h4>
+                                    <p class="text-muted small mb-0">Live dispatch status, supervisor radio channels, and quick field tools.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2 align-items-center">
+                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1.5 fw-bold">
+                                    <i class="fa-solid fa-satellite-dish me-1"></i> Live Dispatch Channel
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- 3-Column Command Status Cards -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="p-3.5 rounded-4 bg-light border border-slate-200 h-100">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small fw-bold text-uppercase text-muted">Radio &amp; Channel</span>
+                                        <span class="badge bg-primary-subtle text-primary rounded-pill">Channel #04</span>
+                                    </div>
+                                    <strong class="d-block text-dark fs-6 mb-1">Maintenance Ops Radio</strong>
+                                    <span class="small text-muted"><i class="fa-solid fa-signal text-success me-1"></i>Connected to central dispatch</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3.5 rounded-4 bg-light border border-slate-200 h-100">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small fw-bold text-uppercase text-muted">Field Supervisor</span>
+                                        <span class="badge bg-info-subtle text-info rounded-pill">On Duty</span>
+                                    </div>
+                                    <strong class="d-block text-dark fs-6 mb-1">Estate Operations Desk</strong>
+                                    <span class="small text-muted"><i class="fa-solid fa-phone me-1 text-primary"></i>Ext. 104 &bull; Gate Security Ext. 101</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="p-3.5 rounded-4 bg-light border border-slate-200 h-100">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="small fw-bold text-uppercase text-muted">Emergency Dispatch</span>
+                                        <span class="badge bg-warning-subtle text-dark rounded-pill">Automated</span>
+                                    </div>
+                                    <strong class="d-block text-dark fs-6 mb-1">SOS Priority Override</strong>
+                                    <span class="small text-muted"><i class="fa-solid fa-bell me-1 text-warning"></i>Active for gas, leak, lift &amp; power</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Action Toolkit -->
+                        <div class="border rounded-4 p-3.5 bg-white">
+                            <h6 class="fw-bold text-dark mb-3"><i class="fa-solid fa-toolbox text-primary me-2"></i>Field Action Toolkit</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="#tasks" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-2 fw-semibold" data-panel="tasks">
+                                    <i class="fa-solid fa-list-check me-1.5 text-warning"></i> View My Tasks
+                                </a>
+                                <a href="#duty" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-2 fw-semibold" data-panel="duty">
+                                    <i class="fa-solid fa-fingerprint me-1.5 text-primary"></i> Check Attendance &amp; Shift
+                                </a>
+                                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 py-2 fw-semibold" onclick="window.loadWorkerDashboardSummary && window.loadWorkerDashboardSummary()">
+                                    <i class="fa-solid fa-arrows-rotate me-1.5"></i> Refresh Dispatch Queue
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -259,7 +818,8 @@
                 const titles = {
                     'duty': 'Worker Duty & Attendance',
                     'tasks': 'My Assigned Tasks',
-                    'history': 'Completed Work Orders'
+                    'history': 'Completed Work Orders',
+                    'command': 'Worker Command Center'
                 };
                 const t = document.getElementById('title');
                 if (t && titles[panelName]) t.textContent = titles[panelName];

@@ -44,7 +44,6 @@ public class PlatformNoticeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public Map<String, Object> publish(@Valid @RequestBody PlatformNoticeRequest request) {
         Announcement notice = new Announcement();
         notice.setTenantId("platform");

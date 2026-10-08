@@ -13,7 +13,7 @@
         const trigger=event.target.closest('[data-detail-action], .apartment-card [data-action], [data-open-modal="post"]');
         if(!trigger) return;
         const action=trigger.dataset.detailAction || trigger.dataset.action || 'post';
-        if(!['shortlist','owner','contact','visit','report','post'].includes(action)) return;
+        if(!['shortlist','visit','report','post'].includes(action)) return;
         const card=trigger.closest('[data-listing-id]');
         const id=card?.dataset.listingId || new URLSearchParams(location.search).get('id');
         event.preventDefault();event.stopImmediatePropagation();

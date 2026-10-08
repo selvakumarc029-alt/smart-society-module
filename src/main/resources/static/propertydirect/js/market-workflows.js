@@ -265,7 +265,13 @@
     async function loadOwnerListings() {
         const body = document.getElementById("agentListingsBody") || document.getElementById("ownerListingsBody") || document.getElementById("vendorListingsBody");
         if (!body) return [];
-        const items = await api("/my-listings");
+        let items = [];
+        try {
+            items = await api("/my-listings");
+        } catch (e) {
+            console.warn("Could not load owner listings:", e);
+            items = [];
+        }
         ownerProperties.clear(); items.forEach(item => ownerProperties.set(String(item.id), item));
 
         // Populate listing dropdown for lead recording form
@@ -305,7 +311,7 @@
                     }
                     const portalBadge = `<span class="status-badge ${["APPROVED", "VERIFIED", "ACTIVE"].includes(statusNorm) ? "active" : statusNorm === "REJECTED" ? "closed" : "pending"}">${["APPROVED", "VERIFIED", "ACTIVE"].includes(statusNorm) ? "● Live on Portal" : statusNorm === "REJECTED" ? "● Offline / Rejected" : "● Pending Review"}</span>`;
 
-                    let actionHtml = '<div style="display: flex; gap: 6px; flex-wrap: wrap;">';
+                    let actionHtml = '<div style="display: inline-flex; gap: 8px; flex-wrap: nowrap; align-items: center; justify-content: flex-end;">';
                     if (["REJECTED", "CHANGES_REQUESTED"].includes(statusNorm)) {
                         actionHtml += `<button type="button" class="btn-primary" style="padding: 5px 10px; font-size: 0.78rem; background: #2563eb; color: #fff; border: none; border-radius: 6px; cursor: pointer;" data-property-api-action="edit-resubmit-listing" data-listing-id="${item.id}">Edit & Resubmit</button>`;
                     }
@@ -316,11 +322,11 @@
                     return `<tr data-listing-id="${item.id}">
                         <td><strong>${esc(code)}</strong></td>
                         <td><strong>${esc(item.title || 'Untitled Property')}</strong><br><small style="color: #64748b;">${esc(loc)}</small></td>
-                        <td>${esc(typeBhk)}</td>
-                        <td><strong style="color: #16a34a;">${currency(item.price)}</strong></td>
+                        <td style="white-space: nowrap;"><span style="font-weight: 600;">${esc(typeBhk)}</span></td>
+                        <td style="white-space: nowrap;"><strong style="color: #16a34a;">${currency(item.price)}</strong></td>
                         <td>${modBadge}</td>
                         <td>${portalBadge}</td>
-                        <td>${actionHtml}</td>
+                        <td style="white-space: nowrap; text-align: right;">${actionHtml}</td>
                     </tr>`;
                 }).join("");
             }
@@ -348,7 +354,13 @@
         const overviewBody = document.getElementById("agentOverviewLeadsBody");
         if (!leadsBody && !overviewBody) return [];
 
-        const items = await api("/agent/leads");
+        let items = [];
+        try {
+            items = await api("/agent/leads");
+        } catch (e) {
+            console.warn("Could not load agent enquiries:", e);
+            items = [];
+        }
 
         const stat = document.querySelector('[data-stat="leads"]');
         if (stat) stat.textContent = items.length;
@@ -943,7 +955,7 @@
         try {
             if (role === "customer") await Promise.all([searchListings(), loadSaved(), loadSavedSearches(), loadVisits(), loadServices()]);
             else if (role === "vendor" || role === "agent" || role === "admin" || role === "owner") {
-                await Promise.all([loadOwnerListings(), loadAgentEnquiries(), loadOwnerVisits()]);
+                await Promise.allSettled([loadOwnerListings().catch(e => console.warn(e)), loadAgentEnquiries().catch(e => console.warn(e)), loadOwnerVisits().catch(e => console.warn(e))]);
             }
             else if (role === "superadmin" || role === "admin") { ensureSuperadminGovernancePanel(); await loadSuperadminGovernance(); }
             document.documentElement.dataset.propertyBackendConnected = "true";

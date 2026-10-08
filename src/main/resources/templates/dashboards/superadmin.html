@@ -5,6 +5,32 @@
     <style>
         #sidebar {
             pointer-events: auto !important;
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow: hidden !important;
+        }
+        #sidebar .sidebar-nav {
+            flex: 1 1 auto !important;
+            min-height: 0 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            scrollbar-width: thin !important;
+            scrollbar-color: rgba(255, 255, 255, 0.35) transparent !important;
+            padding-bottom: 28px !important;
+        }
+        #sidebar .sidebar-nav::-webkit-scrollbar {
+            width: 6px !important;
+            display: block !important;
+        }
+        #sidebar .sidebar-nav::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.35) !important;
+            border-radius: 999px !important;
+        }
+        #sidebar .sidebar-footer {
+            flex-shrink: 0 !important;
+            margin-top: auto !important;
         }
         #sidebar .nav-link {
             pointer-events: auto !important;
@@ -294,6 +320,9 @@
             align-items: center !important;
             gap: 5px !important;
             cursor: pointer !important;
+            min-height: unset !important;
+            height: 28px !important;
+            line-height: 1 !important;
         }
 
         .superadmin-view-toggle button.active {
@@ -678,8 +707,8 @@
         .modal-footer .btn-light,
         .modal-footer .btn-secondary,
         .modal-footer .btn-outline-secondary,
-        [data-add-society-close],
-        [data-bs-dismiss="modal"] {
+        .modal-footer [data-add-society-close],
+        .modal-footer [data-bs-dismiss="modal"] {
             outline: none !important;
             outline-style: none !important;
             outline-width: 0 !important;
@@ -699,8 +728,8 @@
         .modal-footer .btn-light:hover,
         .modal-footer .btn-secondary:hover,
         .modal-footer .btn-outline-secondary:hover,
-        [data-add-society-close]:hover,
-        [data-bs-dismiss="modal"]:hover {
+        .modal-footer [data-add-society-close]:hover,
+        .modal-footer [data-bs-dismiss="modal"]:hover {
             outline: none !important;
             outline-style: none !important;
             background: #f1f5f9 !important;
@@ -716,12 +745,12 @@
         .modal-footer .btn-light:focus,
         .modal-footer .btn-light:focus-visible,
         .modal-footer .btn-light:active,
-        [data-add-society-close]:focus,
-        [data-add-society-close]:focus-visible,
-        [data-add-society-close]:active,
-        [data-bs-dismiss="modal"]:focus,
-        [data-bs-dismiss="modal"]:focus-visible,
-        [data-bs-dismiss="modal"]:active {
+        .modal-footer [data-add-society-close]:focus,
+        .modal-footer [data-add-society-close]:focus-visible,
+        .modal-footer [data-add-society-close]:active,
+        .modal-footer [data-bs-dismiss="modal"]:focus,
+        .modal-footer [data-bs-dismiss="modal"]:focus-visible,
+        .modal-footer [data-bs-dismiss="modal"]:active {
             outline: none !important;
             outline-style: none !important;
             outline-width: 0 !important;
@@ -731,6 +760,52 @@
             box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.28) !important;
             border-radius: 9999px !important;
             transform: translateY(0) scale(0.99) !important;
+        }
+
+        /* High-contrast and elegant Close (X) buttons for all modal headers */
+        .modal-header .btn-close,
+        .modal-header [data-bs-dismiss="modal"].btn-close,
+        .btn-close.btn-close-white,
+        .modal .btn-close {
+            width: 34px !important;
+            min-width: 34px !important;
+            max-width: 34px !important;
+            height: 34px !important;
+            min-height: 34px !important;
+            max-height: 34px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border-radius: 50% !important;
+            background: rgba(255, 255, 255, 0.22) url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/12px 12px no-repeat !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
+            opacity: 0.95 !important;
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            filter: none !important;
+            flex-shrink: 0 !important;
+        }
+
+        .modal-header .btn-close:hover,
+        .modal-header [data-bs-dismiss="modal"].btn-close:hover,
+        .btn-close.btn-close-white:hover,
+        .modal .btn-close:hover {
+            background: #ef4444 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e") center/12px 12px no-repeat !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4) !important;
+            opacity: 1 !important;
+            transform: rotate(90deg) scale(1.08) !important;
+        }
+
+        /* Prevent floating AI Helpdesk widget from obstructing modals */
+        body.modal-open .ai-helpdesk-toggle,
+        body.modal-open .ai-helpdesk {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transition: opacity 0.2s ease !important;
         }
 
         /* Prevent rectangular outlines on all modal containers and scrollable bodies */
@@ -2600,8 +2675,8 @@
             <div class="modal-content shadow-lg border-0 rounded-4 overflow-hidden">
                 <div class="modal-header border-0 px-4 px-md-5 py-3 text-white" style="background: linear-gradient(135deg, #2563eb, #4f46e5);">
                     <div class="d-flex align-items-center gap-3">
-                        <div class="rounded-circle bg-white bg-opacity-20 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.25rem;">
-                            <i class="fa-solid fa-building"></i>
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.25rem; background: rgba(255, 255, 255, 0.22); color: #ffffff;">
+                            <i class="fa-solid fa-building" style="color: #ffffff !important;"></i>
                         </div>
                         <div>
                             <div class="small text-white-50 text-uppercase fw-bold" style="letter-spacing: 0.5px;">Society Details</div>
@@ -2707,14 +2782,14 @@
                 </div>
                 <div class="modal-footer border-0 px-4 px-md-5 py-3 bg-white d-flex justify-content-between align-items-center">
                     <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-success rounded-pill px-3 fw-semibold" id="btnModalApproveSociety">
-                            <i class="fa-solid fa-circle-check me-1"></i>Approve Society
+                        <button type="button" class="btn btn-success rounded-pill px-3.5 py-1.5 fw-semibold shadow-xs" id="btnModalApproveSociety">
+                            <i class="fa-solid fa-circle-check me-1.5"></i>Approve Society
                         </button>
-                        <button type="button" class="btn btn-outline-danger rounded-pill px-3 fw-semibold" id="btnModalSuspendSociety">
-                            <i class="fa-solid fa-ban me-1"></i>Suspend Society
+                        <button type="button" class="btn btn-outline-danger rounded-pill px-3.5 py-1.5 fw-semibold" id="btnModalSuspendSociety">
+                            <i class="fa-solid fa-ban me-1.5"></i>Suspend Society
                         </button>
                     </div>
-                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary rounded-pill px-4 superadmin-cancel-btn" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -2722,10 +2797,18 @@
 
     <!-- Add Society Modal -->
     <div class="modal fade" id="addSocietyModal" tabindex="-1" aria-labelledby="addSocietyModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content shadow-lg rounded-4">
-                <div class="modal-header border-0 px-4 px-md-5 py-3">
-                    <div><div class="small text-white-50 text-uppercase fw-bold">Society onboarding</div><h5 class="modal-title fw-bold mb-0" id="addSocietyModalLabel">Create a complete society profile</h5></div>
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content shadow-lg rounded-4 overflow-hidden border-0">
+                <div class="modal-header border-0 px-4 px-md-5 py-3 text-white" style="background: linear-gradient(135deg, #2563eb, #4f46e5);">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.25rem; background: rgba(255, 255, 255, 0.22); color: #ffffff;">
+                            <i class="fa-solid fa-building-circle-check" style="color: #ffffff !important;"></i>
+                        </div>
+                        <div>
+                            <div class="small text-white-50 text-uppercase fw-bold" style="letter-spacing: 0.5px;">Society Onboarding</div>
+                            <h5 class="modal-title fw-bold mb-0 text-white" id="addSocietyModalLabel">Create a complete society profile</h5>
+                        </div>
+                    </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" data-add-society-close aria-label="Close"></button>
                 </div>
                 <form id="addSocietyForm">
@@ -3493,18 +3576,7 @@
                             <!-- Card Footer: Quick Action Buttons & Status Update -->
                             <div class="pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2 mt-auto" style="border-color: #f1f5f9 !important;">
                                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                                    <span class="small text-secondary fw-semibold" style="font-size: 0.78rem;">Quick status update:</span>
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <button type="button" class="btn btn-outline-warning btn-sm fw-semibold px-3 py-1 d-inline-flex align-items-center ${isPending ? 'active' : ''}" style="font-size: 0.76rem; gap: 8px;" onclick="updateSmartSocietyServiceRequestStatus(${ticket.id}, 'PENDING', this)">
-                                            <i class="fa-solid fa-clock me-1.5"></i><span>Pending</span>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-info btn-sm fw-semibold px-3 py-1 d-inline-flex align-items-center ${isInProgress ? 'active' : ''}" style="font-size: 0.76rem; gap: 8px;" onclick="updateSmartSocietyServiceRequestStatus(${ticket.id}, 'IN_PROGRESS', this)">
-                                            <i class="fa-solid fa-spinner me-1.5"></i><span>In Progress</span>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-success btn-sm fw-semibold px-3 py-1 d-inline-flex align-items-center ${isResolved ? 'active' : ''}" style="font-size: 0.76rem; gap: 8px;" onclick="updateSmartSocietyServiceRequestStatus(${ticket.id}, 'RESOLVED', this)">
-                                            <i class="fa-solid fa-circle-check me-1.5"></i><span>Resolved</span>
-                                        </button>
-                                    </div>
+                                    <span class="small text-secondary">Status is updated by the assigned maintenance worker.</span>
                                 </div>
                                 <div class="d-flex align-items-center gap-2">
                                     ${(ticket.requesterPhone || parsed.meta.phone) ? `
@@ -3552,16 +3624,7 @@
                             </td>
                             <td><span class="badge ${badgeCls}">${status.replace("_", " ")}</span></td>
                             <td>
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-pill px-3" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Update
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end shadow">
-                                        <li><a class="dropdown-item small" href="#" onclick="updateSmartSocietyServiceRequestStatus(${ticket.id}, 'IN_PROGRESS', this); return false;"><i class="fa-solid fa-spinner me-2 text-info"></i>In Progress</a></li>
-                                        <li><a class="dropdown-item small" href="#" onclick="updateSmartSocietyServiceRequestStatus(${ticket.id}, 'RESOLVED', this); return false;"><i class="fa-solid fa-check me-2 text-success"></i>Mark Resolved</a></li>
-                                        <li><a class="dropdown-item small" href="#" onclick="updateSmartSocietyServiceRequestStatus(${ticket.id}, 'PENDING', this); return false;"><i class="fa-solid fa-clock me-2 text-warning"></i>Set Pending</a></li>
-                                    </ul>
-                                </div>
+                                <span class="small text-muted">Worker updates status</span>
                             </td>
                         </tr>
                         ${ticket.description ? `<tr class="table-light"><td colspan="8" class="small text-muted py-2 px-4"><i class="fa-solid fa-quote-left me-2"></i><strong>Requirement:</strong> ${escapeText(ticket.description)}</td></tr>` : ''}
@@ -3592,52 +3655,6 @@
             renderSmartSocietyServiceRequests(filtered);
         }
 
-        async function updateSmartSocietyServiceRequestStatus(id, newStatus, btn) {
-            let originalHtml = "";
-            let btnGroup = null;
-            if (btn) {
-                originalHtml = btn.innerHTML;
-                btnGroup = btn.closest(".btn-group") || btn.closest(".dropdown") || btn.parentElement;
-                if (btnGroup) {
-                    btnGroup.querySelectorAll("button, a").forEach(b => {
-                        b.disabled = true;
-                        b.classList.add("disabled");
-                    });
-                }
-                btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true" style="width: 0.72rem; height: 0.72rem;"></span> Updating...`;
-            }
-
-            const targetStatus = (newStatus === "PENDING") ? "REQUESTED" : newStatus;
-
-            try {
-                const response = await fetch(`/api/maintenance/${id}/status`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json", Accept: "application/json" },
-                    body: JSON.stringify({ 
-                        ticketStatus: targetStatus, 
-                        vendorNotes: `Status updated to ${newStatus} by SuperAdmin.` 
-                    })
-                });
-                if (!response.ok) {
-                    const errJson = await response.json().catch(() => ({}));
-                    throw new Error(errJson.message || "Could not update status");
-                }
-                window.showToast(`✓ Ticket #${id} status updated to ${newStatus}.`);
-                await loadSmartSocietySuperAdminServiceRequests();
-            } catch (error) {
-                window.showToast(error.message || "Failed to update status.", true);
-                if (btn) {
-                    btn.innerHTML = originalHtml;
-                    if (btnGroup) {
-                        btnGroup.querySelectorAll("button, a").forEach(b => {
-                            b.disabled = false;
-                            b.classList.remove("disabled");
-                        });
-                    }
-                }
-            }
-        }
-        
         window.forceOpenPanel = function(panel) {
             if (!document.querySelector(`[data-view="${panel}"]`)) panel = "overview";
             console.log("Switching to panel: " + panel);
@@ -3697,7 +3714,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btnExportAnalytics')?.addEventListener('click', () => {
                 const data=window.platformAnalytics||{},k=data.kpis||{},o=data.operational||{};
-                const rows=[["SmartSociety Platform Analytics"],["Generated",data.generatedAt||new Date().toISOString()],[],["KEY PERFORMANCE INDICATORS"],["Metric","Current value"],["Monthly recurring revenue",k.mrr||0],["Active users",k.activeUsers||0],["Visitor records",k.visitorRecords||0],["Payment success rate",`${k.paymentSuccessRate||0}%`],["Average resolution time",`${k.averageResolutionHours||0} hours`],[],["OPERATIONAL TOTALS"],["Registered societies",o.registeredSocieties||0],["Gate / visitor records",o.gateEntries||0],["Maintenance requests",o.maintenanceRequests||0],["Open payment follow-ups",o.openPaymentFollowUps||0],[],["SOCIETY PERFORMANCE"],["Society","Plan","Active users","Collection rate","Open requests","Health"],...(data.societies||[]).map(item=>[item.society,item.plan,item.activeUsers,`${item.collectionRate}%`,item.openRequests,item.health]),[],["REVENUE AND COLLECTIONS"],["Month","Billed","Collected"],...(data.revenueTrend||[]).map(item=>[item.month,item.billed,item.collected])];
+                const rows=[ ["SmartSociety Platform Analytics"],["Generated",data.generatedAt||new Date().toISOString()],[],["KEY PERFORMANCE INDICATORS"],["Metric","Current value"],["Monthly recurring revenue",k.mrr||0],["Active users",k.activeUsers||0],["Visitor records",k.visitorRecords||0],["Payment success rate",`${k.paymentSuccessRate||0}%`],["Average resolution time",`${k.averageResolutionHours||0} hours`],[],["OPERATIONAL TOTALS"],["Registered societies",o.registeredSocieties||0],["Gate / visitor records",o.gateEntries||0],["Maintenance requests",o.maintenanceRequests||0],["Open payment follow-ups",o.openPaymentFollowUps||0],[],["SOCIETY PERFORMANCE"],["Society","Plan","Active users","Collection rate","Open requests","Health"],...(data.societies||[]).map(item=>[item.society,item.plan,item.activeUsers,`${item.collectionRate}%`,item.openRequests,item.health]),[],["REVENUE AND COLLECTIONS"],["Month","Billed","Collected"],...(data.revenueTrend||[]).map(item=>[item.month,item.billed,item.collected])];
                 const csv = rows.map(row => row.map(value => `\"${String(value).replaceAll('\"', '\"\"')}\"`).join(',')).join('\n');
                 const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); link.download = 'smartsociety-platform-analytics.csv'; link.click(); URL.revokeObjectURL(link.href);
                 showToast('✓ Detailed live analytics downloaded.');
@@ -3830,16 +3847,32 @@
                 }
                 setT("viewSocietyWings", society.totalWings ? `${society.totalWings} Blocks/Wings` : "Not specified");
                 setT("viewSocietyUnits", society.totalUnits ? `${society.totalUnits} Units/Flats` : "Not specified");
-                const badge = document.getElementById("viewSocietyStatusBadge");
-                if (badge) {
-                    if (society.approved) {
-                        badge.className = "badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-semibold";
-                        badge.textContent = "Approved & Active";
-                    } else {
-                        badge.className = "badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3 py-2 fw-semibold";
-                        badge.textContent = "Pending Approval";
+                const updateModalStatusUI = (isApproved) => {
+                    const badge = document.getElementById("viewSocietyStatusBadge");
+                    if (badge) {
+                        if (isApproved) {
+                            badge.className = "badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-semibold";
+                            badge.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i>Approved & Active';
+                        } else {
+                            badge.className = "badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-3 py-2 fw-semibold";
+                            badge.innerHTML = '<i class="fa-solid fa-clock me-1"></i>Pending / Suspended';
+                        }
                     }
-                }
+                    setT("viewSocietyApprovedText", isApproved ? "Approved & Active" : "Pending / Suspended");
+                    const approveBtn = document.getElementById("btnModalApproveSociety");
+                    const suspendBtn = document.getElementById("btnModalSuspendSociety");
+                    if (approveBtn && suspendBtn) {
+                        if (isApproved) {
+                            approveBtn.classList.add("d-none");
+                            suspendBtn.classList.remove("d-none");
+                        } else {
+                            approveBtn.classList.remove("d-none");
+                            suspendBtn.classList.add("d-none");
+                        }
+                    }
+                };
+
+                updateModalStatusUI(Boolean(society.approved));
                 setT("viewSocietyAddress", society.address || "No address entered");
                 setT("viewSocietyCity", society.city || "Not specified");
                 setT("viewSocietyState", society.state || "Not specified");
@@ -3860,7 +3893,6 @@
                 setT("viewSocietyAdminPhone", administrator?.phone || society.phone || "No phone registered");
                 const plan = (window.platformPlans || []).find(p => String(p.id) === String(society.subscriptionPlanId));
                 setT("viewSocietyPlan", plan ? plan.name : "Unassigned");
-                setT("viewSocietyApprovedText", society.approved ? "Approved" : "Pending");
                 setT("viewSocietyNotes", society.onboardingNotes || "No internal onboarding notes logged.");
                 const approveBtn = document.getElementById("btnModalApproveSociety");
                 const suspendBtn = document.getElementById("btnModalSuspendSociety");
@@ -3868,30 +3900,43 @@
                     approveBtn.onclick = async () => {
                         try {
                             approveBtn.disabled = true;
+                            approveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i>Approving...';
                             const res = await fetch(`/api/platform/tenants/${society.id}/approval?approved=true`, { method: "PATCH", headers: { Accept: "application/json" } });
                             if (!res.ok) throw new Error("Could not approve society");
                             society.approved = true;
-                            if (badge) { badge.className = "badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 fw-semibold"; badge.textContent = "Approved & Active"; }
-                            setT("viewSocietyApprovedText", "Approved");
+                            updateModalStatusUI(true);
                             showToast(`✓ ${society.societyName || "Society"} approved and activated.`);
-                            if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
+                            if (typeof window.syncSocietiesCardViews === "function") window.syncSocietiesCardViews();
+                            if (typeof window.loadPlatformBackendData === "function") await window.loadPlatformBackendData();
+                            else if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
                         } catch (err) { showToast(err.message || "Failed to approve society"); }
-                        finally { approveBtn.disabled = false; }
+                        finally {
+                            approveBtn.disabled = false;
+                            approveBtn.innerHTML = '<i class="fa-solid fa-circle-check me-1.5"></i>Approve Society';
+                        }
                     };
                 }
                 if (suspendBtn) {
                     suspendBtn.onclick = async () => {
+                        if (!window.confirm(`Are you sure you want to suspend "${society.societyName || 'this society'}"? Platform access will be paused.`)) {
+                            return;
+                        }
                         try {
                             suspendBtn.disabled = true;
+                            suspendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i>Suspending...';
                             const res = await fetch(`/api/platform/tenants/${society.id}/approval?approved=false`, { method: "PATCH", headers: { Accept: "application/json" } });
                             if (!res.ok) throw new Error("Could not suspend society");
                             society.approved = false;
-                            if (badge) { badge.className = "badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill px-3 py-2 fw-semibold"; badge.textContent = "Pending Approval"; }
-                            setT("viewSocietyApprovedText", "Pending");
+                            updateModalStatusUI(false);
                             showToast(`✓ ${society.societyName || "Society"} suspended.`);
-                            if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
+                            if (typeof window.syncSocietiesCardViews === "function") window.syncSocietiesCardViews();
+                            if (typeof window.loadPlatformBackendData === "function") await window.loadPlatformBackendData();
+                            else if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
                         } catch (err) { showToast(err.message || "Failed to suspend society"); }
-                        finally { suspendBtn.disabled = false; }
+                        finally {
+                            suspendBtn.disabled = false;
+                            suspendBtn.innerHTML = '<i class="fa-solid fa-ban me-1.5"></i>Suspend Society';
+                        }
                     };
                 }
                 if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
@@ -3974,7 +4019,9 @@
                     showToast(editing
                         ? `✓ ${created.societyName || name} profile updated.`
                         : `✓ ${created.societyName || name} created ${created.approved ? "and approved" : "with pending approval"}.`);
-                    loadPlatformBackendData();
+                    if (typeof window.loadPlatformBackendData === "function") await window.loadPlatformBackendData();
+                    else if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
+                    if (typeof window.syncSocietiesCardViews === "function") window.syncSocietiesCardViews();
                 } catch (error) {
                     showToast(error.message || `Unable to ${editing ? "update" : "create"} society`);
                 } finally {
@@ -4758,8 +4805,15 @@
             };
             const selectedRolePolicyChecks = containerId => [...document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`)].map(input => input.value).join(",");
             const closeRolePolicyModal = () => {
-                if (typeof bootstrap !== "undefined") bootstrap.Modal.getInstance(rolePolicyModal)?.hide();
-                else if (rolePolicyModal) { rolePolicyModal.style.display = "none"; rolePolicyModal.classList.remove("show"); document.body.classList.remove("role-policy-editor-open"); }
+                document.body.classList.remove("role-policy-editor-open");
+                const instance = typeof bootstrap !== "undefined" ? bootstrap.Modal.getInstance(rolePolicyModal) : null;
+                if (instance) instance.hide();
+                else if (rolePolicyModal) {
+                    rolePolicyModal.style.display = "none";
+                    rolePolicyModal.classList.remove("show");
+                    rolePolicyModal.setAttribute("aria-hidden", "true");
+                    rolePolicyModal.removeAttribute("aria-modal");
+                }
             };
             document.querySelectorAll("[data-role-policy-close]").forEach(button => button.addEventListener("click", closeRolePolicyModal));
             rolePolicyModal?.addEventListener("click", event => { if (event.target === rolePolicyModal) closeRolePolicyModal(); });
@@ -5016,23 +5070,75 @@
                 else if (modal) { modal.style.display = "block"; modal.classList.add("show"); }
             };
 
-            window.triggerSocietyAction = function(recordId, actionName) {
-                const tableRow = document.querySelector(`table[data-table="societies"] tr[data-record-id="${recordId}"]`);
-                if (tableRow) {
-                    const btn = tableRow.querySelector(`[data-backend-action="${actionName}"]`);
-                    if (btn) {
-                        btn.click();
+            window.triggerSocietyAction = async function(recordId, actionName, btnElement) {
+                const id = String(recordId);
+                const society = (window.platformTenants || []).find(item => String(item.id) === id);
+
+                if (actionName === "view-society") {
+                    if (!society) {
+                        showToast("Society details not found.");
                         return;
                     }
-                }
-                if (actionName === "view-society") {
-                    const society = (window.platformTenants || []).find(item => String(item.id) === String(recordId));
-                    if (society && typeof window.openSocietyViewer === "function") {
-                        const administrator = (window.platformUsers || []).find(user =>
-                            String(user.tenantId) === String(society?.tenantId) && ["SOCIETY_ADMIN", "FACILITY_MANAGER"].includes(String(user.role))
-                        );
+                    const administrator = (window.platformUsers || []).find(user =>
+                        String(user.tenantId) === String(society?.tenantId) && ["SOCIETY_ADMIN", "FACILITY_MANAGER"].includes(String(user.role))
+                    );
+                    if (typeof window.openSocietyViewer === "function") {
                         window.openSocietyViewer(society, administrator || null);
                     }
+                    return;
+                }
+
+                if (actionName === "approve-society") {
+                    const btn = btnElement || document.querySelector(`[data-record-id="${id}"] button[onclick*="approve-society"]`);
+                    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i>Approving...'; }
+                    try {
+                        const res = await fetch(`/api/platform/tenants/${id}/approval?approved=true`, {
+                            method: "PATCH",
+                            headers: { "Accept": "application/json" }
+                        });
+                        if (!res.ok) throw new Error("Could not approve society");
+                        if (society) society.approved = true;
+                        showToast(`✓ ${society?.societyName || "Society"} approved and activated.`);
+                        if (typeof window.syncSocietiesCardViews === "function") window.syncSocietiesCardViews();
+                        if (typeof window.loadPlatformBackendData === "function") await window.loadPlatformBackendData();
+                        else if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
+                    } catch (err) {
+                        showToast(err.message || "Failed to approve society");
+                    } finally {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fa-solid fa-circle-check me-1.5"></i>Approve';
+                        }
+                    }
+                    return;
+                }
+
+                if (actionName === "suspend-society") {
+                    if (!window.confirm(`Are you sure you want to suspend "${society?.societyName || 'this society'}"? Platform access will be paused.`)) {
+                        return;
+                    }
+                    const btn = btnElement || document.querySelector(`[data-record-id="${id}"] button[onclick*="suspend-society"]`);
+                    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1.5"></i>Suspending...'; }
+                    try {
+                        const res = await fetch(`/api/platform/tenants/${id}/approval?approved=false`, {
+                            method: "PATCH",
+                            headers: { "Accept": "application/json" }
+                        });
+                        if (!res.ok) throw new Error("Could not suspend society");
+                        if (society) society.approved = false;
+                        showToast(`✓ ${society?.societyName || "Society"} suspended. Platform access paused.`);
+                        if (typeof window.syncSocietiesCardViews === "function") window.syncSocietiesCardViews();
+                        if (typeof window.loadPlatformBackendData === "function") await window.loadPlatformBackendData();
+                        else if (typeof loadPlatformBackendData === "function") await loadPlatformBackendData();
+                    } catch (err) {
+                        showToast(err.message || "Failed to suspend society");
+                    } finally {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fa-solid fa-ban me-1.5"></i>Suspend';
+                        }
+                    }
+                    return;
                 }
             };
 
@@ -5064,19 +5170,60 @@
                     countBadge.textContent = `${itemsToRender.length} registered`;
                 }
 
+                const plans = window.platformPlans || window.defaultSmartSocietyPlans || [];
+                const planById = new Map(plans.map(p => [String(p.id), p]));
+
+                // Synchronize Table View Rows
+                if (tableBody && itemsToRender.length > 0) {
+                    tableBody.innerHTML = itemsToRender.map(t => {
+                        const planName = t.planName || planById.get(String(t.subscriptionPlanId))?.name || "Unassigned";
+                        const location = [t.city, t.state].filter(Boolean).join(", ") || t.city || "—";
+                        const isApproved = Boolean(t.approved);
+                        const statusBadge = isApproved
+                            ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Approved</span>'
+                            : '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-clock me-1"></i>Pending / Suspended</span>';
+                        
+                        const actionBtn = isApproved
+                            ? `<button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-1 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'suspend-society', this)" title="Suspend this society"><i class="fa-solid fa-ban me-1"></i>Suspend</button>`
+                            : `<button type="button" class="btn btn-sm btn-success rounded-pill px-2.5 py-1 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'approve-society', this)" title="Approve and activate society"><i class="fa-solid fa-check me-1"></i>Approve</button>`;
+
+                        return `
+                            <tr data-record-id="${t.id}">
+                                <td class="fw-bold text-dark">${t.societyName || "Unnamed Society"}</td>
+                                <td class="text-secondary">${location}</td>
+                                <td><span class="badge bg-light text-dark border fw-semibold">${planName}</span></td>
+                                <td>${statusBadge}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-1.5">
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'view-society', this)" title="View society details"><i class="fa-solid fa-eye me-1"></i>View</button>
+                                        ${actionBtn}
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+
+                // Synchronize Cards Grid
                 if (itemsToRender.length > 0) {
                     if (emptyState) emptyState.classList.add('d-none');
                     if (cardsGrid) {
                         cardsGrid.classList.remove('d-none');
-                        const plans = window.platformPlans || window.defaultSmartSocietyPlans || [];
-                        const planById = new Map(plans.map(p => [String(p.id), p]));
-
                         cardsGrid.innerHTML = itemsToRender.map(t => {
                             const planName = t.planName || planById.get(String(t.subscriptionPlanId))?.name || "Unassigned";
                             const location = [t.city, t.state].filter(Boolean).join(", ") || t.city || "Location not set";
-                            const statusBadge = t.approved
+                            const isApproved = Boolean(t.approved);
+                            const statusBadge = isApproved
                                 ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Approved</span>'
                                 : '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-clock me-1"></i>Pending</span>';
+
+                            const actionBtn = isApproved
+                                ? `<button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1 fw-bold" onclick="window.triggerSocietyAction('${t.id}', 'suspend-society', this)" title="Suspend this society">
+                                        <i class="fa-solid fa-ban me-1.5"></i>Suspend
+                                   </button>`
+                                : `<button type="button" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold shadow-xs" onclick="window.triggerSocietyAction('${t.id}', 'approve-society', this)" title="Approve and activate society">
+                                        <i class="fa-solid fa-circle-check me-1.5"></i>Approve
+                                   </button>`;
 
                             return `
                                 <div class="society-directory-card" data-record-id="${t.id}">
@@ -5112,16 +5259,11 @@
                                     </div>
 
                                     <div class="pt-2.5 border-top d-flex justify-content-between align-items-center gap-2 mt-auto" style="border-color: #f1f5f9 !important;">
-                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold" onclick="triggerSocietyAction('${t.id}', 'view-society')" title="View society details">
-                                            <i class="fa-solid fa-eye me-1"></i>View
+                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold" onclick="window.triggerSocietyAction('${t.id}', 'view-society', this)" title="View society details">
+                                            <i class="fa-solid fa-eye me-1.5"></i>View
                                         </button>
-                                        <div class="d-flex gap-1.5">
-                                            <button type="button" class="btn btn-sm ${t.approved ? 'btn-outline-success' : 'btn-success'} rounded-pill px-2.5 py-1 fw-bold" onclick="triggerSocietyAction('${t.id}', 'approve-society')" title="${t.approved ? 'Society is approved and active' : 'Approve and activate society'}">
-                                                <i class="fa-solid fa-check me-1"></i>Approve
-                                            </button>
-                                            <button type="button" class="btn btn-sm ${t.approved ? 'btn-outline-danger' : 'btn-outline-secondary'} rounded-pill px-2.5 py-1 fw-bold" onclick="triggerSocietyAction('${t.id}', 'suspend-society')" title="${t.approved ? 'Suspend this society' : 'Society is currently suspended'}">
-                                                <i class="fa-solid fa-ban me-1"></i>Suspend
-                                            </button>
+                                        <div>
+                                            ${actionBtn}
                                         </div>
                                     </div>
                                 </div>
@@ -5321,14 +5463,14 @@
 
                             return `
                                 <div class="role-policy-card" data-role-id="${ro.id}">
-                                    <div>
-                                        <div class="d-flex justify-content-between align-items-start mb-2.5 gap-2">
-                                            <div class="d-flex align-items-center gap-2.5 min-w-0">
+                                    <div class="role-policy-details">
+                                        <div class="role-policy-heading d-flex justify-content-between align-items-start mb-2.5 gap-2">
+                                            <div class="role-policy-identity d-flex align-items-center gap-2.5 min-w-0">
                                                 <div class="role-card-avatar" style="background: ${avatarBg} !important; color: ${avatarColor} !important; border-color: ${avatarBorder} !important;">
                                                     <i class="fa-solid ${icon}"></i>
                                                 </div>
                                                 <div class="text-truncate">
-                                                    <h5 class="fw-bold mb-0 text-dark text-truncate" style="font-size: 1.05rem; color: #0f172a !important;">${roleFormatted}</h5>
+                                                    <h5 class="role-policy-name fw-bold mb-0 text-dark" style="font-size: 1.05rem; color: #0f172a !important;">${roleFormatted}</h5>
                                                     <small class="text-secondary fw-semibold d-inline-flex align-items-center gap-1" style="font-size: 0.78rem; color: #64748b !important;">
                                                         <i class="fa-solid fa-fingerprint text-muted"></i>ID: #${ro.id || '—'}
                                                     </small>
@@ -5337,14 +5479,14 @@
                                             ${statusBadge}
                                         </div>
 
-                                        <div class="p-2.5 rounded-3 mb-2.5" style="background: #f8fafc; border: 1.5px solid #e2e8f0;">
+                                        <div class="role-policy-permissions p-2.5 rounded-3 mb-2.5" style="background: #f8fafc; border: 1.5px solid #e2e8f0;">
                                             <div class="small fw-semibold text-secondary mb-1" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: #64748b !important;">Permissions Level</div>
-                                            <div class="fw-bold text-dark text-truncate" style="font-size: 0.88rem; color: #1e293b !important;" title="${escapeHtml(ro.permissions || 'Standard access')}">
+                                            <div class="role-policy-description fw-bold text-dark" style="font-size: 0.88rem; color: #1e293b !important;" title="${escapeHtml(ro.permissions || 'Standard access')}">
                                                 ${escapeHtml(ro.permissions || "Standard access")}
                                             </div>
                                         </div>
 
-                                        <div class="d-flex flex-wrap gap-1.5 mb-2.5">
+                                        <div class="role-policy-badges d-flex flex-wrap gap-1.5 mb-2.5">
                                             <span class="badge bg-light text-secondary border px-2 py-1 fw-semibold" style="font-size: 0.72rem;">
                                                 <i class="fa-solid fa-globe me-1 text-primary"></i>${scope}
                                             </span>
@@ -5485,80 +5627,91 @@
                 }
             };
 
+            let isSyncingSuperadminCards = false;
+            const superadminCardSources = [];
             window.syncSuperadminCardViews = function() {
-                // Sync Societies, Users, Roles & Finance
-                window.syncSocietiesCardViews?.();
-                window.syncUsersCardViews?.();
-                window.syncRolesCardViews?.();
-                window.syncFinanceCardViews?.();
+                if (isSyncingSuperadminCards) return;
+                isSyncingSuperadminCards = true;
+                // A card refresh also rebuilds its source table. Do not observe our own writes.
+                superadminCardSources.forEach(({ observer }) => observer.disconnect());
+                try {
+                    // Sync Societies, Users, Roles & Finance
+                    window.syncSocietiesCardViews?.();
+                    window.syncUsersCardViews?.();
+                    window.syncRolesCardViews?.();
+                    window.syncFinanceCardViews?.();
 
-                // Sync Notices
-                const notices = window.platformSentNotices || [];
-                const noticesGrid = document.getElementById('platformNoticeCardsGrid');
-                if (noticesGrid && notices.length > 0) {
-                    noticesGrid.innerHTML = notices.map(notice => {
-                        const priorityLabel = notice.emergency ? "URGENT" : (notice.priority || "NORMAL");
-                        const priorityClass = notice.emergency ? "bg-danger text-white" : "bg-primary-subtle text-primary border border-primary-subtle";
-                        const sentAt = notice.createdAt ? new Date(notice.createdAt).toLocaleString("en-IN", {day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "—";
-                        return `
-                            <div class="platform-notice-card">
-                                <div>
-                                    <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
-                                        <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                                            <span class="badge bg-light text-dark border px-2 py-0.5 small fw-bold">${notice.category || "GENERAL"}</span>
-                                            <span class="badge ${priorityClass} px-2 py-0.5 small fw-bold">${priorityLabel}</span>
-                                        </div>
-                                        <small class="text-muted fw-semibold" style="font-size: 0.72rem;">${sentAt}</small>
-                                    </div>
-                                    <h5 class="fw-bold mb-1 text-dark" style="font-size: 0.98rem; color: #0f172a !important;">${notice.title || "Platform Notice"}</h5>
-                                    <p class="text-secondary small mb-3" style="font-size: 0.84rem; line-height: 1.45; color: #334155 !important;">${notice.message || ""}</p>
-                                </div>
-                                <div class="pt-2.5 border-top d-flex justify-content-between align-items-center gap-2 mt-auto" style="border-color: #f1f5f9 !important;">
-                                    <div class="small fw-semibold text-muted" style="font-size: 0.78rem;">
-                                        <i class="fa-solid fa-users me-1 text-primary"></i>${Number(notice.notifiedUsers || 0).toLocaleString()} users
-                                    </div>
-                                    <div class="d-flex gap-1.5">
-                                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-0.5 fw-bold text-nowrap" style="font-size: 0.75rem;" data-platform-notice-view="${notice.id}"><i class="fa-regular fa-eye me-1"></i>View</button>
-                                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-2.5 py-0.5 fw-bold text-nowrap" style="font-size: 0.75rem;" data-platform-notice-edit="${notice.id}"><i class="fa-solid fa-pen me-1"></i>Edit</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                }
-
-                // Sync Watchlist
-                const tableBody = document.getElementById('liveSocietyWatchlistTable');
-                const watchlistGrid = document.getElementById('liveSocietyWatchlistCardsGrid');
-                if (tableBody && watchlistGrid && tableBody.children.length > 0) {
-                    const rows = Array.from(tableBody.children);
-                    const validRows = rows.filter(r => r.children.length >= 5 && !r.textContent.includes('No societies') && !r.textContent.includes('No platform notices'));
-                    if (validRows.length > 0) {
-                        watchlistGrid.innerHTML = validRows.map(r => {
-                            const society = r.children[0]?.textContent?.trim() || "";
-                            const module = r.children[1]?.textContent?.trim() || "";
-                            const signal = r.children[2]?.textContent?.trim() || "Optimal";
-                            const owner = r.children[3]?.textContent?.trim() || "";
-                            const rule = r.children[4]?.textContent?.trim() || "";
+                    // Sync Notices
+                    const notices = window.platformSentNotices || [];
+                    const noticesGrid = document.getElementById('platformNoticeCardsGrid');
+                    if (noticesGrid && notices.length > 0) {
+                        noticesGrid.innerHTML = notices.map(notice => {
+                            const priorityLabel = notice.emergency ? "URGENT" : (notice.priority || "NORMAL");
+                            const priorityClass = notice.emergency ? "bg-danger text-white" : "bg-primary-subtle text-primary border border-primary-subtle";
+                            const sentAt = notice.createdAt ? new Date(notice.createdAt).toLocaleString("en-IN", {day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : "—";
                             return `
-                                <div class="society-watchlist-card">
+                                <div class="platform-notice-card">
                                     <div>
-                                        <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
-                                            <h6 class="fw-bold mb-0 text-dark" style="color: #0f172a !important; font-size: 0.98rem;"><i class="fa-solid fa-city text-primary me-1.5"></i>${society}</h6>
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small fw-bold">${signal}</span>
+                                        <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
+                                            <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                                                <span class="badge bg-light text-dark border px-2 py-0.5 small fw-bold">${notice.category || "GENERAL"}</span>
+                                                <span class="badge ${priorityClass} px-2 py-0.5 small fw-bold">${priorityLabel}</span>
+                                            </div>
+                                            <small class="text-muted fw-semibold" style="font-size: 0.72rem;">${sentAt}</small>
                                         </div>
-                                        <div class="mb-2">
-                                            <span class="badge bg-light text-dark border px-2 py-0.5 small fw-semibold" style="font-size: 0.72rem;">${module}</span>
-                                        </div>
+                                        <h5 class="fw-bold mb-1 text-dark" style="font-size: 0.98rem; color: #0f172a !important;">${notice.title || "Platform Notice"}</h5>
+                                        <p class="text-secondary small mb-3" style="font-size: 0.84rem; line-height: 1.45; color: #334155 !important;">${notice.message || ""}</p>
                                     </div>
-                                    <div class="pt-2 border-top mt-2 small" style="border-color: #f1f5f9 !important; color: #475569 !important; font-size: 0.78rem;">
-                                        <div><i class="fa-solid fa-user-tie me-1.5 text-secondary"></i>Owner: <strong>${owner}</strong></div>
-                                        <div class="mt-0.5"><i class="fa-solid fa-shield-halved me-1.5 text-secondary"></i>Rule: <strong>${rule}</strong></div>
+                                    <div class="pt-2.5 border-top d-flex justify-content-between align-items-center gap-2 mt-auto" style="border-color: #f1f5f9 !important;">
+                                        <div class="small fw-semibold text-muted" style="font-size: 0.78rem;">
+                                            <i class="fa-solid fa-users me-1 text-primary"></i>${Number(notice.notifiedUsers || 0).toLocaleString()} users
+                                        </div>
+                                        <div class="d-flex gap-1.5">
+                                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-0.5 fw-bold text-nowrap" style="font-size: 0.75rem;" data-platform-notice-view="${notice.id}"><i class="fa-regular fa-eye me-1"></i>View</button>
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-2.5 py-0.5 fw-bold text-nowrap" style="font-size: 0.75rem;" data-platform-notice-edit="${notice.id}"><i class="fa-solid fa-pen me-1"></i>Edit</button>
+                                        </div>
                                     </div>
                                 </div>
                             `;
                         }).join('');
                     }
+
+                    // Sync Watchlist
+                    const tableBody = document.getElementById('liveSocietyWatchlistTable');
+                    const watchlistGrid = document.getElementById('liveSocietyWatchlistCardsGrid');
+                    if (tableBody && watchlistGrid && tableBody.children.length > 0) {
+                        const rows = Array.from(tableBody.children);
+                        const validRows = rows.filter(r => r.children.length >= 5 && !r.textContent.includes('No societies') && !r.textContent.includes('No platform notices'));
+                        if (validRows.length > 0) {
+                            watchlistGrid.innerHTML = validRows.map(r => {
+                                const society = r.children[0]?.textContent?.trim() || "";
+                                const module = r.children[1]?.textContent?.trim() || "";
+                                const signal = r.children[2]?.textContent?.trim() || "Optimal";
+                                const owner = r.children[3]?.textContent?.trim() || "";
+                                const rule = r.children[4]?.textContent?.trim() || "";
+                                return `
+                                    <div class="society-watchlist-card">
+                                        <div>
+                                            <div class="d-flex justify-content-between align-items-start mb-2 gap-2">
+                                                <h6 class="fw-bold mb-0 text-dark" style="color: #0f172a !important; font-size: 0.98rem;"><i class="fa-solid fa-city text-primary me-1.5"></i>${society}</h6>
+                                                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small fw-bold">${signal}</span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <span class="badge bg-light text-dark border px-2 py-0.5 small fw-semibold" style="font-size: 0.72rem;">${module}</span>
+                                            </div>
+                                        </div>
+                                        <div class="pt-2 border-top mt-2 small" style="border-color: #f1f5f9 !important; color: #475569 !important; font-size: 0.78rem;">
+                                            <div><i class="fa-solid fa-user-tie me-1.5 text-secondary"></i>Owner: <strong>${owner}</strong></div>
+                                            <div class="mt-0.5"><i class="fa-solid fa-shield-halved me-1.5 text-secondary"></i>Rule: <strong>${rule}</strong></div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        }
+                    }
+                } finally {
+                    isSyncingSuperadminCards = false;
+                    superadminCardSources.forEach(({ observer, source }) => observer.observe(source, { childList: true, subtree: true }));
                 }
             };
 
@@ -5574,6 +5727,10 @@
             const ut = document.querySelector('table[data-table="users"] tbody');
             const rt = document.querySelector('#accessRolesTable tbody');
             const ft = document.querySelector('#subscriptionPaymentsTable tbody');
+            [ [noticeObserver, nt], [watchlistObserver, wt], [societiesObserver, st],
+                [usersObserver, ut], [rolesObserver, rt], [financeObserver, ft]].forEach(([observer, source]) => {
+                if (source) superadminCardSources.push({ observer, source });
+            });
             if (nt) noticeObserver.observe(nt, { childList: true, subtree: true });
             if (wt) watchlistObserver.observe(wt, { childList: true, subtree: true });
             if (st) societiesObserver.observe(st, { childList: true, subtree: true });
@@ -5586,6 +5743,6 @@
         });
     </script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261007-cards-v3"></script>
+<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261008-dialog-position-v4"></script>
 </body>
 </html>

@@ -727,19 +727,13 @@ public class AuthController {
 
                 customer.setTenantId("propertydirect");
 
-                customer.setName("agent".equalsIgnoreCase(activeCred.role()) ? "Property Owner"
-
-                        : "vendor".equalsIgnoreCase(activeCred.role()) ? "Property Owner"
-
-                        : "owner".equalsIgnoreCase(activeCred.role()) ? "Property Owner"
-
+                customer.setName("agent".equalsIgnoreCase(activeCred.role()) ? "Selva Kumar"
+                        : "vendor".equalsIgnoreCase(activeCred.role()) ? "Selva Kumar"
+                        : "owner".equalsIgnoreCase(activeCred.role()) ? "Selva Kumar"
                         : "customer".equalsIgnoreCase(activeCred.role()) ? "PropertyDirect Customer"
-
                         : "Property Direct Admin");
-
-                customer.setPhone("Not provided");
-
-                customer.setEmail(username.contains("@") ? username : username + "@propertydirect.local");
+                customer.setPhone("8778293269");
+                customer.setEmail(username.contains("@") ? (username.contains(".") ? username : username + ".in") : username + "@propertydirect.in");
 
                 customer.setUsername(username);
 

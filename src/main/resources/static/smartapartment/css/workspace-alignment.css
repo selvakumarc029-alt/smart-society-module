@@ -1,0 +1,283 @@
+/* SmartApartment only: retain each workspace's layout, colours and navigation. */
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) :is(.dashboard-container, .main-content, .content, [data-view], .card, .card-body, .table-responsive) {
+    min-width: 0;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) [data-view] > .row > [class*="col-"] {
+    min-width: 0;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) :is(.card-header.d-flex, .payment-proof-head) {
+    flex-wrap: wrap;
+    gap: 12px;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) :is(.card-header, .topbar) :is(h1, h2, h3, h4, h5, p) {
+    overflow-wrap: anywhere;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) :is(.table-responsive, .dashboard-table-scroll) {
+    max-width: 100%;
+    overscroll-behavior-x: contain;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) :is(input, select, textarea) {
+    min-width: 0;
+    max-width: 100%;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) .smart-record-dialog {
+    box-sizing: border-box;
+    width: min(960px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: auto;
+    color: #0f172a;
+    background: #fff;
+    box-shadow: 0 24px 80px #0f172a40;
+}
+.smart-record-dialog::backdrop { background: #0f172a80; }
+.smart-record-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.smart-record-fields label { min-width: 0; font-weight: 600; }
+.smart-record-fields :is(input, select, textarea) { margin-top: 6px; }
+.smart-record-fields textarea { min-height: 96px; resize: vertical; }
+.smart-record-fields .form-check-input { display: block; }
+.smart-record-toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; margin-bottom: 16px; }
+.smart-record-toolbar label { flex: 1 1 200px; min-width: 0; }
+.smart-record-dialog .btn { min-height: 40px; }
+.smart-record-dialog td { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+    body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) :is(.topbar, .card-header.d-flex) { flex-wrap: wrap; gap: 12px; }
+    body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) .smart-record-dialog { padding: 16px; }
+    .smart-record-fields { grid-template-columns: minmax(0, 1fr); }
+    .smart-record-toolbar > .btn { flex: 1 1 auto; }
+}
+
+body[data-platform="smartapartment"][data-dashboard-role="security"] :is(main, .workspace, .panel, .desk-grid > *) { min-width: 0; }
+body[data-platform="smartapartment"][data-dashboard-role="security"] :is(.heading, .console-bar) { flex-wrap: wrap; gap: 12px; }
+body[data-platform="smartapartment"] .tracking-topbar { flex-wrap: wrap; }
+@media (max-width: 600px) {
+    body[data-platform="smartapartment"][data-dashboard-role="security"] .topbar { height: auto; min-height: 60px; padding-top: 10px; padding-bottom: 10px; }
+}
+
+/* Dashboard headers grow with their controls instead of clipping at narrow widths. */
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role]:not([data-dashboard-role="security"]) .main-content .topbar {
+    height: auto !important;
+    min-height: 88px !important;
+    max-height: none !important;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] :is(.main, main, .dashboard-container, .card-header > *, .topbar > *) { min-width: 0; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] :is(.card-header, .topbar) :is(.btn-group, .input-group) { max-width: 100%; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .card-header .btn-group { flex-wrap: wrap; gap: 4px; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .modal-dialog { max-width: min(var(--bs-modal-width, 500px), calc(100vw - 24px)); }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .modal-content { min-width: 0; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .modal :is(.modal-header, .modal-footer) { flex-wrap: wrap; gap: 8px; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] :is(.table-responsive, .dashboard-table-scroll) { width: 100%; min-width: 0; overflow-x: auto; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] :is(.worker-info-val, .mgr-alerts-container) { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+    body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role]:not([data-dashboard-role="security"]) .main-content .topbar { min-height: 64px !important; }
+    body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .topbar :is(h1, h2) { font-size: clamp(1.15rem, 5vw, 1.5rem); }
+    body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .modal-footer > .btn { flex: 1 1 auto; }
+}
+body[data-platform="smartapartment"] .maintenance-asset-demo-dialog,
+body[data-platform="smartsociety"] .maintenance-asset-demo-dialog {
+    width: min(480px, calc(100vw - 24px));
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+}
+.maintenance-asset-demo-dialog::backdrop { background: rgb(15 23 42 / 55%); }
+
+/* Fractional spacing used by the dashboard templates, absent from Bootstrap. */
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="p-0.5"] { padding: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pt-0.5"] { padding-top: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pb-0.5"] { padding-bottom: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ps-0.5"] { padding-inline-start: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pe-0.5"] { padding-inline-end: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="px-0.5"] { padding-inline: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="py-0.5"] { padding-block: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="m-0.5"] { margin: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mt-0.5"] { margin-top: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mb-0.5"] { margin-bottom: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ms-0.5"] { margin-inline-start: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="me-0.5"] { margin-inline-end: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mx-0.5"] { margin-inline: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="my-0.5"] { margin-block: 0.125rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="p-1.5"] { padding: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pt-1.5"] { padding-top: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pb-1.5"] { padding-bottom: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ps-1.5"] { padding-inline-start: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pe-1.5"] { padding-inline-end: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="px-1.5"] { padding-inline: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="py-1.5"] { padding-block: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="m-1.5"] { margin: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mt-1.5"] { margin-top: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mb-1.5"] { margin-bottom: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ms-1.5"] { margin-inline-start: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="me-1.5"] { margin-inline-end: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mx-1.5"] { margin-inline: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="my-1.5"] { margin-block: 0.45rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="p-2.5"] { padding: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pt-2.5"] { padding-top: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pb-2.5"] { padding-bottom: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ps-2.5"] { padding-inline-start: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pe-2.5"] { padding-inline-end: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="px-2.5"] { padding-inline: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="py-2.5"] { padding-block: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="m-2.5"] { margin: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mt-2.5"] { margin-top: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mb-2.5"] { margin-bottom: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ms-2.5"] { margin-inline-start: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="me-2.5"] { margin-inline-end: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mx-2.5"] { margin-inline: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="my-2.5"] { margin-block: 0.65rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="p-3.5"] { padding: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pt-3.5"] { padding-top: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pb-3.5"] { padding-bottom: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ps-3.5"] { padding-inline-start: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="pe-3.5"] { padding-inline-end: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="px-3.5"] { padding-inline: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="py-3.5"] { padding-block: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="m-3.5"] { margin: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mt-3.5"] { margin-top: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mb-3.5"] { margin-bottom: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="ms-3.5"] { margin-inline-start: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="me-3.5"] { margin-inline-end: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="mx-3.5"] { margin-inline: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="my-3.5"] { margin-block: 0.9rem !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [class~="gap-0.5"] { gap: 0.125rem !important; }
+/* Keep card content and actions aligned even when role names wrap. */
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] #rolesCardsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    align-items: stretch;
+    gap: 20px;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-card {
+    padding: 22px !important;
+    min-width: 0;
+    min-height: 250px !important;
+    gap: 20px;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-heading {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-identity {
+    min-width: 0;
+    align-items: start !important;
+    gap: 12px !important;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-identity > .text-truncate {
+    min-width: 0;
+    overflow: visible;
+    white-space: normal;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] :is(.role-policy-name, .role-policy-description) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-permissions {
+    padding: 14px !important;
+    margin-bottom: 14px !important;
+    min-height: 82px;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-badges {
+    gap: 8px !important;
+    margin-bottom: 0 !important;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-badges .badge {
+    white-space: normal;
+    text-align: start;
+    line-height: 1.4;
+}
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] #rolePolicyModal .modal-dialog {
+    margin: 16px auto !important;
+    min-height: 0 !important;
+    height: calc(100dvh - 32px) !important;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] [data-view] {
+    scroll-margin-top: calc(var(--dashboard-topbar-height, 88px) + 20px);
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .card-header {
+    row-gap: 12px;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] :is(.card-header h3, .card-header h4, .card-header h5) {
+    line-height: 1.35;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] :is(.card-header, .topbar) .btn {
+    flex-shrink: 0;
+    white-space: normal;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role] .table :is(th, td) {
+    vertical-align: middle;
+}
+@media (max-width: 1100px) {
+    body[data-platform="smartapartment"][data-dashboard-role="superadmin"] #rolesCardsGrid { grid-template-columns: minmax(0, 1fr) !important; }
+}
+@media (max-width: 600px) {
+    body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-card { padding: 18px !important; }
+    body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-heading { grid-template-columns: minmax(0, 1fr); }
+    body[data-platform="smartapartment"][data-dashboard-role="superadmin"] .role-policy-heading > .badge { justify-self: start; }
+}
+/* Keep the inline price editor readable beside its save/cancel controls. */
+body[data-platform="smartapartment"][data-dashboard-role="superadmin"] #categoryPackagesModal .modal-body,
+body[data-platform="smartsociety"][data-dashboard-role="superadmin"] #categoryPackagesModal .modal-body {
+    overflow: auto !important;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role="superadmin"] #categoryPackagesModal table {
+    min-width: 760px;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role="superadmin"] #categoryPackagesModal :is(th, td):nth-child(3) {
+    width: 290px !important;
+    min-width: 290px;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role="superadmin"] #categoryPackagesModal [id^="pkgPriceEdit_"] {
+    gap: 8px !important;
+    flex-wrap: nowrap;
+    align-items: center !important;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role="superadmin"] #categoryPackagesModal [id^="pkgPriceInput_"] {
+    flex: 0 0 140px !important;
+    width: 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    height: 44px !important;
+    padding: 8px 12px !important;
+    font-size: 1rem;
+    text-align: left !important;
+}
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"])[data-dashboard-role="superadmin"] #categoryPackagesModal [id^="pkgPriceEdit_"] button {
+    flex: 0 0 40px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Staff form: prevent Bootstrap percentage widths shrinking CSS grid cells. */
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm { display:grid !important; grid-template-columns:repeat(12,minmax(0,1fr)); gap:20px !important; margin:20px 0 24px !important; padding:24px !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm > [class*="col-"] { width:100% !important; max-width:none !important; min-width:0; margin:0 !important; padding:0 !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm > .col-md-3 { grid-column:span 3; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm > .col-md-4 { grid-column:span 4; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm > .col-md-2 { grid-column:span 2; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm > .col-12 { grid-column:1 / -1; flex-wrap:wrap; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm .form-label { display:block; margin-bottom:8px; line-height:1.4; color:#334155; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm :is(input,select) { width:100% !important; max-width:none !important; min-width:0 !important; height:48px !important; box-sizing:border-box; padding:10px 12px !important; border-radius:10px; font-size:16px; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm .detailed-form-section { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; padding:12px 0 !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staff .table-responsive { overflow-x:auto; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staff table { min-width:900px; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staff :is(th,td) { padding:16px !important; vertical-align:middle; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) [data-view="complaints"] .status:is(.resolved,.progress,.status-resolved,.status-progress) { color:#fff !important; opacity:1 !important; font-weight:700; min-height:36px; padding:8px 16px !important; border-radius:999px; white-space:nowrap; display:inline-flex; align-items:center; gap:8px; line-height:1.25; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) [data-view="complaints"] .status:is(.resolved,.status-resolved) { background:#15803d !important; border:1px solid #166534 !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) [data-view="complaints"] .status:is(.progress,.status-progress) { background:#1d4ed8 !important; border:1px solid #1e40af !important; }
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) [data-view="complaints"] .status:is(.resolved,.progress,.status-resolved,.status-progress)::before { background:currentColor !important; opacity:1 !important; }
+@media(max-width:1100px) { body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm > :is(.col-md-2,.col-md-3,.col-md-4) { grid-column:span 6; } }
+@media(max-width:640px) { body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm { padding:16px !important; gap:16px !important; } body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) #staffForm > [class*="col-"] { grid-column:1 / -1; } }
+
+body:is([data-platform="smartapartment"], [data-platform="smartsociety"]) [data-view="complaints"] .status:is(.resolved,.progress,.status-resolved,.status-progress) .status-dot { background: currentColor !important; opacity: 1 !important; }

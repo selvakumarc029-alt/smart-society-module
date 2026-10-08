@@ -569,17 +569,57 @@
       white-space: nowrap !important;
     }
 
+    /* Responsive Table Sliding System */
+    .table-responsive,
+    html body.app-dashboard[data-platform="propertydirect"] .dash-card.table-card .table-responsive,
+    .owner-main .dash-card.table-card .table-responsive {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      -webkit-overflow-scrolling: touch !important;
+      touch-action: pan-x pan-y !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 0 0 4px 0 !important;
+      scrollbar-width: thin !important;
+      scrollbar-color: #94a3b8 #f1f5f9 !important;
+    }
+
+    .table-responsive::-webkit-scrollbar {
+      height: 9px !important;
+      display: block !important;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+      background: #f1f5f9 !important;
+      border-radius: 6px !important;
+      margin: 0 16px !important;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+      background: #94a3b8 !important;
+      border-radius: 6px !important;
+      border: 2px solid #f1f5f9 !important;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+      background: #64748b !important;
+    }
+
     /* Data Table - Pixel-perfect 24px left and right gutters matching card-head */
     .data-table {
       width: 100% !important;
+      min-width: 980px !important;
       border-collapse: collapse !important;
       font-size: 0.88rem !important;
       box-sizing: border-box !important;
+      table-layout: auto !important;
     }
 
     .data-table th {
       text-align: left !important;
-      padding: 13px 14px !important;
+      padding: 14px 16px !important;
       font-weight: 700 !important;
       color: var(--pd-text-muted, #64748b) !important;
       border-bottom: 1px solid var(--pd-border, #e2e8f0) !important;
@@ -592,15 +632,29 @@
     }
 
     .data-table td {
-      padding: 14px 14px !important;
+      padding: 14px 16px !important;
       border-bottom: 1px solid #f1f5f9 !important;
       color: var(--pd-text-primary, #0f172a) !important;
       font-size: 0.88rem !important;
       vertical-align: middle !important;
+      white-space: nowrap !important;
+    }
+
+    /* Title & Location Column: allow clean multiline without splitting words */
+    .data-table td:nth-child(2) {
+      white-space: normal !important;
+      min-width: 190px !important;
+      max-width: 270px !important;
+      word-break: normal !important;
+      overflow-wrap: break-word !important;
     }
 
     .data-table tr:last-child td {
       border-bottom: none !important;
+    }
+
+    .data-table tr:hover td {
+      background: rgba(248, 250, 252, 0.75) !important;
     }
 
     /* First column aligns with title text at exactly 24px from left card edge */
@@ -1072,21 +1126,23 @@
               <button class="btn-secondary" onclick="switchTab('leads')">View All Leads &rsaquo;</button>
             </div>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Lead Ref</th>
-                <th>Client Name &amp; Contact</th>
-                <th>Interested Property</th>
-                <th>Inquiry Type / Budget</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="agentOverviewLeadsBody">
-              <!-- Populated dynamically by market-workflows.js -->
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Lead Ref</th>
+                  <th>Client Name &amp; Contact</th>
+                  <th>Interested Property</th>
+                  <th>Inquiry Type / Budget</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="agentOverviewLeadsBody">
+                <!-- Populated dynamically by market-workflows.js -->
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <!-- Quick Actions Row -->
@@ -1131,22 +1187,24 @@
             </div>
             <button class="btn-primary" onclick="switchTab('post-listing')">+ Create New Listing</button>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Property ID</th>
-                <th>Title &amp; Location</th>
-                <th>Type / BHK</th>
-                <th>Asking Price</th>
-                <th>Moderation / RERA</th>
-                <th>Portal Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="agentListingsBody">
-              <!-- Populated dynamically by market-workflows.js from /api/property/my-listings -->
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Property ID</th>
+                  <th>Title &amp; Location</th>
+                  <th>Type / BHK</th>
+                  <th>Asking Price</th>
+                  <th>Moderation / RERA</th>
+                  <th>Portal Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="agentListingsBody">
+                <!-- Populated dynamically by market-workflows.js from /api/property/my-listings -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -1365,22 +1423,24 @@
             </div>
             <button class="btn-primary" onclick="openAgentLeadModal()">+ Record New Lead</button>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Lead Ref</th>
-                <th>Client Name &amp; Contact</th>
-                <th>Interested Property</th>
-                <th>Inquiry Type / Budget</th>
-                <th>Received Date</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="agentLeadsBody">
-              <!-- Populated dynamically by market-workflows.js -->
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Lead Ref</th>
+                  <th>Client Name &amp; Contact</th>
+                  <th>Interested Property</th>
+                  <th>Inquiry Type / Budget</th>
+                  <th>Received Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="agentLeadsBody">
+                <!-- Populated dynamically by market-workflows.js -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -1394,21 +1454,23 @@
             </div>
             <button class="btn-primary" type="button" data-property-api-action="refresh-owner-visits">Refresh Visits</button>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Property</th>
-                <th>Scheduled Date &amp; Time</th>
-                <th>Visitor Name &amp; Contact</th>
-                <th>Notes</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="agentVisitsBody">
-              <!-- Populated dynamically by market-workflows.js loadOwnerVisits() -->
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Property</th>
+                  <th>Scheduled Date &amp; Time</th>
+                  <th>Visitor Name &amp; Contact</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="agentVisitsBody">
+                <!-- Populated dynamically by market-workflows.js loadOwnerVisits() -->
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -1458,23 +1520,25 @@
               <p style="margin: 4px 0 0 0; font-size: 0.84rem; color: #64748b;">Record of rental disbursements, transaction commissions, and verified payouts</p>
             </div>
           </div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Payout Ref</th>
-                <th>Property Transaction</th>
-                <th>Deal Value</th>
-                <th>Type</th>
-                <th>Earned Amount</th>
-                <th>Payout Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td colspan="6" style="text-align: center; padding: 24px; color: #64748b;">No commission payouts recorded yet. Completed transactions and verified owner payouts will appear here.</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Payout Ref</th>
+                  <th>Property Transaction</th>
+                  <th>Deal Value</th>
+                  <th>Type</th>
+                  <th>Earned Amount</th>
+                  <th>Payout Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 24px; color: #64748b;">No commission payouts recorded yet. Completed transactions and verified owner payouts will appear here.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -1729,7 +1793,7 @@
       switchTab(tab);
     });
   </script>
-  <script src="/propertydirect/js/market-workflows.js?v=20260928-property-workflow-v5"></script>
+  <script src="/propertydirect/js/market-workflows.js?v=20261008-property-workflow-v8"></script>
   <script src="/propertydirect/js/dashboard-controls.js?v=20260910-end-to-end-buttons-v1"></script>
   <!-- Script ensuring full-page vertical scrolling is always active on owner dashboard -->
   <script>
@@ -1757,6 +1821,69 @@
       setTimeout(ensureScrollable, 200);
       setTimeout(ensureScrollable, 600);
       setTimeout(ensureScrollable, 1500);
+    })();
+  </script>
+  <!-- Script enabling drag-to-slide and auto-responsive tables -->
+  <script>
+    (function() {
+      function enhanceResponsiveTables() {
+        document.querySelectorAll('table.data-table').forEach(table => {
+          if (!table.parentElement.classList.contains('table-responsive')) {
+            const wrap = document.createElement('div');
+            wrap.className = 'table-responsive';
+            table.parentNode.insertBefore(wrap, table);
+            wrap.appendChild(table);
+          }
+        });
+
+        document.querySelectorAll('.table-responsive').forEach(el => {
+          if (el.dataset.dragSlideReady) return;
+          el.dataset.dragSlideReady = "true";
+
+          let isDown = false;
+          let startX = 0;
+          let scrollLeft = 0;
+
+          el.addEventListener('mousedown', (e) => {
+            if (e.target.closest('button, a, input, select, textarea')) return;
+            isDown = true;
+            el.style.cursor = 'grabbing';
+            el.style.userSelect = 'none';
+            startX = e.pageX - el.offsetLeft;
+            scrollLeft = el.scrollLeft;
+          });
+
+          el.addEventListener('mouseleave', () => {
+            if (!isDown) return;
+            isDown = false;
+            el.style.cursor = '';
+            el.style.removeProperty('user-select');
+          });
+
+          el.addEventListener('mouseup', () => {
+            if (!isDown) return;
+            isDown = false;
+            el.style.cursor = '';
+            el.style.removeProperty('user-select');
+          });
+
+          el.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - el.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            el.scrollLeft = scrollLeft - walk;
+          });
+        });
+      }
+
+      enhanceResponsiveTables();
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enhanceResponsiveTables);
+      }
+      window.addEventListener('load', enhanceResponsiveTables);
+      window.addEventListener('hashchange', () => setTimeout(enhanceResponsiveTables, 150));
+      setInterval(enhanceResponsiveTables, 2000);
     })();
   </script>
 </body>

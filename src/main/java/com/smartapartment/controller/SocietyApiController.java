@@ -920,6 +920,7 @@ public class SocietyApiController {
     }
 
     @GetMapping("/bills")
+    @PreAuthorize("hasAnyRole('SOCIETY_ADMIN','ACCOUNTANT','RESIDENT')")
     public List<Map<String, Object>> bills() {
         AppUser user = currentUser.requireUser();
         return bills.findByTenantIdOrderByDueDateDesc(user.getTenantId()).stream()
@@ -930,7 +931,7 @@ public class SocietyApiController {
     @GetMapping("/amenities")
     public List<Map<String, Object>> amenities() {
         return amenities.findByTenantIdOrderByNameAsc(currentUser.requireTenantId()).stream()
-                .map(a -> Map.<String, Object>of("id", a.getId(), "name", a.getName(), "capacity", a.getCapacity(),
+                .map(a -> Map.<String, Object>of("id", a.getId(), "version", a.getVersion(), "name", a.getName(), "capacity", a.getCapacity(),
                         "bookingFee", value(a.getBookingFee()), "approvalRequired", a.isApprovalRequired()))
                 .toList();
     }
@@ -1066,11 +1067,14 @@ public class SocietyApiController {
 
     private boolean ownsApartment(AppUser user, Apartment apartment) {
         return residents.findFirstByUserOrderByIdAsc(user)
-                .map(r -> r.getApartment().getId().equals(apartment.getId())).orElse(false);
+                .filter(r -> user.getTenantId().equals(r.getTenantId()))
+                .map(r -> apartment != null && r.getApartment() != null
+                        && user.getTenantId().equals(apartment.getTenantId())
+                        && r.getApartment().getId().equals(apartment.getId())).orElse(false);
     }
 
     private Map<String, Object> apartmentView(Apartment a) {
-        return map("id", a.getId(), "apartmentCode", a.getApartmentCode(), "unitNo", a.getUnitNo(), "block", a.getBlock() == null ? "" : a.getBlock().getName(),
+        return map("id", a.getId(), "version", a.getVersion(), "apartmentCode", a.getApartmentCode(), "unitNo", a.getUnitNo(), "block", a.getBlock() == null ? "" : a.getBlock().getName(),
                 "floor", a.getFloorNo(), "type", a.getUnitType(), "occupancy", a.getOccupancyStatus(),
                 "ownerName", clean(a.getOwnerName()), "ownerPhone", clean(a.getOwnerPhone()), "ownerEmail", clean(a.getOwnerEmail()),
                 "builtUpAreaSqFt", a.getBuiltUpAreaSqFt(), "parkingSlot", clean(a.getParkingSlot()),

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('SmartApartment Society Admin')}"></head>
+<head th:replace="~{fragments/layout :: head('SmartApartment Society Admin')}">
+</head>
 <body class="dashboard-body bg-light" data-platform="smartsociety" data-dashboard-role="admin">
+<link rel="stylesheet" href="/smartapartment/css/admin-insights.css?v=20261008-insights-v1">
     <style>
         /* Keep the dashboard in one viewport.  The sidebar and workspace then
            scroll independently instead of letting the document end mid-panel. */
@@ -875,21 +877,18 @@
             </div>
             <nav class="nav flex-column py-3 sidebar-nav" aria-label="Dashboard sections">
                 <a href="#overview" class="nav-link btn btn-link text-start text-decoration-none active" data-panel="overview" onclick="openPanel('overview'); return false;"><i class="fa-solid fa-house me-2"></i> Overview</a>
+<a href="#occupancy" class="nav-link btn btn-link text-start text-decoration-none" data-panel="occupancy" onclick="openPanel('occupancy'); return false;"><i class="fa-solid fa-building me-2"></i> Block Occupancy</a>
+<a href="#maintenance-overview" class="nav-link btn btn-link text-start text-decoration-none" data-panel="maintenance-overview" onclick="openPanel('maintenance-overview'); return false;"><i class="fa-solid fa-user-gear me-2"></i> Maintenance Overview</a>
+<a href="#security-access" class="nav-link btn btn-link text-start text-decoration-none" data-panel="security-access" onclick="openPanel('security-access'); return false;"><i class="fa-solid fa-shield-halved me-2"></i> Security Login & Logout</a>
                 <a href="#residents" class="nav-link btn btn-link text-start text-decoration-none" data-panel="residents" onclick="openPanel('residents'); return false;"><i class="fa-solid fa-users me-2"></i> Residents</a>
                 <a href="#billing" class="nav-link btn btn-link text-start text-decoration-none" data-panel="billing" onclick="openPanel('billing'); return false;"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Billing</a>
                 <a href="#visitors" class="nav-link btn btn-link text-start text-decoration-none" data-panel="visitors" onclick="openPanel('visitors'); return false;"><i class="fa-solid fa-address-card me-2"></i> Visitors</a>
                 <a href="#complaints" class="nav-link btn btn-link text-start text-decoration-none" data-panel="complaints" onclick="openPanel('complaints'); return false;"><i class="fa-solid fa-triangle-exclamation me-2"></i> Complaints</a>
                 <a href="#maintenance-chat" class="nav-link btn btn-link text-start text-decoration-none" data-panel="maintenance-chat" onclick="openPanel('maintenance-chat'); return false;"><i class="fa-solid fa-headset me-2 text-warning"></i> Maintenance Escalations & Chat <span class="badge bg-danger ms-auto" id="adminMaintChatBadge" style="display:none;">0</span></a>
-                <a href="#amenities" class="nav-link btn btn-link text-start text-decoration-none" data-panel="amenities" onclick="openPanel('amenities'); return false;"><i class="fa-solid fa-table-tennis-paddle-ball me-2"></i> Amenities</a>
                 <a href="#announcements" class="nav-link btn btn-link text-start text-decoration-none" data-panel="announcements" onclick="openPanel('announcements'); return false;"><i class="fa-solid fa-bullhorn me-2"></i> Announcements</a>
-                <a href="#billing-rules" class="nav-link btn btn-link text-start text-decoration-none" data-panel="billing-rules" onclick="openPanel('billing-rules'); return false;"><i class="fa-solid fa-money-check-dollar me-2"></i> Recurring Charges</a>
                 <a href="#staff" class="nav-link btn btn-link text-start text-decoration-none" data-panel="staff" onclick="openPanel('staff'); return false;"><i class="fa-solid fa-broom me-2"></i> Domestic Staff</a>
                 <a href="#deliveries" class="nav-link btn btn-link text-start text-decoration-none" data-panel="deliveries" onclick="openPanel('deliveries'); return false;"><i class="fa-solid fa-box me-2"></i> Deliveries</a>
-                <a href="#polls" class="nav-link btn btn-link text-start text-decoration-none" data-panel="polls" onclick="openPanel('polls'); return false;"><i class="fa-solid fa-check-to-slot me-2"></i> Polls & Voting</a>
-                <a href="#assets" class="nav-link btn btn-link text-start text-decoration-none" data-panel="assets" onclick="openPanel('assets'); return false;"><i class="fa-solid fa-boxes-stacked me-2"></i> Assets & AMC</a>
-                <a href="#expenses" class="nav-link btn btn-link text-start text-decoration-none" data-panel="expenses" onclick="openPanel('expenses'); return false;"><i class="fa-solid fa-receipt me-2"></i> Expenses</a>
                 <a href="#payments" class="nav-link btn btn-link text-start text-decoration-none" data-panel="payments" onclick="openPanel('payments'); return false;"><i class="fa-solid fa-credit-card me-2"></i> Payments</a>
-                <a href="#home-services" class="nav-link btn btn-link text-start text-decoration-none" data-panel="home-services" id="sidebarHomeServicesLink" onclick="openPanel('home-services'); return false;"><i class="fa-solid fa-broom me-2 text-warning"></i> Home Services & Pricing</a>
                 <a href="#subscriptions" class="nav-link btn btn-link text-start text-decoration-none" data-panel="subscriptions" onclick="openPanel('subscriptions'); return false;"><i class="fa-solid fa-cloud me-2"></i> SaaS Plan</a>
                 <a href="#reports" class="nav-link btn btn-link text-start text-decoration-none" data-panel="reports" onclick="openPanel('reports'); return false;"><i class="fa-solid fa-chart-pie me-2"></i> Reports</a>
             </nav>
@@ -975,21 +974,6 @@
                         </article>
                     </div>
                     
-                    <div class="card shadow-sm border rounded-4 mb-4 bg-white">
-                        <div class="card-body p-4">
-                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
-                                <div><span class="small text-primary fw-bold text-uppercase">Operational snapshot</span><h4 class="fw-bold mb-1 mt-1">Today</h4><p class="text-muted mb-0">Open the right workspace to act on the latest society activity.</p></div>
-                                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle rounded-pill px-3 py-2"><i class="fa-solid fa-circle-check me-1"></i>Live data</span>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2 pill-row" aria-label="Today’s operational priorities">
-                                <button type="button" class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="visitors"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewVisitorRecords">0 visitor records</span></button>
-                                <button type="button" class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="amenities"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewAmenityBookings">0 amenity bookings</span></button>
-                                <button type="button" class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="expenses"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewExpenseRecords">0 expense records</span></button>
-                                <button type="button" class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3 py-2 fw-normal" data-panel="complaints"><i class="fa-solid fa-arrow-right me-1"></i><span id="overviewOpenComplaints">0 open complaints</span></button>
-                            </div>
-                        </div>
-                    </div>
-
                 </section>
 
                 <!-- Control Center -->
@@ -1062,7 +1046,25 @@
 
 
                 <!-- Residents -->
-                <section id="residents" class="d-none animate__animated animate__fadeIn" data-view="residents">
+                
+<section id="occupancy" data-view="occupancy" class="d-none admin-insights"><div class="card p-4">
+<div class="insights-heading"><div><h3>Block-wise Occupancy</h3><p class="text-muted">Tenants are residents registered as tenants. Filled and available flats are counted separately for each block.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="occupancy">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="occupancy">Export CSV</button></div></div><p id="insights-occupancy-message" role="status" aria-live="polite"></p><div id="insights-occupancy-metrics" class="insights-metrics"></div>
+<div class="insights-filters"><label>Block<select id="insights-block" class="form-select"><option value="">All blocks</option></select></label><label>Flat status<select id="insights-occupancy-status" class="form-select"><option value="">All statuses</option><option>Filled</option><option>Available</option><option>Unavailable</option></select></label><label>Find flat or resident<input id="insights-flat-search" class="form-control" type="search" placeholder="Flat number or resident name"></label></div>
+<h4>Block summary</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Total flats</th><th scope="col">Filled</th><th scope="col">Available</th><th scope="col">Unavailable</th><th scope="col">Tenants</th><th scope="col">Residents</th></tr></thead><tbody id="insights-block-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
+<h4>Flat details</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Flat</th><th scope="col">BHK / type</th><th scope="col">Floor</th><th scope="col">Status</th><th scope="col">Tenants</th><th scope="col">Residents</th></tr></thead><tbody id="insights-flat-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
+</div></section>
+<section id="maintenance-overview" data-view="maintenance-overview" class="d-none admin-insights"><div class="card p-4">
+<div class="insights-heading"><div><h3>Maintenance Overview</h3><p class="text-muted">Saved attendance, checkouts, recorded breaks, and worker reports in one workspace.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="maintenance">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="maintenance">Export CSV</button></div></div><p id="insights-maintenance-message" role="status" aria-live="polite"></p><div id="insights-maintenance-metrics" class="insights-metrics"></div><form class="insights-filters" data-insights-date-form="maintenance"><label>From<input class="form-control" type="date" id="insights-maintenance-start" required></label><label>To<input class="form-control" type="date" id="insights-maintenance-end" required></label><button type="submit" class="btn btn-outline-primary">Apply dates</button></form>
+<h4>Attendance &amp; breaks</h4><p class="text-muted">Older attendance may include only its last recorded break. New breaks are saved individually.</p><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Worker</th><th scope="col">Date</th><th scope="col">Check-in</th><th scope="col">Checkout</th><th scope="col">Attendance</th><th scope="col">Break time</th><th scope="col">Working time</th><th scope="col">Attendance notes</th></tr></thead><tbody id="insights-maintenance-rows"><tr><td colspan="8">Select Refresh to load records.</td></tr></tbody></table></div>
+<div class="insights-heading"><h4>Work reports</h4><button type="button" class="btn btn-outline-primary" data-insights-export="reports">Export work reports</button></div><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Reference</th><th scope="col">Worker</th><th scope="col">Work</th><th scope="col">Flat / address</th><th scope="col">Status</th><th scope="col">Report / completion notes</th><th scope="col">Updated</th></tr></thead><tbody id="insights-work-report-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
+</div></section>
+<section id="security-access" data-view="security-access" class="d-none admin-insights"><div class="card p-4">
+<div class="insights-heading"><div><h3>Security Login &amp; Logout</h3><p class="text-muted">Guard account access, separate from duty check-in and checkout. Tracking begins with this update.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="security">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="security">Export CSV</button></div></div><p id="insights-security-message" role="status" aria-live="polite"></p><div id="insights-security-metrics" class="insights-metrics"></div><form class="insights-filters" data-insights-date-form="security"><label>From<input class="form-control" type="date" id="insights-security-start" required></label><label>To<input class="form-control" type="date" id="insights-security-end" required></label><button type="submit" class="btn btn-outline-primary">Apply dates</button></form>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Security guard</th><th scope="col">Login</th><th scope="col">Logout / session end</th><th scope="col">Session status</th></tr></thead><tbody id="insights-security-rows"><tr><td colspan="4">Select Refresh to load records.</td></tr></tbody></table></div>
+<h4>Duty attendance</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Security guard</th><th scope="col">Date</th><th scope="col">Duty check-in</th><th scope="col">Duty checkout</th></tr></thead><tbody id="insights-security-duty-rows"><tr><td colspan="4">Select Refresh to load records.</td></tr></tbody></table></div>
+</div></section>
+
+<section id="residents" class="d-none animate__animated animate__fadeIn" data-view="residents">
                     <div class="card shadow-sm border-0 rounded-4">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-start card-head gap-3">
                             <div><h4 class="fw-bold mb-1">Residents &amp; Society Team</h4><p class="small text-muted mb-0">Create resident accounts and operational staff access for this society.</p></div>
@@ -1087,11 +1089,26 @@
 
                 <!-- Billing -->
                 <section id="billing" class="d-none animate__animated animate__fadeIn" data-view="billing">
+<div class="admin-insights card p-4 mb-4" id="admin-billing-overview">
+<div class="insights-heading"><div><h3>Billing Overview &amp; Pending Dues</h3><p class="text-muted">Outstanding maintenance invoices by flat. Notices reach only residents assigned to the selected flat; one reminder per day.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="billing">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="billing">Export CSV</button></div></div><p id="insights-billing-message" role="status" aria-live="polite"></p><div id="insights-billing-metrics" class="insights-metrics"></div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Flat</th><th scope="col">Pending amount</th><th scope="col">Overdue amount</th><th scope="col">Outstanding invoices</th><th scope="col">Action</th></tr></thead><tbody id="insights-dues-rows"><tr><td colspan="6">Select Refresh to load records.</td></tr></tbody></table></div>
+<h4>Landlord rent increase</h4><p class="text-muted">Record the landlord rental amount separately. Saving sends a notice to that flat’s residents; it does not alter maintenance charges or existing invoices.</p>
+<form id="insights-rent-form" class="insights-rent-form">
+<label>Flat<select id="insights-rent-flat" class="form-select" required><option value="">Select flat</option></select></label>
+<label>Landlord name<input id="insights-landlord" class="form-control" maxlength="200" required></label>
+<label>Current / latest agreed monthly rent (₹)<input id="insights-rent-current" class="form-control" type="number" min="0" step="0.01" required></label>
+<label>New monthly rent (₹)<input id="insights-rent-new" class="form-control" type="number" min="0.01" step="0.01" required></label>
+<label>Effective date<input id="insights-rent-date" class="form-control" type="date" required></label>
+<label>Landlord instructions / reference<input id="insights-rent-note" class="form-control" maxlength="1000"></label>
+<div class="insights-rent-submit"><button type="submit" class="btn btn-primary">Save landlord rent increase</button></div>
+</form>
+<h4>Rent change history</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Flat</th><th scope="col">Landlord</th><th scope="col">Previous rent</th><th scope="col">New rent</th><th scope="col">Effective date</th><th scope="col">Status</th><th scope="col">Notes</th></tr></thead><tbody id="insights-rent-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
+</div>
                     <div class="billing-workspace">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
                             <div>
                                 <h4 class="fw-bold mb-1"><i class="fa-solid fa-file-invoice text-primary me-2"></i>Maintenance Invoice Generator</h4>
-                                <p class="text-muted small mb-0">Quickly generate and dispatch monthly maintenance bills and invoices for all society flats.</p>
+                                <p class="text-muted small mb-0">Generate an invoice for a selected flat, or use the separate batch action for all society flats.</p>
                             </div>
                             <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="openAdminItemizedModal()"><i class="fa-solid fa-plus me-2"></i>Create Invoice</button>
                         </div>
@@ -1123,7 +1140,7 @@
                     <div class="billing-workspace">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
                             <h4 class="fw-bold mb-0">Maintenance Billing & Invoices Log</h4>
-                            <button type="button" class="btn btn-outline-primary rounded-pill btn-sm" onclick="openAdminItemizedModal()"><i class="fa-solid fa-layer-group me-1"></i> Generate Batch</button>
+                            <button type="button" class="btn btn-outline-primary rounded-pill btn-sm" onclick="openAdminItemizedModal('batch')"><i class="fa-solid fa-layer-group me-1"></i> Generate Batch</button>
                         </div>
                         <div class="card-body px-4 pb-4">
                             <div class="billing-summary-row billing-stats">
@@ -1152,7 +1169,7 @@
                                 <h3 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
                                     <i class="fa-solid fa-file-invoice"></i> Generate Maintenance Invoices
                                 </h3>
-                                <p style="margin: 3px 0 0 0; font-size: 0.8rem; color: #dbeafe;">Generate monthly maintenance bills for all registered society flats in one click.</p>
+                                <p style="margin: 3px 0 0 0; font-size: 0.8rem; color: #dbeafe;">Select the flat number and BHK type. All residents assigned to that flat can see its invoice.</p>
                             </div>
                             <button type="button" onclick="closeAdminItemizedModal()" style="background: rgba(255,255,255,0.2); border: none; font-size: 1.25rem; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: #ffffff; display: flex; align-items: center; justify-content: center;">&times;</button>
                         </div>
@@ -1164,7 +1181,7 @@
                                     <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: #1e40af; letter-spacing: 0.5px; display: block;">Total Maintenance Fee</span>
                                     <strong style="font-size: 1.65rem; color: #1d4ed8; font-weight: 800;" id="adminInvoiceEstimate">Rs. 2,500.00</strong>
                                     <span style="font-size: 0.76rem; color: #475569; display: block; margin-top: 2px;">
-                                        <i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 4px;"></i>Applied to all registered society flats
+                                        <i class="fa-solid fa-circle-check" style="color: #10b981; margin-right: 4px;"></i><span id="adminInvoiceAudience">Applied only to the selected flat</span>
                                     </span>
                                 </div>
                                 <div style="text-align: right;">
@@ -1173,6 +1190,13 @@
                                 </div>
                             </div>
 
+                            <input type="hidden" id="adminInvoiceScope" value="flat">
+                            <div id="adminInvoiceFlatFields" class="row g-3 mb-3">
+                                <div class="col-md-5"><label for="adminInvoiceUnitType" class="form-label small fw-bold">BHK / Flat type</label><select id="adminInvoiceUnitType" class="form-select" required><option value="">Loading flat types…</option></select></div>
+                                <div class="col-md-7"><label for="adminInvoiceFlat" class="form-label small fw-bold">Flat number</label><select id="adminInvoiceFlat" class="form-select" required><option value="">Select a flat type first</option></select></div>
+                                <p class="small text-muted mb-0">Visible to all residents assigned to this flat. Other flats cannot see this invoice.</p>
+                            </div>
+                            <p id="adminInvoiceSelectionMessage" class="small text-danger" role="status"></p>
                             <!-- Primary Essential Fields -->
                             <div class="row g-3">
                                 <div class="col-md-6">
@@ -1254,7 +1278,8 @@
                     </div>
                 </div>
                 <script>
-                    function openAdminItemizedModal() {
+                    function openAdminItemizedModal(mode = 'flat') {
+                        if (typeof window.loadAdminInvoiceFlats === 'function') window.loadAdminInvoiceFlats(mode);
                         const modal = document.getElementById('adminItemizedModal');
                         if (modal) modal.style.display = 'flex';
                         handleAdminMonthChange();
@@ -1315,7 +1340,7 @@
                         const base = adminInvoiceValue('adminSimpleAmount') || 2500;
                         const power = adminInvoiceValue('adminBatchPowerFee');
                         const sinking = adminInvoiceValue('adminBatchSinkingFee');
-                        const parking = adminInvoiceValue('adminBatchParkingFee');
+                        const parking = document.getElementById('adminInvoiceScope')?.value === 'flat' && !window.adminInvoiceSelectedFlat?.parkingSlot ? 0 : adminInvoiceValue('adminBatchParkingFee');
                         const gstRate = adminInvoiceValue('adminCgstRate');
                         const subtotal = base + power + sinking + parking;
                         const tax = subtotal * (gstRate / 100);
@@ -1329,6 +1354,16 @@
 
                     async function handleAdminItemizedSubmit(e) {
                         e.preventDefault();
+                        if (!e.target.reportValidity()) return;
+                        const submitButton = e.target.querySelector('button[type="submit"]');
+                        if (submitButton?.disabled) return;
+                        const scope = document.getElementById('adminInvoiceScope')?.value || 'flat';
+                        const apartmentId = Number(document.getElementById('adminInvoiceFlat')?.value);
+                        const unitType = document.getElementById('adminInvoiceUnitType')?.value;
+                        if (scope !== 'batch' && (!apartmentId || !unitType)) {
+                            document.getElementById('adminInvoiceSelectionMessage').textContent = 'Select a registered BHK type and flat number.';
+                            return;
+                        }
                         const month = document.getElementById('adminBatchMonth')?.value || "2026-08";
                         const baseAmount = adminInvoiceValue('adminSimpleAmount') || 2500;
                         const powerFee = adminInvoiceValue('adminBatchPowerFee');
@@ -1377,7 +1412,8 @@
                             upiId: upiId,
                             societyGstin: "33AAACS1234F1Z8",
                             societyPan: "AAACS1234F",
-                            notes: notes
+                            notes: notes,
+                            ...(scope === 'batch' ? {} : { apartmentId, unitType })
                         };
 
                         const submit = e.target.querySelector('button[type="submit"]');
@@ -1386,13 +1422,13 @@
                             submit.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-1"></i> Generating…';
                         }
                         try {
-                            const response = await fetch('/api/billing/generate-detailed', {
+                            const response = await fetch(scope === 'batch' ? '/api/billing/generate-detailed' : '/api/billing/generate-for-flat', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
                                 body: JSON.stringify(payload)
                             });
                             const result = await response.json().catch(() => ({}));
-                            if (!response.ok) throw new Error(result.message || 'Unable to generate bills');
+                            if (response.redirected || !response.ok) throw new Error(result.detail || result.message || 'Unable to generate bills');
                             closeAdminItemizedModal();
                             if (typeof loadSocietyBackendData === 'function') await loadSocietyBackendData();
                             if (typeof updateBillingStats === 'function') updateBillingStats();
@@ -1635,31 +1671,7 @@
                 </section>
 
                 <!-- Amenities -->
-                <section id="amenities" class="d-none animate__animated animate__fadeIn" data-view="amenities">
-                    <div class="card shadow-sm border-0 rounded-4 mb-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Amenity Bookings</h4><p class="text-muted small mb-0">Record the resident, flat, date and time, payment method, amount and approval status.</p></div>
-                            <button type="button" class="btn btn-primary rounded-pill px-4" data-action="amenity-booking"><i class="fa-solid fa-calendar-plus me-2"></i>Add Booking</button>
-                        </div>
-                        <div class="card-body px-4 pb-4 table-responsive">
-                            <table class="table align-middle mb-0" data-table="amenity-bookings">
-                                <thead class="table-light"><tr><th>Amenity</th><th>Booked by</th><th>Flat</th><th>Required date &amp; time</th><th>Payment</th><th>Price</th><th>Submitted details</th><th>Approval</th><th>Action</th></tr></thead>
-                                <tbody><tr><td colspan="9" class="text-muted text-center py-4">Loading amenity bookings…</td></tr></tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 card-head">
-                            <h4 class="fw-bold mb-1">Amenity Prices &amp; Settings</h4><p class="text-muted small mb-0">Update the booking charge and approval requirement for every amenity.</p>
-                        </div>
-                        <div class="card-body px-4 pb-4 table-responsive">
-                            <table class="table align-middle mb-0" data-table="amenity-prices">
-                                <thead class="table-light"><tr><th>Amenity</th><th>Capacity</th><th>Booking price</th><th>Approval</th><th>Action</th></tr></thead>
-                                <tbody><tr><td colspan="5" class="text-muted text-center py-4">Loading amenity settings…</td></tr></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
+                
 
                 <!-- Announcements -->
                 <section id="announcements" class="d-none animate__animated animate__fadeIn" data-view="announcements">
@@ -1703,32 +1715,7 @@
                 </section>
 
                 <!-- Billing Rules -->
-                <section id="billing-rules" class="d-none animate__animated animate__fadeIn" data-view="billing-rules">
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Recurring Charge Rules</h4><p class="text-muted small mb-0">Set a charge once, schedule it, and generate traceable bills whenever needed.</p></div>
-                            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2" id="billingRuleState">Ready to create</span>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <form class="row g-3 form-grid mb-4 bg-light p-3 rounded-4" id="billingRuleForm" novalidate>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Charge name</label><input class="form-control" name="name" value="Monthly maintenance" required></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Amount</label><input class="form-control" name="amount" type="number" min="1" value="2500" required></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Due day</label><input class="form-control" name="dueDay" type="number" min="1" max="28" value="10" required></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Late fee</label><input class="form-control" name="lateFee" type="number" min="0" value="100" required></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Frequency</label><select class="form-select" name="frequency"><option>MONTHLY</option><option>QUARTERLY</option><option>YEARLY</option></select></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Next run</label><input class="form-control" name="nextRunDate" type="date"></div>
-                                <div class="col-md-3 d-flex align-items-end"><div class="form-check mb-2"><input class="form-check-input" name="automatic" type="checkbox" id="autoRun"><label class="form-check-label" for="autoRun">Run automatically</label></div></div>
-                                <div class="col-md-6 text-end align-self-end d-flex justify-content-end gap-2"><button class="btn btn-outline-secondary rounded-pill px-4 d-none" id="cancelBillingRuleEdit" type="button">Cancel</button><button class="btn btn-primary rounded-pill px-4" data-advanced-action="create-billing-rule" type="submit" id="saveBillingRule"><i class="fa-solid fa-plus me-2"></i>Create Rule</button></div>
-                            </form>
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light"><tr><th>Rule</th><th>Amount</th><th>Schedule</th><th>Late Fee</th><th>Next Run</th><th>Automation</th><th>Action</th></tr></thead>
-                                    <tbody id="billingRulesBody"><tr><td colspan="7" class="text-muted text-center py-4">Loading recurring charge rules…</td></tr></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
 
                 <!-- Domestic Staff -->
                 <section id="staff" class="d-none animate__animated animate__fadeIn" data-view="staff">
@@ -1795,96 +1782,13 @@
                 </section>
 
                 <!-- Polls -->
-                <section id="polls" class="d-none animate__animated animate__fadeIn" data-view="polls">
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Community Polls</h4><p class="text-muted small mb-0">Create transparent resident decisions with a defined purpose, voting window, and live participation record.</p></div>
-                            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2" id="pollState">One vote per resident</span>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <form class="row g-3 form-grid mb-4 bg-light p-3 rounded-4" id="pollForm" novalidate>
-                                <div class="col-md-8"><label class="form-label small fw-bold">Poll question</label><input class="form-control" name="question" placeholder="What decision should residents vote on?" required></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Category</label><select class="form-select" name="category"><option>General</option><option>Maintenance</option><option>Finance</option><option>Security</option><option>Amenities</option><option>Community event</option><option>Policy</option></select></div>
-                                <div class="col-md-12"><label class="form-label small fw-bold">Context / description</label><textarea class="form-control" name="description" rows="2" maxlength="2000" placeholder="Explain the decision, background, cost, or impact so residents can make an informed choice."></textarea></div>
-                                <div class="col-md-5"><label class="form-label small fw-bold">Options (comma separated)</label><input class="form-control" name="options" value="Yes, No" placeholder="Option 1, Option 2, Option 3" required></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Closes at</label><input class="form-control" name="closesAt" type="datetime-local" required></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Audience</label><select class="form-select" name="audience"><option value="RESIDENTS">Residents</option><option value="ALL">Residents &amp; staff</option></select></div>
-                                <div class="col-md-2 d-flex align-items-end gap-3"><div class="form-check mb-2"><input class="form-check-input" name="anonymous" type="checkbox" id="anonPoll"><label class="form-check-label" for="anonPoll">Anonymous</label></div><div class="form-check mb-2"><input class="form-check-input" name="resultsVisible" type="checkbox" id="pollResults" checked><label class="form-check-label" for="pollResults">Live results</label></div></div>
-                                <div class="col-12 text-end"><button class="btn btn-primary rounded-pill px-4" data-advanced-action="create-poll" type="submit">Publish Poll</button></div>
-                            </form>
-                            <div class="row g-4" id="pollsList"></div>
-                        </div>
-                    </div>
-                </section>
+                
 
                 <!-- Assets -->
-                <section id="assets" class="d-none animate__animated animate__fadeIn" data-view="assets">
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Assets, Warranty & AMC</h4><p class="text-muted mb-0">Track equipment ownership, vendor cover, service schedules and maintenance condition in one register.</p></div>
-                            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2" id="assetRegistryState">New asset record</span>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <form class="row g-3 form-grid mb-4 bg-light p-4 rounded-4" id="assetForm">
-                                <div class="col-md-4"><label class="form-label small fw-bold">Asset name</label><input class="form-control" name="name" placeholder="e.g. Tower A passenger lift" required></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Category</label><input class="form-control" name="category" placeholder="Lift / Generator / Pump" required></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Location</label><input class="form-control" name="location" placeholder="Tower A lobby / Basement" required></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Serial number</label><input class="form-control" name="serialNumber" placeholder="Manufacturer serial"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Purchase date</label><input class="form-control" name="purchasedOn" type="date"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Purchase cost (Rs.)</label><input class="form-control" name="purchaseCost" type="number" min="0" step="0.01"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Current condition</label><select class="form-select" name="assetCondition"><option value="GOOD">Good</option><option value="NEEDS_ATTENTION">Needs attention</option><option value="OUT_OF_SERVICE">Out of service</option></select></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Vendor name</label><input class="form-control" name="vendorName" placeholder="Supplier / service vendor"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Vendor phone</label><input class="form-control" name="vendorPhone" type="tel" placeholder="Primary contact"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">AMC provider</label><input class="form-control" name="amcProvider" placeholder="Annual maintenance provider"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">AMC valid until</label><input class="form-control" name="amcUntil" type="date"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Warranty until</label><input class="form-control" name="warrantyUntil" type="date"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Last service</label><input class="form-control" name="lastServiceDate" type="date"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Next service</label><input class="form-control" name="nextServiceDate" type="date"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Service interval (days)</label><input class="form-control" name="serviceIntervalDays" type="number" min="1" max="3650" placeholder="e.g. 90"></div>
-                                <div class="col-12"><label class="form-label small fw-bold">Maintenance notes</label><textarea class="form-control" name="notes" rows="2" maxlength="2000" placeholder="Service instructions, warranty exclusions, safety checks, or handover notes"></textarea></div>
-                                <div class="col-12 d-flex flex-wrap justify-content-end gap-2"><button class="btn btn-outline-secondary rounded-pill d-none" id="cancelAssetEdit" type="button">Cancel edit</button><button class="btn btn-primary rounded-pill px-4" id="saveAsset" data-advanced-action="create-asset" type="submit"><i class="fa-solid fa-plus me-2"></i>Add Asset</button></div>
-                            </form>
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light"><tr><th>Asset & serial</th><th>Location / condition</th><th>Vendor & AMC</th><th>Warranty</th><th>Service schedule</th><th>Action</th></tr></thead>
-                                    <tbody id="assetsBody"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
 
                 <!-- Expenses -->
-                <section id="expenses" class="d-none animate__animated animate__fadeIn" data-view="expenses">
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Expense Approvals</h4><p class="text-muted mb-0">Record vendor invoices, verify approval, and keep payment details ready for audit.</p></div>
-                            <span id="expenseFormState" class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2">New expense</span>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <form id="expenseForm" class="row g-3 form-grid mb-4 bg-light p-4 rounded-4">
-                                <div class="col-md-4"><label class="form-label small fw-bold">Expense title</label><input class="form-control" name="title" placeholder="e.g. Generator quarterly service" required></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Category</label><select class="form-select" name="category" required><option value="">Select category</option><option>Maintenance</option><option>Utilities</option><option>Security</option><option>Housekeeping</option><option>Repairs</option><option>Administration</option><option>Events</option><option>Other</option></select></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Expense date</label><input class="form-control" name="date" type="date" required></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Vendor / payee</label><input class="form-control" name="vendor" placeholder="Vendor company or payee" required></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Vendor phone</label><input class="form-control" name="vendorPhone" type="tel" placeholder="Vendor contact"></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Invoice number</label><input class="form-control" name="invoiceNumber" placeholder="Invoice / receipt reference"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Invoice date</label><input class="form-control" name="invoiceDate" type="date"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Payment due date</label><input class="form-control" name="dueDate" type="date"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Base amount (Rs.)</label><input class="form-control" name="amount" type="number" min="0.01" step="0.01" required></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Tax amount (Rs.)</label><input class="form-control" name="taxAmount" type="number" min="0" step="0.01" value="0"></div>
-                                <div class="col-12"><label class="form-label small fw-bold">Description / approval context</label><textarea class="form-control" name="description" rows="2" maxlength="2000" placeholder="Scope of work, quotation comparison, committee note, and supporting document details"></textarea></div>
-                                <div class="col-12 d-flex justify-content-end gap-2"><button type="button" class="btn btn-outline-secondary rounded-pill d-none" id="cancelExpenseEdit">Cancel edit</button><button type="submit" class="btn btn-primary rounded-pill px-4" id="saveExpense"><i class="fa-solid fa-plus me-2"></i>Record Expense</button></div>
-                            </form>
-                            <div class="table-responsive">
-                            <table class="table table-hover align-middle" data-table="expenses">
-                                <thead class="table-light"><tr><th>Expense & invoice</th><th>Vendor</th><th>Amount / tax</th><th>Dates</th><th>Status</th><th>Action</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
 
                 <!-- Payments -->
                 <section id="payments" class="d-none animate__animated animate__fadeIn" data-view="payments">
@@ -1936,136 +1840,7 @@
 
                 <!-- Home Services & Pricing CRUD Management Panel -->
                                 <!-- Home Services & Pricing CRUD Management Panel (Resident Dashboard Card Model) -->
-                <section class="d-none animate__animated animate__fadeIn" data-view="home-services" id="home-services-panel" data-alt-view="service-pricing">
-                    <link rel="stylesheet" href="/smartapartment/css/service-category-cards.css?v=20261007-v5">
-                    <style>
-                        .admin-category-cards-grid,
-                        #adminCategoryCardsGrid {
-                            display: grid !important;
-                            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
-                            gap: 1.5rem !important;
-                            width: 100% !important;
-                            margin: 0 0 1.5rem 0 !important;
-                            padding: 0 !important;
-                            box-sizing: border-box !important;
-                        }
-                        .admin-category-cards-grid > .col-12,
-                        #adminCategoryCardsGrid > .col-12 {
-                            grid-column: 1 / -1 !important;
-                            width: 100% !important;
-                        }
-                        @media (max-width: 768px) {
-                            .admin-category-cards-grid,
-                            #adminCategoryCardsGrid {
-                                grid-template-columns: 1fr !important;
-                                gap: 1.15rem !important;
-                            }
-                        }
-                        .service-catalog-card-col {
-                            display: flex !important;
-                            flex-direction: column !important;
-                            min-width: 0 !important;
-                            height: 100% !important;
-                            box-sizing: border-box !important;
-                        }
-                        .superadmin-service-card,
-                        .admin-service-card {
-                            background: #ffffff !important;
-                            border: 1.5px solid #e2e8f0 !important;
-                            border-radius: 20px !important;
-                            padding: 1.5rem 1.45rem 1.35rem 1.45rem !important;
-                            box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02) !important;
-                            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
-                            position: relative !important;
-                            display: flex !important;
-                            flex-direction: column !important;
-                            height: 100% !important;
-                            box-sizing: border-box !important;
-                            text-align: left !important;
-                        }
-                        .superadmin-service-card:hover,
-                        .admin-service-card:hover {
-                            transform: translateY(-4px) !important;
-                            box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.09), 0 4px 14px -2px rgba(37, 99, 235, 0.1) !important;
-                            border-color: #93c5fd !important;
-                        }
-                    </style>
-
-                    <!-- Top Header matching Resident Dashboard style -->
-                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
-                        <div>
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill small fw-semibold">
-                                <i class="fa-solid fa-screwdriver-wrench me-1"></i> Live Pricing Control
-                            </span>
-                            <h4 class="fw-bold mb-0 mt-2 text-dark">
-                                Home Services &amp; Pricing Management
-                            </h4>
-                            <p class="text-muted small mb-0 mt-1">
-                                Edit starting rates and service packages. Updates reflect instantly across the resident dashboard.
-                            </p>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold shadow-xs" onclick="window.loadAdminPackages()">
-                                <i class="fa-solid fa-rotate me-1"></i> Refresh
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary rounded-pill btn-sm px-3 fw-bold shadow-xs" onclick="window.resetToDefaultPricingCatalog()">
-                                <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reset Defaults
-                            </button>
-                            <button type="button" class="btn btn-primary rounded-pill btn-sm px-3 fw-bold shadow-xs" onclick="window.openAddPackageModal()">
-                                <i class="fa-solid fa-plus me-1"></i> Add Custom Package
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- 8 Core Service Categories Grid -->
-                    <div class="admin-category-cards-grid mb-4" id="adminCategoryCardsGrid">
-                        <div class="col-12 text-center py-5">
-                            <div class="spinner-border text-primary" role="status"></div>
-                            <div class="text-muted small mt-2">Loading live service categories...</div>
-                        </div>
-                    </div>
-
-                    <!-- Category Packages Modal for editing sub-packages -->
-                    <div class="modal fade" id="categoryPackagesModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                            <div class="modal-content rounded-4 border-0 shadow">
-                                <div class="modal-header border-bottom pb-3 px-4 pt-4">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div id="catModalIconWrapper" class="service-icon-circle service-circle-red" style="width: 44px; height: 44px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
-                                            <i id="catModalIcon" class="fa-solid fa-house-chimney"></i>
-                                        </div>
-                                        <div>
-                                            <h5 class="modal-title fw-bold text-dark mb-0" id="catModalTitle">Category Packages</h5>
-                                            <span class="text-muted small" id="catModalSubtitle">Manage individual packages and rates</span>
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" data-category-packages-close onclick="window.closeCategoryPackagesModal()" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body px-0 py-0">
-                                    <table class="table table-hover align-middle mb-0" style="font-size: 0.88rem; width: 100%;">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th style="padding-left: 1.5rem;">Package</th>
-                                                <th>Scope / Details</th>
-                                                <th style="width: 150px;">Live Price (₹)</th>
-                                                <th style="width: 120px; padding-right: 1.5rem;" class="text-end">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="catModalTableBody">
-                                            <!-- Rows injected by JS -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="modal-footer border-top px-4 py-3 d-flex justify-content-between">
-                                    <button type="button" class="btn btn-outline-primary rounded-pill btn-sm px-3 fw-bold" onclick="window.openAddPackageForCategoryModal()">
-                                        <i class="fa-solid fa-plus me-1"></i> Add Package to Category
-                                    </button>
-                                    <button type="button" class="btn btn-secondary rounded-pill btn-sm px-4 fw-bold" data-bs-dismiss="modal" data-category-packages-close onclick="window.closeCategoryPackagesModal()">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
 
                 <!-- Add / Edit Service Package Modal -->
                 <div class="modal fade hidden" id="homeServicePackageModal" tabindex="-1" aria-labelledby="modalPackageTitle" aria-hidden="true" style="display: none !important; z-index: 1065;">
@@ -2220,7 +1995,7 @@
     <script th:src="@{/smartapartment/js/owner-property-workflow.js}"></script>
     <script>
         window.openPanel = function(panel, updateHistory = true) {
-            if (!panel) panel = 'overview';
+            if (!panel || ['amenities', 'billing-rules', 'home-services', 'service-pricing', 'polls', 'assets', 'expenses'].includes(panel)) panel = 'overview';
             if (panel === 'service-pricing' || panel === 'home-services') {
                 panel = 'home-services';
             }
@@ -2264,6 +2039,9 @@
                 "billing-rules": "Recurring Charge Rules",
                 staff: "Domestic Staff",
                 deliveries: "Delivery Management",
+                occupancy: "Block-wise Occupancy",
+                "maintenance-overview": "Maintenance Overview",
+                "security-access": "Security Login & Logout",
                 polls: "Community Polls",
                 assets: "Assets & AMC",
                 expenses: "Expenses",
@@ -2910,8 +2688,10 @@
         document.addEventListener("DOMContentLoaded", syncAdminTickets);
     </script>
 <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
+<script defer src="/smartapartment/js/admin-invoice-selection.js?v=20261008-flat-billing-v1"></script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
 <script src="/smartapartment/js/gate-management.js?v=20260916-multigate-v1"></script>
-<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261007-cards-v3"></script>
+
+<script defer src="/smartapartment/js/admin-insights.js?v=20261008-insights-v1"></script>
 </body>
 </html>

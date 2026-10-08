@@ -409,7 +409,7 @@ public class PropertyPortalController {
                 : null;
         String submitterRole = access.isAdmin(session) ? "ADMIN" : PropertyAccessService.role(access.account(session).getRole());
         listing.setSubmittedBy(actor);
-        listing.setSubmittedById(submitterId);
+        listing.setSubmittedById(submitterId != null ? submitterId : ownerId);
         listing.setSubmitterRole(submitterRole);
         
         listings.saveAndFlush(listing);
@@ -720,7 +720,7 @@ public class PropertyPortalController {
                     Map<String,Object> row=new LinkedHashMap<>(); row.put("enquiry",e);
 
                     String title = inventory.containsKey(e.getListingId()) ? inventory.get(e.getListingId()).getTitle() :
-                                  (e.getProjectId() != null && projectMap.containsKey(e.getProjectId()) ? ("Project: " + projectMap.get(e.getProjectId()).getName()) : "Platform contact");
+                                  (e.getProjectId() != null && projectMap.containsKey(e.getProjectId()) ? ("Project: " + projectMap.get(e.getProjectId()).getName()) : "Website Contact Message");
                     row.put("listingTitle", title);
 
                     boolean canReply = admin ||

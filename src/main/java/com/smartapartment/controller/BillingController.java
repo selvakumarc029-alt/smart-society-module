@@ -39,6 +39,15 @@ public class BillingController {
 
     @PostMapping("/generate-detailed")
     public Map<String,Object> generateDetailed(@Valid @RequestBody DetailedBillRequest r) {
+        return generate(r, false);
+    }
+
+    @PostMapping("/generate-for-flat")
+    public Map<String,Object> generateForFlat(@Valid @RequestBody DetailedBillRequest r) {
+        return generate(r, true);
+    }
+
+    private Map<String,Object> generate(DetailedBillRequest r, boolean singleFlat) {
         YearMonth cycle = parseMonth(r.month());
         BillingService.DetailedInvoice details = new BillingService.DetailedInvoice(
                 text(r.invoicePrefix(), "INV"), r.invoiceDate(), r.periodStart(), r.periodEnd(), r.dueDate(),
@@ -48,7 +57,9 @@ public class BillingController {
                 nvl(r.previousBalance()), nvl(r.creditAdjustment()), nvl(r.cgstRate()), nvl(r.sgstRate()), nvl(r.roundOff()),
                 text(r.paymentTerms(), "Pay on or before the due date"), text(r.bankName(), ""), text(r.bankAccountNumber(), ""),
                 text(r.bankIfsc(), ""), text(r.upiId(), ""), text(r.societyGstin(), ""), text(r.societyPan(), ""), text(r.notes(), ""));
-        int count = billingService.generateDetailedMonthlyBills(currentUser.requireTenantId(), cycle.toString(), details);
+        int count = singleFlat
+                ? billingService.generateDetailedBillForFlat(currentUser.requireTenantId(), cycle.toString(), details, r.apartmentId(), r.unitType())
+                : billingService.generateDetailedMonthlyBills(currentUser.requireTenantId(), cycle.toString(), details);
         return Map.of("message", "Detailed invoices generated", "count", count, "month", cycle.toString());
     }
 
@@ -66,7 +77,7 @@ public class BillingController {
             @PositiveOrZero BigDecimal previousBalance, @PositiveOrZero BigDecimal creditAdjustment,
             @PositiveOrZero BigDecimal cgstRate, @PositiveOrZero BigDecimal sgstRate, BigDecimal roundOff,
             String paymentTerms, String bankName, String bankAccountNumber, String bankIfsc, String upiId,
-            String societyGstin, String societyPan, String notes) {}
+            String societyGstin, String societyPan, String notes, Long apartmentId, String unitType) {}
 
     private YearMonth parseMonth(String month) {
         if (month == null || month.isBlank()) return YearMonth.now();

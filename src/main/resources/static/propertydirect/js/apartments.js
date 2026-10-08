@@ -3,7 +3,7 @@ const apartments = [];
 const publishedListingsStorageKey = "propertydirect-published-listings:v1";
 const cityOptionsStorageKey = "propertydirect-city-options:v1";
 const ownerContactRequestsStorageKey = "propertydirect-owner-contact-requests:v1";
-const defaultCityOptions = ["Bangalore", "Chennai", "Mumbai", "Pune", "Hyderabad", "Delhi NCR"];
+const defaultCityOptions = ["All Cities", "Bengaluru", "Bangalore", "Chennai", "Mumbai", "Pune", "Hyderabad", "Delhi NCR"];
 
 const societyData = [];
 
@@ -12,8 +12,8 @@ const resultCount = document.getElementById("resultCount");
 const societyStrip = document.getElementById("societyStrip");
 const toast = document.getElementById("toast");
 const modal = document.getElementById("appModal");
-const defaultCity = document.getElementById("listingCity")?.value || "Bangalore";
-const defaultBudget = document.getElementById("budgetRange")?.value || "80000";
+const defaultCity = "";
+const defaultBudget = document.getElementById("budgetRange")?.value || "250000";
 const defaultMinBudget = document.getElementById("minBudgetRange")?.value || "0";
 let activeFilters = new Map();
 let activeModalKind = "contact";
@@ -75,11 +75,49 @@ function readPublishedListings() {
     return items;
 }
 
+function isSameCity(aptCity, filterCity) {
+    if (!filterCity) return true;
+    const f = String(filterCity).trim().toLowerCase();
+    if (!f || f === "all" || f === "all cities") return true;
+    const a = String(aptCity || "").trim().toLowerCase();
+    if (!a) return false;
+    if (a === f) return true;
+
+    const isBlr = (s) => s.includes("bangalore") || s.includes("bengaluru");
+    if (isBlr(a) && isBlr(f)) return true;
+
+    const isChn = (s) => s.includes("chennai") || s.includes("madras");
+    if (isChn(a) && isChn(f)) return true;
+
+    const isMum = (s) => s.includes("mumbai") || s.includes("bombay");
+    if (isMum(a) && isMum(f)) return true;
+
+    return a.includes(f) || f.includes(a);
+}
+
+function isSameMode(aptMode, filterMode) {
+    if (!filterMode) return true;
+    const f = String(filterMode).trim().toLowerCase();
+    if (!f || f === "all" || f === "all listings") return true;
+    const a = String(aptMode || "").trim().toLowerCase();
+    if (!a) return true;
+
+    const isRental = (m) => m.includes("rent") || m.includes("lease");
+    if (isRental(f)) return isRental(a);
+
+    const isBuy = (m) => m.includes("buy") || m.includes("sale") || m.includes("sell");
+    if (isBuy(f)) return isBuy(a);
+
+    return a.includes(f) || f.includes(a);
+}
+
 function readCityOptions() {
     try {
         const saved = JSON.parse(localStorage.getItem(cityOptionsStorageKey) || "[]");
+        const inventoryCities = (approvedDiscoveryListings || []).map(item => item.city).filter(Boolean);
         const postedCities = readPublishedListings().map(item => item.city).filter(Boolean);
-        return [...new Set([...defaultCityOptions, ...saved, ...postedCities].map(titleCasePlace).filter(Boolean))];
+        const raw = ["All Cities", ...defaultCityOptions, ...inventoryCities, ...saved, ...postedCities];
+        return [...new Set(raw.map(titleCasePlace).filter(Boolean))];
     } catch {
         localStorage.removeItem(cityOptionsStorageKey);
         return defaultCityOptions;
@@ -88,7 +126,7 @@ function readCityOptions() {
 
 function saveCityOption(city) {
     const normalized = titleCasePlace(city);
-    if (!normalized) return;
+    if (!normalized || normalized.toLowerCase() === "all cities") return;
     const cities = readCityOptions();
     if (!cities.includes(normalized)) {
         localStorage.setItem(cityOptionsStorageKey, JSON.stringify([...cities, normalized]));
@@ -98,12 +136,22 @@ function saveCityOption(city) {
 
 function hydrateCityDropdowns(selectedCity = "") {
     document.querySelectorAll("#listingCity, #city").forEach(select => {
-        const current = selectedCity || select.value || defaultCity;
-        select.innerHTML = readCityOptions().map(city => `<option value="${city}">${city}</option>`).join("");
-        if (current && ![...select.options].some(option => option.value === current)) {
+        const current = selectedCity !== "" ? selectedCity : (select.value || "");
+        const cities = readCityOptions();
+        select.innerHTML = cities.map(city => {
+            const isAll = city.toLowerCase() === "all cities";
+            const val = isAll ? "" : city;
+            const label = (city.toLowerCase() === "bangalore" || city.toLowerCase() === "bengaluru") ? "Bangalore / Bengaluru" : city;
+            return `<option value="${val}">${label}</option>`;
+        }).join("");
+        if (current && ![...select.options].some(option => option.value.toLowerCase() === current.toLowerCase())) {
             select.insertAdjacentHTML("beforeend", `<option value="${current}">${current}</option>`);
         }
-        if (current) select.value = current;
+        if (current) {
+            select.value = (current.toLowerCase() === "all cities") ? "" : current;
+        } else {
+            select.value = "";
+        }
     });
 }
 
@@ -111,22 +159,26 @@ function publishedApartments() {
     return approvedDiscoveryListings.map((item) => ({
         id: item.id,
         isPublished: true,
-        listingMode: item.type || "Rent",
+        listingMode: item.listingMode || item.listingType || item.type || "Rent",
         title: escapeApartmentText(item.title || `Property in ${item.locality || item.city || "your city"}`),
         society: escapeApartmentText(item.society || item.locality || "Owner Listed Apartment"),
         locality: escapeApartmentText(item.locality || "Owner Listed"),
         city: escapeApartmentText(item.city || "Not specified"),
         rent: Number(item.rent ?? item.price ?? 0),
+        price: Number(item.price ?? item.rent ?? 0),
         maintenance: Number(item.maintenance || 0),
         deposit: item.deposit == null ? "Not specified" : money(Number(item.deposit)),
-        sqft: item.sqft || "Area not specified",
+        sqft: item.sqft || (item.areaSqft ? `${Number(item.areaSqft).toLocaleString("en-IN")} sqft` : "Area not specified"),
         photo: "Owner posted",
         furnishing: escapeApartmentText(item.furnishing || "Not specified"),
-        type: escapeApartmentText(item.bhk || "Not specified"),
+        type: escapeApartmentText(item.bhk || (item.bedrooms ? `${item.bedrooms} BHK` : "2 BHK")),
+        bhk: escapeApartmentText(item.bhk || (item.bedrooms ? `${item.bedrooms} BHK` : "2 BHK")),
         tenant: "All",
-        available: escapeApartmentText(item.available || "Confirm availability"),
+        available: escapeApartmentText(item.available || "Ready to Move"),
+        constructionStatus: escapeApartmentText(item.constructionStatus || "Ready to Move"),
         parking: escapeApartmentText(item.parking || "Not specified"),
-        apartmentType: escapeApartmentText(item.apartmentType || "Apartment"),
+        apartmentType: escapeApartmentText(item.propertyType || item.apartmentType || "Apartment"),
+        propertyType: escapeApartmentText(item.propertyType || item.apartmentType || "Apartment"),
         image: safeApartmentImage(item.image || item.imageUrl),
         video: item.video || item.videoUrl || "",
         imageUrls: Array.isArray(item.imageUrls) ? item.imageUrls : [],
@@ -134,6 +186,7 @@ function publishedApartments() {
         address: item.address,
         pincode: item.pincode,
         description: item.description,
+        amenities: item.amenities || "",
         nearby: [escapeApartmentText(item.amenities || "Amenities not specified"), "Direct contact"]
     }));
 }
@@ -184,11 +237,15 @@ function renderSocieties() {
 
 function getApartmentValue(apt, group) {
     const values = {
-        bhk: apt.type,
+        bhk: apt.bhk || apt.type,
+        mode: apt.listingMode || apt.type,
+        propertyType: apt.apartmentType || apt.propertyType,
+        apartmentType: apt.apartmentType || apt.propertyType,
         availability: apt.available,
         furnishing: apt.furnishing,
         parking: apt.parking,
-        apartmentType: apt.apartmentType
+        bathrooms: apt.bathrooms,
+        amenities: apt.amenities || apt.nearby?.join(" ")
     };
     return String(values[group] || "").toLowerCase();
 }
@@ -197,8 +254,20 @@ function matchesGroupedFilters(apt) {
     return [...activeFilters.entries()].every(([group, values]) => {
         if (!values.size) return true;
 
+        if (group === "mode") {
+            return [...values].some(val => isSameMode(apt.listingMode || apt.type, val));
+        }
+
+        if (group === "propertyType") {
+            const aptType = String(apt.apartmentType || apt.propertyType || "").toLowerCase();
+            return [...values].some(val => {
+                const target = String(val).toLowerCase();
+                return aptType.includes(target) || target.includes(aptType);
+            });
+        }
+
         if (group === "bhk") {
-            const aptTypeNum = String(apt.type || "").replace(/\D/g, "");
+            const aptTypeNum = String(apt.bhk || apt.type || "").replace(/\D/g, "");
             return [...values].some(val => {
                 const filterNum = String(val).replace(/\D/g, "");
                 if (String(val).includes("+") && filterNum && aptTypeNum) return Number(aptTypeNum) >= Number(filterNum);
@@ -206,13 +275,21 @@ function matchesGroupedFilters(apt) {
             });
         }
 
+        if (group === "bathrooms") {
+            const aptBaths = Number(apt.bathrooms || 0);
+            return [...values].some(val => {
+                const target = String(val).replace(/\D/g, "");
+                if (String(val).includes("+") && target) return aptBaths >= Number(target);
+                return target ? aptBaths === Number(target) : true;
+            });
+        }
+
         if (group === "availability") {
-            const aptAvail = String(apt.available || "").toLowerCase();
+            const aptAvail = String(apt.available || apt.constructionStatus || "").toLowerCase();
             return [...values].some(val => {
                 const target = String(val).toLowerCase();
                 if (target.includes("ready") || target.includes("immediate")) return aptAvail.includes("ready") || aptAvail.includes("immediate");
-                if (target.includes("15")) return aptAvail.includes("15") || aptAvail.includes("immediate") || aptAvail.includes("ready");
-                if (target.includes("30")) return aptAvail.includes("30") || aptAvail.includes("15") || aptAvail.includes("immediate") || aptAvail.includes("ready");
+                if (target.includes("under") || target.includes("construction")) return aptAvail.includes("under") || aptAvail.includes("construction");
                 return aptAvail.includes(target);
             });
         }
@@ -225,6 +302,16 @@ function matchesGroupedFilters(apt) {
                 if (target.includes("semi")) return aptFurn.includes("semi");
                 if (target.includes("unfurnished") || target.includes("none")) return aptFurn.includes("unfurnished") || aptFurn.includes("none");
                 return aptFurn.includes(target);
+            });
+        }
+
+        if (group === "amenities") {
+            const aptAmenities = `${apt.amenities || ""} ${apt.parking || ""} ${apt.nearby?.join(" ") || ""}`.toLowerCase();
+            return [...values].some(val => {
+                const target = String(val).toLowerCase();
+                if (target.includes("security")) return aptAmenities.includes("security") || aptAmenities.includes("gated");
+                if (target.includes("pool")) return aptAmenities.includes("pool") || aptAmenities.includes("swimming");
+                return aptAmenities.includes(target);
             });
         }
 
@@ -250,6 +337,13 @@ function activeFilterCount() {
 function updateFilterState(message = "") {
     document.querySelectorAll("[data-filter]").forEach(button => {
         const group = button.dataset.filterGroup || "general";
+        if (group === "mode") {
+            const bVal = (button.dataset.filter || "").toLowerCase();
+            const active = Boolean(activeSearchMode && isSameMode(bVal, activeSearchMode));
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+            return;
+        }
         const active = activeFilters.get(group)?.has(button.dataset.filter) || false;
         button.classList.toggle("active", active);
         button.setAttribute("aria-pressed", String(active));
@@ -259,20 +353,42 @@ function updateFilterState(message = "") {
 }
 
 function filteredApartments() {
-    const query = (document.getElementById("listingSearch")?.value || "").toLowerCase().trim();
-    const city = (document.getElementById("listingCity")?.value || "").toLowerCase().trim();
-    const budget = Number(document.getElementById("budgetRange")?.value || 150000);
-    const minBudget = Number(document.getElementById("minBudgetRange")?.value || 0);
+    const searchInput = document.getElementById("listingSearch");
+    const query = (searchInput?.value || "").toLowerCase().trim();
+    const citySelect = document.getElementById("listingCity");
+    const city = (citySelect?.value || "").toLowerCase().trim();
+    const budgetEl = document.getElementById("budgetRange");
+    const minBudgetEl = document.getElementById("minBudgetRange");
+    const budget = Number(budgetEl?.value || 250000);
+    const maxBudgetRange = Number(budgetEl?.max || 250000);
+    const minBudget = Number(minBudgetEl?.value || 0);
     const mode = (activeSearchMode || "").toLowerCase().trim();
 
     return allApartments().filter((apt) => {
-        const text = `${apt.title} ${apt.society} ${apt.locality} ${apt.city} ${apt.type} ${apt.listingMode || ""} ${apt.furnishing} ${apt.available} ${apt.parking} ${apt.apartmentType} ${apt.nearby?.join(" ") || ""}`.toLowerCase();
+        const text = `${apt.title} ${apt.society} ${apt.locality} ${apt.city} ${apt.bhk || apt.type} ${apt.listingMode || ""} ${apt.furnishing} ${apt.available} ${apt.parking} ${apt.apartmentType || apt.propertyType} ${apt.amenities || ""} ${apt.nearby?.join(" ") || ""}`.toLowerCase();
         const filtersOk = matchesGroupedFilters(apt);
         const queryOk = !query || text.includes(query);
-        const cityOk = !city || String(apt.city || "").toLowerCase() === city || String(apt.locality || "").toLowerCase() === city;
+        const cityOk = isSameCity(apt.city, city) || isSameCity(apt.locality, city);
+        const modeOk = isSameMode(apt.listingMode || apt.type, mode);
 
-        const modeOk = !mode || String(apt.listingMode || "").toLowerCase() === mode;
-        const budgetOk = apt.rent >= minBudget && apt.rent <= budget;
+        let budgetOk = true;
+        const aptPrice = Number(apt.rent ?? apt.price ?? 0);
+        const isAptSale = isSameMode(apt.listingMode || apt.type, "buy");
+        const isSearchRent = mode === "rent" || mode === "lease";
+        const isSearchBuy = mode === "buy" || mode === "sale";
+
+        if (isSearchRent) {
+            budgetOk = aptPrice >= minBudget && (budget >= maxBudgetRange || aptPrice <= budget);
+        } else if (isSearchBuy) {
+            if (minBudget > 0) budgetOk = aptPrice >= minBudget;
+            if (budget < maxBudgetRange && budget > 500000) budgetOk = budgetOk && aptPrice <= budget;
+        } else {
+            if (isAptSale) {
+                budgetOk = minBudget > 0 ? aptPrice >= minBudget : true;
+            } else {
+                budgetOk = aptPrice >= minBudget && (budget >= maxBudgetRange || aptPrice <= budget);
+            }
+        }
 
         return cityOk && modeOk && budgetOk && filtersOk && queryOk;
     });
@@ -344,7 +460,7 @@ function renderApartments(items = filteredApartments()) {
                 </div>
                 <div class="apt-actions">
                     <a class="primary" href="${detailUrl}">View Details</a>
-                    <button class="primary" data-action="owner">Get Details</button>
+                    <button class="primary" data-action="owner">Get Owner Details</button>
                     <button class="ghost" data-action="visit">Schedule Visit</button>
                     <button class="ghost" data-action="shortlist">♡ Save</button>
                 </div>
@@ -692,13 +808,17 @@ function actionMessage(action) {
 
 function resetApartmentSearch() {
     activeFilters = new Map();
+    activeSearchMode = "";
     document.querySelectorAll(".filters button.active, [data-view-mode].active").forEach(btn => btn.classList.remove("active"));
     document.querySelector('[data-view-mode="list"]')?.classList.add("active");
+    document.querySelectorAll("[data-search-mode]").forEach(b => {
+        b.classList.toggle("active", b.dataset.searchMode === "");
+    });
     const city = document.getElementById("listingCity");
     const search = document.getElementById("listingSearch");
     const budget = document.getElementById("budgetRange");
     const minBudget = document.getElementById("minBudgetRange");
-    if (city) city.value = defaultCity;
+    if (city) city.value = "";
     if (search) search.value = "";
     if (budget) {
         budget.value = defaultBudget;
@@ -733,9 +853,11 @@ function syncBudgetForCurrentSearch() {
 }
 
 function updateListingContext(count = Number(resultCount?.textContent || 0)) {
-    const city = document.getElementById("listingCity")?.value || "Selected city";
+    const city = document.getElementById("listingCity")?.value || "";
+    const cityLabel = city && city.toLowerCase() !== "all cities" ? city : "All Cities";
     const breadcrumb = document.querySelector(".breadcrumb");
-    if (breadcrumb) breadcrumb.textContent = `Home / Apartments / ${city}${activeSearchMode ? ` / ${activeSearchMode}` : ""}`;
+    const modeLabel = activeSearchMode ? ` / ${activeSearchMode}` : "";
+    if (breadcrumb) breadcrumb.textContent = `Home / Apartments / ${cityLabel}${modeLabel}`;
     const liveCount = document.getElementById("resultCount");
     if (liveCount) liveCount.textContent = String(count);
 }
@@ -852,6 +974,24 @@ document.addEventListener("click", (event) => {
         event.preventDefault();
         const group = filter.dataset.filterGroup || "general";
         const value = filter.dataset.filter;
+
+        if (group === "mode") {
+            const targetMode = value.toLowerCase();
+            activeSearchMode = (activeSearchMode === targetMode) ? "" : targetMode;
+            document.querySelectorAll("[data-search-mode]").forEach(b => {
+                b.classList.toggle("active", (b.dataset.searchMode || "") === activeSearchMode);
+            });
+            document.querySelectorAll('[data-filter-group="mode"]').forEach(b => {
+                const bVal = (b.dataset.filter || "").toLowerCase();
+                const isActive = activeSearchMode && isSameMode(bVal, activeSearchMode);
+                b.classList.toggle("active", Boolean(isActive));
+                b.setAttribute("aria-pressed", String(Boolean(isActive)));
+            });
+            renderApartments();
+            showToast(activeSearchMode ? `Showing ${activeSearchMode.toUpperCase()} properties` : "Showing all listings");
+            return;
+        }
+
         const values = activeFilters.get(group) || new Set();
         if (values.has(value)) values.delete(value);
         else values.add(value);
@@ -908,9 +1048,17 @@ document.addEventListener("click", (event) => {
         event.preventDefault();
         document.querySelectorAll("[data-search-mode]").forEach(b => b.classList.remove("active"));
         searchModeBtn.classList.add("active");
-        activeSearchMode = searchModeBtn.dataset.searchMode;
+        activeSearchMode = searchModeBtn.dataset.searchMode || "";
+        
+        document.querySelectorAll('[data-filter-group="mode"]').forEach(b => {
+            const bVal = (b.dataset.filter || "").toLowerCase();
+            const isActive = activeSearchMode && isSameMode(bVal, activeSearchMode);
+            b.classList.toggle("active", Boolean(isActive));
+            b.setAttribute("aria-pressed", String(Boolean(isActive)));
+        });
+
         renderApartments();
-        showToast(`Filtered by ${activeSearchMode.toUpperCase()}`);
+        showToast(activeSearchMode ? `Filtered by ${activeSearchMode.toUpperCase()}` : "Showing all listings");
     }
 
     const emptyReset = event.target.closest("#emptyResetFilters");
@@ -1095,21 +1243,64 @@ async function loadPublicInventory() {
     return items;
 }
 if(results) results.innerHTML='<article class="apartment-card empty-results" role="status"><h2>Loading properties…</h2><p>Finding approved, available listings.</p></article>';
-loadPublicInventory().then(items=>{
-    const mapped=items.map(x=>({
-        id:x.id,title:x.title,society:x.society,locality:x.locality,city:x.city,type:x.listingType,
-        rent:Number(x.price||0),price:x.price,bhk:x.bhk,bathrooms:x.bathrooms,furnishing:x.furnishing,
-        image:x.imageUrl,imageUrl:x.imageUrl,imageUrls:String(x.imageUrls||"").split(/\r?\n/).filter(Boolean),
-        deposit:x.deposit,maintenance:x.maintenance,sqft:x.areaSqft?`${x.areaSqft.toLocaleString("en-IN")} sqft`:"Area on request",
-        parking:x.parking,address:x.address,pincode:x.pincode,description:x.description,amenities:x.amenities,
-        available:x.availableFrom?new Date(x.availableFrom).toLocaleDateString("en-IN"):"Confirm availability",
-        apartmentType:x.propertyType||"Apartment"
+function updateSocietiesFromListings() {
+    const counts = {};
+    (approvedDiscoveryListings || []).forEach(apt => {
+        const soc = apt.society || apt.locality;
+        if (soc && soc !== "Owner Listed Apartment" && soc !== "Approved Society") {
+            counts[soc] = (counts[soc] || 0) + 1;
+        }
+    });
+    societyData.length = 0;
+    Object.entries(counts).forEach(([k, v]) => societyData.push([k, v]));
+}
+
+loadPublicInventory().then(items => {
+    const mapped = items.map(x => ({
+        id: x.id,
+        title: x.title,
+        society: x.society || x.locality || "Approved Society",
+        locality: x.locality || x.city || "Direct Listing",
+        city: x.city,
+        listingMode: x.listingType || "Rent",
+        listingType: x.listingType || "Rent",
+        type: x.listingType || "Rent",
+        rent: Number(x.price || 0),
+        price: Number(x.price || 0),
+        bhk: x.bhk || (x.bedrooms ? `${x.bedrooms} BHK` : "2 BHK"),
+        bedrooms: x.bedrooms,
+        bathrooms: x.bathrooms,
+        furnishing: x.furnishing,
+        image: x.imageUrl,
+        imageUrl: x.imageUrl,
+        imageUrls: String(x.imageUrls || "").split(/\r?\n/).filter(Boolean),
+        video: x.videoUrl,
+        videoUrl: x.videoUrl,
+        deposit: x.deposit,
+        maintenance: x.maintenance,
+        areaSqft: x.areaSqft,
+        sqft: x.areaSqft ? `${Number(x.areaSqft).toLocaleString("en-IN")} sqft` : "Area on request",
+        parking: x.parking,
+        address: x.address,
+        pincode: x.pincode,
+        description: x.description,
+        amenities: x.amenities,
+        available: x.availableFrom ? new Date(x.availableFrom).toLocaleDateString("en-IN") : (x.constructionStatus || "Ready to Move"),
+        constructionStatus: x.constructionStatus || "Ready to Move",
+        propertyType: x.propertyType || "Apartment",
+        apartmentType: x.propertyType || "Apartment"
     }));
     approvedDiscoveryListings = mapped;
     approvedDiscoveryLoaded = true;
-    renderSocieties(); updateFilterState();
-}).catch(error=>{
+
+    [...new Set(mapped.map(x => x.city).filter(Boolean))].forEach(c => saveCityOption(c));
+    hydrateCityDropdowns(document.getElementById("listingCity")?.value || "");
+    updateSocietiesFromListings();
+    syncBudgetForCurrentSearch();
+    renderSocieties();
+    updateFilterState();
+}).catch(error => {
     approvedDiscoveryListings = [];
     approvedDiscoveryLoaded = true;
-    if(results) results.innerHTML='<article class="apartment-card empty-results" role="alert"><h2>Properties could not be loaded</h2><p>Please retry. Your filters have been kept.</p><button class="primary" type="button" onclick="location.reload()">Try again</button></article>';
+    if (results) results.innerHTML = '<article class="apartment-card empty-results" role="alert"><h2>Properties could not be loaded</h2><p>Please retry. Your filters have been kept.</p><button class="primary" type="button" onclick="location.reload()">Try again</button></article>';
 });

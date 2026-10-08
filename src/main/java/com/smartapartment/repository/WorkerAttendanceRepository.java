@@ -20,4 +20,5 @@ public interface WorkerAttendanceRepository extends JpaRepository<WorkerAttendan
     List<WorkerAttendance> findByWorkerIdOrderByDateDesc(Long workerId);
 
     List<WorkerAttendance> findByTenantIdOrderByDateDesc(String tenantId);
+    List<WorkerAttendance> findByTenantIdAndDateBetweenOrderByDateDesc(String tenantId,LocalDate start,LocalDate end);
 }

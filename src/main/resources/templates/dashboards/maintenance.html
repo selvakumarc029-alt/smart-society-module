@@ -6035,7 +6035,7 @@
                         <div
                             class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
                             <div>
-                                <h4 class="fw-bold mb-1">Preventive Asset Maintenance Schedule</h4>
+                                <h4 class="fw-bold mb-1">Preventive Asset Maintenance Schedule <span class="badge bg-secondary fs-6">Demo</span></h4>
                                 <p class="text-muted mb-0">Maintain each asset’s service history, safety status,
                                     readings and next due date.</p>
                             </div>
@@ -6054,7 +6054,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="assetsBody">
+                                <tbody id="assetsBody" data-maintenance-asset-demo="true">
                                     <tr>
                                         <td>Schindler Passenger Lift #1</td>
                                         <td>Elevator System</td>
@@ -11373,10 +11373,15 @@
                     e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
-                    const name = document.getElementById('techName')?.value?.trim() || "Ramesh Kumar";
-                    const skill = document.getElementById('techSkill')?.value?.trim() || "Senior Plumber & Pipe Fitter";
-                    const shift = document.getElementById('techShift')?.value?.trim() || "Morning Shift (07:00 AM - 04:00 PM)";
-                    const phone = document.getElementById('techPhone')?.value?.trim() || "+91 98441 22334";
+                    const name = document.getElementById('techName')?.value?.trim() || "";
+                    const skill = document.getElementById('techSkill')?.value?.trim() || "";
+                    const shift = document.getElementById('techShift')?.value?.trim() || "";
+                    const phone = document.getElementById('techPhone')?.value?.trim() || "";
+                    if (!name) {
+                        if (window.showToast) window.showToast('Enter the team lead name before saving.', 'danger');
+                        document.getElementById('techName')?.focus();
+                        return;
+                    }
                     const availability = document.getElementById('techAvailability')?.value || "Available on duty";
                     const backup = document.getElementById('techBackup')?.value?.trim() || "";
                     const serviceArea = document.getElementById('techServiceArea')?.value?.trim() || "";
@@ -11385,7 +11390,10 @@
                     const profileData = { name, skill, shift, phone, availability, backup, serviceArea, notes, updatedAt: new Date().toISOString() };
                     try {
                         localStorage.setItem('smart_maintenance_tech_profile', JSON.stringify(profileData));
-                    } catch (err) { }
+                    } catch (err) {
+                        if (window.showToast) window.showToast('This browser could not save the technician profile. Your inputs are still available.', 'danger');
+                        return;
+                    }
 
                     const originalHtml = profileSaveBtn.innerHTML;
                     profileSaveBtn.disabled = true;
@@ -11393,7 +11401,7 @@
                     profileSaveBtn.classList.remove('btn-primary');
                     profileSaveBtn.classList.add('btn-success');
 
-                    if (window.showToast) window.showToast(`Technician profile for ${name} saved successfully!`, "success");
+                    if (window.showToast) window.showToast(`Technician profile for ${name} saved on this browser.`, "success");
 
                     setTimeout(() => {
                         if (profileSaveBtn && profileSaveBtn.isConnected) {
@@ -11412,11 +11420,15 @@
                     e.preventDefault();
                     e.stopPropagation();
                     e.stopImmediatePropagation();
-                    const email = copyLoginBtn.dataset.email || "worker@smartsociety.com";
-                    const creds = `Login: ${email}\nPassword: Password@123\nURL: ${window.location.origin}/login`;
+                    const email = copyLoginBtn.dataset.email?.trim();
+                    if (!email) {
+                        if (window.showToast) window.showToast('No login email is available for this worker.', 'danger');
+                        return;
+                    }
+                    const creds = `Login: ${email}\nURL: ${window.location.origin}/login\nUse the password assigned to this worker.`;
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(creds).then(() => {
-                            if (window.showToast) window.showToast(`Login credentials for ${email} copied to clipboard!`, "success");
+                            if (window.showToast) window.showToast(`Login details for ${email} copied to clipboard!`, "success");
                         }).catch(() => {
                             prompt("Copy worker login:", creds);
                         });
@@ -11922,8 +11934,9 @@
 
             <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
             <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-            <script src="/smartapartment/js/worker-attendance-module.js?v=20260919-v1"></script>
-            <script src="/smartapartment/js/maintenance-manager-dashboard.js?v=20260919-v1"></script>
+            <script src="/smartapartment/js/worker-attendance-module.js?v=20261008-task-buttons-v2"></script>
+            <script src="/smartapartment/js/maintenance-manager-dashboard.js?v=20261008-action-buttons-v2"></script>
+            <script src="/smartapartment/js/maintenance-asset-demo.js?v=20261008-demo-v1"></script>
 </body>
 
 </html>

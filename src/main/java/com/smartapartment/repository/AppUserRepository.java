@@ -13,4 +13,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     List<AppUser> findByTenantId(String tenantId);
     List<AppUser> findByRole(com.smartapartment.entity.UserRole role);
     List<AppUser> findByTenantIdAndRole(String tenantId, com.smartapartment.entity.UserRole role);
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @org.springframework.data.jpa.repository.Query("select u from AppUser u where u.id=:id")
+    Optional<AppUser> lockAttendanceUser(@org.springframework.data.repository.query.Param("id") Long id);
 }

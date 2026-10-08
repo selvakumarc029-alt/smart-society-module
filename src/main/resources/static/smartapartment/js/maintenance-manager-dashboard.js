@@ -386,8 +386,11 @@
     }
 
     // Attach Action Listeners for Audited Manual Actions
+    const boundActionButtons = new WeakSet();
     function attachActionListeners() {
         document.querySelectorAll('.mgr-action').forEach(el => {
+            if (boundActionButtons.has(el)) return;
+            boundActionButtons.add(el);
             el.addEventListener('click', (e) => {
                 e.preventDefault();
                 const act = el.dataset.act;
@@ -473,7 +476,7 @@
                 payload = { workerId: parseInt(workerId), justification: notes || 'Manager override' };
             }
 
-            await executeSimpleAction(endpoint, payload, 'Worker assigned successfully');
+            return executeSimpleAction(endpoint, payload, 'Worker assigned successfully');
         });
     }
 
@@ -512,7 +515,7 @@
         showModal(modalHtml, async () => {
             const priority = document.getElementById('mgr-modal-priority').value;
             const reason = document.getElementById('mgr-modal-notes').value || 'Manager priority update';
-            await executeSimpleAction(`/api/maintenance/manager/${reqId}/priority`, { priority, reason }, 'Priority updated');
+            return executeSimpleAction(`/api/maintenance/manager/${reqId}/priority`, { priority, reason }, 'Priority updated');
         });
     }
 
@@ -546,7 +549,7 @@
         showModal(modalHtml, async () => {
             const additionalMinutes = parseInt(document.getElementById('mgr-modal-eta-mins').value);
             const reason = document.getElementById('mgr-modal-notes').value || 'ETA adjusted by manager';
-            await executeSimpleAction(`/api/maintenance/manager/${reqId}/eta`, { additionalMinutes, reason }, 'ETA updated');
+            return executeSimpleAction(`/api/maintenance/manager/${reqId}/eta`, { additionalMinutes, reason }, 'ETA updated');
         });
     }
 
@@ -576,27 +579,34 @@
         const modal = new bootstrap.Modal(modalEl);
         modal.show();
 
-        document.getElementById('mgr-modal-submit').addEventListener('click', async () => {
-            await onSubmit();
-            modal.hide();
+        const submit = document.getElementById('mgr-modal-submit');
+        const error = document.createElement('p'); error.className = 'text-danger small mt-2'; error.setAttribute('role', 'alert');
+        modalEl.querySelector('.modal-body').appendChild(error);
+        submit.addEventListener('click', async () => {
+            if (submit.disabled) return;
+            submit.disabled = true; error.textContent = '';
+            try { if (await onSubmit() !== false) modal.hide(); else error.textContent = 'The action was not saved. Check the error notification and try again.'; }
+            catch (failure) { error.textContent = failure.message; }
+            finally { submit.disabled = false; }
         });
     }
 
     async function executeSimpleAction(url, body, successMsg) {
         try {
             const resp = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
+                method: 'POST', credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
             });
-            if (resp.ok) {
-                showManagerToast('SUCCESS', successMsg);
-                loadDashboardSummary();
-            } else {
-                alert('Action failed. Check console for details.');
+            if (resp.redirected || !resp.ok) {
+                const error = await resp.json().catch(() => ({}));
+                throw new Error(error.message || error.error || 'The action could not be saved. Refresh or sign in again.');
             }
-        } catch (err) {
-            console.error(err);
+            showManagerToast('SUCCESS', successMsg);
+            loadDashboardSummary();
+            return true;
+        } catch (error) {
+            showManagerToast('Action failed', error.message);
+            return false;
         }
     }
 

@@ -5,6 +5,9 @@
 (function () {
     "use strict";
 
+    const societyAttendance = ["smartapartment", "smartsociety"].includes(document.body?.dataset.platform);
+    const attendanceActionUrl = action => (societyAttendance ? "/api/society/workforce/attendance/" : "/api/workers/attendance/") + action;
+
     let liveInterval = null;
     let clockInTimestamp = null;
     let isOnBreak = false;
@@ -346,101 +349,48 @@
     }
 
     // Attendance Actions
+    let attendanceSaving = false;
+    async function saveAttendance(buttonId, endpoint, successMessage, type = "success") {
+        if (attendanceSaving) return;
+        const button = document.getElementById(buttonId);
+        if (button?.disabled) return;
+        attendanceSaving = true;
+        const controls = ["btnWorkerClockIn", "btnWorkerClockOut", "btnWorkerStartBreak", "btnWorkerEndBreak"]
+            .map(id => document.getElementById(id)).filter(Boolean).map(element => ({ element, disabled: element.disabled }));
+        controls.forEach(({ element }) => { element.disabled = true; });
+        const label = button?.innerHTML;
+        if (button) button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
+        let saved = false;
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: "{}"
+            });
+            if (response.redirected || !response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.message || error.error || "Attendance was not saved. Refresh or sign in again.");
+            }
+            saved = true;
+            showToast(successMessage, type);
+        } catch (error) { showToast(error.message, "danger"); }
+        finally {
+            controls.forEach(({ element, disabled }) => { element.disabled = disabled; });
+            if (button) button.innerHTML = label;
+            attendanceSaving = false;
+        }
+        if (saved) await loadWorkerDashboardSummary();
+    }
     async function workerClockIn() {
-        const btn = document.getElementById("btnWorkerClockIn");
-        if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Clocking in...'; }
-        try {
-            const res = await fetch("/api/workers/attendance/clock-in", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({})
-            });
-            if (!res.ok) {
-                applyLocalAttendanceState("PRESENT", "AVAILABLE");
-                showToast("Clocked in successfully! You are now AVAILABLE.", "success");
-                return;
-            }
-            showToast("Clocked in successfully! You are now AVAILABLE.", "success");
-            await loadWorkerDashboardSummary();
-        } catch (e) {
-            applyLocalAttendanceState("PRESENT", "AVAILABLE");
-            showToast("Clocked in successfully! You are now AVAILABLE.", "success");
-        } finally {
-            if (btn) { btn.innerHTML = '<i class="fa-solid fa-right-to-bracket me-1.5"></i>Clock In'; }
-        }
+        return saveAttendance("btnWorkerClockIn", attendanceActionUrl("clock-in"), "Clocked in successfully! You are now AVAILABLE.");
     }
-
     async function workerClockOut() {
-        if (!confirm("Are you sure you want to clock out for today?")) return;
-        const btn = document.getElementById("btnWorkerClockOut");
-        if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Clocking out...'; }
-        try {
-            const res = await fetch("/api/workers/attendance/clock-out", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({})
-            });
-            if (!res.ok) {
-                applyLocalAttendanceState("CLOCKED_OUT", "OFFLINE");
-                showToast("Clocked out successfully. You are now OFFLINE.", "success");
-                return;
-            }
-            showToast("Clocked out successfully. You are now OFFLINE.", "success");
-            await loadWorkerDashboardSummary();
-        } catch (e) {
-            applyLocalAttendanceState("CLOCKED_OUT", "OFFLINE");
-            showToast("Clocked out successfully. You are now OFFLINE.", "success");
-        } finally {
-            if (btn) { btn.innerHTML = '<i class="fa-solid fa-arrow-right-from-bracket me-1.5"></i>Clock Out'; }
-        }
+        if (attendanceSaving || !confirm("Are you sure you want to clock out for today?")) return;
+        return saveAttendance("btnWorkerClockOut", attendanceActionUrl("clock-out"), "Clocked out successfully. You are now OFFLINE.");
     }
-
     async function workerStartBreak() {
-        const btn = document.getElementById("btnWorkerStartBreak");
-        if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Starting break...'; }
-        try {
-            const res = await fetch("/api/workers/attendance/break-start", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({})
-            });
-            if (!res.ok) {
-                applyLocalAttendanceState("PRESENT", "ON_BREAK");
-                showToast("Break started. Your availability is now ON BREAK.", "info");
-                return;
-            }
-            showToast("Break started. Your availability is now ON BREAK.", "info");
-            await loadWorkerDashboardSummary();
-        } catch (e) {
-            applyLocalAttendanceState("PRESENT", "ON_BREAK");
-            showToast("Break started. Your availability is now ON BREAK.", "info");
-        } finally {
-            if (btn) { btn.innerHTML = '<i class="fa-solid fa-mug-hot me-1.5"></i>Start Break'; }
-        }
+        return saveAttendance("btnWorkerStartBreak", attendanceActionUrl("break-start"), "Break started. Your availability is now ON BREAK.", "info");
     }
-
     async function workerEndBreak() {
-        const btn = document.getElementById("btnWorkerEndBreak");
-        if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Ending break...'; }
-        try {
-            const res = await fetch("/api/workers/attendance/break-end", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({})
-            });
-            if (!res.ok) {
-                applyLocalAttendanceState("PRESENT", "AVAILABLE");
-                showToast("Break ended. You are back on duty.", "success");
-                return;
-            }
-            showToast("Break ended. You are back on duty.", "success");
-            await loadWorkerDashboardSummary();
-        } catch (e) {
-            applyLocalAttendanceState("PRESENT", "AVAILABLE");
-            showToast("Break ended. You are back on duty.", "success");
-        } finally {
-            if (btn) { btn.innerHTML = '<i class="fa-solid fa-play me-1.5"></i>End Break'; }
-        }
+        return saveAttendance("btnWorkerEndBreak", attendanceActionUrl("break-end"), "Break ended. You are back on duty.");
     }
 
     // Start a task
@@ -682,6 +632,29 @@
         } catch (e) {
             showToast(e.message, "danger");
         }
+    }
+
+    const pendingRejections = new Set();
+    async function rejectWorkerTask(taskId) {
+        if (pendingRejections.has(taskId)) return;
+        const reason = prompt("Why are you rejecting this assignment?");
+        if (reason === null) return;
+        if (!reason.trim()) { showToast("A rejection reason is required.", "warning"); return; }
+        pendingRejections.add(taskId);
+        try {
+            const res = await fetch("/api/v1/auto-assignment/requests/" + taskId + "/reject", {
+                method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ reason: reason.trim() })
+            });
+            if (res.redirected || !res.ok) {
+                const error = await res.json().catch(() => ({}));
+                throw new Error(error.message || "Unable to reject this assignment. Please sign in again if your session expired.");
+            }
+            showToast("Assignment rejected. The existing reassignment workflow will find another worker.", "success");
+            await loadWorkerDashboardSummary();
+            if (window.loadAdminResidentRequests) await window.loadAdminResidentRequests();
+        } catch (error) { showToast(error.message, "danger"); }
+        finally { pendingRejections.delete(taskId); }
     }
 
     async function workerStartTravel(taskId) {

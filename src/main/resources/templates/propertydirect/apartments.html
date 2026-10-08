@@ -967,7 +967,7 @@
 <header class="topbar compact">
     <a class="brand" href="/propertydirect"><span class="brand-mark">PD</span> <span>Property</span>Direct</a>
     <div class="apartment-searchbar" style="max-width: 600px;">
-        <select id="listingCity"><option value="Chennai">Chennai</option><option value="Bangalore">Bangalore</option><option value="Mumbai">Mumbai</option><option value="Pune">Pune</option></select>
+        <select id="listingCity"><option value="">All Cities</option><option value="Bangalore">Bangalore / Bengaluru</option><option value="Chennai">Chennai</option><option value="Mumbai">Mumbai</option><option value="Pune">Pune</option><option value="Hyderabad">Hyderabad</option><option value="Delhi NCR">Delhi NCR</option></select>
         <input id="listingSearch" placeholder="Search locality, project or bedrooms" aria-label="Search properties">
         <button class="primary small" id="listingSearchButton" style="background: linear-gradient(135deg, #2563eb, #7c3aed); border: none; font-weight: 800;">Search</button>
     </div>
@@ -992,7 +992,7 @@
         <label>Property Purpose</label>
         <div class="check-grid">
             <button data-filter-group="mode" data-filter="BUY">Buy</button>
-            <button data-filter-group="mode" data-filter="RENT" class="active">Rent</button>
+            <button data-filter-group="mode" data-filter="RENT">Rent</button>
             <button data-filter-group="mode" data-filter="LEASE">Lease</button>
         </div>
 
@@ -1076,14 +1076,14 @@
     <section class="listing-content">
         <div class="listing-toolbar">
             <div>
-                <p class="breadcrumb">Home / Apartments / Bangalore</p>
+                <p class="breadcrumb">Home / Apartments / All Cities</p>
                 <h1><span id="resultCount">0</span> verified apartments without brokerage</h1>
                 <p>Owner-listed apartment homes with rent, deposit, furnishing, availability, nearby places and visit options.</p>
                 <div class="pd-mode-tabs" style="margin-top: 10px;">
                     <button type="button" class="pd-mode-tab" data-search-mode="buy">Buy</button>
-                    <button type="button" class="pd-mode-tab active" data-search-mode="rent">Rent</button>
+                    <button type="button" class="pd-mode-tab" data-search-mode="rent">Rent</button>
                     <button type="button" class="pd-mode-tab" data-search-mode="lease">Lease</button>
-                    <button type="button" class="pd-mode-tab" data-search-mode="">All Listings</button>
+                    <button type="button" class="pd-mode-tab active" data-search-mode="">All Listings</button>
                 </div>
             </div>
             <div class="view-toggle">
@@ -1190,7 +1190,8 @@
 </script>
 
 <script src="/shared/js/required-fields.js?v=20260826-v2"></script>
-<script src="/propertydirect/js/apartments.js?v=20260929-real-workflow-v1"></script>
+<script src="/propertydirect/js/apartments.js?v=20261008-admin-approved-sync-v1"></script>
 <script src="/propertydirect/js/public-workflow.js?v=20260929-1"></script>
+<script src="/propertydirect/js/owner-details-flow.js?v=20261008-owner-flow-v1"></script>
 </body>
 </html>

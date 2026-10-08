@@ -15,6 +15,9 @@ public interface MaintenanceBillRepository extends JpaRepository<MaintenanceBill
     boolean existsByTenantIdAndApartmentIdAndBillMonth(String tenantId, Long apartmentId, String billMonth);
     List<MaintenanceBill> findByTenantIdOrderByDueDateDesc(String tenantId);
     Optional<MaintenanceBill> findByIdAndTenantId(Long id, String tenantId);
+    @org.springframework.data.jpa.repository.Lock(jakarta.persistence.LockModeType.PESSIMISTIC_WRITE)
+    @Query("select b from MaintenanceBill b where b.id=:id and b.tenantId=:tenant")
+    Optional<MaintenanceBill> lockByIdAndTenantId(@Param("id") Long id,@Param("tenant") String tenant);
     List<MaintenanceBill> findByTenantIdAndPaymentStatusIgnoreCaseAndDueDateBefore(String tenantId, String paymentStatus, LocalDate date);
 
     @Query("select coalesce(sum(b.totalAmount), 0) from MaintenanceBill b " +

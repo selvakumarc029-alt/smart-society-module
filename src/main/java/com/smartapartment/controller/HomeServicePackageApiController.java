@@ -6,6 +6,7 @@ import com.smartapartment.service.HomeServicePackageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,7 @@ public class HomeServicePackageApiController {
     /**
      * Admin endpoint to get all packages (including inactive) for admin table view.
      */
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping("/api/admin/home-services/packages")
     public ResponseEntity<List<HomeServicePackage>> getAllPackagesForAdmin() {
         return ResponseEntity.ok(packageService.getAllPackages());
@@ -47,6 +49,7 @@ public class HomeServicePackageApiController {
     /**
      * CRUD: Create new service package.
      */
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/api/admin/home-services/packages")
     public ResponseEntity<?> createPackage(@RequestBody HomeServicePackageDto dto) {
         try {
@@ -69,6 +72,7 @@ public class HomeServicePackageApiController {
     /**
      * CRUD: Update package details & price.
      */
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PutMapping("/api/admin/home-services/packages/{id}")
     public ResponseEntity<?> updatePackage(@PathVariable Long id, @RequestBody HomeServicePackageDto dto) {
         try {
@@ -92,6 +96,7 @@ public class HomeServicePackageApiController {
      * CRUD: Quick inline price update.
      * Expects { "price": 2899 } or direct numeric query param.
      */
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PatchMapping("/api/admin/home-services/packages/{id}/price")
     public ResponseEntity<?> updatePriceOnly(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         try {
@@ -114,6 +119,7 @@ public class HomeServicePackageApiController {
     /**
      * CRUD: Delete package (soft delete / active = false).
      */
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping("/api/admin/home-services/packages/{id}")
     public ResponseEntity<?> deletePackage(@PathVariable Long id) {
         try {
@@ -129,6 +135,7 @@ public class HomeServicePackageApiController {
     /**
      * Reset catalog to system defaults if needed.
      */
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/api/admin/home-services/packages/reset-defaults")
     public ResponseEntity<?> resetDefaults() {
         try {

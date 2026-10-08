@@ -688,6 +688,13 @@
                                 <i class="fa-solid fa-rotate"></i> <span>Refresh List</span>
                             </button>
                         </div>
+                        <section class="mb-4" aria-labelledby="workerServiceTicketsTitle">
+                            <h5 id="workerServiceTicketsTitle" class="fw-bold">Assigned Home Service Tickets</h5>
+                            <p class="small text-muted">Update your assigned tickets. Saved changes appear in the resident’s service tickets.</p>
+                            <button type="button" class="btn btn-sm btn-outline-primary mb-3" data-service-tickets-refresh>Refresh service tickets</button>
+                            <p class="small" role="status" id="workerServiceTicketMessage"></p>
+                            <div id="workerServiceTickets" class="d-grid gap-3"></div>
+                        </section>
                         <div id="workerFullTasksList" class="d-grid gap-3">
                             <div class="worker-empty-state text-center">
                                 <div class="worker-empty-icon rounded-circle bg-white shadow-xs d-inline-flex align-items-center justify-content-center mb-3">
@@ -700,6 +707,7 @@
                     </div>
                 </section>
 
+                <!-- Assigned home-service tickets use the same saved records as the resident view. -->
                 <!-- COMPLETED HISTORY PANEL -->
                 <section data-view="history" id="viewHistory" class="d-none animate__animated animate__fadeIn">
                     <div class="worker-section-card">
@@ -800,9 +808,10 @@
     </div>
 
     <!-- Scripts -->
+    <script defer src="/smartapartment/js/worker-service-tickets.js?v=20261008-worker-status-v1"></script>
     <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
     <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-    <script src="/smartapartment/js/worker-attendance-module.js?v=20260919-v1"></script>
+    <script src="/smartapartment/js/worker-attendance-module.js?v=20261008-task-buttons-v2"></script>
     <script>
         // Tab switching logic for Worker Dashboard
         document.addEventListener('DOMContentLoaded', () => {

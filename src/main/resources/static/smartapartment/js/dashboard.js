@@ -733,6 +733,7 @@ document.addEventListener("click", async event => {
 
 function removeStaticDashboardOperationalData() {
     document.querySelectorAll("[data-view] table tbody").forEach(tbody => {
+        if (tbody.dataset.maintenanceAssetDemo === "true") return;
         const columns = tbody.closest("table")?.querySelectorAll("thead th").length || 1;
         tbody.innerHTML = `<tr class="dashboard-empty-row"><td colspan="${columns}" class="text-muted text-center py-4">No records available.</td></tr>`;
     });
@@ -1078,8 +1079,11 @@ async function loadPlatformBackendData(){
                 ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Approved</span>'
                 : '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-clock me-1"></i>Pending / Suspended</span>';
             r.appendChild(statusCell);
-            const c=document.createElement("td");
-            c.innerHTML=`<button class="btn btn-sm btn-outline-primary me-1" data-backend-action="view-society" title="View society details"><i class="fa-solid fa-eye me-1"></i>View</button><button class="btn btn-sm ${t.approved ? 'btn-outline-success' : 'btn-success'} me-1" data-backend-action="approve-society" title="${t.approved ? 'Society is approved and active (click to re-verify)' : 'Approve and activate society'}"><i class="fa-solid fa-check me-1"></i>Approve</button><button class="btn btn-sm ${t.approved ? 'btn-outline-danger' : 'btn-outline-secondary'}" data-backend-action="suspend-society" title="${t.approved ? 'Suspend this society' : 'Society is currently suspended'}"><i class="fa-solid fa-ban me-1"></i>Suspend</button>`;
+            const c = document.createElement("td");
+            const actionBtn = t.approved
+                ? `<button class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-1 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'suspend-society', this)" title="Suspend this society"><i class="fa-solid fa-ban me-1"></i>Suspend</button>`
+                : `<button class="btn btn-sm btn-success rounded-pill px-2.5 py-1 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'approve-society', this)" title="Approve and activate society"><i class="fa-solid fa-check me-1"></i>Approve</button>`;
+            c.innerHTML=`<button class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-1 me-1.5 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'view-society', this)" title="View society details"><i class="fa-solid fa-eye me-1"></i>View</button>${actionBtn}`;
             r.appendChild(c);
             return r;
         });
@@ -1209,8 +1213,10 @@ async function loadPlatformBackendData(){
 
     }catch(error){console.error("Platform hydration failed",error);}
 }
+window.loadPlatformBackendData = loadPlatformBackendData;
 
 async function mutateSociety(path, method, body) {
+    if (window.smartCrudRequest) return window.smartCrudRequest(`/api/${path}`, method, body);
     const response = await fetch(`/api/${path}`, {method, headers:{"Content-Type":"application/json",Accept:"application/json"}, body:body===undefined?undefined:JSON.stringify(body)});
     const result = await response.json().catch(()=>({}));
     if(!response.ok) throw new Error(result.message || "The operation could not be completed");
@@ -1393,6 +1399,7 @@ function renderAmenityBookingDesk(amenityItems = [], bookingItems = [], resident
             button.type = "button"; button.className = "btn btn-sm btn-outline-primary";
             button.dataset.action = "amenity-price-edit";
             button.dataset.amenityId = amenity.id;
+            button.dataset.version = amenity.version;
             button.dataset.amenityName = amenity.name;
             button.dataset.amenityCapacity = amenity.capacity;
             button.dataset.amenityPrice = amenity.bookingFee ?? 0;
@@ -4520,6 +4527,8 @@ function closeActionModal() {
 }
 
 async function performAction(action, button, values = []) {
+    const persistedCrud = await window.performPersistedCrudAction?.(action, button, values);
+    if (persistedCrud) return persistedCrud;
     const context = getContext(button);
     const now = new Date().toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
     const fieldValues = values.filter(Boolean);
@@ -5263,7 +5272,7 @@ async function submitActionModal() {
         modal.querySelector("#dashboardActionTitle")?.textContent?.toLowerCase().includes("complaint")
     );
 
-    if (isComplaintAction) {
+    if (isComplaintAction && dashboardRole === "resident") {
         const inputs = [...modal.querySelectorAll("[data-action-input]")];
         const categoryVal = inputs[1]?.value?.trim() || "Plumbing";
         const descVal = inputs[10]?.value?.trim() || "";
@@ -5297,7 +5306,7 @@ async function submitActionModal() {
         showToast(`Please complete required field: ${labelText || "all required fields"}`, "warning");
         return;
     }
-    const values = [...modal.querySelectorAll("[data-action-input]")].map(input => input.value.trim());
+    const values = [...modal.querySelectorAll("[data-action-input]")].map(input => input.type === "password" ? input.value : input.value.trim());
 
     if (dashboardRole === "resident" && activeAction.action === "book") {
         const save = modal.querySelector("#dashboardActionSave");
@@ -5319,12 +5328,14 @@ async function submitActionModal() {
     }
 
     const save = modal.querySelector("#dashboardActionSave");
+    if (save.disabled) return;
     save.disabled = true;
     save.textContent = "Saving…";
     try {
-        const saved = await persistWorkflowAction(activeAction.action, activeAction.button, values).catch(() => ({ id: "LOCAL" }));
         const receipt = await performAction(activeAction.action, activeAction.button, values);
-        if (receipt && receipt.lines) {
+        // Record CRUD only after its domain operation succeeds; never log initial passwords.
+        const saved = receipt?.persisted ? null : await persistWorkflowAction(activeAction.action, activeAction.button, values).catch(() => null);
+        if (saved?.id && receipt && receipt.lines) {
             receipt.lines.push(`<strong>Database reference:</strong> WF-${saved.id}`);
         }
         activeAction = null;

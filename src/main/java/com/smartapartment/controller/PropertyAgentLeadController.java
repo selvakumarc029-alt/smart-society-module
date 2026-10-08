@@ -28,10 +28,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class PropertyAgentLeadController {
     private final PropertyListingRepository listings;
     private final PropertyEnquiryRepository enquiries;
+    private final com.smartapartment.repository.PropertyCustomerRepository customers;
 
-    public PropertyAgentLeadController(PropertyListingRepository listings, PropertyEnquiryRepository enquiries) {
+    public PropertyAgentLeadController(PropertyListingRepository listings, PropertyEnquiryRepository enquiries,
+                                     com.smartapartment.repository.PropertyCustomerRepository customers) {
         this.listings = listings;
         this.enquiries = enquiries;
+        this.customers = customers;
     }
 
     @GetMapping
@@ -69,13 +72,19 @@ public class PropertyAgentLeadController {
         return toView(enquiries.save(enquiry), listing);
     }
 
-    private static long requireAgent(HttpSession session) {
-        if (!Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:agent"))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PropertyDirect agent login is required");
+    private long requireAgent(HttpSession session) {
+        boolean authorized = session != null && (
+                Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:agent")) ||
+                Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:owner")) ||
+                Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:vendor")) ||
+                Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:admin")) ||
+                Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:superadmin")));
+        if (!authorized) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "PropertyDirect agent or owner login is required");
         }
-        Object id = session.getAttribute("propertydirect:customerId");
-        if (id instanceof Long agentId) return agentId;
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "PropertyDirect agent account is unavailable");
+        var acc = new com.smartapartment.service.PropertyAccessService(customers).account(session);
+        if (acc != null) return acc.getId();
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "PropertyDirect account is unavailable");
     }
 
     private static LeadView toView(PropertyEnquiry enquiry, PropertyListing listing) {

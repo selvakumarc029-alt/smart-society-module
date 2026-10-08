@@ -26,7 +26,7 @@
     document.getElementById('contactForm').addEventListener('submit', async (event) => {
       event.preventDefault(); const form=event.currentTarget, button=form.querySelector('button'), status=document.getElementById('contactStatus');
       status.className='status'; status.textContent=''; button.disabled=true; button.textContent='Sending…';
-      try { const response=await fetch('/api/property/contact-messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form)))}); const result=await response.json(); if(!response.ok) throw new Error(result.message||'Unable to send your message.'); form.reset(); status.classList.add('success'); status.textContent=result.message||'Your message has been sent.'; } catch(error) { status.textContent=error.message||'Unable to send your message.'; } finally { button.disabled=false; button.textContent='Send message'; }
+      try { const response=await fetch('/api/property/contact-messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form)))}); const result=await response.json(); if(!response.ok) throw new Error(result.message||'Unable to send your message.'); form.reset(); status.classList.add('success'); status.textContent='Message sent successfully!'; } catch(error) { status.textContent=error.message||'Unable to send your message.'; } finally { button.disabled=false; button.textContent='Send message'; }
     });
   </script>
 </body>

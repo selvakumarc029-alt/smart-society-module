@@ -732,6 +732,11 @@
     };
 
     function wireModalCloseButtons() {
+        // Fixed-position dialogs must not inherit the animated catalog panel as their viewport.
+        ["categoryPackagesModal", "homeServicePackageModal"].forEach(id => {
+            const modal = document.getElementById(id);
+            if (modal && modal.parentElement !== document.body) document.body.appendChild(modal);
+        });
         const catModal = document.getElementById("categoryPackagesModal");
         if (catModal) {
             catModal.querySelectorAll('[data-bs-dismiss="modal"], .btn-close, [data-category-packages-close]').forEach(btn => {

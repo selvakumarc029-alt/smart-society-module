@@ -410,6 +410,8 @@ public class DashboardController {
     public String propertyDirectOwner(HttpSession session) {
         if (session != null) {
             session.setAttribute("dashboard:propertydirect:owner", Boolean.TRUE);
+            session.setAttribute("dashboard:propertydirect:agent", Boolean.TRUE);
+            session.setAttribute("dashboard:propertydirect:vendor", Boolean.TRUE);
         }
         return "propertydirect/dashboards/owner";
     }

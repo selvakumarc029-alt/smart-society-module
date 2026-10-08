@@ -404,6 +404,7 @@
         .px-3\.5, [class*="px-3.5"] { padding-left: 0.9rem !important; padding-right: 0.9rem !important; }
         .py-3\.5, [class*="py-3.5"] { padding-top: 0.9rem !important; padding-bottom: 0.9rem !important; }
     </style>
+    <link rel="stylesheet" href="/smartapartment/css/workspace-alignment.css?v=20261008-admin-layout-v6">
 </head>
 <body>
 
@@ -425,6 +426,10 @@
 
     <!-- Scripts Fragment -->
     <div th:fragment="scripts">
+        <script defer src="/smartapartment/js/dashboard-interface.js?v=20261008-alignment-v4"></script>
+        <script defer src="/smartapartment/js/crud-workflows.js?v=20261008-crud-v1"></script>
+        <script defer src="/smartapartment/js/accountant-button-workflows.js?v=20261008-role-actions-v1"></script>
+        <script defer src="/smartapartment/js/button-interactions.js?v=20261008-role-actions-v1"></script>
         <script src="/shared/js/required-fields.js?v=20260826-no-login-star-v5"></script>
         <script src="/shared/js/dashboard-system.js?v=20261006-clean-header-v2"></script>
         <!-- Bootstrap Bundle with Popper -->
@@ -432,7 +437,7 @@
         
         <!-- Application Logic -->
         <!-- Versioned so dashboard button fixes are not hidden by a browser cache. -->
-    <script th:src="@{/smartapartment/js/dashboard.js(v='20260917-resident-complaint-v2')}"></script>
+    <script th:src="@{/smartapartment/js/dashboard.js(v='20261008-demo-buttons-v2')}"></script>
         <script th:src="@{/smartapartment/js/ai-helpdesk.js(v='20260826-ai-helpdesk-v2')}"></script>
     </div>
 

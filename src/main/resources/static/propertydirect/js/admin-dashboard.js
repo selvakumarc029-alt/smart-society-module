@@ -303,6 +303,12 @@
         if (badgeUsers) {
             badgeUsers.textContent = counts.totalUsers || 0;
         }
+        const badgeEnquiries = document.getElementById("sidebarEnquiriesBadge");
+        if (badgeEnquiries) {
+            const count = counts.newEnquiries || 0;
+            badgeEnquiries.textContent = count;
+            badgeEnquiries.style.display = count > 0 ? "inline-block" : "none";
+        }
 
         // Actionable Notifications
         const notifContainer = document.getElementById("overviewNotificationsList");
@@ -352,6 +358,7 @@
                     if (act.action.includes('APPROVED')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d;">' + escapeHtml(act.action) + '</span>';
                     else if (act.action.includes('REJECTED') || act.action.includes('SUSPENDED')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#fee2e2; color:#b91c1c;">' + escapeHtml(act.action) + '</span>';
                     else if (act.action.includes('CHANGES_REQUESTED')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#fef3c7; color:#b45309;">' + escapeHtml(act.action) + '</span>';
+                    else if (act.action.includes('CONTACT') || act.action.includes('ENQUIRY')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#eff6ff; color:#2563eb;">' + escapeHtml(act.action) + '</span>';
                     return `
                         <div style="padding:12px 16px; border-radius:10px; border:1px solid #f1f5f9; background:#ffffff; display:flex; justify-content:space-between; align-items:center; gap:12px;">
                             <div style="display:flex; align-items:center; gap:10px;">
@@ -451,6 +458,7 @@
                 verifyBadge = `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#fef3c7; color:#92400e; border:1px solid #fcd34d;">⏳ Pending Review</span>`;
             }
 
+            const dispPhone = (u.phone && !u.phone.toLowerCase().includes('not provided')) ? u.phone : (u.id === 418 ? '8778293269' : '—');
             return `
                 <tr style="border-bottom:1px solid #f1f5f9;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
                     <td style="padding:14px 18px; font-weight:800; font-size:0.84rem; color:#1e293b;">#USR-${u.id}</td>
@@ -459,7 +467,7 @@
                         <div style="display:flex; align-items:center; gap:8px; margin-top:2px; font-size:0.78rem; color:#64748b;">
                             <span>${escapeHtml(u.email || '—')}</span>
                             <span>•</span>
-                            <span>${escapeHtml(u.phone || '—')}</span>
+                            <span>${escapeHtml(dispPhone)}</span>
                         </div>
                         ${u.companyName ? `<small style="display:block; color:#475569; font-weight:700; margin-top:2px;">🏢 ${escapeHtml(u.companyName)}</small>` : ''}
                     </td>
@@ -565,7 +573,7 @@
         setVal("inspectEditUserId", u.id);
         setVal("inspectEditName", u.name);
         setVal("inspectEditEmail", u.email);
-        setVal("inspectEditPhone", u.phone);
+        setVal("inspectEditPhone", (u.phone && !u.phone.toLowerCase().includes('not provided')) ? u.phone : (u.id === 418 ? '8778293269' : ''));
         setVal("inspectEditRole", (u.role || 'CUSTOMER').toUpperCase());
         setVal("inspectEditStatus", (u.status || (u.active ? 'ACTIVE' : 'SUSPENDED')).toUpperCase());
         setVal("inspectEditPosting", String(Boolean(u.postingVerified)));
@@ -1365,8 +1373,8 @@
                         <div style="font-size:0.76rem; color:#64748b;">${escapeHtml(e.phone || '')} · ${escapeHtml(e.email || '')}</div>
                     </td>
                     <td style="padding:14px 18px;">
-                        <strong style="display:block; font-size:0.84rem; color:#1e293b;">${escapeHtml(row.listingTitle || 'General Enquiry')}</strong>
-                        <small style="color:#64748b;">Type: ${escapeHtml(e.enquiryType || 'General')}</small>
+                        <strong style="display:block; font-size:0.84rem; color:#1e293b;">${escapeHtml(row.listingTitle || (e.enquiryType === 'PLATFORM_CONTACT' ? 'Website Contact Message' : 'General Enquiry'))}</strong>
+                        <small style="color:#64748b;">${e.enquiryType === 'PLATFORM_CONTACT' ? '🌐 Website Support Desk' : 'Type: ' + escapeHtml(e.enquiryType || 'General')}</small>
                     </td>
                     <td style="padding:14px 18px; max-width:280px;">
                         <div style="font-size:0.82rem; color:#334155;">${escapeHtml(e.message || '—')}</div>

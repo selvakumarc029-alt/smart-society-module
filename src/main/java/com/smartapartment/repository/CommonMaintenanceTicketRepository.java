@@ -10,4 +10,5 @@ public interface CommonMaintenanceTicketRepository extends JpaRepository<CommonM
     List<CommonMaintenanceTicket> findByRequesterIdOrderByCreatedAtDesc(Long requesterId);
     List<CommonMaintenanceTicket> findByTicketStatusIgnoreCaseOrderByCreatedAtDesc(String ticketStatus);
     List<CommonMaintenanceTicket> findByVendorIdOrderByCreatedAtDesc(Long vendorId);
+    List<CommonMaintenanceTicket> findByTenantIdAndSourcePlatformIgnoreCaseOrderByCreatedAtDesc(String tenantId,String sourcePlatform);
 }

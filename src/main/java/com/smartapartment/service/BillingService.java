@@ -58,6 +58,17 @@ public class BillingService {
 
     @Transactional
     public int generateDetailedMonthlyBills(String tenantId, String billMonth, DetailedInvoice details) {
+        return generateDetailedBills(tenantId, billMonth, details, null, null);
+    }
+
+    @Transactional
+    public int generateDetailedBillForFlat(String tenantId, String billMonth, DetailedInvoice details, Long apartmentId, String unitType) {
+        if (apartmentId == null || apartmentId <= 0) throw new IllegalArgumentException("Select a registered flat number");
+        if (unitType == null || unitType.isBlank()) throw new IllegalArgumentException("Select the flat's BHK type");
+        return generateDetailedBills(tenantId, billMonth, details, apartmentId, unitType);
+    }
+
+    private int generateDetailedBills(String tenantId, String billMonth, DetailedInvoice details, Long apartmentId, String unitType) {
         if (tenantId == null || tenantId.isBlank()) throw new IllegalArgumentException("Tenant is required");
         YearMonth cycle;
         try { cycle = YearMonth.parse(billMonth); }
@@ -65,8 +76,24 @@ public class BillingService {
         if (details == null || details.baseRatePerSqFt() == null || details.baseRatePerSqFt().signum() < 0) {
             throw new IllegalArgumentException("Base maintenance rate is required");
         }
+        var selected = apartmentRepository.findByTenantId(tenantId);
+        if (apartmentId != null) {
+            if (details.periodStart() == null || details.periodEnd() == null || details.invoiceDate() == null || details.dueDate() == null
+                    || details.periodEnd().isBefore(details.periodStart()) || details.dueDate().isBefore(details.invoiceDate()))
+                throw new IllegalArgumentException("Choose a valid billing period and due date");
+            if (details.baseRatePerSqFt().signum() == 0 && nvl(details.otherCharges()).signum() <= 0)
+                throw new IllegalArgumentException("Maintenance fee must be greater than zero");
+            var flat = selected.stream().filter(a -> apartmentId.equals(a.getId())).findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Selected flat was not found in your society"));
+            if (!normalizeType(unitType).equals(normalizeType(flat.getUnitType())))
+                throw new IllegalArgumentException("Selected BHK type does not match the registered flat");
+            if (billRepository.existsByTenantIdAndApartmentIdAndBillMonth(tenantId, apartmentId, billMonth))
+                throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT,
+                        "An invoice already exists for this flat and month. No duplicate was generated.");
+            selected = java.util.List.of(flat);
+        }
         int created = 0;
-        for (Apartment apartment : apartmentRepository.findByTenantId(tenantId)) {
+        for (Apartment apartment : selected) {
             if (billRepository.existsByTenantIdAndApartmentIdAndBillMonth(tenantId, apartment.getId(), billMonth)) continue;
             int area = apartment.getBuiltUpAreaSqFt() == null || apartment.getBuiltUpAreaSqFt() <= 0
                     ? details.defaultAreaSqFt() : apartment.getBuiltUpAreaSqFt();
@@ -111,6 +138,10 @@ public class BillingService {
             billRepository.save(bill); created++;
         }
         return created;
+    }
+
+    private static String normalizeType(String type) {
+        return type == null ? "" : type.replaceAll("\\s+", "").toUpperCase(java.util.Locale.ROOT);
     }
 
     private BigDecimal sum(BigDecimal... values) { BigDecimal total=BigDecimal.ZERO; for(BigDecimal v:values) total=total.add(nvl(v)); return total; }

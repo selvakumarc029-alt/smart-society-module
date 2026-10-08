@@ -1,0 +1,150 @@
+[
+  {
+    "name": "superadmin",
+    "missing": [],
+    "scripts": [
+      "/smartapartment/js/dashboard-interface.js",
+      "/smartapartment/js/crud-workflows.js",
+      "/smartapartment/js/accountant-button-workflows.js",
+      "/smartapartment/js/button-interactions.js",
+      "/shared/js/required-fields.js",
+      "/shared/js/dashboard-system.js",
+      "/smartapartment/js/dashboard.js",
+      "/smartapartment/js/ai-helpdesk.js",
+      "/smartapartment/js/dashboard-controls.js",
+      "/smartapartment/js/home-services-pricing-admin.js"
+    ],
+    "unclassified": []
+  },
+  {
+    "name": "society-admin",
+    "missing": [],
+    "scripts": [
+      "/smartapartment/js/dashboard-interface.js",
+      "/smartapartment/js/crud-workflows.js",
+      "/smartapartment/js/accountant-button-workflows.js",
+      "/smartapartment/js/button-interactions.js",
+      "/shared/js/required-fields.js",
+      "/shared/js/dashboard-system.js",
+      "/smartapartment/js/dashboard.js",
+      "/smartapartment/js/ai-helpdesk.js",
+      "/smartapartment/js/advanced-dashboard.js",
+      "/smartapartment/js/owner-property-workflow.js",
+      "/shared/js/common-maintenance.js",
+      "/smartapartment/js/dashboard-controls.js",
+      "/smartapartment/js/gate-management.js",
+      "/smartapartment/js/home-services-pricing-admin.js"
+    ],
+    "unclassified": [
+      {
+        "text": "Clear draft"
+      }
+    ]
+  },
+  {
+    "name": "resident",
+    "missing": [
+      "print"
+    ],
+    "scripts": [
+      "/smartapartment/js/dashboard-interface.js",
+      "/smartapartment/js/crud-workflows.js",
+      "/smartapartment/js/accountant-button-workflows.js",
+      "/smartapartment/js/button-interactions.js",
+      "/shared/js/required-fields.js",
+      "/shared/js/dashboard-system.js",
+      "/smartapartment/js/dashboard.js",
+      "/smartapartment/js/ai-helpdesk.js",
+      "/shared/js/common-maintenance.js",
+      "/shared/js/home-services-dashboard.js",
+      "/smartapartment/js/dashboard-controls.js",
+      "/smartapartment/js/resident-gate-approvals.js",
+      "/smartapartment/js/maintenance-workflow.js"
+    ],
+    "unclassified": [
+      {
+        "text": ""
+      },
+      {
+        "text": ""
+      },
+      {
+        "text": ""
+      },
+      {
+        "text": ""
+      }
+    ]
+  },
+  {
+    "name": "accountant",
+    "missing": [
+      "print"
+    ],
+    "scripts": [
+      "/smartapartment/js/dashboard-interface.js",
+      "/smartapartment/js/crud-workflows.js",
+      "/smartapartment/js/accountant-button-workflows.js",
+      "/smartapartment/js/button-interactions.js",
+      "/shared/js/required-fields.js",
+      "/shared/js/dashboard-system.js",
+      "/smartapartment/js/dashboard.js",
+      "/smartapartment/js/ai-helpdesk.js"
+    ],
+    "unclassified": []
+  },
+  {
+    "name": "security",
+    "missing": [],
+    "scripts": [
+      "/smartapartment/js/dashboard-interface.js",
+      "/smartapartment/js/crud-workflows.js",
+      "/smartapartment/js/accountant-button-workflows.js",
+      "/smartapartment/js/button-interactions.js",
+      "/shared/js/required-fields.js",
+      "/shared/js/dashboard-system.js",
+      "/smartapartment/js/dashboard.js",
+      "/smartapartment/js/ai-helpdesk.js",
+      "/smartapartment/js/security-console.js"
+    ],
+    "unclassified": []
+  },
+  {
+    "name": "maintenance",
+    "missing": [],
+    "scripts": [
+      "/smartapartment/js/dashboard-interface.js",
+      "/smartapartment/js/crud-workflows.js",
+      "/smartapartment/js/accountant-button-workflows.js",
+      "/smartapartment/js/button-interactions.js",
+      "/shared/js/required-fields.js",
+      "/shared/js/dashboard-system.js",
+      "/smartapartment/js/dashboard.js",
+      "/smartapartment/js/ai-helpdesk.js",
+      "/shared/js/common-maintenance.js",
+      "/smartapartment/js/dashboard-controls.js",
+      "/smartapartment/js/worker-attendance-module.js",
+      "/smartapartment/js/maintenance-manager-dashboard.js",
+      "/smartapartment/js/maintenance-asset-demo.js"
+    ],
+    "unclassified": []
+  },
+  {
+    "name": "maintenance-worker",
+    "missing": [],
+    "scripts": [
+      "/smartapartment/js/dashboard-interface.js",
+      "/smartapartment/js/crud-workflows.js",
+      "/smartapartment/js/accountant-button-workflows.js",
+      "/smartapartment/js/button-interactions.js",
+      "/shared/js/required-fields.js",
+      "/shared/js/dashboard-system.js",
+      "/smartapartment/js/dashboard.js",
+      "/smartapartment/js/ai-helpdesk.js",
+      "/shared/js/common-maintenance.js",
+      "/smartapartment/js/dashboard-controls.js",
+      "/smartapartment/js/worker-attendance-module.js"
+    ],
+    "unclassified": []
+  }
+]

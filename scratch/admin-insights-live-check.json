@@ -1,0 +1,12 @@
+{
+  "dashboard": 200,
+  "pages": 3,
+  "billingOverview": true,
+  "occupancy": 200,
+  "maintenance": 200,
+  "security": 200,
+  "billing": 200,
+  "residentAccess": 403,
+  "residentNotices": 200,
+  "securityLoginLogout": true
+}

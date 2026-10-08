@@ -1,0 +1,44 @@
+[
+  {
+    "dashboard": "superadmin",
+    "status": 200,
+    "parsedScripts": 11,
+    "buttons": 86
+  },
+  {
+    "dashboard": "society-admin",
+    "status": 200,
+    "parsedScripts": 17,
+    "buttons": 75
+  },
+  {
+    "dashboard": "resident",
+    "status": 200,
+    "parsedScripts": 21,
+    "buttons": 80
+  },
+  {
+    "dashboard": "accountant",
+    "status": 200,
+    "parsedScripts": 9,
+    "buttons": 16
+  },
+  {
+    "dashboard": "security",
+    "status": 200,
+    "parsedScripts": 1,
+    "buttons": 32
+  },
+  {
+    "dashboard": "maintenance",
+    "status": 200,
+    "parsedScripts": 16,
+    "buttons": 153
+  },
+  {
+    "dashboard": "maintenance-worker",
+    "status": 200,
+    "parsedScripts": 5,
+    "buttons": 8
+  }
+]

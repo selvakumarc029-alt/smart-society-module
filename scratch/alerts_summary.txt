@@ -1,0 +1,51 @@
+Line 2845: <button class="primary small" onclick="alert('Exporting Fraud Incident Log PDF...')"> Export
+Line 2925: onclick="alert('Next Page')">Next ›</button>
+Line 3054: onclick="alert('Next Page')">Next ›</button>
+Line 3107: <button class="primary small" onclick="alert('Full Analytics Report Downloaded as PDF!')">
+Line 3299: onclick="alert('Next Page')">Next ›</button>
+Line 3353: onclick="alert('Opening Create Administrator Modal...')"> Create Administrator</button>
+Line 3430: onclick="alert('Next Page')">Next ›</button>
+Line 3531: <button class="primary small" onclick="alert('Add New Pricing Package Modal Opened')">＋ Create
+Line 3727: onclick="alert('Managing Advertising Tiers...')">️ Manage Advertising Rates</button>
+Line 3744: onclick="alert('Managing Enterprise Builder Packages...')">️ Manage Enterprise Builder
+Line 3784: onclick="alert('Editing Plan Details')">️ Edit</button>
+Line 3787: onclick="alert('Plan Paused')">️ Pause</button>
+Line 3801: onclick="alert('Editing Plan Details')">️ Edit</button>
+Line 3804: onclick="alert('Plan Paused')">️ Pause</button>
+Line 3818: onclick="alert('Editing Plan Details')">️ Edit</button>
+Line 3821: onclick="alert('Plan Paused')">️ Pause</button>
+Line 3835: onclick="alert('Editing Plan Details')">️ Edit</button>
+Line 3838: onclick="alert('Plan Paused')">️ Pause</button>
+Line 3858: onclick="alert('Next Page')">Next ›</button>
+Line 3910: onclick="alert('Exporting Master Financial Ledger PDF...')"> Export Master Ledger</button>
+Line 4065: <button class="primary small" onclick="alert('Audit Trail Report Exported as CSV!')"> Download
+Line 4069: onclick="alert('Database Integrity Check & Backup Started!')"> Run
+Line 4196: onclick="alert('Next Page')">Next ›</button>
+Line 4269: onclick="alert('Refreshing customer messages...')"> Refresh Messages</button>
+Line 4345: onclick="alert('Next Page')">Next ›</button>
+Line 4397: <button class="primary small" onclick="alert('Create New Content Item Modal Opened')">＋ Create
+Line 4407: <button onclick="alert('Editing About Us Page Content')"
+Line 4410: <button onclick="alert('Editing Contact Us Page Content')"
+Line 4413: <button onclick="alert('Editing Privacy Policy Document')"
+Line 4416: <button onclick="alert('Editing Terms & Conditions Document')"
+Line 4419: <button onclick="alert('Editing FAQ Knowledge Base')"
+Line 4422: <button onclick="alert('Editing Blog Index Page')"
+Line 4425: <button onclick="alert('Editing Help Center Page')"
+Line 4502: onclick="alert('Edit Blog Post Modal Opened')">️ Edit</button>
+Line 4505: onclick="alert('Blog Post Deleted!')">️ Delete</button>
+Line 4525: onclick="alert('Edit FAQ Item Modal Opened')">️ Edit</button>
+Line 4528: onclick="alert('FAQ Item Deleted!')">️ Delete</button>
+Line 4547: onclick="alert('Edit Banner Image & Target URL')">️ Edit Banner</button>
+Line 4550: onclick="alert('Banner Deleted!')">️ Delete</button>
+Line 4569: onclick="alert('Reorder & Edit Section Layout')">️ Edit Layout</button>
+Line 4572: onclick="alert('Section Hidden!')">️ Hide Section</button>
+Line 4593: onclick="alert('Edit Announcement Text')">️ Edit Alert</button>
+Line 4596: onclick="alert('Announcement Stopped!')"> Stop Alert</button>
+Line 4616: onclick="alert('Next Page')">Next ›</button>
+Line 4678: onclick="alert('Profile Edit Mode Activated!')">Edit profile</button>
+Line 4681: onclick="alert('Profile Changes Saved Successfully!')">Save changes</button>
+Line 4685: <form onsubmit="event.preventDefault(); alert('Profile Saved Successfully!');">
+Line 5622: alert("Please fill in all required fields!");
+Line 5655: <button style="padding: 5px 10px; font-size: 0.78rem;" onclick="alert('Viewing ${name} Activity')">Activity</button>
+Line 5656: <button style="padding: 5px 10px; font-size: 0.78rem;" onclick="alert('Editing ${name} profile')">Edit</button>
+Line 7204: alert("Rejection reason is required.");

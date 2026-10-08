@@ -1,0 +1,325 @@
+[
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\accountant.html",
+    "count": 16,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\maintenance-worker.html",
+    "count": 7,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\maintenance.html",
+    "count": 153,
+    "missing": [
+      {
+        "line": 9046,
+        "label": "Details",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-xs btn-outline-primary rounded-pill px-2 py-0.5",
+          "onclick": "event.stopPropagation(); window.openBookingDetailsDrawer(${b.id});",
+          "title": "View Full Details Drawer"
+        },
+        "missing": [
+          "stopPropagation"
+        ],
+        "unwired": false
+      }
+    ],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\resident-maintenance.html",
+    "count": 18,
+    "missing": [],
+    "unwired": [
+      {
+        "line": 110,
+        "label": "Track",
+        "attrs": {
+          "class": "btn btn-primary rounded-pill px-4 fw-bold"
+        },
+        "missing": [],
+        "unwired": true
+      }
+    ]
+  },
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\resident.html",
+    "count": 80,
+    "missing": [
+      {
+        "line": 987,
+        "label": "Chat with Maintenance",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-outline-primary rounded-pill shadow-sm px-3 fw-semibold text-nowrap",
+          "onclick": "openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')"
+        },
+        "missing": [
+          "Kumar"
+        ],
+        "unwired": false
+      },
+      {
+        "line": 1826,
+        "label": "Chat",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-primary rounded-pill px-3 py-1 fw-bold shadow-xs flex-grow-1 small",
+          "style": "font-size:0.76rem;",
+          "onclick": "openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)', true)"
+        },
+        "missing": [
+          "Kumar"
+        ],
+        "unwired": false
+      },
+      {
+        "line": 1925,
+        "label": "Chat",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-sm btn-primary rounded-pill px-2.5 py-0.5 shadow-xs",
+          "style": "font-size:0.74rem;",
+          "onclick": "openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')"
+        },
+        "missing": [
+          "Kumar"
+        ],
+        "unwired": false
+      },
+      {
+        "line": 1962,
+        "label": "Chat",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-sm btn-outline-primary rounded-pill px-2.5 py-0.5 shadow-xs",
+          "style": "font-size:0.74rem;",
+          "onclick": "openResidentChat('req_T-102_cust', 'T-102', 'Bathroom Water Leakage', 'Ramesh (Plumber)')"
+        },
+        "missing": [
+          "Ramesh"
+        ],
+        "unwired": false
+      }
+    ],
+    "unwired": [
+      {
+        "line": 3317,
+        "label": "",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-outline-light rounded-circle p-3",
+          "style": "width:52px; height:52px;",
+          "title": "Mute Microphone"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 3318,
+        "label": "",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-outline-light rounded-circle p-3",
+          "style": "width:52px; height:52px;",
+          "title": "Speaker"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 3345,
+        "label": "",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-outline-light rounded-circle p-3",
+          "style": "width:50px; height:50px;",
+          "title": "Camera Switch"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 3346,
+        "label": "",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-outline-light rounded-circle p-3",
+          "style": "width:50px; height:50px;",
+          "title": "Mute Microphone"
+        },
+        "missing": [],
+        "unwired": true
+      }
+    ]
+  },
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\security.html",
+    "count": 32,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\society-admin.html",
+    "count": 86,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\dashboards\\superadmin.html",
+    "count": 90,
+    "missing": [],
+    "unwired": [
+      {
+        "line": 2665,
+        "label": "",
+        "attrs": {
+          "type": "button",
+          "class": "btn-close",
+          "aria-label": "Close"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 2667,
+        "label": "Close",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-light rounded-pill px-4"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 2849,
+        "label": "Show",
+        "attrs": {
+          "type": "button",
+          "aria-label": "Show administrator passwords"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 4291,
+        "label": "Save",
+        "attrs": {
+          "type": "button",
+          "class": "btn btn-sm btn-outline-primary fw-bold"
+        },
+        "missing": [],
+        "unwired": true
+      }
+    ]
+  },
+  {
+    "file": "src\\main\\resources\\templates\\error.html",
+    "count": 0,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\fragments\\layout.html",
+    "count": 0,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\index.html",
+    "count": 35,
+    "missing": [],
+    "unwired": [
+      {
+        "line": 148,
+        "label": "✓ Notice board Publish targeted community updates and emergency alerts.",
+        "attrs": {
+          "type": "button"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 149,
+        "label": "✓ Complaints Assign and follow every issue through resolution.",
+        "attrs": {
+          "type": "button"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 150,
+        "label": "✓ Online payment Track dues, receipts and reconciliation activity.",
+        "attrs": {
+          "type": "button"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 167,
+        "label": "✓ Visitor updates See approvals and gate movement in real time.",
+        "attrs": {
+          "type": "button"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 168,
+        "label": "✓ Maintenance bills Generate, pay and reconcile community dues.",
+        "attrs": {
+          "type": "button"
+        },
+        "missing": [],
+        "unwired": true
+      },
+      {
+        "line": 169,
+        "label": "✓ Digital receipts Keep every collection traceable and auditable.",
+        "attrs": {
+          "type": "button"
+        },
+        "missing": [],
+        "unwired": true
+      }
+    ]
+  },
+  {
+    "file": "src\\main\\resources\\templates\\maintenance-feedback.html",
+    "count": 6,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\resident\\update-details.html",
+    "count": 4,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\terms\\daily-operations.html",
+    "count": 0,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\terms\\finance-reports.html",
+    "count": 0,
+    "missing": [],
+    "unwired": []
+  },
+  {
+    "file": "src\\main\\resources\\templates\\terms\\onboarding.html",
+    "count": 0,
+    "missing": [],
+    "unwired": []
+  }
+]

@@ -3,6 +3,13 @@
 *.log
 mvn-output.txt
 /.kilo/
-scratch/
+scratch/chrome-temp*
+scratch/tomcat*
+scratch/duplicate-code-backup/
+scratch/button-runtime/
+scratch/crud-validation/
+scratch/*.png
+scratch/*.jpg
+scratch/*.log
 *cookies.txt
 

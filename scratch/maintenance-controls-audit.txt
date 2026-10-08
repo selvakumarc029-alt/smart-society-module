@@ -1,0 +1,248 @@
+10:    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+3369:                        <button type="button" class="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold btn-primary text-white"
+3370:                            id="topNavTickets" onclick="window.switchQueuePipeline('tickets')" style="font-size: 0.8rem;">
+3373:                        <button type="button" class="btn btn-sm rounded-pill px-2.5 py-1 fw-semibold text-secondary"
+3374:                            id="topNavLiveBookings" onclick="window.switchQueuePipeline('live-bookings')" style="font-size: 0.8rem;">
+3382:                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill shadow-xs px-2.5 py-1 text-nowrap fw-semibold d-inline-flex align-items-center gap-1.5" 
+3383:                        onclick="forceOpenPanel('live-chat')" title="Live Chat & Escalations" style="font-size: 0.8rem; height: 34px;">
+3388:                    <button class="btn btn-sm btn-primary rounded-pill shadow-xs px-2.5 py-1 text-nowrap fw-semibold d-inline-flex align-items-center gap-1.5" 
+3389:                        data-panel="workers" onclick="window.openPanel('workers')" title="Add Maintenance Worker" style="font-size: 0.8rem; height: 34px;">
+3394:                        <button
+3409:                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2"
+3410:                                    type="button" onclick="window.setMaintenanceDutyStatus('available', true)">
+3421:                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2"
+3422:                                    type="button" onclick="window.setMaintenanceDutyStatus('busy', true)">
+3435:                                <button class="dropdown-item d-flex align-items-center gap-2 rounded-2 px-2 py-2"
+3436:                                    type="button" onclick="window.setMaintenanceDutyStatus('off-duty', true)">
+3493:                                <button type="button"
+3495:                                    id="btnWorkerClockIn" onclick="window.workerClockIn()">
+3498:                                <button type="button" class="btn btn-outline-info btn-sm rounded-pill px-3 py-2 fw-bold"
+3499:                                    id="btnWorkerStartBreak" onclick="window.workerStartBreak()" disabled>
+3502:                                <button type="button"
+3504:                                    id="btnWorkerEndBreak" onclick="window.workerEndBreak()" disabled>
+3507:                                <button type="button"
+3509:                                    id="btnWorkerClockOut" onclick="window.workerClockOut()" disabled>
+3546:                                <button type="button" class="btn btn-sm fw-bold rounded-pill px-3 py-2 shadow-sm active"
+3547:                                    id="btnFlowSociety" onclick="window.switchQueuePipeline('tickets')"
+3551:                                <button type="button" class="btn btn-sm fw-bold rounded-pill px-3 py-2"
+3552:                                    id="btnFlowDispatch" onclick="window.switchQueuePipeline('live-bookings')"
+3676:                                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3"
+3720:                                    <button type="button" class="btn btn-primary rounded-pill w-100 mt-4 shadow-sm py-2"
+3757:                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-bold"
+3758:                                    onclick="window.MaintenanceManagerDashboard.loadDashboardSummary()">
+3931:                            <div class="manager-kpi-card" onclick="window.openPanel('workers')" style="cursor: pointer;" title="View worker attendance & availability">
+3947:                            <div class="manager-kpi-card" onclick="window.openPanel('workers')" style="cursor: pointer;" title="View engaged workers & active jobs">
+3963:                            <div class="manager-kpi-card" onclick="window.openPanel('workers')" style="cursor: pointer;" title="View worker roster">
+4038:                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3"
+4150:                                <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-bold"
+4151:                                    onclick="loadAdminResidentRequests()">
+4165:                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold active btn-primary text-white"
+4166:                                    data-admin-filter="all" onclick="filterAdminResidentRequests('all')">All</button>
+4167:                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary"
+4169:                                    onclick="filterAdminResidentRequests('requested')">Requested</button>
+4170:                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary"
+4172:                                    onclick="filterAdminResidentRequests('assigned')">Assigned</button>
+4173:                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary"
+4175:                                    onclick="filterAdminResidentRequests('in_progress')">In Progress</button>
+4176:                                <button type="button" class="btn btn-sm rounded-pill px-3 fw-bold text-secondary"
+4178:                                    onclick="filterAdminResidentRequests('completed')">Completed</button>
+4330:                            <button type="button" class="btn-close" onclick="closeResidentRequestDetailsModal()"></button>
+4338:                            <button type="button" class="btn btn-light rounded-pill px-3" onclick="closeResidentRequestDetailsModal()">Close</button>
+4339:                            <button type="button" class="btn btn-outline-primary rounded-pill px-3 fw-bold" id="viewModalChatCustomerBtn" onclick="openChatFromRequestDetails('CUSTOMER')">
+4342:                            <button type="button" class="btn btn-outline-warning text-dark rounded-pill px-3 fw-bold" id="viewModalContactAdminBtn" onclick="openChatFromRequestDetails('ADMIN')">
+4345:                            <button type="button" class="btn btn-warning text-dark rounded-pill px-3 fw-bold" id="viewModalStageBtn">
+4348:                            <button type="button" class="btn btn-primary rounded-pill px-3 fw-bold shadow-sm" id="viewModalManageBtn">
+4368:                            <button type="button" class="btn-close" onclick="closeAdminAssignModal()"></button>
+4417:                                <button type="button" class="btn btn-light rounded-pill px-4"
+4418:                                    onclick="closeAdminAssignModal()">Cancel</button>
+4419:                                <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm"
+4449:                            <button type="button" class="btn-close" onclick="closeWorkerLiveStageModal()"></button>
+4478:                                <button type="button"
+4480:                                    data-stage="ACCEPTED" onclick="executeWorkerStageUpdate('ACCEPTED')">
+4496:                                <button type="button"
+4499:                                    onclick="executeWorkerStageUpdate('REACHED_LOCATION')">
+4515:                                <button type="button"
+4517:                                    data-stage="STARTED" onclick="executeWorkerStageUpdate('STARTED')">
+4533:                                <button type="button"
+4535:                                    data-stage="STAGE_1" onclick="executeWorkerStageUpdate('STAGE_1')">
+4551:                                <button type="button"
+4553:                                    data-stage="PROCESSING" onclick="executeWorkerStageUpdate('PROCESSING')">
+4569:                                <button type="button"
+4571:                                    data-stage="COMPLETED" onclick="executeWorkerStageUpdate('COMPLETED')"
+4598:                            <button type="button" class="btn btn-light rounded-pill px-4"
+4599:                                onclick="closeWorkerLiveStageModal()">Close</button>
+4604:                <script>
+4733:                                        <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none text-primary fw-semibold" style="font-size:0.75rem;" onclick="viewResidentRequestDetails(${req.id})">
+4753:                                                <button type="button" class="btn btn-sm btn-primary rounded-start-pill px-2.5 py-1 fw-bold d-inline-flex align-items-center gap-1" onclick="openAdminAssignModal(${req.id})" title="Manage Request">
+4757:                                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split rounded-end-pill px-2 py-1" onclick="toggleReqActionMenu(event, ${req.id})" title="All Actions" aria-expanded="false">
+4762:                                                <a href="javascript:void(0)" class="dropdown-item text-dark" onclick="viewResidentRequestDetails(${req.id})">
+4766:                                                    <a href="javascript:void(0)" class="dropdown-item text-success fw-bold" onclick="window.autoAssignWorkerToRequest(${req.id})">
+4770:                                                <a href="javascript:void(0)" class="dropdown-item text-warning-emphasis fw-bold" onclick="openWorkerLiveStageModal(${req.id})">
+4774:                                                <a href="javascript:void(0)" class="dropdown-item text-primary fw-bold" onclick="openAdminAssignModal(${req.id})">
+5446:                                <button type="button" class="btn btn-sm rounded-pill px-4 fw-bold active btn-primary text-white" id="tabBtnCustomerChats" onclick="switchMaintChatChannel('CUSTOMER')">
+5450:                                <button type="button" class="btn btn-sm rounded-pill px-4 fw-bold text-secondary" id="tabBtnAdminChats" onclick="switchMaintChatChannel('ADMIN')">
+5499:                                    <button type="button" class="btn btn-warning text-dark fw-bold rounded-pill px-3 shadow-sm btn-sm" onclick="escalateCurrentTicketToAdmin()" title="Start internal escalation with Society Admin for this ticket">
+5513:                                <button type="button" class="chat-quick-chip" onclick="setMaintCustomerReplyInput('I’ll reach your flat in 15 minutes.')">
+5516:                                <button type="button" class="chat-quick-chip" onclick="setMaintCustomerReplyInput('Technician is currently inspecting the line.')">
+5519:                                <button type="button" class="chat-quick-chip" onclick="setMaintCustomerReplyInput('Repair completed. Please test and confirm.')">
+5528:                                    <button type="submit" class="chat-send-btn" title="Send Reply">
+5595:                                    <button type="button" class="chat-quick-chip" onclick="setMaintAdminReplyInput('Replacement part cost estimated at Rs. 1,800. Requesting board approval.')">
+5598:                                    <button type="button" class="chat-quick-chip" onclick="setMaintAdminReplyInput('Shift handover note: All assigned tickets inspected.')">
+5607:                                        <button type="submit" class="chat-send-btn" style="background:#eab308 !important; color:#0f172a !important;" title="Send to Admin">
+5629:                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold"
+5630:                                onclick="window.loadWorkerDashboardSummary()">
+5694:                            <button type="button"
+5696:                                onclick="window.switchQueuePipeline('live-bookings')">
+5874:                                    </div><button type="button" class="btn btn-outline-primary rounded-pill w-100 mt-4"
+5908:                            <button type="button"
+5910:                                onclick="window.switchQueuePipeline('live-bookings')">
+5952:                                <button type="button"
+5954:                                    id="manualAutoAssignBtn" onclick="window.runAutoAssignOpenPool()">
+5985:                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3"
+5997:                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3"
+6064:                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill"
+6065:                                                data-action="service-log"><i
+6075:                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill"
+6076:                                                data-action="service-log"><i
+6086:                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill"
+6087:                                                data-action="service-log"><i
+6121:                            <button type="button" class="btn btn-primary btn-sm rounded-pill px-3 shadow-2xs fw-semibold text-nowrap"
+6122:                                onclick="loadDispatchBookings()">
+6140:                            onclick="document.getElementById('unassignedActionQueueContainer')?.scrollIntoView({behavior: 'smooth'})"
+6209:                                <button type="button" class="btn btn-sm btn-outline-light rounded-pill px-3 shadow-xs"
+6210:                                    onclick="loadDispatchBookings()">
+6290:                                        <button type="button" class="btn btn-sm rounded-pill btn-primary text-white fw-semibold px-3"
+6291:                                            id="btnDispatchViewCards" onclick="window.switchDispatchLayout('cards')">
+6294:                                        <button type="button" class="btn btn-sm rounded-pill text-secondary fw-semibold px-3"
+6295:                                            id="btnDispatchViewList" onclick="window.switchDispatchLayout('list')">
+6298:                                        <button type="button" class="btn btn-sm rounded-pill text-secondary fw-semibold px-3"
+6299:                                            id="btnDispatchViewMap" onclick="window.switchDispatchLayout('map')">
+6304:                                    <button type="button" class="btn btn-primary shadow-sm" id="btnRefreshOperations"
+6305:                                        onclick="loadDispatchBookings()">
+6325:                                <button type="button"
+6546:                                    <button type="button"
+6548:                                        data-map-filter="ALL" onclick="window.filterEmergencyMap('ALL', this)">All
+6550:                                    <button type="button"
+6553:                                        onclick="window.filterEmergencyMap('UNASSIGNED', this)"><i
+6556:                                    <button type="button"
+6558:                                        data-map-filter="ACTIVE" onclick="window.filterEmergencyMap('ACTIVE', this)"><i
+6561:                                    <button type="button"
+6564:                                        onclick="window.filterEmergencyMap('SLA_BREACHED', this)"><i
+6579:                                    <button type="button"
+6581:                                        onclick="window.fitEmergencyMap()">
+6843:                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-2xs fw-semibold"
+6844:                                    onclick="window.loadMaintenanceWorkersAttendance()">
+7213:                                            <button class="btn btn-primary btn-lg rounded-3"
+7215:                                                onclick="window.submitMaintenanceWorkerForm(event)">
+7232:                                    <button class="btn btn-outline-primary rounded-pill" type="button"
+7234:                                        onclick="window.loadMaintenanceWorkersAttendance()">
+7381:                                <button class="btn btn-primary rounded-pill px-5 shadow-sm" data-action="save"><i
+7440:                                    </div><button type="button" class="btn btn-outline-primary rounded-pill w-100 mt-4"
+7457:    <script>
+7930:                        <div role="button" tabindex="0" class="chat-thread-card ${isActive ? 'active' : ''}" id="maint-cust-thread-${t.conversationId}" onclick="openMaintCustomerThreadByKey('${convKey}')">
+7995:                        <div role="button" tabindex="0" class="chat-thread-card ${isActive ? 'active' : ''}" id="maint-admin-thread-${t.conversationId}" onclick="openMaintAdminThreadByKey('${convKey}')">
+8523:                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 shadow-sm" onclick="window.loadDispatchBookings()">
+8586:                            <a href="javascript:void(0)" class="font-monospace text-primary fw-bold text-decoration-none cursor-pointer" onclick="window.openBookingDetailsDrawer(${b.id})" title="Open Emergency Details Drawer">#EP-${b.id}</a>
+8610:                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 me-1 shadow-xs" onclick="window.openBookingDetailsDrawer(${b.id})" title="View Emergency Details Drawer">
+8613:                            <button type="button" class="btn btn-sm btn-danger rounded-pill px-3 fw-bold shadow-sm text-nowrap" onclick="window.openAssignPartnerModal(${b.id})">
+8626:                    const beforePhotoBtn = beforePhotoUrl ? ('<button type="button" class="btn btn-xs btn-outline-primary rounded-pill me-1 shadow-xs" onclick="window.openPhotoLightbox(\'' + beforePhotoUrl + '\',\'Before Photo (Initial Damage)\',\'' + b.id + '\',\'' + (b.photoStartAt || '') + '\',\'' + beforePhotoUrl + '\',\'' + (afterPhotoUrl || '') + '\')"><i class="fa-solid fa-image me-1"></i>Before</button>') : '';
+8627:                    const afterPhotoBtn = afterPhotoUrl ? ('<button type="button" class="btn btn-xs btn-outline-success rounded-pill me-1 shadow-xs" onclick="window.openPhotoLightbox(\'' + afterPhotoUrl + '\',\'After Photo (Completion Evidence)\',\'' + b.id + '\',\'' + (b.photoEndAt || '') + '\',\'' + (beforePhotoUrl || '') + '\',\'' + afterPhotoUrl + '\')"><i class="fa-solid fa-image me-1"></i>After</button>') : '';
+8628:                    const compareBtn = (beforePhotoUrl && afterPhotoUrl) ? ('<button class="btn btn-xs btn-outline-dark rounded-pill" onclick="window.comparePhotos(\'' + beforePhotoUrl + '\',\'' + afterPhotoUrl + '\',\'' + (b.orderReference || b.bookingReference || ('#EP-' + b.id)) + '\')"><i class="fa-solid fa-code-compare me-1"></i>Compare</button>') : '';
+8632:                        cardActionControls = '<div class="d-flex gap-1.5 mt-1 w-100"><button class="btn btn-xs btn-success rounded-pill flex-grow-1" onclick="window.submitBookingAction(' + b.id + ',\'ACCEPT\')"><i class="fa-solid fa-check me-1"></i>Accept</button><button class="btn btn-xs btn-outline-danger rounded-pill flex-grow-1" onclick="window.submitBookingAction(' + b.id + ',\'DECLINE\')"><i class="fa-solid fa-xmark me-1"></i>Decline</button></div>';
+8634:                        cardActionControls = '<div class="mt-1 w-100"><button class="btn btn-xs btn-primary rounded-pill w-100" onclick="window.submitBookingAction(' + b.id + ',\'REACHED\')"><i class="fa-solid fa-location-dot me-1"></i>Reached Location</button></div>';
+8638:                        cardActionControls = '<div class="mt-1 w-100"><button class="btn btn-xs btn-warning rounded-pill w-100 fw-bold" onclick="window.submitBookingAction(' + b.id + ',\'IN_PROGRESS\')"><i class="fa-solid fa-play me-1"></i>Start Repair Work</button></div>';
+8642:                        cardActionControls = '<div class="mt-1 w-100"><span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 mb-1 d-inline-block"><i class="fa-solid fa-flag-checkered me-1"></i>Work Completed</span>' + ((beforePhotoUrl && afterPhotoUrl) ? ('<button class="btn btn-xs btn-outline-dark rounded-pill w-100 mt-1" onclick="window.comparePhotos(\'' + beforePhotoUrl + '\',\'' + afterPhotoUrl + '\',\'' + (b.orderReference || b.bookingReference || ('#EP-' + b.id)) + '\')"><i class="fa-solid fa-code-compare me-1"></i>Compare Proof</button>') : '') + '<button class="btn btn-xs btn-outline-primary rounded-pill w-100 mt-1" onclick="window.sendEmergencyReviewLink(' + b.id + ')"><i class="fa-solid fa-paper-plane me-1"></i>' + (b.reviewLinkSentAt ? 'Resend Review Link' : 'Send Review Link') + '</button></div>';
+8663:                                    '<a href="javascript:void(0)" class="fw-bold text-dark fs-6 text-decoration-none" onclick="window.openBookingDetailsDrawer(' + b.id + ')" title="View Details">' + refStr + '</a>' +
+8664:                                    '<span class="badge bg-light text-primary border font-monospace" style="font-size: 0.72rem; cursor: pointer;" onclick="window.openBookingDetailsDrawer(' + b.id + ')">#EP-' + b.id + '</span>' +
+8682:                                            (b.contactUnlocked ? ('<div class="fw-semibold text-dark text-truncate mt-1" style="font-size: 0.84rem;" title="' + customerName + '">' + customerName + '</div>' + (customerPhone ? ('<div class="font-monospace text-muted mt-0.5 small text-truncate" style="font-size: 0.76rem;">' + customerPhone + '</div><a href="tel:' + customerPhone + '" class="btn btn-xs btn-outline-success rounded-pill mt-1.5 w-100" onclick="window.triggerCallCustomer(' + b.id + ')"><i class="fa-solid fa-phone me-1"></i>Call</a>') : '')) : '<div class="text-muted small mt-1"><i class="fa-solid fa-lock text-warning me-1"></i>Protected</div>') +
+8700:                                        (hasPartner && canReassignBooking ? '<button type="button" class="btn btn-xs btn-link p-0 text-decoration-none text-primary fw-semibold" onclick="window.openAssignPartnerModal(' + b.id + ')"><i class="fa-solid fa-arrows-rotate me-1"></i>Reassign</button>' : '') +
+8702:                                    (hasPartner ? ('<div class="d-flex align-items-center justify-content-between"><div><div class="fw-semibold text-dark" style="font-size: 0.88rem;">' + partnerStr + '</div>' + (partnerPhoneStr ? ('<div class="text-muted font-monospace" style="font-size: 0.74rem;"><i class="fa-solid fa-phone me-1"></i>' + partnerPhoneStr + '</div>') : '') + '</div></div>') : '<div class="d-flex align-items-center justify-content-between"><span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-0.5" style="font-size: 0.72rem;"><i class="fa-solid fa-triangle-exclamation me-1"></i>Unassigned</span><button type="button" class="btn btn-xs btn-primary rounded-pill px-2.5 py-0.5 fw-bold shadow-xs" onclick="window.openAssignPartnerModal(' + b.id + ')"><i class="fa-solid fa-user-plus me-1"></i>Assign Partner</button></div>') +
+8716:                                    '<button class="btn btn-xs btn-primary rounded-pill fw-semibold shadow-xs flex-grow-1" onclick="window.openBookingDetailsDrawer(' + b.id + ')" title="Open Booking Details Drawer"><i class="fa-solid fa-file-lines me-1"></i>Details</button>' +
+8717:                                    '<button class="btn btn-xs btn-outline-secondary rounded-pill fw-semibold flex-grow-1" onclick="window.viewLifecycleTimeline(' + b.id + ')" title="View Lifecycle Timeline"><i class="fa-solid fa-timeline me-1 text-primary"></i>Timeline</button>' +
+8946:                                <button type="button" class="btn btn-xs btn-primary flex-grow-1 rounded-pill fw-bold shadow-xs" onclick="window.openBookingDetailsDrawer(${b.id})">
+8950:                                    <button class="btn btn-xs btn-outline-danger rounded-pill fw-bold" onclick="window.openAssignPartnerModal(${b.id})" title="Manual Assign">
+8954:                                    <button class="btn btn-xs btn-outline-secondary rounded-pill" onclick="window.openAssignPartnerModal(${b.id})" title="Reassign">
+9031:                    <div class="map-incident-mini-card" id="sideRailCard-${b.id}" onclick="window.focusEmergencyOnMap(${b.id})">
+9046:                                <button type="button" class="btn btn-xs btn-outline-primary rounded-pill px-2 py-0.5" onclick="event.stopPropagation(); window.openBookingDetailsDrawer(${b.id});" title="View Full Details Drawer"><i class="fa-solid fa-file-lines me-1"></i>Details</button>
+9047:                                <span class="text-primary fw-semibold cursor-pointer" onclick="window.focusEmergencyOnMap(${b.id})"><i class="fa-solid fa-crosshairs me-1"></i>Fly</span>
+9385:                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-xs" onclick="document.getElementById('liveBookingsSearchInput').value=''; document.getElementById('liveBookingsStatusFilter').value='ALL'; window.filterDispatchTable();">
+9400:                const beforePhotoBtn = beforePhotoUrl ? `<button type="button" class="btn btn-xs btn-outline-primary rounded-pill me-1 shadow-xs" onclick="window.openPhotoLightbox('${beforePhotoUrl}','Before Photo (Initial Damage)','${b.id}','${b.photoStartAt || ''}','${beforePhotoUrl}','${afterPhotoUrl || ''}')"><i class="fa-solid fa-image me-1"></i>Before</button>` : '';
+9401:                const afterPhotoBtn = afterPhotoUrl ? `<button type="button" class="btn btn-xs btn-outline-success rounded-pill me-1 shadow-xs" onclick="window.openPhotoLightbox('${afterPhotoUrl}','After Photo (Completion Evidence)','${b.id}','${b.photoEndAt || ''}','${beforePhotoUrl || ''}','${afterPhotoUrl}')"><i class="fa-solid fa-image me-1"></i>After</button>` : '';
+9402:                const compareBtn = (beforePhotoUrl && afterPhotoUrl) ? `<button class="btn btn-xs btn-outline-dark rounded-pill" onclick="window.comparePhotos('${beforePhotoUrl}','${afterPhotoUrl}','${b.orderReference || b.bookingReference || ('#EP-' + b.id)}')"><i class="fa-solid fa-code-compare me-1"></i>Compare</button>` : '';
+9409:                            <button class="btn btn-xs btn-success rounded-pill" onclick="window.submitBookingAction(${b.id},'ACCEPT')"><i class="fa-solid fa-check me-1"></i>Accept</button>
+9410:                            <button class="btn btn-xs btn-outline-danger rounded-pill" onclick="window.submitBookingAction(${b.id},'DECLINE')"><i class="fa-solid fa-xmark me-1"></i>Decline</button>
+9415:                            <button class="btn btn-xs btn-primary rounded-pill" onclick="window.submitBookingAction(${b.id},'REACHED')"><i class="fa-solid fa-location-dot me-1"></i>Reached Location</button>
+9442:                            <button class="btn btn-xs btn-success w-100 rounded-pill fw-bold shadow-sm" onclick="window.submitBookingAction(${b.id},'START')">
+9456:                                    <button class="btn btn-xs btn-outline-dark rounded-pill" onclick="window.comparePhotos('${beforePhotoUrl}','${afterPhotoUrl}','${b.orderReference || b.bookingReference || ('#EP-' + b.id)}')"><i class="fa-solid fa-code-compare me-1"></i>Compare</button>
+9472:                                <button class="btn btn-xs btn-success w-100 rounded-pill fw-bold shadow-sm mb-1" onclick="window.submitBookingAction(${b.id},'COMPLETE')">
+9506:                                    <button class="btn btn-xs btn-outline-dark rounded-pill w-100 mt-1" onclick="window.comparePhotos('${beforePhotoUrl}','${afterPhotoUrl}','${b.orderReference || b.bookingReference || ('#EP-' + b.id)}')">
+9511:                            <button class="btn btn-xs btn-outline-primary rounded-pill w-100 mt-1" onclick="window.sendEmergencyReviewLink(${b.id})">
+9524:                            <div><a href="javascript:void(0)" class="text-dark fs-6 fw-bold text-decoration-none" onclick="window.openBookingDetailsDrawer(${b.id})" title="View Emergency Details Drawer">${escapeHtml(b.orderReference || b.bookingReference || ('ORD-EMG-' + String(b.id).padStart(4, '0')))}</a></div>
+9525:                            <a href="javascript:void(0)" class="badge bg-light text-primary border font-monospace mt-0.5 text-decoration-none cursor-pointer" onclick="window.openBookingDetailsDrawer(${b.id})" title="View Emergency Details Drawer">#EP-${b.id}</a>
+9533:                                    <a href="tel:${b.phone || b.customerPhone || b.requesterPhone}" class="btn btn-xs btn-outline-success rounded-pill mt-1" onclick="window.triggerCallCustomer(${b.id})">
+9567:                                    <button type="button" class="btn btn-xs btn-link p-0 text-decoration-none mt-1 text-primary fw-semibold" onclick="window.openAssignPartnerModal(${b.id})">
+9573:                                <button type="button" class="btn btn-xs btn-primary rounded-pill px-2.5 py-1 fw-bold shadow-sm mt-1" onclick="window.openAssignPartnerModal(${b.id})">
+9617:                                    <button class="btn btn-xs btn-primary rounded-pill fw-semibold shadow-xs" onclick="window.openBookingDetailsDrawer(${b.id})" title="Open Booking Details Drawer">
+9620:                                    <button class="btn btn-xs btn-outline-secondary rounded-pill" onclick="window.viewLifecycleTimeline(${b.id})" title="View Lifecycle Timeline">
+9740:                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3.5 py-1.5 fw-bold shadow-sm assign-partner-submit-btn" onclick="window.assignPartnerToBooking(${bookingId}, ${c.id || c.partnerId})">
+9841:                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="window.openBookingDetailsDrawer(${bookingId})">
+9853:                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="window.openBookingDetailsDrawer(${bookingId})">
+10005:                            <button type="button" class="btn btn-xs btn-success rounded-pill px-2.5 fw-bold shadow-xs" onclick="window.triggerCallCustomer(${b.id}, '${custPhone}')">
+10017:                            ${custPhone ? `<a href="tel:${custPhone}" class="text-decoration-none text-success fw-bold" onclick="window.triggerCallCustomer(${b.id}, '${custPhone}')">${escapeHtml(custPhone)}</a>` : '<span class="text-muted">Not provided</span>'}
+10024:                                <a href="tel:${custPhone}" class="btn btn-xs btn-outline-success rounded-pill px-2.5 fw-bold" onclick="window.triggerCallCustomer(${b.id}, '${custPhone}')">
+10081:                            <button type="button" class="btn btn-xs btn-danger rounded-pill px-2.5 fw-bold shadow-xs" onclick="window.openAssignPartnerModal(${b.id})">
+10085:                            <button type="button" class="btn btn-xs btn-outline-primary rounded-pill px-2" onclick="window.openAssignPartnerModal(${b.id})">
+10220:                                    <div class="photo-preview-thumbnail" onclick="window.openPhotoLightbox('${beforePhotoUrl}','Before Photo (Initial Damage)','${b.id}','${tPhoto || ''}','${beforePhotoUrl}','${afterPhotoUrl || ''}')" title="Click to enlarge before photo in-place">
+10228:                                        <button type="button" class="btn btn-xs btn-outline-primary rounded-pill w-100 fw-semibold" onclick="window.openPhotoLightbox('${beforePhotoUrl}','Before Photo (Initial Damage)','${b.id}','${tPhoto || ''}','${beforePhotoUrl}','${afterPhotoUrl || ''}')">
+10256:                                    <div class="photo-preview-thumbnail" onclick="window.openPhotoLightbox('${afterPhotoUrl}','After Photo (Completion Evidence)','${b.id}','${tCompleted || ''}','${beforePhotoUrl || ''}','${afterPhotoUrl}')" title="Click to enlarge after photo in-place">
+10264:                                        <button type="button" class="btn btn-xs btn-outline-success rounded-pill w-100 fw-semibold" onclick="window.openPhotoLightbox('${afterPhotoUrl}','After Photo (Completion Evidence)','${b.id}','${tCompleted || ''}','${beforePhotoUrl || ''}','${afterPhotoUrl}')">
+10287:                        <button type="button" class="btn btn-sm btn-outline-dark rounded-pill w-100 mt-3 fw-bold shadow-xs" onclick="window.comparePhotos('${beforePhotoUrl}', '${afterPhotoUrl}', '${escapeHtml(bookingRef)}')">
+10302:                    controls.push(`<button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold shadow-xs" onclick="window.sendEmergencyReviewLink(${b.id})"><i class="fa-solid fa-paper-plane me-1.5"></i>${b.reviewLinkSentAt ? 'Resend Review Link' : 'Send Review Link'}</button>`);
+10304:                    controls.push(`<button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold shadow-xs" onclick="window.openAssignPartnerModal(${b.id})"><i class="fa-solid ${isAssigned ? 'fa-arrows-rotate' : 'fa-user-plus'} me-1.5"></i>${isAssigned ? 'Reassign Partner' : 'Assign Partner'}</button>`);
+10307:                    controls.push(`<button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3 fw-semibold shadow-xs" onclick="window.adminAdvanceMaintenanceStage(${b.id}, 'STAGE_1_REACHED')"><i class="fa-solid fa-location-dot me-1.5"></i>Override: Reached</button>`);
+10309:                    controls.push(`<button type="button" class="btn btn-sm btn-outline-warning rounded-pill px-3 fw-semibold shadow-xs" onclick="window.adminAdvanceMaintenanceStage(${b.id}, 'STAGE_2_STARTED')"><i class="fa-solid fa-camera me-1.5"></i>Override: Start Work</button>`);
+10311:                    controls.push(`<button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 fw-semibold shadow-xs" onclick="window.adminAdvanceMaintenanceStage(${b.id}, 'STAGE_3_COMPLETED')"><i class="fa-solid fa-circle-check me-1.5"></i>Override: Complete</button>`);
+10927:                    actionBtn = `<button class="btn btn-primary btn-sm rounded-pill px-3 py-1 fw-bold shadow-sm" data-work-step="process" data-ticket-id="${t.id}"><i class="fa-solid fa-gear me-1"></i>Start Processing</button>`;
+10930:                    actionBtn = `<button class="btn btn-success btn-sm rounded-pill px-3 py-1 fw-bold shadow-sm" data-work-step="complete" data-ticket-id="${t.id}"><i class="fa-solid fa-circle-check me-1"></i>Mark Completed</button>`;
+10940:                            <button type="button" class="btn btn-sm ${isSelected ? 'btn-primary' : 'btn-outline-primary'} rounded-pill px-3 py-1 fw-bold ticket-select-btn" data-ticket-id="${t.id}" title="Click to view pin-to-pin details">
+11224:                        <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-claim-action="ticket" data-backend-id="${item.backendId || ""}"><i class="fa-solid fa-hand-holding-hand me-1"></i>Claim Ticket</button></td>
+11352:                const serviceLogBtn = e.target.closest('[data-action="service-log"]');
+11371:                const profileSaveBtn = e.target.closest('[data-action="save"]');
+11468:    <script>
+11523:                    ? `<button class="btn btn-sm btn-outline-warning rounded-pill mt-1 py-0 px-2 fw-semibold" style="font-size:0.75rem;" type="button" onclick="window.toggleStaffAttendance(${worker.id}, 'checkout')"><i class="fa-solid fa-right-from-bracket me-1"></i>Check Out</button>`
+11524:                    : `<button class="btn btn-sm btn-outline-success rounded-pill mt-1 py-0 px-2 fw-semibold" style="font-size:0.75rem;" type="button" onclick="window.toggleStaffAttendance(${worker.id}, 'checkin')"><i class="fa-solid fa-right-to-bracket me-1"></i>Check In</button>`;
+11567:                            <button class="btn btn-sm btn-outline-primary rounded-pill copy-worker-login" type="button" data-email="${email}">
+11593:                    table.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load workers: ${maintenanceWorkerEscape(error.message)} <button type="button" class="btn btn-sm btn-outline-danger ms-2 rounded-pill" onclick="loadMaintenanceWorkers()">Retry</button></td></tr>`;
+11715:                <button type="button" class="btn btn-sm btn-light border rounded-circle"
+11716:                    onclick="document.getElementById('photoComparisonOverlay').style.display='none'"
+11762:                <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3"
+11763:                    onclick="document.getElementById('photoComparisonOverlay').style.display='none'">Close</button>
+11785:                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5"
+11786:                                id="lightboxZoomOutBtn" onclick="window.adjustLightboxZoom(-0.2)" title="Zoom Out"><i
+11789:                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5"
+11790:                                id="lightboxZoomInBtn" onclick="window.adjustLightboxZoom(0.2)" title="Zoom In"><i
+11792:                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5"
+11793:                                onclick="window.resetLightboxZoom()" title="Reset Zoom"><i
+11795:                            <button type="button" class="btn btn-sm btn-light border rounded-circle ms-2"
+11796:                                onclick="window.closePhotoLightbox()" style="width:34px; height:34px; padding:0;"
+11814:                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold"
+11815:                                id="lightboxSwitchPhotoBtn" onclick="window.toggleLightboxPhoto()"
+11820:                            <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3.5 fw-semibold"
+11821:                                onclick="window.closePhotoLightbox()">Close</button>
+11828:            <div id="bookingDetailsDrawerOverlay" onclick="window.closeBookingDetailsDrawer()"></div>
+11841:                    <button type="button" class="btn btn-sm btn-light border rounded-circle shadow-xs"
+11842:                        onclick="window.closeBookingDetailsDrawer()" style="width:34px; height:34px; padding:0;"
+11858:                        <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3 fw-semibold"
+11859:                            onclick="window.closeBookingDetailsDrawer()">Close</button>
+11877:                        <button type="button" class="btn btn-sm btn-light border rounded-circle"
+11878:                            onclick="document.getElementById('lifecycleTimelineOverlay').style.display='none'"
+11888:                        <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3"
+11889:                            onclick="document.getElementById('lifecycleTimelineOverlay').style.display='none'">Close</button>
+11907:                        <button type="button" class="btn btn-sm btn-light border rounded-circle"
+11908:                            onclick="document.getElementById('assignPartnerOverlay').style.display='none'"
+11917:                        <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3"
+11918:                            onclick="document.getElementById('assignPartnerOverlay').style.display='none'">Close</button>
+11923:            <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
+11924:            <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
+11925:            <script src="/smartapartment/js/worker-attendance-module.js?v=20260919-v1"></script>
+11926:            <script src="/smartapartment/js/maintenance-manager-dashboard.js?v=20260919-v1"></script>

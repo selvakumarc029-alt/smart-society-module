@@ -1,0 +1,150 @@
+1: text="Overview & Metrics" | attrs="class="active" type="button" data-panel="overview" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('overview');}return false;""
+2: text="Customer Directory 0" | attrs="type="button" data-panel="users" style="position:relative;" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('users');}return false;""
+3: text="Owner & Builder Verification 0" | attrs="type="button" data-panel="verifications" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('verifications');}return false;""
+4: text="Property Inventory & Queue 0" | attrs="type="button" data-panel="my-properties" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('my-properties');}return false;""
+5: text="Enquiries & Visit Tracking" | attrs="type="button" data-panel="enquiries" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('enquiries');}return false;""
+6: text="Reports & Complaints 0" | attrs="type="button" data-panel="reports" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('reports');}return false;""
+7: text="Categories & Locations" | attrs="type="button" data-panel="metadata" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('metadata');}return false;""
+8: text="Featured & Content" | attrs="type="button" data-panel="content" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('content');}return false;""
+9: text="Notifications & Audit" | attrs="type="button" data-panel="audit" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('audit');}return false;""
+10: text="Post Listing on Behalf" | attrs="type="button" data-panel="add-property" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('add-property');}return false;""
+11: text="Admin Profile" | attrs="type="button" data-panel="profile" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('profile');}return false;""
+12: text="Manage Users" | attrs="onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel('users'); return false; }" class="primary" data-panel="users" style="display:inline-flex; align-items:center; gap:8px;""
+13: text="Sync Now" | attrs="type="button" onclick="loadOverview()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;""
+14: text="View Full Audit Log →" | attrs="type="button" onclick="switchTabAndFilter('audit', 'ALL')"
+
+                        style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-size:0.78rem; font-weight:700; cursor:pointer;""
+15: text="Refresh Directory" | attrs="type="button" id="refreshUsersBtn" onclick="loadUsers()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;""
+16: text="Reset" | attrs="type="button" id="userFilterResetBtn" style="padding:10px 16px; border-radius:10px; border:1px solid #e2e8f0; background:#f1f5f9; color:#475569; font-size:0.84rem; font-weight:700; cursor:pointer;""
+17: text="Refresh Applications" | attrs="type="button" id="refreshAppsBtn" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;""
+18: text="＋ Create Listing on Behalf" | attrs="type="button" onclick="switchTabAndFilter('add-property')" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;""
+19: text="Refresh" | attrs="type="button" onclick="loadInventory()" class="small" style="padding:8px 14px; border-radius:10px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; cursor:pointer;""
+20: text="Save Step 1 & Next" | attrs="type="button" class="primary pd-form-step-btn"
+
+                        style="grid-column: 1 / -1; width: fit-content; margin-top: 10px;"
+
+                        onclick="goToAddPropertyStep(2)""
+21: text="Save Step 2 & Next" | attrs="type="button" class="primary pd-form-step-btn"
+
+                        style="grid-column: 1 / -1; width: fit-content; margin-top: 10px;"
+
+                        onclick="goToAddPropertyStep(3)""
+22: text="Save Step 3 & Next" | attrs="type="button" class="primary pd-form-step-btn"
+
+                        style="grid-column: 1 / -1; width: fit-content; margin-top: 10px;"
+
+                        onclick="goToAddPropertyStep(4)""
+23: text="Primary" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Primary cover image updated!')""
+24: text="⬆️ Up" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image moved up!')""
+25: text="⬇️ Down" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image moved down!')""
+26: text="️ Delete" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image deleted!')""
+27: text="Set Primary" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Set as Primary cover image!')""
+28: text="⬆️ Up" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image moved up!')""
+29: text="⬇️ Down" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image moved down!')""
+30: text="️ Delete" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image deleted!')""
+31: text="Set Primary" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Set as Primary cover image!')""
+32: text="⬆️ Up" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image moved up!')""
+33: text="⬇️ Down" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image moved down!')""
+34: text="️ Delete" | attrs="type="button"
+
+                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; cursor: pointer;"
+
+                                        onclick="showToast('Image deleted!')""
+35: text="Submit Property Listing" | attrs="type="submit" class="primary" data-property-api-action="publish-owner-listing"
+
+                        style="grid-column: 1 / -1; width: fit-content; margin-top: 18px;""
+36: text="← Back to My Properties" | attrs="type="button" class="btn-table-action" onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel('my-properties'); }" style="background: #f1f5f9; color: #334155 !important; border: 1px solid #cbd5e1; font-weight: 700; cursor: pointer; padding: 6px 14px; border-radius: 8px;""
+37: text="Cancel" | attrs="type="button" onclick="if (window.PropertyDirectDashboardControls) { window.PropertyDirectDashboardControls.setPanel('my-properties'); }" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #cbd5e1; background: #ffffff; color: #334155; font-weight: 700; font-size: 0.88rem; cursor: pointer;""
+38: text="Save Changes" | attrs="type="submit" style="padding: 10px 24px; border-radius: 8px; border: none; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; font-weight: 800; font-size: 0.88rem; cursor: pointer; box-shadow: 0 4px 12px rgba(37,99,235,0.3);""
+39: text="Customer Inquiries" | attrs="type="button" id="subtabEnquiriesBtn" class="pill-btn active" onclick="switchEnquirySubtab('enquiries')"
+
+                        style="padding:7px 16px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#0f172a; color:#ffffff;""
+40: text="Scheduled Visits" | attrs="type="button" id="subtabVisitsBtn" class="pill-btn" onclick="switchEnquirySubtab('visits')"
+
+                        style="padding:7px 16px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff; color:#334155;""
+41: text="Refresh" | attrs="type="button" onclick="loadReports()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;""
+42: text="+ Add Category Catalog" | attrs="type="button" onclick="openMetadataDetailModal('Category')" id="btnAddCategoryMeta" class="btn-meta-action btn-meta-category"
+
+                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(37,99,235,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);""
+43: text="+ Add Amenity Catalog" | attrs="type="button" onclick="openMetadataDetailModal('Amenity')" id="btnAddAmenityMeta" class="btn-meta-action btn-meta-amenity"
+
+                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #065f46 0%, #059669 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(5,150,105,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);""
+44: text="+ Add Location Catalog" | attrs="type="button" onclick="openMetadataDetailModal('Location')" id="btnAddLocationMeta" class="btn-meta-action btn-meta-location"
+
+                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #9a3412 0%, #ea580c 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(234,88,12,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);""
+45: text="Browse Properties to Feature →" | attrs="type="button" onclick="switchTabAndFilter('my-properties', 'ACTIVE')" class="primary small" style="background:#0f172a;""
+46: text="Refresh Audit Log" | attrs="type="button" onclick="loadAudit()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;""
+47: text="×" | attrs="class="close" id="closeInspectModalBtn" type="button" aria-label="Close modal" onclick="closeInspectModal()""
+48: text="💾 Save Changes" | attrs="type="submit" id="inspectSaveBtn" class="primary" style="background:#0f172a; color:#fff; padding:9px 18px; border-radius:8px; font-size:0.84rem; font-weight:700; cursor:pointer;""
+49: text="Status Dialog" | attrs="type="button" id="inspectSuspendBtn" onclick="openUserStatusModalFromInspect()" style="padding:9px 14px; border-radius:8px; font-size:0.82rem; font-weight:700; cursor:pointer; border:1px solid #fca5a5; background:#fff1f2; color:#b91c1c;""
+50: text="Posting Dialog" | attrs="type="button" id="inspectPostingBtn" onclick="openUserPostingModalFromInspect()" style="padding:9px 14px; border-radius:8px; font-size:0.82rem; font-weight:700; cursor:pointer; border:1px solid #bfdbfe; background:#eff6ff; color:#1d4ed8;""
+51: text="Close" | attrs="type="button" id="closeInspectModalBottomBtn" class="modal-cancel" onclick="closeInspectModal()""
+52: text="×" | attrs="class="close" type="button" aria-label="Close modal" onclick="closeModal('userStatusModal')""
+53: text="⚠️ Suspicious Activity" | attrs="type="button" class="preset-chip" onclick="applyStatusNotePreset('Suspicious activity detected on account')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+54: text="📜 Policy Violation" | attrs="type="button" class="preset-chip" onclick="applyStatusNotePreset('Violation of PropertyDirect platform policies')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+55: text="✅ Verification Cleared" | attrs="type="button" class="preset-chip" onclick="applyStatusNotePreset('Identity and ownership verification successfully cleared')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+56: text="⏸️ User Requested Hold" | attrs="type="button" class="preset-chip" onclick="applyStatusNotePreset('Account owner requested temporary hold')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+57: text="🔍 Routine Review" | attrs="type="button" class="preset-chip" onclick="applyStatusNotePreset('Routine compliance review completed')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+58: text="Cancel" | attrs="type="button" class="modal-cancel" onclick="closeModal('userStatusModal')""
+59: text="Apply Status Change" | attrs="type="submit" id="statusSubmitBtn" class="primary" style="background:#0f172a; color:#fff; padding:10px 20px; border-radius:10px; font-weight:700; font-size:0.86rem; cursor:pointer;""
+60: text="×" | attrs="class="close" type="button" aria-label="Close modal" onclick="closeModal('userPostingModal')""
+61: text="📄 Documents Verified" | attrs="type="button" class="preset-chip" onclick="applyPostingNotePreset('Ownership documents and government ID verified')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+62: text="🏢 RERA Validated" | attrs="type="button" class="preset-chip" onclick="applyPostingNotePreset('RERA builder registration and license validated')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+63: text="👤 Owner Verified" | attrs="type="button" class="preset-chip" onclick="applyPostingNotePreset('Verified direct individual property owner')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+64: text="⏳ Pending Documents" | attrs="type="button" class="preset-chip" onclick="applyPostingNotePreset('Access revoked pending updated deed submission')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+65: text="⚠️ Posting Misuse" | attrs="type="button" class="preset-chip" onclick="applyPostingNotePreset('Restricted due to inaccurate or misleading property postings')" style="padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#f1f5f9; font-size:0.74rem; font-weight:600; color:#334155; cursor:pointer;""
+66: text="Cancel" | attrs="type="button" class="modal-cancel" onclick="closeModal('userPostingModal')""
+67: text="Update Posting Access" | attrs="type="submit" id="postingSubmitBtn" class="primary" style="background:#1d4ed8; color:#fff; padding:10px 20px; border-radius:10px; font-weight:700; font-size:0.86rem; cursor:pointer;""
+68: text="×" | attrs="type="button" class="close" onclick="closeModal('reviewAppModal')""
+69: text="✓ Approve Application" | attrs="type="button" onclick="submitApplicationReview('APPROVED')" style="padding:10px 18px; border-radius:10px; background:#10b981; color:#ffffff; font-weight:800; border:none; cursor:pointer;""
+70: text="✕ Reject Application" | attrs="type="button" onclick="submitApplicationReview('REJECTED')" style="padding:10px 18px; border-radius:10px; background:#ef4444; color:#ffffff; font-weight:800; border:none; cursor:pointer;""
+71: text="Cancel" | attrs="type="button" onclick="closeModal('reviewAppModal')" class="modal-cancel""
+72: text="×" | attrs="type="button" class="close" onclick="closeModal('inspectListingModal')""
+73: text="Close" | attrs="type="button" onclick="closeModal('inspectListingModal')" class="modal-cancel""
+74: text="✕" | attrs="type="button" class="close" onclick="closeModal('metadataDetailModal')" aria-label="Close" style="width:34px; height:34px; border-radius:10px; border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; font-size:1.1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s ease;""
+75: text="Cancel" | attrs="type="button" onclick="closeModal('metadataDetailModal')" class="modal-cancel" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#475569; font-weight:700; font-size:0.85rem; cursor:pointer;""
+76: text="Save & Publish Item" | attrs="type="submit" id="metaSubmitBtn" class="primary" style="padding:10px 24px; border-radius:12px; font-weight:750; font-size:0.85rem; color:#ffffff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(15,23,42,0.2);""

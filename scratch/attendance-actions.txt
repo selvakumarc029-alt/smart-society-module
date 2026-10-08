@@ -1,0 +1,44 @@
+    let attendanceSaving = false;
+    async function saveAttendance(buttonId, endpoint, successMessage, type = "success") {
+        if (attendanceSaving) return;
+        const button = document.getElementById(buttonId);
+        if (button?.disabled) return;
+        attendanceSaving = true;
+        const controls = ["btnWorkerClockIn", "btnWorkerClockOut", "btnWorkerStartBreak", "btnWorkerEndBreak"]
+            .map(id => document.getElementById(id)).filter(Boolean).map(element => ({ element, disabled: element.disabled }));
+        controls.forEach(({ element }) => { element.disabled = true; });
+        const label = button?.innerHTML;
+        if (button) button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
+        let saved = false;
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: "{}"
+            });
+            if (response.redirected || !response.ok) {
+                const error = await response.json().catch(() => ({}));
+                throw new Error(error.message || error.error || "Attendance was not saved. Refresh or sign in again.");
+            }
+            saved = true;
+            showToast(successMessage, type);
+        } catch (error) { showToast(error.message, "danger"); }
+        finally {
+            controls.forEach(({ element, disabled }) => { element.disabled = disabled; });
+            if (button) button.innerHTML = label;
+            attendanceSaving = false;
+        }
+        if (saved) await loadWorkerDashboardSummary();
+    }
+    async function workerClockIn() {
+        return saveAttendance("btnWorkerClockIn", "/api/workers/attendance/clock-in", "Clocked in successfully! You are now AVAILABLE.");
+    }
+    async function workerClockOut() {
+        if (attendanceSaving || !confirm("Are you sure you want to clock out for today?")) return;
+        return saveAttendance("btnWorkerClockOut", "/api/workers/attendance/clock-out", "Clocked out successfully. You are now OFFLINE.");
+    }
+    async function workerStartBreak() {
+        return saveAttendance("btnWorkerStartBreak", "/api/workers/attendance/break-start", "Break started. Your availability is now ON BREAK.", "info");
+    }
+    async function workerEndBreak() {
+        return saveAttendance("btnWorkerEndBreak", "/api/workers/attendance/break-end", "Break ended. You are back on duty.");
+    }
+

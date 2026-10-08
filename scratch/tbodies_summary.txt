@@ -1,0 +1,108 @@
+=== TBODY #1 (lines: 3) ===
+<tr>
+<td colspan="7" style="text-align: center; padding: 36px; color: #64748b;">Loading user directory from server...</td>
+</tr>
+
+=== TBODY #2 (lines: 3) ===
+<tr>
+<td colspan="6" style="text-align: center; padding: 36px; color: #64748b;">Loading verified agents from server...</td>
+</tr>
+
+=== TBODY #3 (lines: 3) ===
+<tr>
+<td colspan="6" style="text-align: center; padding: 36px; color: #64748b;">Loading owners and builders from server...</td>
+</tr>
+
+=== TBODY #4 (lines: 3) ===
+<tr>
+<td colspan="6" style="text-align: center; padding: 36px; color: #64748b;">Loading property inventory from server...</td>
+</tr>
+
+=== TBODY #5 (lines: 5) ===
+<tr>
+<td colspan="7" style="text-align: center; padding: 36px; color: #64748b;">
+Loading approval queue from moderation API...
+</td>
+</tr>
+
+=== TBODY #6 (lines: 3) ===
+<tr>
+<td colspan="7" style="text-align: center; padding: 36px; color: #64748b;">Loading fraud reports from server...</td>
+</tr>
+
+=== TBODY #7 (lines: 3) ===
+<tr>
+<td colspan="7" style="text-align: center; padding: 36px; color: #64748b;">Loading scheduled tours from server...</td>
+</tr>
+
+=== TBODY #8 (lines: 3) ===
+<tr>
+<td colspan="6" style="text-align: center; padding: 36px; color: #64748b;">Loading investigation queue from server...</td>
+</tr>
+
+=== TBODY #9 (lines: 104) ===
+<tr>
+<td>
+<strong style="color: #0f172a;">Riya Sharma</strong><br>
+<small style="color: #64748b;">riya@propertydirect.in</small>
+</td>
+<td><span style="font-weight: 700; color: #1e293b;">Listings & Verification</span></td>
+<td><span
+style="background: #f0fdf4; color: #166534; font-weight: 700; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px;">Enforced
+
+=== TBODY #10 (lines: 25) ===
+<tr>
+<th>Master group</th>
+<th>Configured values</th>
+<th>Rule / availability</th>
+<th>Action</th>
+</tr>
+<tr>
+<td>Property types</td>
+
+=== TBODY #11 (lines: 68) ===
+<tr>
+<td><strong style="color: #0f172a;">Professional Agent Subscription</strong></td>
+<td><span style="font-weight: 700; color: #1e293b;">Verified Brokers</span></td>
+<td><strong style="color: #16a34a;">₹2,499 / month</strong></td>
+<td>612 Subscribed</td>
+<td><strong style="color: #0f172a;">₹15,29,388 / mo</strong></td>
+<td style="text-align: right;">
+<div style="display: inline-flex; gap: 5px; justify-content: flex-end;">
+
+=== TBODY #12 (lines: 3) ===
+<tr>
+<td colspan="6" style="text-align: center; padding: 32px; color: #64748b;">No recent payment transactions recorded. Financial transactions from premium subscriptions and lead unlocks will appear here.</td>
+</tr>
+
+=== TBODY #13 (lines: 3) ===
+<tr>
+<td colspan="7" style="text-align: center; padding: 32px; color: #64748b;">Loading platform audit logs from server...</td>
+</tr>
+
+=== TBODY #14 (lines: 111) ===
+<tr>
+<td>
+<strong style="color: #0f172a;">PD-MSG-1082</strong><br>
+<small style="color: #64748b;">Today, 02:15 PM</small>
+</td>
+<td><strong>Ananya Roy</strong></td>
+<td>
+<span style="color: #0f172a; font-weight: 600;">ananya@gmail.com</span><br>
+
+=== TBODY #15 (lines: 114) ===
+<tr>
+<td>
+<strong style="color: #0f172a;">Top 10 Real Estate Investment Hotspots in
+Chennai</strong><br>
+<small style="color: #64748b;"> Blog Post</small>
+</td>
+<td><span style="font-weight: 700; color: #1e293b;">Blog (/blog)</span></td>
+<td>Editorial Team · Today</td>
+
+=== TBODY #16 (lines: 4) ===
+<tr>
+<td colspan="8" style="text-align: center; padding: 20px; color: #64748b;">Loading
+service requests...</td>
+</tr>
+

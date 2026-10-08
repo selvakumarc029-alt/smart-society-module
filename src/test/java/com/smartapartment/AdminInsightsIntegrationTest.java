@@ -88,5 +88,8 @@ class AdminInsightsIntegrationTest {
         var worker=users.findByEmail(email).orElseThrow();var a=attendance.findFirstByWorkerIdAndDateOrderByCreatedAtDesc(worker.getId(),LocalDate.now()).orElseThrow();assertEquals(2,breaks.findByTenantIdAndAttendanceIdOrderByStartedAtAsc(tenant,a.getId()).size());
         mvc.perform(post("/api/society/workforce/attendance/clock-out").with(user(email).roles("MAINTENANCE_STAFF"))).andExpect(status().isOk());
         mvc.perform(post("/api/society/workforce/attendance/break-start").with(user(email).roles("MAINTENANCE_STAFF"))).andExpect(status().isConflict());
+        mvc.perform(post("/api/society/workforce/attendance/clock-in").with(user(email).roles("MAINTENANCE_STAFF"))).andExpect(status().isOk());
+        assertEquals(2,attendance.findByWorkerIdOrderByDateDesc(worker.getId()).size());
+        assertEquals(2,breaks.findByTenantIdAndAttendanceIdOrderByStartedAtAsc(tenant,a.getId()).size());
     }
 }

@@ -1100,7 +1100,7 @@
 <label>New monthly rent (₹)<input id="insights-rent-new" class="form-control" type="number" min="0.01" step="0.01" required></label>
 <label>Effective date<input id="insights-rent-date" class="form-control" type="date" required></label>
 <label>Landlord instructions / reference<input id="insights-rent-note" class="form-control" maxlength="1000"></label>
-<div class="insights-rent-submit"><button type="submit" class="btn btn-primary">Save landlord rent increase</button></div>
+<div class="insights-rent-submit insights-actions"><button type="button" id="insights-rent-reset" class="btn btn-outline-secondary">Reset rent form</button><button type="submit" class="btn btn-primary">Save landlord rent increase</button></div>
 </form>
 <h4>Rent change history</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Flat</th><th scope="col">Landlord</th><th scope="col">Previous rent</th><th scope="col">New rent</th><th scope="col">Effective date</th><th scope="col">Status</th><th scope="col">Notes</th></tr></thead><tbody id="insights-rent-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
 </div>

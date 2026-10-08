@@ -78,6 +78,7 @@
     $('insights-rent-date').min=localDate();$('insights-rent-date').value=localDate();
     ['insights-block','insights-occupancy-status'].forEach(id=>$(id).addEventListener('change',occupancy));$('insights-flat-search').addEventListener('input',occupancy);$('insights-rent-flat').addEventListener('change',()=>{rentSelection();$('insights-rent-new').value='';$('insights-rent-note').value='';});
     $('insights-rent-form').addEventListener('input',()=>{$('insights-rent-form').dataset.dirty='true';});
+    $('insights-rent-reset').addEventListener('click',()=>{const form=$('insights-rent-form');form.reset();form.dataset.dirty='false';$('insights-rent-date').value=localDate();load('billing');});
     document.querySelectorAll('[data-insights-refresh]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.insightsRefresh)));
     document.querySelectorAll('[data-insights-export]').forEach(b=>b.addEventListener('click',()=>download(b.dataset.insightsExport)));
     document.querySelectorAll('[data-insights-date-form]').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();load(form.dataset.insightsDateForm);}));

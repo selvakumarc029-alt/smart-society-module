@@ -32,7 +32,10 @@ public class SocietyWorkerAttendanceController {
         var existing=attendance.findFirstByWorkerIdAndDateOrderByCreatedAtDesc(user.getId(),LocalDate.now()).orElse(null);
         if(existing!=null&&!java.util.Objects.equals(user.getTenantId(),existing.getTenantId()))throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Attendance belongs to another society");
         if("clock-in".equals(action)){
-            if(existing!=null&&existing.getClockIn()!=null)throw new ResponseStatusException(HttpStatus.CONFLICT,"Today's attendance is already recorded");
+            if(existing!=null&&existing.getClockIn()!=null&&existing.getClockOut()==null)throw new ResponseStatusException(HttpStatus.CONFLICT,"You are already clocked in");
+            if(existing!=null&&existing.getClockOut()!=null){
+                var next=new WorkerAttendance();next.setTenantId(user.getTenantId());next.setWorkerId(user.getId());next.setDate(LocalDate.now());attendance.saveAndFlush(next);
+            }
             return service.clockIn(user,new ClockInRequest(body==null?null:body.shiftId(),notes));
         }
         if(existing==null)throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Clock in first");
@@ -56,6 +59,7 @@ public class SocietyWorkerAttendanceController {
         if("clock-out".equals(action)){
             long paused=breaks.findByTenantIdAndAttendanceIdOrderByStartedAtAsc(user.getTenantId(),existing.getId()).stream().filter(b->b.getEndedAt()!=null).mapToLong(b->Math.max(0,Duration.between(b.getStartedAt(),b.getEndedAt()).toMinutes())).sum();
             existing.setTotalWorkingMinutes((int)Math.max(0,Duration.between(existing.getClockIn(),existing.getClockOut()).toMinutes()-paused));
+            existing.setAttendanceStatus(existing.getTotalWorkingMinutes()>0&&existing.getTotalWorkingMinutes()<240?"HALF_DAY":"CLOCKED_OUT");
             result=WorkerAttendanceResponseDto.from(attendance.save(existing),user.getFullName());
         }
         return result;

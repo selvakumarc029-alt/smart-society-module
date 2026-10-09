@@ -3143,7 +3143,7 @@
             border: 1px solid rgba(220, 38, 38, 0.28) !important;
             animation: dispatchAlertPulse 1.4s ease-in-out infinite;
         }
-    
+
         /* Scoped High-Precision Styling for Overview KPI Cards */
         #overviewKpiCards {
             display: grid !important;
@@ -3324,10 +3324,6 @@
                     <span class="badge bg-danger rounded-pill float-end ms-auto" id="maintChatTotalBadge">3</span></a>
                 <a href="#tasks" class="nav-link btn btn-link text-start text-decoration-none" data-panel="tasks"><i
                         class="fa-solid fa-clipboard-list me-2"></i> My Assigned Tasks</a>
-                <a href="#complaints" class="nav-link btn btn-link text-start text-decoration-none"
-                    data-panel="complaints"><i class="fa-solid fa-ticket me-2"></i> Open Ticket Pool</a>
-                <a href="#assets" class="nav-link btn btn-link text-start text-decoration-none" data-panel="assets"><i
-                        class="fa-solid fa-screwdriver-wrench me-2"></i> Assets & Preventive</a>
 
                 <div class="px-3 pb-1 pt-3 text-uppercase fw-bold small text-warning-emphasis"
                     style="letter-spacing: 0.08em; font-size: 0.68rem; color: #fde047 !important;">Track 2: Live
@@ -3385,7 +3381,7 @@
                         <span>Live Chat</span>
                         <span class="badge bg-danger rounded-pill px-1.5" id="maintHeaderChatBadge" style="display:none; font-size: 0.65rem;">0</span>
                     </button>
-                    
+
                     <div class="dropdown">
                         <button
                             class="btn btn-sm btn-success rounded-pill shadow-xs px-2.5 py-1 dropdown-toggle d-inline-flex align-items-center gap-1.5 fw-semibold text-white text-nowrap"
@@ -3669,8 +3665,7 @@
                                         <span class="small text-muted"><i
                                                 class="fa-solid fa-clock text-primary me-1"></i>Next scheduled task:
                                             Lift #1 inspection at 02:00 PM</span>
-                                        <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3"
-                                            data-panel="assets">View asset schedule</button>
+
                                     </div>
                                 </div>
                             </div>
@@ -4119,7 +4114,7 @@
                         </div>
                     </div>
 
-                    
+
                 </section>
 
                 <!-- Resident Service Requests Panel -->
@@ -5877,218 +5872,8 @@
                 </section>
 
                 <!-- Open Complaint Pool Panel -->
-                <section class="d-none animate__animated animate__fadeIn" data-view="complaints">
-
-                    <!-- Track 1 Header Banner: Routine Complaint Pool -->
-                    <div class="alert bg-white border border-primary-subtle rounded-4 p-3 mb-4 shadow-sm d-flex flex-wrap align-items-center justify-content-between gap-3"
-                        id="track1ComplaintsBanner">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center flex-shrink-0"
-                                style="width: 44px; height: 44px; font-size: 1.25rem;">
-                                <i class="fa-solid fa-ticket"></i>
-                            </div>
-                            <div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <span
-                                        class="badge bg-primary text-white rounded-pill px-2.5 py-1 fw-bold text-uppercase"
-                                        style="font-size: 0.72rem; letter-spacing: 0.05em;">Track 1: Non-Emergency
-                                        Ticket Pool</span>
-                                    <span class="badge bg-light text-muted border rounded-pill small">Unassigned Society
-                                        Complaints</span>
-                                </div>
-                                <p class="text-muted small mb-0 mt-1">Unassigned routine complaints for maintenance
-                                    staff claim. On-demand emergency jobs are handled strictly via Live Bookings.</p>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center gap-2">
-                            <button type="button"
-                                class="btn btn-sm btn-outline-warning text-dark fw-bold rounded-pill px-3 shadow-sm"
-                                onclick="window.switchQueuePipeline('live-bookings')">
-                                <i class="fa-solid fa-truck-fast text-danger me-1"></i> Switch to Live Bookings
-                                (Emergency) &rarr;
-                            </button>
-                        </div>
-                    </div>
-                    <div class="row g-3 mb-4">
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">Open for claim</span><strong
-                                    class="d-block fs-4 text-primary mt-1" id="complaintOpenCount">—</strong><span
-                                    class="small text-muted">Available to the shift team</span></div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">High urgency</span><strong
-                                    class="d-block fs-4 text-danger mt-1" id="complaintHighUrgencyCount">—</strong><span
-                                    class="small text-muted">Safety or water-related issue</span></div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">Access confirmed</span><strong
-                                    class="d-block fs-4 text-success mt-1"
-                                    id="complaintAccessConfirmedCount">—</strong><span class="small text-muted">Ready
-                                    for technician visit</span></div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">Awaiting triage</span><strong
-                                    class="d-block fs-4 text-warning mt-1" id="complaintTriageCount">—</strong><span
-                                    class="small text-muted">Needs an on-site assessment</span></div>
-                        </div>
-                    </div>
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div
-                            class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2 card-head">
-                            <div>
-                                <h4 class="fw-bold mb-1">Unassigned Complaint Pool</h4>
-                                <p class="text-muted mb-0">Incoming resident service requests. When Team Head is busy,
-                                    requests auto-assign to available workers within 10 minutes.</p>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <button type="button"
-                                    class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm fw-bold"
-                                    id="manualAutoAssignBtn" onclick="window.runAutoAssignOpenPool()">
-                                    <i class="fa-solid fa-bolt text-warning me-1"></i> Auto-Assign Queued Pool (10m SLA)
-                                </button>
-                                <span class="badge badge-soft-info inline-state"><i
-                                        class="fa-solid fa-hand-holding-hand me-1"></i> Claim &amp; Assign to
-                                    Self</span>
-                            </div>
-                        </div>
-                        <div class="card-body px-4 pb-4 table-responsive">
-                            <table class="table table-hover align-middle" data-table="maintenance-complaints">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Ticket ID</th>
-                                        <th>Issue Summary</th>
-                                        <th>Flat / Area</th>
-                                        <th>Category</th>
-                                        <th>Logged Date</th>
-                                        <th>Assignment SLA</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>T-110</strong></td>
-                                        <td>Basement Light Switchboard Broken</td>
-                                        <td>Basement Parking B2</td>
-                                        <td>Electrical</td>
-                                        <td>2026-08-04</td>
-                                        <td><span
-                                                class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill"><i
-                                                    class="fa-regular fa-clock me-1"></i>Manual Queue</span></td>
-                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3"
-                                                data-claim-action="ticket">Claim Ticket</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>T-111</strong></td>
-                                        <td>Main Gate Intercom Line Disconnected</td>
-                                        <td>Main Security Gate</td>
-                                        <td>Telecom / Wiring</td>
-                                        <td>2026-08-04</td>
-                                        <td><span
-                                                class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill"><i
-                                                    class="fa-regular fa-clock me-1"></i>Manual Queue</span></td>
-                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill px-3"
-                                                data-claim-action="ticket">Claim Ticket</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
 
                 <!-- Asset & Service Panel -->
-                <section class="d-none animate__animated animate__fadeIn" data-view="assets">
-                    <div class="row g-3 mb-4">
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">Registered assets</span><strong
-                                    class="d-block fs-4 text-primary mt-1">3 critical</strong><span
-                                    class="small text-muted">Lift, DG set and water pump</span></div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">Due this week</span><strong
-                                    class="d-block fs-4 text-danger mt-1">1 service</strong><span
-                                    class="small text-muted">Lift #1 inspection is overdue</span></div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">Healthy assets</span><strong
-                                    class="d-block fs-4 text-success mt-1">2 assets</strong><span
-                                    class="small text-muted">No active safety alerts</span></div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="card border border-light-subtle rounded-4 bg-white shadow-sm p-3 h-100"><span
-                                    class="small text-muted text-uppercase fw-bold">Open spares</span><strong
-                                    class="d-block fs-4 text-warning mt-1">1 request</strong><span
-                                    class="small text-muted">Lift fan capacitor pending</span></div>
-                        </div>
-                    </div>
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div
-                            class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div>
-                                <h4 class="fw-bold mb-1">Preventive Asset Maintenance Schedule <span class="badge bg-secondary fs-6">Demo</span></h4>
-                                <p class="text-muted mb-0">Maintain each asset’s service history, safety status,
-                                    readings and next due date.</p>
-                            </div>
-                            <span class="badge badge-soft-success inline-state"><i
-                                    class="fa-solid fa-heart-pulse me-1"></i> Society Infrastructure Health</span>
-                        </div>
-                        <div class="card-body px-4 pb-4 table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Asset Name</th>
-                                        <th>Category</th>
-                                        <th>Location</th>
-                                        <th>Last Service Date</th>
-                                        <th>Next Scheduled Due</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="assetsBody" data-maintenance-asset-demo="true">
-                                    <tr>
-                                        <td>Schindler Passenger Lift #1</td>
-                                        <td>Elevator System</td>
-                                        <td>Tower A</td>
-                                        <td>2026-07-15</td>
-                                        <td><strong class="text-danger">2026-08-15 (Due in 11 days)</strong></td>
-                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill"
-                                                data-action="service-log"><i
-                                                    class="fa-solid fa-clipboard-check me-1"></i> Log Service</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cummins 250 KVA DG Generator</td>
-                                        <td>Power Backup</td>
-                                        <td>Substation Yard</td>
-                                        <td>2026-07-01</td>
-                                        <td>2026-09-01</td>
-                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill"
-                                                data-action="service-log"><i
-                                                    class="fa-solid fa-clipboard-check me-1"></i> Log Service</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Kirloskar 15 HP Water Pump</td>
-                                        <td>Pumping Station</td>
-                                        <td>Basement Tank</td>
-                                        <td>2026-07-20</td>
-                                        <td>2026-08-20</td>
-                                        <td><button class="btn btn-outline-primary btn-sm rounded-pill"
-                                                data-action="service-log"><i
-                                                    class="fa-solid fa-clipboard-check me-1"></i> Log Service</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
                 <!-- Flow 2: On-Demand Dispatch Panel -->
                 <section class="d-none animate__animated animate__fadeIn" data-view="dispatch">
 
@@ -6848,271 +6633,9 @@
                         </div>
 
                         <!-- 4 Detailed Worker Cards Grid -->
-                        <div class="row g-3" id="workerDetailCardsGrid">
-                            <!-- Worker 1: Ramesh Plumber -->
-                            <div class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3">
-                                <div class="worker-detail-card" style="border-top: 3.5px solid #2563eb;">
-                                    <div class="d-flex align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
-                                        <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-                                            <div class="worker-avatar bg-primary-subtle text-primary flex-shrink-0">
-                                                <i class="fa-solid fa-faucet-drip"></i>
-                                            </div>
-                                            <div class="overflow-hidden" style="min-width: 0;">
-                                                <h6 class="fw-bold mb-0 text-dark text-truncate" style="font-size: 0.92rem;" title="Ramesh Kumar">Ramesh Kumar</h6>
-                                                <div class="small text-muted font-monospace text-truncate" style="font-size: 0.72rem;">
-                                                    <span class="fw-semibold text-secondary">EMP-001</span>
-                                                    <span class="text-black-50 mx-1">·</span>
-                                                    <span>Plumber</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small fw-bold text-nowrap">
-                                                <i class="fa-solid fa-circle text-success me-1 fa-fade" style="font-size: 0.45rem;"></i>PRESENT
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="worker-info-list mb-3">
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-toolbox text-primary"></i>Trade</span>
-                                            <span class="worker-info-val fw-bold text-dark text-truncate">Senior Plumber</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-regular fa-clock text-primary"></i>Shift</span>
-                                            <span class="worker-info-val fw-semibold text-dark text-truncate">Morning (07:00–16:00)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-stopwatch text-primary"></i>Clock In</span>
-                                            <span class="worker-info-val font-monospace text-success fw-bold text-nowrap">
-                                                07:00 AM <span class="text-muted fw-normal small ms-1">(4h 15m)</span>
-                                            </span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-signal text-primary"></i>Availability</span>
-                                            <div class="worker-info-val">
-                                                <span class="badge bg-success text-white rounded-pill px-2 py-0.5 small fw-bold text-nowrap"><i class="fa-solid fa-circle-check me-1"></i>AVAILABLE</span>
-                                            </div>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-briefcase text-primary"></i>Current Task</span>
-                                            <span class="worker-info-val text-muted small text-truncate">None (Idle / Ready)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-phone text-primary"></i>Contact</span>
-                                            <span class="worker-info-val font-monospace text-dark">9876543211</span>
-                                        </div>
-                                        <div class="worker-info-row bg-light rounded-2 px-2.5 py-1.5 mt-1 border-0">
-                                            <span class="worker-info-label small"><i class="fa-solid fa-key text-primary"></i>Login Pass</span>
-                                            <span class="worker-info-val font-monospace text-primary fw-bold small">password123</span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-auto pt-2 border-top">
-                                        <a href="/login?email=plumber@smartapartment" target="_blank"
-                                            class="btn btn-sm btn-outline-primary rounded-pill w-100 fw-semibold" style="font-size: 0.78rem;">
-                                            <i class="fa-solid fa-right-to-bracket me-1"></i>Login as Worker
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Worker 2: Suresh Electrician -->
-                            <div class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3">
-                                <div class="worker-detail-card" style="border-top: 3.5px solid #d97706;">
-                                    <div class="d-flex align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
-                                        <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-                                            <div class="worker-avatar bg-warning-subtle text-warning-emphasis flex-shrink-0">
-                                                <i class="fa-solid fa-bolt"></i>
-                                            </div>
-                                            <div class="overflow-hidden" style="min-width: 0;">
-                                                <h6 class="fw-bold mb-0 text-dark text-truncate" style="font-size: 0.92rem;" title="Suresh Sharma">Suresh Sharma</h6>
-                                                <div class="small text-muted font-monospace text-truncate" style="font-size: 0.72rem;">
-                                                    <span class="fw-semibold text-secondary">EMP-002</span>
-                                                    <span class="text-black-50 mx-1">·</span>
-                                                    <span>Electrician</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small fw-bold text-nowrap">
-                                                <i class="fa-solid fa-circle text-success me-1 fa-fade" style="font-size: 0.45rem;"></i>PRESENT
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="worker-info-list mb-3">
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-toolbox text-warning"></i>Trade</span>
-                                            <span class="worker-info-val fw-bold text-dark text-truncate">Electrical Specialist</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-regular fa-clock text-warning"></i>Shift</span>
-                                            <span class="worker-info-val fw-semibold text-dark text-truncate">General (09:00–18:00)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-stopwatch text-warning"></i>Clock In</span>
-                                            <span class="worker-info-val font-monospace text-success fw-bold text-nowrap">
-                                                08:30 AM <span class="text-muted fw-normal small ms-1">(2h 45m)</span>
-                                            </span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-signal text-warning"></i>Availability</span>
-                                            <div class="worker-info-val">
-                                                <span class="badge bg-warning text-dark rounded-pill px-2 py-0.5 small fw-bold text-nowrap"><i class="fa-solid fa-wrench me-1"></i>BUSY</span>
-                                            </div>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-briefcase text-warning"></i>Current Task</span>
-                                            <span class="worker-info-val badge bg-warning-subtle text-warning-emphasis font-monospace px-2 py-0.5">T-102 (Switchboard)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-phone text-warning"></i>Contact</span>
-                                            <span class="worker-info-val font-monospace text-dark">9876543212</span>
-                                        </div>
-                                        <div class="worker-info-row bg-light rounded-2 px-2.5 py-1.5 mt-1 border-0">
-                                            <span class="worker-info-label small"><i class="fa-solid fa-key text-warning"></i>Login Pass</span>
-                                            <span class="worker-info-val font-monospace text-dark fw-bold small">password123</span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-auto pt-2 border-top">
-                                        <a href="/login?email=electrician@smartapartment" target="_blank"
-                                            class="btn btn-sm btn-outline-warning text-dark rounded-pill w-100 fw-semibold" style="font-size: 0.78rem;">
-                                            <i class="fa-solid fa-right-to-bracket me-1"></i>Login as Worker
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Worker 3: Anand Carpenter -->
-                            <div class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3">
-                                <div class="worker-detail-card" style="border-top: 3.5px solid #475569;">
-                                    <div class="d-flex align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
-                                        <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-                                            <div class="worker-avatar bg-secondary-subtle text-secondary flex-shrink-0">
-                                                <i class="fa-solid fa-hammer"></i>
-                                            </div>
-                                            <div class="overflow-hidden" style="min-width: 0;">
-                                                <h6 class="fw-bold mb-0 text-dark text-truncate" style="font-size: 0.92rem;" title="Anand Verma">Anand Verma</h6>
-                                                <div class="small text-muted font-monospace text-truncate" style="font-size: 0.72rem;">
-                                                    <span class="fw-semibold text-secondary">EMP-003</span>
-                                                    <span class="text-black-50 mx-1">·</span>
-                                                    <span>Carpenter</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small fw-bold text-nowrap">
-                                                <i class="fa-solid fa-circle text-success me-1 fa-fade" style="font-size: 0.45rem;"></i>PRESENT
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="worker-info-list mb-3">
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-toolbox text-secondary"></i>Trade</span>
-                                            <span class="worker-info-val fw-bold text-dark text-truncate">Carpentry Specialist</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-regular fa-clock text-secondary"></i>Shift</span>
-                                            <span class="worker-info-val fw-semibold text-dark text-truncate">General (09:00–18:00)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-stopwatch text-secondary"></i>Clock In</span>
-                                            <span class="worker-info-val font-monospace text-success fw-bold text-nowrap">
-                                                08:45 AM <span class="text-muted fw-normal small ms-1">(2h 30m)</span>
-                                            </span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-signal text-secondary"></i>Availability</span>
-                                            <div class="worker-info-val">
-                                                <span class="badge bg-success text-white rounded-pill px-2 py-0.5 small fw-bold text-nowrap"><i class="fa-solid fa-circle-check me-1"></i>AVAILABLE</span>
-                                            </div>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-briefcase text-secondary"></i>Current Task</span>
-                                            <span class="worker-info-val text-muted small text-truncate">None (Idle / Ready)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-phone text-secondary"></i>Contact</span>
-                                            <span class="worker-info-val font-monospace text-dark">9876543213</span>
-                                        </div>
-                                        <div class="worker-info-row bg-light rounded-2 px-2.5 py-1.5 mt-1 border-0">
-                                            <span class="worker-info-label small"><i class="fa-solid fa-key text-secondary"></i>Login Pass</span>
-                                            <span class="worker-info-val font-monospace text-dark fw-bold small">password123</span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-auto pt-2 border-top">
-                                        <a href="/login?email=carpenter@smartapartment" target="_blank"
-                                            class="btn btn-sm btn-outline-secondary rounded-pill w-100 fw-semibold" style="font-size: 0.78rem;">
-                                            <i class="fa-solid fa-right-to-bracket me-1"></i>Login as Worker
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Worker 4: Manoj Cleaner -->
-                            <div class="col-12 col-md-6 col-lg-6 col-xl-4 col-xxl-3">
-                                <div class="worker-detail-card" style="border-top: 3.5px solid #0284c7;">
-                                    <div class="d-flex align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
-                                        <div class="d-flex align-items-center gap-2 overflow-hidden" style="min-width: 0;">
-                                            <div class="worker-avatar bg-info-subtle text-info flex-shrink-0">
-                                                <i class="fa-solid fa-broom"></i>
-                                            </div>
-                                            <div class="overflow-hidden" style="min-width: 0;">
-                                                <h6 class="fw-bold mb-0 text-dark text-truncate" style="font-size: 0.92rem;" title="Manoj Singh">Manoj Singh</h6>
-                                                <div class="small text-muted font-monospace text-truncate" style="font-size: 0.72rem;">
-                                                    <span class="fw-semibold text-secondary">EMP-004</span>
-                                                    <span class="text-black-50 mx-1">·</span>
-                                                    <span>Housekeeping</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-shrink-0">
-                                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-0.5 small fw-bold text-nowrap">
-                                                <i class="fa-solid fa-circle text-success me-1 fa-fade" style="font-size: 0.45rem;"></i>PRESENT
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="worker-info-list mb-3">
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-toolbox text-info"></i>Trade</span>
-                                            <span class="worker-info-val fw-bold text-dark text-truncate">Housekeeping & Sanitization</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-regular fa-clock text-info"></i>Shift</span>
-                                            <span class="worker-info-val fw-semibold text-dark text-truncate">Night / Rotational (15:00–23:00)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-stopwatch text-info"></i>Clock In</span>
-                                            <span class="worker-info-val font-monospace text-success fw-bold text-nowrap">
-                                                07:15 AM <span class="text-muted fw-normal small ms-1">(4h 00m)</span>
-                                            </span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-signal text-info"></i>Availability</span>
-                                            <div class="worker-info-val">
-                                                <span class="badge bg-info text-dark rounded-pill px-2 py-0.5 small fw-bold text-nowrap"><i class="fa-solid fa-mug-hot me-1"></i>ON BREAK</span>
-                                            </div>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-briefcase text-info"></i>Current Task</span>
-                                            <span class="worker-info-val text-muted small text-truncate">Common Area Sanitation (Done)</span>
-                                        </div>
-                                        <div class="worker-info-row">
-                                            <span class="worker-info-label"><i class="fa-solid fa-phone text-info"></i>Contact</span>
-                                            <span class="worker-info-val font-monospace text-dark">9876543214</span>
-                                        </div>
-                                        <div class="worker-info-row bg-light rounded-2 px-2.5 py-1.5 mt-1 border-0">
-                                            <span class="worker-info-label small"><i class="fa-solid fa-key text-info"></i>Login Pass</span>
-                                            <span class="worker-info-val font-monospace text-info fw-bold small">password123</span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-auto pt-2 border-top">
-                                        <a href="/login?email=cleaner@smartapartment" target="_blank"
-                                            class="btn btn-sm btn-outline-info text-dark rounded-pill w-100 fw-semibold" style="font-size: 0.78rem;">
-                                            <i class="fa-solid fa-right-to-bracket me-1"></i>Login as Worker
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="maintenanceWorkerRosterTable" class="table-responsive">
+<table class="table align-middle mb-0"><thead><tr><th>Worker</th><th>Trade</th><th>Shift</th><th>Attendance</th><th>Clock In</th><th>Clock Out</th><th>Working Hours</th><th>Availability</th><th>Current Task</th></tr></thead><tbody id="maintenanceWorkersAttendanceTable"><tr><td colspan="9">Loading worker roster…</td></tr></tbody></table>
+</div>
                     </div>
                 </section>
 
@@ -7469,10 +6992,10 @@
         }
 
         const dashboardTitles = {
-            overview: "Overview", tasks: "My Assigned Tasks", complaints: "Open Ticket Pool",
+            overview: "Overview", tasks: "My Assigned Tasks",
             dispatch: "On-Demand Emergency Dispatch",
             "live-chat": "Maintenance Communication Center",
-            workers: "Maintenance Worker Management & Attendance", assets: "Assets & Preventive Servicing", profile: "Worker Profile"
+            workers: "Maintenance Worker Management & Attendance", profile: "Worker Profile"
         };
 
         let currentMaintChatChannel = 'CUSTOMER';
@@ -8124,7 +7647,7 @@
                 }
             }
 
-            
+
             if (panel === "live-chat" || panel === "chats") {
                 if (typeof window.startMaintChatRealtime === "function") {
                     window.startMaintChatRealtime();
@@ -10728,7 +10251,7 @@
 
             const tickets = getStoredTickets();
             if (tickets.length === 0) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="6" class="text-center text-muted py-4">${maintenanceBackendLoaded ? "No assigned work orders. Claim a booking from the Open Ticket Pool." : "Work orders unavailable · waiting for a connection."}</td></tr>`;
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="6" class="text-center text-muted py-4">${maintenanceBackendLoaded ? "No assigned work orders. Check Resident Service Requests for available work." : "Work orders unavailable · waiting for a connection."}</td></tr>`;
                 currentSelectedTicketId = "";
                 updateTicketSelectorOptions();
                 const emptyScope = {
@@ -11848,6 +11371,31 @@ body.dashboard-body #maintenanceTaskQueueCards [id$="TasksList"] { margin-top: 1
 body.dashboard-body #maintenanceTaskQueueCards [id$="TasksList"] > .text-center { text-align: left !important; padding: 0 !important; }
 body.dashboard-body #track1TasksBanner { background: #fff !important; border: 1px solid #dce5f2 !important; border-radius: 14px !important; padding: 18px !important; margin-bottom: 20px !important; }
 @media(max-width:900px) { body.dashboard-body #maintenanceTaskQueueCards > .row { grid-template-columns: 1fr; } }
+</style>
+<script>if (["assets", "complaints"].includes(location.hash.slice(1))) location.replace(location.pathname + "#overview");</script>
+<style id="maintenance-worker-table-view">
+body.dashboard-body #maintenanceWorkerRosterTable { display:block !important; overflow-x:auto !important; background:#fff !important; border:1px solid #dce5f2 !important; border-radius:14px !important; margin-top:18px; }
+body.dashboard-body #maintenanceWorkerRosterTable table { width:100% !important; min-width:1050px; border-collapse:collapse; background:#fff; }
+body.dashboard-body #maintenanceWorkerRosterTable th { background:#f5f8fc !important; color:#64748b; font-size:12px !important; padding:14px !important; white-space:nowrap; text-align:left; }
+body.dashboard-body #maintenanceWorkerRosterTable td { padding:14px !important; border-bottom:1px solid #e8edf5 !important; font-size:13px !important; vertical-align:middle; }
+body.dashboard-body #maintenanceWorkerRosterTable tbody tr:last-child td { border-bottom:0 !important; }
+body.dashboard-body #maintenanceWorkerRosterTable td:first-child { min-width:205px; overflow-wrap:anywhere; }
+body.dashboard-body #maintenanceWorkerRosterTable .badge { white-space:nowrap; font-size:11px !important; }
+</style>
+<style id="maintenance-password-alignment">
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm { padding:24px !important; border-radius:16px !important; margin-top:20px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-settings__section-title { padding-bottom:18px !important; margin-bottom:20px !important; align-items:center !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm h3 { font-size:20px !important; line-height:1.4 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-password-grid { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:20px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm label { display:block !important; min-width:0; margin:0 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm label > span { display:block !important; margin:0 0 8px !important; font-size:12px !important; line-height:20px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-password { position:relative !important; display:block !important; height:46px !important; margin:0 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-password input { width:100% !important; height:46px !important; min-height:46px !important; padding:10px 48px 10px 12px !important; margin:0 !important; font-size:14px !important; border-radius:10px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm [data-password-toggle] { position:absolute !important; top:50% !important; right:8px !important; bottom:auto !important; transform:translateY(-50%) !important; display:flex !important; align-items:center !important; justify-content:center !important; width:32px !important; height:32px !important; min-height:32px !important; padding:0 !important; margin:0 !important; border:0 !important; background:transparent !important; box-shadow:none !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-security-note { margin:20px 0 0 !important; padding:16px !important; align-items:flex-start !important; font-size:13px !important; line-height:1.6 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-settings__actions { margin-top:20px !important; padding-top:18px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-settings__actions button { min-height:42px !important; font-size:14px !important; padding:10px 18px !important; }
+@media(max-width:1100px) { body.dashboard-body[data-dashboard-role="maintenance"] #dashboardPasswordForm .profile-password-grid { grid-template-columns:1fr !important; } }
 </style>
 </body>
 

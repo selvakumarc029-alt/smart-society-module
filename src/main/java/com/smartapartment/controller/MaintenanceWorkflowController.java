@@ -31,24 +31,9 @@ public class MaintenanceWorkflowController {
     }
 
     private AppUser getOrFallbackUser() {
-        try {
-            return currentUser.requireUser();
-        } catch (Exception e) {
-            return users.findByEmail("resident@smartsociety")
-                    .or(() -> users.findByEmail("resident@smartapartment"))
-                    .or(() -> users.findAll().stream().filter(u -> u.getRole() != null && "RESIDENT".equalsIgnoreCase(u.getRole().name())).findFirst())
-                    .or(() -> users.findAll().stream().findFirst())
-                    .orElseGet(() -> {
-                        AppUser u = new AppUser();
-                        u.setTenantId("society-1");
-                        u.setFullName("Kavya Sharma");
-                        u.setEmail("resident@smartsociety");
-                        u.setPhone("9844022010");
-                        u.setPasswordHash("$2a$10$abcdefghijklmnopqrstuvwxyz0123456789ABCDEF");
-                        u.setRole(com.smartapartment.entity.UserRole.RESIDENT);
-                        return users.save(u);
-                    });
-        }
+        AppUser user = currentUser.requireUser();
+        if (user.getRole() != com.smartapartment.entity.UserRole.RESIDENT) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Use your resident account to request a home service");
+        return user;
     }
 
     public record AnalyzeRequest(String title, String description, String category) {}

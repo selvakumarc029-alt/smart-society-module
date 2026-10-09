@@ -913,6 +913,24 @@ public class SocietyApiController {
                 .map(this::billView).toList();
     }
 
+    @GetMapping(value = "/bills/{id}/payment-qr", produces = MediaType.IMAGE_PNG_VALUE)
+    @PreAuthorize("hasAnyRole('SOCIETY_ADMIN','ACCOUNTANT','RESIDENT')")
+    public ResponseEntity<byte[]> billPaymentQr(@PathVariable Long id) throws Exception {
+        Map<String,Object> bill = bills().stream().filter(b -> id.equals(b.get("id"))).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invoice was not found for this account"));
+        String upi = String.valueOf(bill.get("upiId"));
+        if (!upi.matches("[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+")) throw new IllegalArgumentException("Invoice receiving UPI ID is not configured");
+        if (Set.of("PAID", "CANCELLED", "VOID").contains(String.valueOf(bill.get("paymentStatus")))) throw new IllegalArgumentException("This invoice is not payable");
+        var amount = new java.math.BigDecimal(String.valueOf(bill.get("totalAmount")));
+        if (amount.signum() <= 0) throw new IllegalArgumentException("Invoice amount must be positive");
+        String uri = "upi://pay?pa=" + java.net.URLEncoder.encode(upi, java.nio.charset.StandardCharsets.UTF_8)
+                + "&pn=Society%20maintenance&am=" + amount.toPlainString() + "&cu=INR&tn="
+                + java.net.URLEncoder.encode(String.valueOf(bill.get("invoiceNumber")), java.nio.charset.StandardCharsets.UTF_8);
+        BitMatrix matrix = new QRCodeWriter().encode(uri, BarcodeFormat.QR_CODE, 280, 280);
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        MatrixToImageWriter.writeToStream(matrix, "PNG", output);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(output.toByteArray());
+    }
     @GetMapping("/amenities")
     public List<Map<String, Object>> amenities() {
         return amenities.findByTenantIdOrderByNameAsc(currentUser.requireTenantId()).stream()

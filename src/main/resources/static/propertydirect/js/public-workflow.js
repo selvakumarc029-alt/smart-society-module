@@ -3,11 +3,26 @@
     'use strict';
     const chips=document.getElementById('aiPromptChips');
     if(chips) {
-        chips.replaceChildren(...['2 BHK','3 BHK','Villa'].map(query=>{
-            const button=document.createElement('button');button.type='button';button.textContent=query;
-            button.addEventListener('click',()=>{document.getElementById('listingSearch').value=query;document.getElementById('listingSearchButton').click();});
-            return button;
-        }));
+        if (!chips.children.length) {
+            chips.replaceChildren(...[
+                { label: '✨ 3 BHK below 80L', query: '3 BHK house in Chennai below 80 lakhs' },
+                { label: '✨ 2 BHK under 50L', query: '2 BHK apartment near Chennai under 50 lakh with parking' },
+                { label: '✨ Luxury Villa', query: 'Luxury Villa with swimming pool and gym' }
+            ].map(item=>{
+                const button=document.createElement('button');
+                button.type='button';
+                button.textContent=item.label;
+                button.addEventListener('click',()=>{
+                    const input = document.getElementById('listingSearch');
+                    if (input) { input.value = item.query; document.getElementById('listingSearchButton')?.click(); }
+                });
+                return button;
+            }));
+        } else {
+            chips.querySelectorAll('button').forEach(btn => {
+                btn.style.cursor = 'pointer';
+            });
+        }
     }
     document.addEventListener('click', event => {
         const trigger=event.target.closest('[data-detail-action], .apartment-card [data-action], [data-open-modal="post"]');

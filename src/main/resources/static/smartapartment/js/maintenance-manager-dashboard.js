@@ -21,7 +21,7 @@
     };
 
     function init() {
-        const container = document.getElementById('maintenance-manager-operations-container');
+        const container = document.querySelector('[data-view="manager-operations"]');
         if (!container) return;
 
         loadDashboardSummary();
@@ -98,7 +98,8 @@
         try {
             const resp = await fetch('/api/maintenance/manager/summary');
             if (!resp.ok) {
-                if (resp.status === 401 || resp.status === 403) return;
+                if (resp.status === 401) throw new Error('Please sign in to load the worker board.');
+                if (resp.status === 403) throw new Error('Sign in with a maintenance manager or society admin account to view the worker board.');
                 throw new Error('Failed to load dashboard summary');
             }
             dashboardData = await resp.json();
@@ -110,6 +111,8 @@
             loadQueue(); // load filtered queue
         } catch (err) {
             console.error('[ManagerDashboard] Error loading summary:', err);
+            const board = document.getElementById('mgr-worker-board-tbody');
+            if (board) board.innerHTML = '<tr><td colspan="9" class="text-center py-4 text-danger" role="alert">' + escapeHtml(err.message || 'Unable to load worker board.') + '</td></tr>';
         }
     }
 

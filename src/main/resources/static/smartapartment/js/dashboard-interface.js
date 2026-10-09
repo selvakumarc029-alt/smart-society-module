@@ -15,6 +15,17 @@
                 const height = Math.ceil(topbar.getBoundingClientRect().height);
                 if (height > 0 && height !== previousHeight) {
                     previousHeight = height;
+                    if (body.classList.contains('dashboard-body')) {
+                        const brand = document.querySelector('#sidebar > .sidebar-header');
+                        if (brand) {
+                            for (const property of ['height', 'min-height', 'max-height']) {
+                                brand.style.setProperty(property, height + 'px', 'important');
+                            }
+                            brand.style.setProperty('flex', '0 0 ' + height + 'px', 'important');
+                            brand.style.setProperty('box-sizing', 'border-box', 'important');
+                            brand.style.setProperty('margin', '0', 'important');
+                        }
+                    }
                     body.style.setProperty('--dashboard-topbar-height', height + 'px'); body.style.setProperty('--society-aligned-header-height', height + 'px');
                     if (body.dataset.dashboardRole === 'admin') {
                         body.style.setProperty('--society-admin-header-height', height + 'px');

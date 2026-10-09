@@ -2262,7 +2262,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
         modal.classList.add("active");
         modal.style.setProperty("display", "flex", "important");
-        modal.style.display = "flex";
+        modal.style.setProperty("display", "flex", "important");
     };
 
     const designationPackages = {
@@ -3492,7 +3492,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
         modal.classList.add("active");
         modal.style.removeProperty("display");
-        modal.style.display = "flex";
+        modal.style.setProperty("display", "flex", "important");
 
         const boxEl = document.getElementById("subserviceModalBox");
         if (boxEl) {
@@ -4147,7 +4147,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
         modal.classList.add("active");
         modal.style.removeProperty("display");
-        modal.style.display = "flex";
+        modal.style.setProperty("display", "flex", "important");
 
         const boxEl = document.getElementById("subserviceModalBox");
         if (boxEl) {
@@ -4834,6 +4834,8 @@ window.closeSubServicesModal = function closeSubServicesModal() {
                     headers: { "Content-Type": "application/json", "Accept": "application/json" },
                     body: JSON.stringify({
                         requesterPhone: phone,
+                        preferredDate: date,
+                        preferredSlot: _pgCurrentSlot,
                         serviceAddress: address,
                         city: "Chennai",
                         area: "Whitefield",
@@ -5559,7 +5561,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
             });
         }
 
-        modal.style.display = "flex";
+        modal.style.setProperty("display", "flex", "important");
         const bodyEl = document.getElementById("maintenanceLiveTrackingBody");
         const headerEl = document.getElementById("maintenanceLiveTrackingHeader");
 
@@ -5570,7 +5572,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
                         <div style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; font-weight: 700;">Live Service Process Tracking</div>
                         <h5 class="fw-bold mb-0 text-white font-monospace">${escapeHtml(externalRef || `#${id}`)}</h5>
                     </div>
-                    <button type="button" class="btn-close btn-close-white" onclick="window.closeMaintenanceLiveTracking()" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-close-live-tracking aria-label="Close service tracking"></button>
                 </div>
             `;
         }
@@ -5663,13 +5665,28 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
     window.closeMaintenanceLiveTracking = function closeMaintenanceLiveTracking() {
         const modal = document.getElementById("maintenanceLiveTrackingModal");
-        if (modal) modal.style.display = "none";
+        if (modal) modal.style.setProperty("display", "none", "important");
         if (window._liveTrackingPollTimer) {
             clearInterval(window._liveTrackingPollTimer);
             window._liveTrackingPollTimer = null;
         }
     };
 
+    // Capture close clicks before generic dashboard button handlers consume them.
+    document.addEventListener("click", function(event) {
+        const close = event.target.closest?.("#maintenanceLiveTrackingModal [data-close-live-tracking]");
+        if (!close) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        window.closeMaintenanceLiveTracking();
+    }, true);
+    document.addEventListener("keydown", function(event) {
+        const modal = document.getElementById("maintenanceLiveTrackingModal");
+        if (event.key === "Escape" && modal && modal.style.display !== "none") {
+            event.preventDefault();
+            window.closeMaintenanceLiveTracking();
+        }
+    });
     function renderLiveTrackingModal(id, reqData, currentStageIndex) {
         const headerEl = document.getElementById("maintenanceLiveTrackingHeader");
         const bodyEl = document.getElementById("maintenanceLiveTrackingBody");
@@ -5718,7 +5735,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
                             ${escapeHtml(title)}
                         </h5>
                     </div>
-                    <button type="button" class="btn-close btn-close-white" onclick="window.closeMaintenanceLiveTracking()" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-close-live-tracking aria-label="Close service tracking"></button>
                 </div>
             `;
         }

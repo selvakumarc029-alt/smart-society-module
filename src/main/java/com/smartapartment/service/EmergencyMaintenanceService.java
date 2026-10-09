@@ -562,6 +562,7 @@ public class EmergencyMaintenanceService {
         long pending = bookings.findAll().stream().filter(b -> "PENDING_ASSIGNMENT".equals(workflowStageName(b))).count();
         long active = bookings.findAll().stream().filter(b -> Set.of("ASSIGNED", "STAGE_1_REACHED", "STAGE_2_STARTED").contains(workflowStageName(b))).count();
         long available = partners.findAll().stream().filter(MaintenancePartner::isOnDuty)
+                .filter(this::withinWorkerShift)
                 .filter(p -> "IDLE".equalsIgnoreCase(p.getWorkState()) || "IDLE".equalsIgnoreCase(p.getAvailability()))
                 .count();
         return Map.of("pendingAssignment", pending, "activeJobs", active, "availableTechnicians", available);
@@ -574,8 +575,8 @@ public class EmergencyMaintenanceService {
         coordinates(latitude, longitude);
         EmergencyMaintenanceBooking b = resolveWorkflowBooking(identifier);
         boolean workerOwns = a.worker() && assigned(a, b);
-        boolean adminAllowed = a.admin() && adminOverride;
-        if (!workerOwns && !adminAllowed) throw error(403, "Only the assigned technician or an admin override can update this order");
+        boolean adminAllowed = false; // Service progress is controlled by the assigned worker only.
+        if (!workerOwns && !adminAllowed) throw error(403, "Only the assigned technician can update service progress");
         String stage = requestedStage == null ? "" : requestedStage.trim().toUpperCase(Locale.ROOT);
         LocalDateTime now = LocalDateTime.now();
         String current = workflowStageName(b);
@@ -708,10 +709,16 @@ public class EmergencyMaintenanceService {
         return 6371 * 2 * Math.asin(Math.sqrt(Math.min(1, x)));
     }
 
+    private boolean withinWorkerShift(MaintenancePartner partner) {
+        return users.findById(partner.getUserId()).map(user -> !user.isAccountLocked()
+                && WorkerShift.fromString(user.getWorkShift()).isWithinShift(java.time.LocalTime.now())).orElse(false);
+    }
+
     public List<MaintenancePartner> findEligiblePartners(EmergencyMaintenanceBooking b, MaintenanceHub h) {
         if (h == null || b == null) return List.of();
         return partners.findByHubId(h.getId()).stream()
                 .filter(MaintenancePartner::isOnDuty)
+                .filter(this::withinWorkerShift)
                 .filter(p -> "IDLE".equalsIgnoreCase(p.getWorkState() == null ? p.getAvailability() : p.getWorkState()))
                 .filter(p -> !"BUSY".equalsIgnoreCase(p.getWorkState()) && !"BUSY".equalsIgnoreCase(p.getAvailability()))
                 .filter(p -> !"OFFLINE".equalsIgnoreCase(p.getWorkState()) && !"OFFLINE".equalsIgnoreCase(p.getAvailability()))
@@ -777,6 +784,12 @@ public class EmergencyMaintenanceService {
     }
 
     public void dispatch(EmergencyMaintenanceBooking b, boolean isTimeout) {
+        if (b.getPreferredDate() != null && b.getPreferredDate().isAfter(LocalDate.now())) {
+            b.setJobStatus("UNASSIGNED");
+            b.setDispatchReason("Scheduled for " + b.getPreferredDate() + "; worker matching begins on the scheduled date");
+            bookings.save(b);
+            return;
+        }
         MaintenanceHub h = resolveHub(b.getCity(), b.getArea(), b.getLatitude(), b.getLongitude());
         b.setHubId(h == null ? null : h.getId());
         b.setPartnerId(null);
@@ -832,6 +845,7 @@ public class EmergencyMaintenanceService {
 
         List<MaintenancePartner> onDuty = remaining.stream()
                 .filter(MaintenancePartner::isOnDuty)
+                .filter(this::withinWorkerShift)
                 .toList();
         if (onDuty.isEmpty()) {
             return "No on-duty partners";
@@ -1400,8 +1414,14 @@ public class EmergencyMaintenanceService {
                 }
                 recordAudit(b, "CALL_CUSTOMER", b.getPartnerId(), "Partner initiated call to customer", a.id());
             }
+            case "ON_THE_WAY", "EN_ROUTE" -> {
+                if (!Set.of("ACCEPTED", "ASSIGNED").contains(s)) throw error(409, "Accept the order before traveling");
+                b.setJobStatus("EN_ROUTE");
+                b.setDispatchReason("Assigned technician is on the way");
+                recordAudit(b, "EN_ROUTE", b.getPartnerId(), "Technician started traveling to the service location", a.id());
+            }
             case "REACHED", "REACHED_LOCATION" -> {
-                if (!"ACCEPTED".equals(s) && !"ASSIGNED".equals(s)) {
+                if (!Set.of("ACCEPTED", "ASSIGNED", "EN_ROUTE").contains(s)) {
                     throw error(409, "This action requires ACCEPTED or ASSIGNED; current status is " + s);
                 }
                 b.setJobStatus("REACHED_LOCATION");
@@ -1483,6 +1503,15 @@ public class EmergencyMaintenanceService {
             default -> throw error(400,"Unknown job action");
         }
         bookings.save(b);
+        if (b.getRequesterId() != null && !Set.of("CALL_CUSTOMER", "DECLINE").contains(action)) {
+            Notification notification = new Notification();
+            notification.setUserId(b.getRequesterId());
+            notification.setType("SERVICE_PROGRESS");
+            notification.setTitle("Service update: " + b.getJobStatus().replace('_', ' '));
+            notification.setMessage((b.getOrderReference() != null ? b.getOrderReference() : b.getBookingReference()) + ": " + b.getDispatchReason());
+            notification.setReadStatus(false);
+            notifications.save(notification);
+        }
         broadcastEvent(b.getId(), b.getJobStatus(), action, b.getPartnerId(), "Booking transitioned: " + action);
     }
     public void photo(Actor a,Long id,String kind,byte[] bytes) {

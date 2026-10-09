@@ -3385,11 +3385,7 @@
                         <span>Live Chat</span>
                         <span class="badge bg-danger rounded-pill px-1.5" id="maintHeaderChatBadge" style="display:none; font-size: 0.65rem;">0</span>
                     </button>
-                    <button class="btn btn-sm btn-primary rounded-pill shadow-xs px-2.5 py-1 text-nowrap fw-semibold d-inline-flex align-items-center gap-1.5" 
-                        data-panel="workers" onclick="window.openPanel('workers')" title="Add Maintenance Worker" style="font-size: 0.8rem; height: 34px;">
-                        <i class="fa-solid fa-user-plus"></i>
-                        <span>Add Worker</span>
-                    </button>
+                    
                     <div class="dropdown">
                         <button
                             class="btn btn-sm btn-success rounded-pill shadow-xs px-2.5 py-1 dropdown-toggle d-inline-flex align-items-center gap-1.5 fw-semibold text-white text-nowrap"
@@ -5618,7 +5614,7 @@
                 <section class="d-none animate__animated animate__fadeIn" data-view="tasks">
 
                     <!-- Worker Task Queue Categories: Pending, Completed, Upcoming -->
-                    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                    <div id="maintenanceTaskQueueCards" class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
                         <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                             <div>
                                 <h5 class="fw-bold mb-0 text-dark"><i
@@ -7113,156 +7109,6 @@
                                             class="btn btn-sm btn-outline-info text-dark rounded-pill w-100 fw-semibold" style="font-size: 0.78rem;">
                                             <i class="fa-solid fa-right-to-bracket me-1"></i>Login as Worker
                                         </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row g-4">
-                        <div class="col-xl-5">
-                            <div class="card shadow-sm border-0 rounded-4 h-100">
-                                <div class="card-header bg-transparent border-0 pt-4 px-4">
-                                    <h4 class="fw-bold mb-1">Add Maintenance Worker</h4>
-                                    <p class="text-muted mb-0">Create a worker login account with skill, shift and
-                                        emergency details.</p>
-                                </div>
-                                <div class="card-body px-4 pb-4">
-                                    <form id="maintenanceWorkerForm" class="maintenance-worker-form row g-3"
-                                        onsubmit="window.submitMaintenanceWorkerForm(event); return false;">
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerName">Full name *</label>
-                                            <input class="form-control" id="workerName" name="name" autocomplete="name"
-                                                required placeholder="e.g. Ramesh Kumar">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerEmail">Work email *</label>
-                                            <input type="email" class="form-control" id="workerEmail" name="email"
-                                                autocomplete="email" required placeholder="ramesh@greenheights.com">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerPhone">Phone number</label>
-                                            <input class="form-control" id="workerPhone" name="phone" autocomplete="tel"
-                                                placeholder="9876543210">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerDesignation">Skill / designation
-                                                *</label>
-                                            <select class="form-select" id="workerDesignation" name="designation"
-                                                required>
-                                                <option value="Maintenance Technician">Maintenance Technician</option>
-                                                <option value="Plumber">Plumber</option>
-                                                <option value="Electrician">Electrician</option>
-                                                <option value="Carpenter">Carpenter</option>
-                                                <option value="HVAC Technician">HVAC Technician</option>
-                                                <option value="Housekeeping Supervisor">Housekeeping Supervisor</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerEmployeeId">Employee ID</label>
-                                            <input class="form-control" id="workerEmployeeId" name="employeeId"
-                                                placeholder="EMP-001">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerJoiningDate">Joining date</label>
-                                            <input type="date" class="form-control" id="workerJoiningDate"
-                                                name="joiningDate">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerShift">Work shift</label>
-                                            <select class="form-select" id="workerShift" name="workShift">
-                                                <option value="General Shift">General Shift</option>
-                                                <option value="Morning Shift">Morning Shift</option>
-                                                <option value="Evening Shift">Evening Shift</option>
-                                                <option value="Night Shift">Night Shift</option>
-                                                <option value="On Call">On Call</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerPassword">Temporary password *</label>
-                                            <input type="password" minlength="8" class="form-control"
-                                                id="workerPassword" name="temporaryPassword" required
-                                                placeholder="Min. 8 characters">
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label" for="workerAddress">Address</label>
-                                            <textarea class="form-control" id="workerAddress" name="address" rows="2"
-                                                placeholder="Local residential address"></textarea>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerEmergencyName">Emergency contact
-                                                name</label>
-                                            <input class="form-control" id="workerEmergencyName"
-                                                name="emergencyContactName" placeholder="Contact person name">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="form-label" for="workerEmergencyPhone">Emergency contact
-                                                phone</label>
-                                            <input class="form-control" id="workerEmergencyPhone"
-                                                name="emergencyContactPhone" placeholder="Emergency phone">
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label" for="workerNotes">Notes</label>
-                                            <textarea class="form-control" id="workerNotes" name="notes" rows="2"
-                                                placeholder="Assigned block, special skill, weekly off, or escalation note"></textarea>
-                                        </div>
-                                        <div class="col-12" id="workerFeedbackContainer" style="display:none;">
-                                            <div class="alert mb-0 py-2 px-3 fw-semibold small"
-                                                id="workerFeedbackAlert"></div>
-                                        </div>
-                                        <div class="col-12 d-grid">
-                                            <button class="btn btn-primary btn-lg rounded-3"
-                                                id="createMaintenanceWorkerBtn" type="button"
-                                                onclick="window.submitMaintenanceWorkerForm(event)">
-                                                <i class="fa-solid fa-user-plus me-2"></i>Create Maintenance Worker
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-7">
-                            <div class="card shadow-sm border-0 rounded-4 h-100">
-                                <div
-                                    class="card-header bg-transparent border-0 pt-4 px-4 d-flex flex-wrap justify-content-between gap-3 align-items-center">
-                                    <div>
-                                        <h4 class="fw-bold mb-1">Worker Accounts</h4>
-                                        <p class="text-muted mb-0">Workers listed here can sign in and access their
-                                            separate maintenance dashboard.</p>
-                                    </div>
-                                    <button class="btn btn-outline-primary rounded-pill" type="button"
-                                        id="refreshMaintenanceWorkers"
-                                        onclick="window.loadMaintenanceWorkersAttendance()">
-                                        <i class="fa-solid fa-rotate me-2"></i>Refresh Roster
-                                    </button>
-                                </div>
-                                <div class="card-body px-4 pb-4">
-                                    <div class="table-responsive">
-                                        <table class="table maintenance-worker-table align-middle mb-0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Worker</th>
-                                                    <th>Department / Skill</th>
-                                                    <th>Shift</th>
-                                                    <th>Attendance (Today)</th>
-                                                    <th>Clock In</th>
-                                                    <th>Clock Out</th>
-                                                    <th>Working Hours</th>
-                                                    <th>Availability</th>
-                                                    <th>Current Task</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="maintenanceWorkersAttendanceTable">
-                                                <tr>
-                                                    <td colspan="9" class="text-center text-muted py-4">Loading worker
-                                                        attendance roster...</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="alert alert-info rounded-4 mt-4 mb-0">
-                                        <strong>Worker login:</strong> use the worker email and temporary password on
-                                        the SmartSociety login page. The account opens the separate Maintenance
-                                        Dashboard.
                                     </div>
                                 </div>
                             </div>
@@ -11609,6 +11455,14 @@
         window.loadMaintenanceWorkers = loadMaintenanceWorkers;
         window.renderMaintenanceWorkers = renderMaintenanceWorkers;
 
+        window.openMaintenanceWorkerForm = function () {
+            window.openPanel('workers');
+            requestAnimationFrame(() => {
+                const form = document.getElementById('maintenanceWorkerForm');
+                form?.scrollIntoView({behavior: 'smooth', block: 'start'});
+                document.getElementById('workerName')?.focus({preventScroll: true});
+            });
+        };
         window.submitMaintenanceWorkerForm = async function (event) {
             if (event && event.preventDefault) event.preventDefault();
             const form = document.getElementById("maintenanceWorkerForm");
@@ -11690,7 +11544,7 @@
 
             refreshButton?.addEventListener("click", () => loadMaintenanceWorkers().catch(error => window.showToast(error.message, "danger")));
 
-            form?.addEventListener("submit", (event) => window.submitMaintenanceWorkerForm(event));
+            // Submission is handled once by the form onsubmit attribute.
 
             document.addEventListener("click", async (event) => {
                 const copyButton = event.target.closest(".copy-worker-login");
@@ -11935,8 +11789,66 @@
             <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
             <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
             <script src="/smartapartment/js/worker-attendance-module.js?v=20261008-society-break-history-v3"></script>
-            <script src="/smartapartment/js/maintenance-manager-dashboard.js?v=20261008-action-buttons-v2"></script>
+            <script src="/smartapartment/js/maintenance-manager-dashboard.js?v=20261009-worker-board-v3"></script>
             <script src="/smartapartment/js/maintenance-asset-demo.js?v=20261008-demo-v1"></script>
+<style id="maintenance-workers-layout-fix">
+body.dashboard-body[data-dashboard-role="maintenance"] header.topbar { display: flex !important; flex-wrap: wrap !important; gap: 12px !important; height: auto !important; min-height: 80px !important; max-height: none !important; flex: 0 0 auto !important; padding: 16px 24px !important; width: 100% !important; overflow: visible !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] header.topbar .topbar-left-cluster { flex: 1 1 500px !important; min-width: 0 !important; flex-wrap: wrap !important; gap: 12px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] header.topbar #title { font-size: 20px !important; white-space: normal !important; line-height: 1.35 !important; flex: 1 1 280px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] header.topbar .header-actions { flex: 0 1 auto !important; flex-wrap: wrap !important; min-width: 0 !important; margin-left: 0 !important; gap: 10px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers .stats { display: grid !important; grid-template-columns: repeat(4,minmax(0,1fr)) !important; gap: 16px !important; margin: 0 0 22px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers .stats > * { width: auto !important; padding: 0 !important; margin: 0 !important; min-width: 0 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #workerDetailCardsGrid { display: grid !important; grid-template-columns: repeat(3,minmax(0,1fr)) !important; gap: 16px !important; margin: 0 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #workerDetailCardsGrid > * { width: auto !important; padding: 0 !important; min-width: 0 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #workerDetailCardsGrid .worker-detail-card { padding: 18px !important; border-radius: 14px !important; height: 100% !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #workerDetailCardsGrid .worker-info-row { display: flex !important; flex-wrap: wrap !important; gap: 6px 12px !important; padding: 9px 0 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #workerDetailCardsGrid .worker-info-val { overflow-wrap: anywhere !important; white-space: normal !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #maintenanceWorkerForm { scroll-margin-top: 140px; }
+@media(max-width:1100px) { body.dashboard-body[data-dashboard-role="maintenance"] #workerDetailCardsGrid,body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers .stats { grid-template-columns: repeat(2,minmax(0,1fr)) !important; } }
+@media(max-width:600px) { body.dashboard-body[data-dashboard-role="maintenance"] #workerDetailCardsGrid,body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers .stats { grid-template-columns: 1fr !important; } }
+</style><style id="maintenance-worker-account-cards">
+body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers > .row.g-4 { display: grid !important; grid-template-columns: minmax(340px,1fr) minmax(0,1.4fr) !important; gap: 20px !important; margin: 0 !important; align-items: start !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers > .row.g-4 > * { width: auto !important; padding: 0 !important; min-width: 0 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers > .row.g-4 .card { background: white !important; border: 1px solid #dce5f2 !important; border-radius: 16px !important; padding: 0 !important; margin: 0 !important; box-shadow: 0 4px 16px rgba(15,23,42,.04) !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers > .row.g-4 .card-header { padding: 20px !important; border-bottom: 1px solid #e5ebf5 !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers > .row.g-4 .card-body { padding: 20px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #maintenanceWorkerForm .form-control,body.dashboard-body[data-dashboard-role="maintenance"] #maintenanceWorkerForm .form-select { min-height: 44px !important; height: 44px !important; padding: 10px 12px !important; font-size: 13px !important; }
+body.dashboard-body[data-dashboard-role="maintenance"] #maintenanceWorkerForm textarea.form-control { height: 80px !important; }
+@media(max-width:1000px) { body.dashboard-body[data-dashboard-role="maintenance"] #panel-workers > .row.g-4 { grid-template-columns: 1fr !important; } }
+</style><style id="maintenance-assignment-dialog-alignment">
+body #adminAssignWorkerModal > div { width: min(640px, 100%) !important; max-width: 640px !important; padding: 24px !important; border-radius: 18px !important; box-sizing: border-box; }
+body #adminAssignWorkerModal h4 { font-size: 22px !important; line-height: 1.3 !important; margin-bottom: 8px !important; }
+body #adminAssignWorkerModal #assignModalReqNumber { font-size: 13px !important; line-height: 1.6 !important; overflow-wrap: anywhere; }
+body #adminAssignWorkerModal .btn-close { flex-shrink: 0; margin: 4px 0 0 16px !important; }
+body #adminAssignWorkerForm > .row { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px !important; margin: 0 0 18px !important; }
+body #adminAssignWorkerForm > .row > div { width: 100% !important; padding: 0 !important; margin: 0 !important; min-width: 0; }
+body #adminAssignWorkerForm .form-label { display: flex !important; align-items: center; gap: 5px; min-height: 20px; margin: 0 0 8px !important; font-size: 13px !important; line-height: 20px !important; }
+body #adminAssignWorkerForm .form-label span { display: inline !important; margin: 0 !important; padding: 0 !important; }
+body #adminAssignWorkerForm :is(input:not([type="hidden"]),select) { width: 100% !important; height: 44px !important; min-height: 44px !important; padding: 10px 12px !important; font-size: 14px !important; border-radius: 10px !important; }
+body #adminAssignWorkerForm select { padding-right: 32px !important; }
+body #adminAssignWorkerForm textarea { width: 100% !important; min-height: 88px !important; padding: 12px !important; font-size: 14px !important; border-radius: 10px !important; }
+body #adminAssignWorkerForm > .d-flex { gap: 12px !important; margin-top: 20px !important; }
+body #adminAssignWorkerForm button { min-height: 42px !important; font-size: 14px !important; }
+@media(max-width: 540px) { body #adminAssignWorkerModal > div { padding: 20px !important; } body #adminAssignWorkerForm > .row { grid-template-columns: 1fr; } }
+</style>
+<style id="maintenance-task-card-layout">
+body.dashboard-body #maintenanceTaskQueueCards { display: block !important; background: #fff !important; border: 1px solid #dce5f2 !important; border-radius: 16px !important; padding: 22px !important; margin: 0 0 20px !important; box-shadow: 0 4px 16px rgba(15,23,42,.04) !important; }
+body.dashboard-body #maintenanceTaskQueueCards > .d-flex { padding: 0 0 18px !important; margin: 0 0 18px !important; border-bottom: 1px solid #e8edf5; gap: 14px !important; }
+body.dashboard-body #maintenanceTaskQueueCards h5 { font-size: 18px !important; line-height: 1.4 !important; margin: 0 0 5px !important; }
+body.dashboard-body #maintenanceTaskQueueCards p { font-size: 13px !important; line-height: 1.5 !important; }
+body.dashboard-body #maintenanceTaskQueueCards button { min-height: 38px !important; font-size: 13px !important; }
+body.dashboard-body #maintenanceTaskQueueCards > .row { display: grid !important; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px !important; margin: 0 !important; }
+body.dashboard-body #maintenanceTaskQueueCards > .row > div { width: auto !important; min-width: 0; padding: 0 !important; margin: 0 !important; }
+body.dashboard-body #maintenanceTaskQueueCards > .row > div > .card { display: block !important; background: #fff !important; border: 1px solid #dce5f2 !important; border-top: 3px solid #2563eb !important; border-radius: 12px !important; padding: 18px !important; margin: 0 !important; min-height: 132px; height: 100% !important; box-shadow: 0 3px 10px rgba(15,23,42,.03) !important; }
+body.dashboard-body #maintenanceTaskQueueCards > .row > div:nth-child(2) > .card { border-top-color: #0891b2 !important; }
+body.dashboard-body #maintenanceTaskQueueCards > .row > div:nth-child(3) > .card { border-top-color: #059669 !important; }
+body.dashboard-body #maintenanceTaskQueueCards h6 { display: flex !important; align-items: center; gap: 8px; font-size: 15px !important; line-height: 24px !important; margin: 0 !important; }
+body.dashboard-body #maintenanceTaskQueueCards h6 i { display: inline-flex; width: 28px; height: 28px; align-items: center; justify-content: center; border-radius: 8px; background: #eff6ff; font-size: 15px; margin: 0 !important; }
+body.dashboard-body #maintenanceTaskQueueCards [id$="TasksList"] { margin-top: 14px; font-size: 13px !important; line-height: 1.6 !important; }
+body.dashboard-body #maintenanceTaskQueueCards [id$="TasksList"] > .text-center { text-align: left !important; padding: 0 !important; }
+body.dashboard-body #track1TasksBanner { background: #fff !important; border: 1px solid #dce5f2 !important; border-radius: 14px !important; padding: 18px !important; margin-bottom: 20px !important; }
+@media(max-width:900px) { body.dashboard-body #maintenanceTaskQueueCards > .row { grid-template-columns: 1fr; } }
+</style>
 </body>
 
 </html>

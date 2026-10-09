@@ -87,6 +87,8 @@
         // Alias support for legacy or renamed panels
         if (panelId === 'leads' || panelId === 'tours') panelId = 'enquiries';
         if (panelId === 'kyc') panelId = 'verifications';
+        if (panelId === 'metadata') panelId = 'overview';
+        if (panelId === 'content') panelId = 'overview';
 
         // Update nav buttons
         document.querySelectorAll("[data-panel]").forEach(btn => {
@@ -152,11 +154,21 @@
         else if (panelId === 'verifications') loadApplications();
         else if (panelId === 'projects') loadProjects();
         else if (panelId === 'my-properties') loadInventory();
-        else if (panelId === 'enquiries') { loadEnquiries(); loadVisits(); }
+        else if (panelId === 'enquiries') {
+            if (filterOptions === 'VISITS') switchEnquirySubtab('visits');
+            else switchEnquirySubtab('enquiries');
+        }
         else if (panelId === 'reports') loadReports();
         else if (panelId === 'metadata') loadMetadata();
         else if (panelId === 'content') loadMetadata();
         else if (panelId === 'audit') loadAudit();
+        else if (panelId === 'add-property') {
+            if (!state.users || state.users.length === 0) {
+                loadUsers();
+            } else {
+                populateAdminOwnerSelect();
+            }
+        }
 
         if (window.location.hash !== '#' + panelId) {
             if (history.pushState) {
@@ -310,70 +322,204 @@
             badgeEnquiries.style.display = count > 0 ? "inline-block" : "none";
         }
 
-        // Actionable Notifications
+        // Actionable Notifications in Card Grid
         const notifContainer = document.getElementById("overviewNotificationsList");
         if (notifContainer) {
             if (notifications.length === 0) {
                 notifContainer.innerHTML = `
-                    <div style="padding:16px 20px; border-radius:12px; background:#f0fdf4; border:1px solid #bbf7d0; display:flex; align-items:center; gap:12px;">
-                        <span style="font-size:1.3rem;">✓</span>
+                    <div style="padding:18px 22px; border-radius:14px; background:#f0fdf4; border:1px solid #bbf7d0; display:flex; align-items:center; gap:12px; grid-column:1/-1;">
+                        <span style="font-size:1.4rem;">✓</span>
                         <div>
-                            <strong style="color:#166534; font-size:0.9rem;">All Moderation Queues Clear</strong>
+                            <strong style="color:#166534; font-size:0.92rem; font-weight:800;">All Moderation Queues Clear</strong>
                             <p style="margin:2px 0 0 0; color:#15803d; font-size:0.82rem;">No pending approvals, open reports, or unreviewed verifications at this moment.</p>
                         </div>
                     </div>`;
             } else {
                 notifContainer.innerHTML = notifications.map(n => {
                     const isDanger = n.type === 'danger';
-                    const bg = isDanger ? '#fef2f2' : '#fffbeb';
-                    const border = isDanger ? '#fecaca' : '#fde68a';
-                    const textCol = isDanger ? '#991b1b' : '#92400e';
-                    const icon = isDanger ? '🚨' : '⏳';
+                    const isInfo = n.type === 'info';
+                    const bg = isDanger ? 'linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%)' : (isInfo ? 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)' : 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)');
+                    const border = isDanger ? '#fecdd3' : (isInfo ? '#bfdbfe' : '#fde68a');
+                    const textCol = isDanger ? '#9f1239' : (isInfo ? '#1e40af' : '#92400e');
+                    const badgeBg = isDanger ? '#ffe4e6' : (isInfo ? '#dbeafe' : '#fef3c7');
+                    const icon = isDanger ? '🚨' : (isInfo ? '📩' : '⏳');
                     return `
-                        <div style="padding:14px 18px; border-radius:12px; background:${bg}; border:1px solid ${border}; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <span style="font-size:1.3rem;">${icon}</span>
-                                <div>
-                                    <strong style="color:${textCol}; font-size:0.88rem;">${escapeHtml(n.title)} (${n.count})</strong>
-                                    <p style="margin:2px 0 0 0; color:${textCol}; font-size:0.82rem; opacity:0.9;">${escapeHtml(n.message)}</p>
+                        <div class="overview-notif-card" style="background:${bg}; border:1.5px solid ${border};">
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <span style="font-size:1.5rem;">${icon}</span>
+                                    <div>
+                                        <strong style="color:${textCol}; font-size:0.95rem; font-weight:800; display:block;">${escapeHtml(n.title)}</strong>
+                                        <span style="display:inline-block; margin-top:3px; font-size:0.74rem; font-weight:800; padding:2px 8px; border-radius:999px; background:${badgeBg}; color:${textCol}; border:1px solid ${border};">${n.count} Action Pending</span>
+                                    </div>
                                 </div>
                             </div>
-                            <button type="button" onclick="switchTabAndFilter('${n.targetPanel}', '${n.filter}')"
-                                style="padding:7px 14px; border-radius:8px; background:#0f172a; color:#ffffff; font-size:0.8rem; font-weight:700; border:none; cursor:pointer;">
-                                Review Now →
-                            </button>
+                            <p style="margin:0; color:${textCol}; font-size:0.84rem; line-height:1.45; opacity:0.95;">${escapeHtml(n.message)}</p>
+                            <div style="display:flex; justify-content:flex-end;">
+                                <button type="button" onclick="switchTabAndFilter('${n.targetPanel}', '${n.filter}')"
+                                    style="padding:8px 16px; border-radius:10px; background:#0f172a; color:#ffffff; font-size:0.82rem; font-weight:750; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s ease; box-shadow:0 4px 12px rgba(15,23,42,0.15);">
+                                    Review Now →
+                                </button>
+                            </div>
                         </div>`;
                 }).join('');
             }
         }
 
-        // Recent Activity Feed
+        // Render Recent Activity Feed
+        updateOverviewActivityViewButtons();
+        renderRecentActivityFeed();
+    }
+
+    state.overviewActivityView = 'list';
+
+    window.setOverviewActivityView = function(mode) {
+        state.overviewActivityView = mode || 'list';
+        localStorage.setItem('pd_overview_activity_view', state.overviewActivityView);
+        updateOverviewActivityViewButtons();
+        renderRecentActivityFeed();
+    };
+
+    function updateOverviewActivityViewButtons() {
+        const mode = state.overviewActivityView || 'list';
+        const cardsBtn = document.getElementById('activityViewCardsBtn');
+        const listBtn = document.getElementById('activityViewListBtn');
+        if (cardsBtn) {
+            cardsBtn.style.background = (mode === 'cards') ? '#ffffff' : 'transparent';
+            cardsBtn.style.color = (mode === 'cards') ? '#0f172a' : '#64748b';
+            cardsBtn.style.boxShadow = (mode === 'cards') ? '0 1px 3px rgba(0,0,0,0.08)' : 'none';
+            cardsBtn.style.fontWeight = (mode === 'cards') ? '800' : '600';
+        }
+        if (listBtn) {
+            listBtn.style.background = (mode === 'list') ? '#ffffff' : 'transparent';
+            listBtn.style.color = (mode === 'list') ? '#0f172a' : '#64748b';
+            listBtn.style.boxShadow = (mode === 'list') ? '0 1px 3px rgba(0,0,0,0.08)' : 'none';
+            listBtn.style.fontWeight = (mode === 'list') ? '800' : '600';
+        }
+    }
+
+    function renderRecentActivityFeed() {
         const activityContainer = document.getElementById("overviewRecentActivity");
-        if (activityContainer) {
-            if (recentActivity.length === 0) {
-                activityContainer.innerHTML = `<div style="text-align:center; padding:24px; color:#64748b; font-size:0.86rem;">No recent activity recorded.</div>`;
-            } else {
-                activityContainer.innerHTML = recentActivity.map(act => {
-                    let badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#f1f5f9; color:#475569;">' + escapeHtml(act.action) + '</span>';
-                    if (act.action.includes('APPROVED')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d;">' + escapeHtml(act.action) + '</span>';
-                    else if (act.action.includes('REJECTED') || act.action.includes('SUSPENDED')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#fee2e2; color:#b91c1c;">' + escapeHtml(act.action) + '</span>';
-                    else if (act.action.includes('CHANGES_REQUESTED')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#fef3c7; color:#b45309;">' + escapeHtml(act.action) + '</span>';
-                    else if (act.action.includes('CONTACT') || act.action.includes('ENQUIRY')) badge = '<span style="padding:2px 8px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#eff6ff; color:#2563eb;">' + escapeHtml(act.action) + '</span>';
-                    return `
-                        <div style="padding:12px 16px; border-radius:10px; border:1px solid #f1f5f9; background:#ffffff; display:flex; justify-content:space-between; align-items:center; gap:12px;">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                ${badge}
-                                <span style="font-size:0.84rem; font-weight:700; color:#1e293b;">${escapeHtml(act.targetType)} #${act.targetId}</span>
-                                <span style="font-size:0.82rem; color:#64748b;">${escapeHtml(act.detail || '—')}</span>
+        if (!activityContainer) return;
+        const recentActivity = (state.overview && state.overview.recentActivity) || [];
+
+        if (recentActivity.length === 0) {
+            activityContainer.innerHTML = `<div style="text-align:center; padding:32px; color:#64748b; font-size:0.86rem;">No recent activity recorded.</div>`;
+            return;
+        }
+
+        const isCards = (state.overviewActivityView || 'list') === 'cards';
+        activityContainer.className = isCards ? 'overview-activity-grid' : 'overview-activity-list';
+
+        if (isCards) {
+            activityContainer.innerHTML = recentActivity.map(act => {
+                let badge = '<span style="padding:3px 8px; border-radius:999px; font-size:0.7rem; font-weight:800; background:#f1f5f9; color:#475569; display:inline-flex; align-items:center; gap:4px;"><span style="width:5px; height:5px; border-radius:50%; background:#94a3b8;"></span>' + escapeHtml(act.action) + '</span>';
+                if (act.action.includes('APPROVED')) badge = '<span style="padding:3px 8px; border-radius:999px; font-size:0.7rem; font-weight:800; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; display:inline-flex; align-items:center; gap:4px;"><span style="width:5px; height:5px; border-radius:50%; background:#22c55e;"></span>' + escapeHtml(act.action) + '</span>';
+                else if (act.action.includes('REJECTED') || act.action.includes('SUSPENDED')) badge = '<span style="padding:3px 8px; border-radius:999px; font-size:0.7rem; font-weight:800; background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; display:inline-flex; align-items:center; gap:4px;"><span style="width:5px; height:5px; border-radius:50%; background:#ef4444;"></span>' + escapeHtml(act.action) + '</span>';
+                else if (act.action.includes('CHANGES_REQUESTED')) badge = '<span style="padding:3px 8px; border-radius:999px; font-size:0.7rem; font-weight:800; background:#fef3c7; color:#b45309; border:1px solid #fde68a; display:inline-flex; align-items:center; gap:4px;"><span style="width:5px; height:5px; border-radius:50%; background:#f59e0b;"></span>' + escapeHtml(act.action) + '</span>';
+                else if (act.action.includes('CONTACT') || act.action.includes('ENQUIRY') || act.action.includes('UPDATED')) badge = '<span style="padding:3px 8px; border-radius:999px; font-size:0.7rem; font-weight:800; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; display:inline-flex; align-items:center; gap:4px;"><span style="width:5px; height:5px; border-radius:50%; background:#3b82f6;"></span>' + escapeHtml(act.action) + '</span>';
+
+                let entityIcon = '📄';
+                let targetClick = `switchTabAndFilter('audit', 'ALL')`;
+                let actionBtnText = 'View Audit →';
+                const tType = (act.targetType || '').toUpperCase();
+                if (tType === 'LISTING') {
+                    entityIcon = '🏢';
+                    targetClick = `switchTabAndFilter('my-properties')`;
+                    actionBtnText = 'View Listing →';
+                } else if (tType === 'ACCOUNT' || tType === 'USER') {
+                    entityIcon = '👤';
+                    targetClick = `switchTabAndFilter('users')`;
+                    actionBtnText = 'View User →';
+                } else if (tType === 'REPORT') {
+                    entityIcon = '🚩';
+                    targetClick = `switchTabAndFilter('reports')`;
+                    actionBtnText = 'View Report →';
+                } else if (tType === 'ENQUIRY' || tType === 'VISIT') {
+                    entityIcon = '📩';
+                    targetClick = `switchTabAndFilter('enquiries')`;
+                    actionBtnText = 'View Enquiry →';
+                }
+
+                return `
+                    <div class="overview-activity-card">
+                        <div class="overview-activity-card-header">
+                            ${badge}
+                            <span style="font-size:0.74rem; color:#94a3b8; font-weight:600; white-space:nowrap;">🕒 ${formatDateTime(act.createdAt)}</span>
+                        </div>
+                        <div class="overview-activity-card-body">
+                            <div class="overview-activity-card-title">
+                                <span>${entityIcon}</span>
+                                <span>${escapeHtml(act.targetType)} #${act.targetId}</span>
                             </div>
-                            <div style="display:flex; align-items:center; gap:10px; font-size:0.76rem; color:#94a3b8; white-space:nowrap;">
-                                <span>by ${escapeHtml(act.actor || 'system')}</span>
-                                <span>•</span>
-                                <span>${formatDateTime(act.createdAt)}</span>
+                            <p class="overview-activity-card-desc">${escapeHtml(act.detail || 'System operation processed.')}</p>
+                        </div>
+                        <div class="overview-activity-card-footer">
+                            <span style="display:inline-flex; align-items:center; gap:5px; color:#64748b; font-size:0.76rem; font-weight:600; background:#f8fafc; padding:3px 8px; border-radius:6px; border:1px solid #f1f5f9;">
+                                <span style="font-size:0.8rem;">👤</span> ${escapeHtml(act.actor || 'system')}
+                            </span>
+                            <button type="button" onclick="${targetClick}" style="padding:4px 10px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#1e293b; font-size:0.74rem; font-weight:750; cursor:pointer; transition:all 0.15s ease;">
+                                ${actionBtnText}
+                            </button>
+                        </div>
+                    </div>`;
+            }).join('');
+        } else {
+            activityContainer.innerHTML = recentActivity.map(act => {
+                let badge = '<span style="padding:3px 9px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#f1f5f9; color:#475569; display:inline-flex; align-items:center; gap:5px; white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#94a3b8;"></span>' + escapeHtml(act.action) + '</span>';
+                if (act.action.includes('APPROVED')) {
+                    badge = '<span style="padding:3px 9px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d; border:1px solid #bbf7d0; display:inline-flex; align-items:center; gap:5px; white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#22c55e;"></span>' + escapeHtml(act.action) + '</span>';
+                } else if (act.action.includes('REJECTED') || act.action.includes('SUSPENDED')) {
+                    badge = '<span style="padding:3px 9px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#fee2e2; color:#b91c1c; border:1px solid #fecaca; display:inline-flex; align-items:center; gap:5px; white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#ef4444;"></span>' + escapeHtml(act.action) + '</span>';
+                } else if (act.action.includes('CHANGES_REQUESTED')) {
+                    badge = '<span style="padding:3px 9px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#fef3c7; color:#b45309; border:1px solid #fde68a; display:inline-flex; align-items:center; gap:5px; white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#f59e0b;"></span>' + escapeHtml(act.action) + '</span>';
+                } else if (act.action.includes('CONTACT') || act.action.includes('ENQUIRY') || act.action.includes('UPDATED')) {
+                    badge = '<span style="padding:3px 9px; border-radius:6px; font-size:0.72rem; font-weight:800; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; display:inline-flex; align-items:center; gap:5px; white-space:nowrap;"><span style="width:5px; height:5px; border-radius:50%; background:#3b82f6;"></span>' + escapeHtml(act.action) + '</span>';
+                }
+
+                let entityIcon = '📄';
+                let targetClick = `switchTabAndFilter('audit', 'ALL')`;
+                let actionBtnText = 'View Audit →';
+                const tType = (act.targetType || '').toUpperCase();
+                if (tType === 'LISTING') {
+                    entityIcon = '🏢';
+                    targetClick = `switchTabAndFilter('my-properties')`;
+                    actionBtnText = 'View Listing →';
+                } else if (tType === 'ACCOUNT' || tType === 'USER') {
+                    entityIcon = '👤';
+                    targetClick = `switchTabAndFilter('users')`;
+                    actionBtnText = 'View User →';
+                } else if (tType === 'REPORT') {
+                    entityIcon = '🚩';
+                    targetClick = `switchTabAndFilter('reports')`;
+                    actionBtnText = 'View Report →';
+                } else if (tType === 'ENQUIRY' || tType === 'VISIT') {
+                    entityIcon = '📩';
+                    targetClick = `switchTabAndFilter('enquiries')`;
+                    actionBtnText = 'View Enquiry →';
+                }
+
+                return `
+                    <div class="overview-activity-list-item">
+                        <div style="display:flex; align-items:center; gap:12px; min-width:0; flex:1 1 auto;">
+                            ${badge}
+                            <div style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
+                                <span style="font-size:0.9rem;">${entityIcon}</span>
+                                <strong style="font-size:0.86rem; font-weight:800; color:#0f172a;">${escapeHtml(act.targetType)} #${act.targetId}</strong>
                             </div>
-                        </div>`;
-                }).join('');
-            }
+                            <span style="font-size:0.83rem; color:#475569; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(act.detail || '—')}</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:12px; font-size:0.78rem; color:#64748b; white-space:nowrap; flex-shrink:0;">
+                            <span style="background:#f8fafc; padding:3px 8px; border-radius:6px; border:1px solid #f1f5f9; font-weight:600; color:#475569;">
+                                👤 ${escapeHtml(act.actor || 'system')}
+                            </span>
+                            <span style="color:#94a3b8;">🕒 ${formatDateTime(act.createdAt)}</span>
+                            <button type="button" onclick="${targetClick}" style="padding:4px 10px; border-radius:7px; border:1px solid #cbd5e1; background:#ffffff; color:#0f172a; font-size:0.75rem; font-weight:750; cursor:pointer; transition:all 0.15s ease;">
+                                ${actionBtnText}
+                            </button>
+                        </div>
+                    </div>`;
+            }).join('');
         }
     }
 
@@ -1354,7 +1500,7 @@
         if (!tbody) return;
 
         if (state.enquiries.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px 14px; color:#64748b; font-size:0.85rem;">No customer enquiries yet.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px 14px; color:#64748b; font-size:0.85rem;">No client leads or customer enquiries yet.</td></tr>`;
             return;
         }
 
@@ -1363,18 +1509,22 @@
             const isResponded = (e.status || '').toUpperCase() === 'RESPONDED';
             let stBadge = isResponded
                 ? `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d; border:1px solid #86efac;">✓ Responded</span>`
-                : `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#fef3c7; color:#92400e; border:1px solid #fcd34d;">New</span>`;
+                : `<span style="padding:4px 9px; border-radius:999px; font-size:0.72rem; font-weight:800; background:#fef3c7; color:#92400e; border:1px solid #fcd34d;">New Lead</span>`;
 
+            const leadRef = `#LD-${e.id || 100}`;
             return `
                 <tr style="border-bottom:1px solid #f1f5f9;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'">
-                    <td style="padding:14px 18px; font-size:0.82rem; color:#64748b;">${formatDateTime(e.createdAt)}</td>
                     <td style="padding:14px 18px;">
-                        <strong style="display:block; font-size:0.88rem; color:#0f172a;">${escapeHtml(e.name || 'Anonymous')}</strong>
+                        <strong style="display:block; font-size:0.86rem; color:#0f172a; font-family:monospace;">${escapeHtml(leadRef)}</strong>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">${formatDateTime(e.createdAt)}</div>
+                    </td>
+                    <td style="padding:14px 18px;">
+                        <strong style="display:block; font-size:0.88rem; color:#0f172a;">${escapeHtml(e.name || 'Anonymous Client')}</strong>
                         <div style="font-size:0.76rem; color:#64748b;">${escapeHtml(e.phone || '')} · ${escapeHtml(e.email || '')}</div>
                     </td>
                     <td style="padding:14px 18px;">
                         <strong style="display:block; font-size:0.84rem; color:#1e293b;">${escapeHtml(row.listingTitle || (e.enquiryType === 'PLATFORM_CONTACT' ? 'Website Contact Message' : 'General Enquiry'))}</strong>
-                        <small style="color:#64748b;">${e.enquiryType === 'PLATFORM_CONTACT' ? '🌐 Website Support Desk' : 'Type: ' + escapeHtml(e.enquiryType || 'General')}</small>
+                        <small style="color:#64748b;">${e.enquiryType === 'PLATFORM_CONTACT' ? '🌐 Platform Inquiry' : 'Type: ' + escapeHtml(e.enquiryType || 'General')}</small>
                     </td>
                     <td style="padding:14px 18px; max-width:280px;">
                         <div style="font-size:0.82rem; color:#334155;">${escapeHtml(e.message || '—')}</div>
@@ -1404,6 +1554,69 @@
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || 'Failed to send reply');
             showToast(`Response dispatched for Enquiry #${enquiryId}!`);
+            loadEnquiries();
+            loadOverview();
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    };
+
+    window.openAdminLeadModal = async function () {
+        const modal = document.getElementById("adminRecordLeadModal");
+        if (!modal) return;
+        const select = document.getElementById("adminLeadListingSelect");
+        if (select) {
+            select.innerHTML = '<option value="">— General Marketplace / Platform Enquiry —</option>';
+            try {
+                const res = await fetch('/api/property/listings', { headers: { 'Accept': 'application/json' } });
+                if (res.ok) {
+                    const list = await res.json();
+                    list.forEach(p => {
+                        const opt = document.createElement("option");
+                        opt.value = p.id;
+                        opt.textContent = `#${p.id} - ${p.title} (${p.city || ''})`;
+                        select.appendChild(opt);
+                    });
+                }
+            } catch (e) {
+                console.warn("Could not load listings for lead select:", e);
+            }
+        }
+        modal.classList.remove("hidden");
+        modal.style.display = "flex";
+    };
+
+    window.closeAdminLeadModal = function () {
+        const modal = document.getElementById("adminRecordLeadModal");
+        if (modal) {
+            modal.classList.add("hidden");
+            modal.style.display = "none";
+        }
+        const form = document.getElementById("adminRecordLeadForm");
+        if (form) form.reset();
+    };
+
+    window.handleSaveAdminLead = async function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const payload = {
+            listingId: form.listingId.value ? Number(form.listingId.value) : null,
+            name: form.name.value.trim(),
+            phone: form.phone.value.trim(),
+            email: form.email.value.trim(),
+            type: form.type.value || "GENERAL",
+            message: form.message.value.trim()
+        };
+        try {
+            const res = await fetch('/api/property/enquiries', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message || 'Failed to save lead');
+            showToast(`Client Lead #${data.id || ''} recorded successfully!`);
+            closeAdminLeadModal();
             loadEnquiries();
             loadOverview();
         } catch (err) {
@@ -2350,6 +2563,7 @@
         });
 
         document.getElementById("appDecisionFilter")?.addEventListener("change", renderApplicationsTable);
+        document.getElementById("refreshAppsBtn")?.addEventListener("click", loadApplications);
 
         document.getElementById("inventoryStatusFilter")?.addEventListener("change", renderInventoryTable);
         document.getElementById("inventoryTypeFilter")?.addEventListener("change", renderInventoryTable);

@@ -863,8 +863,9 @@ async function loadSocietyBackendData() {
         const canReadFinance = ["admin", "accountant"].includes(dashboardRole);
         const [overview, apartments, residents, complaints, visitors, bills, amenityItems, bookingItems, noticeItems, me, expenseItems, paymentItems, teamItems, subscription] = await Promise.all([
             request("overview"), optional("apartments"), canReadResidents ? optional("residents") : Promise.resolve([]),
-            optional("complaints"), optional("visitors"), optional("bills"), optional("amenities"), optional("bookings"), optional("announcements"), request("me"), canReadFinance ? optional("finance/expenses") : Promise.resolve([]), canReadFinance ? optional("finance/payments") : Promise.resolve([]), dashboardRole === "admin" ? optional("team-users") : Promise.resolve([]), dashboardRole === "admin" ? request("subscription").catch(() => null) : Promise.resolve(null)
+            optional("complaints"), optional("visitors"), dashboardRole === "resident" ? request("bills") : optional("bills"), optional("amenities"), optional("bookings"), optional("announcements"), request("me"), canReadFinance ? optional("finance/expenses") : Promise.resolve([]), canReadFinance ? optional("finance/payments") : Promise.resolve([]), dashboardRole === "admin" ? optional("team-users") : Promise.resolve([]), dashboardRole === "admin" ? request("subscription").catch(() => null) : Promise.resolve(null)
         ]);
+        if (dashboardRole === "resident") window.renderResidentDues?.(bills);
         const overviewByLabel = {"total flats":overview.totalApartments,"residents":overview.totalResidents,
             "unpaid bills":overview.unpaidBills,"open complaints":overview.pendingComplaints,
             "open requests":overview.pendingComplaints,"inside visitors":overview.visitorCount};
@@ -966,6 +967,7 @@ async function loadSocietyBackendData() {
         const state = document.getElementById("societyAdminLoadState");
         if (state) { state.hidden = false; state.textContent = error.message || "Society records could not be loaded. Try refreshing the dashboard."; }
         else console.error("Dashboard backend hydration failed", error);
+        if (dashboardRole === "resident") window.renderResidentDues?.(null);
     }
 }
 

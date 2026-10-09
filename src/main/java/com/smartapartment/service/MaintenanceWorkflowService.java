@@ -26,6 +26,8 @@ public class MaintenanceWorkflowService {
     private final AppUserRepository users;
     private final NotificationRepository notifications;
     private final AuditLogRepository auditLogs;
+    @Autowired
+    private CurrentUserService currentUser;
 
     @Autowired(required = false)
     private StaffAttendanceRepository attendances;
@@ -169,7 +171,9 @@ public class MaintenanceWorkflowService {
                 ? input.title().trim() : (finalCategory + ": " + (input.description() != null && input.description().length() > 30 ? input.description().substring(0, 30) + "…" : input.description()) + " (Flat " + unit + ")");
 
         // 1. Check AMC / Society Vendor vs Approved External Vendor
-        VendorSelectionResult vendorSelection = findEligibleVendorWithFallback(user.getTenantId(), finalCategory, skill);
+        VendorSelectionResult vendorSelection = input.preferredDate() != null && input.preferredDate().isAfter(LocalDate.now())
+                ? new VendorSelectionResult(null, false, "UNASSIGNED")
+                : findEligibleVendorWithFallback(user.getTenantId(), finalCategory, skill);
 
         MaintenancePartner assignedPartner = vendorSelection.partner();
         boolean isAmc = vendorSelection.isAmc();
@@ -333,6 +337,7 @@ public class MaintenanceWorkflowService {
         List<MaintenancePartner> amcCandidates = allPartners.stream()
                 .filter(p -> "INTERNAL".equalsIgnoreCase(p.getEmploymentType()) || "AMC".equalsIgnoreCase(p.getEmploymentType()))
                 .filter(MaintenancePartner::isOnDuty)
+                .filter(p -> users.findById(p.getUserId()).map(u -> !u.isAccountLocked() && WorkerShift.fromString(u.getWorkShift()).isWithinShift(java.time.LocalTime.now())).orElse(false))
                 .filter(p -> "IDLE".equalsIgnoreCase(p.getAvailability()) || "AVAILABLE".equalsIgnoreCase(p.getAvailability()))
                 .filter(p -> isSkillMatch(p, category, skill))
                 .sorted(Comparator.comparing(this::partnerWorkloadScore))
@@ -346,6 +351,7 @@ public class MaintenanceWorkflowService {
         List<MaintenancePartner> externalCandidates = allPartners.stream()
                 .filter(p -> !"INTERNAL".equalsIgnoreCase(p.getEmploymentType()) && !"AMC".equalsIgnoreCase(p.getEmploymentType()))
                 .filter(MaintenancePartner::isOnDuty)
+                .filter(p -> users.findById(p.getUserId()).map(u -> !u.isAccountLocked() && WorkerShift.fromString(u.getWorkShift()).isWithinShift(java.time.LocalTime.now())).orElse(false))
                 .filter(p -> "IDLE".equalsIgnoreCase(p.getAvailability()) || "AVAILABLE".equalsIgnoreCase(p.getAvailability()))
                 .filter(p -> isSkillMatch(p, category, skill))
                 .sorted(Comparator.comparing(this::partnerWorkloadScore))
@@ -384,6 +390,7 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> respondToJobOffer(Long bookingId, boolean accept, String declineReason) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        requireAssignedWorker(b);
 
         if (!"OFFERED".equalsIgnoreCase(b.getJobStatus()) && !"ASSIGNED".equalsIgnoreCase(b.getJobStatus())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Job is not awaiting acceptance. Current status: " + b.getJobStatus());
@@ -447,6 +454,8 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> startTravel(Long bookingId) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        requireAssignedWorker(b);
+        if (!Set.of("JOB_CONFIRMED", "ACCEPTED", "ASSIGNED").contains(b.getJobStatus())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Complete the preceding service stage first");
         b.setJobStatus("TRAVELING");
         b.setDispatchReason("Technician is traveling to the property");
         bookings.save(b);
@@ -459,6 +468,8 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> arriveAtApartment(Long bookingId, Double latitude, Double longitude) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        requireAssignedWorker(b);
+        if (!Set.of("TRAVELING", "EN_ROUTE").contains(b.getJobStatus())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Complete the preceding service stage first");
         b.setJobStatus("ARRIVED");
         b.setReachedAt(LocalDateTime.now());
         b.setArrivalDistanceKm(0.0);
@@ -479,6 +490,8 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> startDiagnosis(Long bookingId) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        requireAssignedWorker(b);
+        if (!Set.of("ARRIVED", "REACHED_LOCATION").contains(b.getJobStatus())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Complete the preceding service stage first");
         b.setJobStatus("DIAGNOSING");
         b.setDiagnosisStartedAt(LocalDateTime.now());
         b.setDispatchReason("Technician is currently diagnosing the issue");
@@ -492,6 +505,8 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> startRepairNoCost(Long bookingId) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        requireAssignedWorker(b);
+        if (!Set.of("ARRIVED", "REACHED_LOCATION", "DIAGNOSING").contains(b.getJobStatus())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Complete the preceding service stage first");
         b.setAdditionalCostRequired(false);
         b.setEstimateStatus("NONE");
         b.setEstimateAmount(BigDecimal.ZERO);
@@ -508,6 +523,7 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> generateEstimate(Long bookingId, BigDecimal amount, String description, String parts, String labor) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        requireAssignedWorker(b);
         b.setAdditionalCostRequired(true);
         b.setEstimateAmount(amount != null ? amount : BigDecimal.ZERO);
         b.setEstimateDescription(description != null ? description.trim() : "Repair estimate for required parts and labor");
@@ -582,6 +598,8 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> markWorkCompleted(Long bookingId, String completionNotes, byte[] afterPhotoBytes, String photoUrl) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        requireAssignedWorker(b);
+        if (!Set.of("IN_PROGRESS").contains(b.getJobStatus())) throw new ResponseStatusException(HttpStatus.CONFLICT, "Complete the preceding service stage first");
 
         b.setJobStatus("WORK_COMPLETED");
         b.setCompletedAt(LocalDateTime.now());
@@ -685,6 +703,11 @@ public class MaintenanceWorkflowService {
     public Map<String, Object> submitRatingAndClose(Long bookingId, int rating, String review, List<String> tags) {
         EmergencyMaintenanceBooking b = bookings.lockById(bookingId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+        AppUser reviewer = currentUser.requireUser();
+        if (!Objects.equals(reviewer.getId(), b.getRequesterId())) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the requester can review this service");
+        if (b.getWorkCompletedAt() == null && b.getCompletedAt() == null) throw new ResponseStatusException(HttpStatus.CONFLICT, "Reviews unlock after work completion");
+        if (b.getRating() != null) throw new ResponseStatusException(HttpStatus.CONFLICT, "This service has already been reviewed");
+
 
         b.setRating(Math.max(1, Math.min(5, rating)));
         b.setReview(review != null ? review.trim() : "");
@@ -861,6 +884,13 @@ public class MaintenanceWorkflowService {
         };
     }
 
+    private void requireAssignedWorker(EmergencyMaintenanceBooking b) {
+        AppUser user = currentUser.requireUser();
+        boolean assigned = user.getRole() == UserRole.MAINTENANCE_STAFF && b.getPartnerId() != null
+                && partners.findById(b.getPartnerId()).map(p -> Objects.equals(p.getUserId(), user.getId())).orElse(false);
+        if (!assigned) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only the assigned maintenance worker can update service progress");
+    }
+
     private void releasePartner(EmergencyMaintenanceBooking b) {
         if (b.getPartnerId() != null) {
             partners.findById(b.getPartnerId()).ifPresent(p -> {
@@ -921,6 +951,7 @@ public class MaintenanceWorkflowService {
     }
 
     private void broadcast(Long bookingId, String status, String action, String message) {
+        bookings.findById(bookingId).ifPresent(b -> sendNotification(b.getRequesterId(), "SERVICE_PROGRESS", "Service update: " + status.replace('_', ' '), message));
         if (emergencyService != null) {
             try {
                 emergencyService.broadcastEvent(bookingId, status, action, null, message);

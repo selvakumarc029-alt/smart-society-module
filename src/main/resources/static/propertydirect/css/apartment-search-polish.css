@@ -394,20 +394,31 @@ body.apartment-page #aiRecommendationBanner p {
 }
 
 body.apartment-page #aiPromptChips button {
-  min-height: 36px;
-  padding: 7px 13px !important;
-  border: 1px solid #d7def2 !important;
-  background: rgba(255, 255, 255, .8) !important;
-  color: #34456d !important;
-  font-size: .8rem !important;
-  font-weight: 650 !important;
-  text-align: left;
+  min-height: 36px !important;
+  padding: 6px 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  font-size: .82rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 body.apartment-page #aiPromptChips button:hover {
-  border-color: #9aa9e8 !important;
-  background: #fff !important;
-  color: var(--search-accent-dark) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.28) !important;
+  color: #ffffff !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.apartment-page #aiPromptChips button:active {
+  transform: scale(0.97) !important;
 }
 
 body.apartment-page .apartment-results {

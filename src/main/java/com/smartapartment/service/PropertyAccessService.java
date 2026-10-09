@@ -97,14 +97,15 @@ public class PropertyAccessService {
             needsSave = true;
         }
 
-        if (isPrivilegedDashboard || !"CUSTOMER".equalsIgnoreCase(account.getRole())) {
+        // CUSTOMER accounts must ALWAYS remain CUSTOMER and never be mutated to OWNER.
+        if (!"CUSTOMER".equalsIgnoreCase(account.getRole())) {
             if (!"OWNER".equalsIgnoreCase(account.getRole()) && !"BUILDER".equalsIgnoreCase(account.getRole()) &&
                     !"AGENT".equalsIgnoreCase(account.getRole()) && !"VENDOR".equalsIgnoreCase(account.getRole()) &&
                     !"ADMIN".equalsIgnoreCase(account.getRole()) && !"SUPERADMIN".equalsIgnoreCase(account.getRole())) {
-                account.setRole("OWNER");
+                account.setRole(isPrivilegedDashboard ? "OWNER" : "CUSTOMER");
                 needsSave = true;
             }
-            if (!account.isPostingVerified()) {
+            if (!account.isPostingVerified() && ("OWNER".equalsIgnoreCase(account.getRole()) || "BUILDER".equalsIgnoreCase(account.getRole()))) {
                 account.setPostingVerified(true);
                 needsSave = true;
             }
@@ -116,10 +117,12 @@ public class PropertyAccessService {
 
         if (session != null) {
             session.setAttribute("propertydirect:customerId", account.getId());
-            if (isPrivilegedDashboard || "OWNER".equalsIgnoreCase(account.getRole()) || "AGENT".equalsIgnoreCase(account.getRole()) || "VENDOR".equalsIgnoreCase(account.getRole())) {
+            if ("OWNER".equalsIgnoreCase(account.getRole()) || "AGENT".equalsIgnoreCase(account.getRole()) || "VENDOR".equalsIgnoreCase(account.getRole())) {
                 session.setAttribute("dashboard:propertydirect:owner", Boolean.TRUE);
                 session.setAttribute("dashboard:propertydirect:agent", Boolean.TRUE);
                 session.setAttribute("dashboard:propertydirect:vendor", Boolean.TRUE);
+            } else if ("CUSTOMER".equalsIgnoreCase(account.getRole())) {
+                session.setAttribute("dashboard:propertydirect:customer", Boolean.TRUE);
             }
         }
 
@@ -148,25 +151,7 @@ public class PropertyAccessService {
 
     public PropertyCustomer seller(HttpSession session) {
         PropertyCustomer account = account(session);
-        boolean needsSave = false;
-        if (!"OWNER".equalsIgnoreCase(account.getRole()) && !"BUILDER".equalsIgnoreCase(account.getRole()) &&
-                !"AGENT".equalsIgnoreCase(account.getRole()) && !"VENDOR".equalsIgnoreCase(account.getRole()) &&
-                !isAdmin(session)) {
-            account.setRole("OWNER");
-            needsSave = true;
-        }
-        if (!account.isPostingVerified()) {
-            account.setPostingVerified(true);
-            needsSave = true;
-        }
-        if (!account.isActive() || !"ACTIVE".equalsIgnoreCase(account.getStatus())) {
-            account.setActive(true);
-            account.setStatus("ACTIVE");
-            needsSave = true;
-        }
-        if (needsSave) {
-            account = customers.save(account);
-        }
+        // Do not silently mutate customer accounts into OWNER in the database.
         return account;
     }
 

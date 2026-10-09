@@ -1,0 +1,16 @@
+body .service-order-progress { margin: 0 0 24px; padding: 20px; background: #fff; border: 1px solid #dce5f2; border-radius: 16px; }
+body .service-order-progress > header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+body .service-order-progress h3 { font-size:19px; margin:0 0 6px; }
+body .service-order-progress p { font-size:13px; color:#64748b; margin:6px 0; overflow-wrap:anywhere; }
+body .service-order-progress [data-orders] { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+body .service-order-progress article { padding:18px; border:1px solid #dce5f2; border-radius:12px; background:#f8fafc; }
+body .service-order-progress h4 { font-size:16px; margin:12px 0 8px; }
+body .service-order-title { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between; font-size:12px; }
+body .service-order-title > span { padding:5px 8px; border-radius:8px; background:#e7f0ff; color:#1d4ed8; }
+body .service-order-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+body .service-order-actions input { display:block; max-width:100%; font-size:12px; }
+body .service-order-progress button,body .service-order-actions a { min-height:36px; padding:8px 12px; border:1px solid #2563eb; border-radius:8px; background:white; color:#1d4ed8; font-size:12px; cursor:pointer; }
+body .service-review-dialog { width:min(460px,calc(100% - 32px)); padding:24px; border:1px solid #dce5f2; border-radius:16px; }
+body .service-review-dialog label { display:block; margin:16px 0; }
+body .service-review-dialog select,body .service-review-dialog textarea { display:block; width:100%; margin-top:8px; padding:10px; border:1px solid #cdd9ec; border-radius:8px; }
+body .service-review-dialog::backdrop { background:rgba(15,23,42,.5); }

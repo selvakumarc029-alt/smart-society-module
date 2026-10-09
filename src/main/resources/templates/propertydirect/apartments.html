@@ -209,13 +209,31 @@
             font-weight: 800 !important;
             color: #17223b !important;
         }
-        .filter-head button {
-            background: transparent !important;
-            border: none !important;
-            color: #244a9d !important;
-            font-size: 0.82rem !important;
+        .filter-head button, #clearFilters {
+            background: #f1f5f9 !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #1d4ed8 !important;
+            font-size: 0.8rem !important;
             font-weight: 700 !important;
             cursor: pointer !important;
+            padding: 5px 12px !important;
+            border-radius: 8px !important;
+            min-height: 28px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+        }
+        .filter-head button:hover, #clearFilters:hover {
+            background: #dbeafe !important;
+            border-color: #93c5fd !important;
+            color: #1e40af !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.15) !important;
+        }
+        .filter-head button:active, #clearFilters:active {
+            transform: scale(0.97) !important;
         }
         aside.filters label {
             display: block !important;
@@ -962,6 +980,427 @@
 <link rel="stylesheet" href="/propertydirect/css/smartsociety-parity.css?v=20260825-18">
 <link rel="stylesheet" href="/propertydirect/css/apartment-search-polish.css?v=20260928-search-ui-v1">
 <link rel="stylesheet" href="/shared/css/required-fields.css?v=20260826-v2">
+<style>
+
+    /* =========================================================================
+       PROPERTYDIRECT 4 QUICK FEATURES: STYLES & MODALS
+       ========================================================================= */
+    .apartments-header-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+    .topbar-action-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.22) !important;
+        padding: 6px 13px !important;
+        border-radius: 999px !important;
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        white-space: nowrap !important;
+    }
+    .topbar-action-pill:hover {
+        background: rgba(255, 255, 255, 0.22) !important;
+        border-color: #8cf0bd !important;
+        color: #8cf0bd !important;
+        transform: translateY(-1px) !important;
+    }
+    .action-count-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #2563eb !important;
+        color: #ffffff !important;
+        font-size: 0.7rem !important;
+        font-weight: 800 !important;
+        min-width: 18px !important;
+        height: 18px !important;
+        padding: 0 5px !important;
+        border-radius: 999px !important;
+        line-height: 1 !important;
+    }
+
+    /* Quick Features Toolbar (Above Listings) */
+    .apartments-quick-features-bar {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+        margin: 14px 0 16px 0 !important;
+        padding: 10px 14px !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03) !important;
+    }
+    .feature-bar-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #1e293b !important;
+        padding: 8px 16px !important;
+        border-radius: 10px !important;
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 0.84rem !important;
+        font-weight: 750 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03) !important;
+    }
+    .feature-bar-btn:hover {
+        background: #eff6ff !important;
+        border-color: #3b82f6 !important;
+        color: #1d4ed8 !important;
+        transform: translateY(-1px) !important;
+    }
+    .feature-badge {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #e2e8f0 !important;
+        color: #0f172a !important;
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+        min-width: 20px !important;
+        height: 20px !important;
+        padding: 0 6px !important;
+        border-radius: 999px !important;
+    }
+
+    /* Compare Button on Listing Cards */
+    .btn-card-compare {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #334155 !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 750 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .btn-card-compare:hover {
+        background: #eff6ff !important;
+        border-color: #3b82f6 !important;
+        color: #1d4ed8 !important;
+    }
+    .btn-card-compare.active {
+        background: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #047857 !important;
+    }
+
+    /* Modal / Drawer Overlays */
+    .pd-feature-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        background: rgba(15, 23, 42, 0.65) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        z-index: 99999 !important;
+        display: none;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px !important;
+    }
+    .pd-feature-modal {
+        background: #ffffff !important;
+        border-radius: 20px !important;
+        width: 100% !important;
+        max-width: 760px !important;
+        max-height: 90vh !important;
+        box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25) !important;
+        border: 1px solid #e2e8f0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        animation: pdModalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+    .pd-feature-modal.modal-wide {
+        max-width: 1040px !important;
+    }
+    @keyframes pdModalSlideUp {
+        from { opacity: 0; transform: translateY(20px) scale(0.97); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .pd-modal-header {
+        padding: 18px 24px !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        background: #f8fafc !important;
+    }
+    .pd-modal-header h3 {
+        margin: 0 !important;
+        font-size: 1.15rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+    .pd-modal-body {
+        padding: 22px 24px !important;
+        overflow-y: auto !important;
+        flex: 1 !important;
+    }
+    .btn-modal-close {
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #64748b !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        transition: all 0.2s ease !important;
+    }
+    .btn-modal-close:hover {
+        background: #fee2e2 !important;
+        border-color: #fca5a5 !important;
+        color: #ef4444 !important;
+    }
+
+    /* Feature Item Cards */
+    .feature-item-card {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 16px !important;
+        padding: 16px 18px !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 14px !important;
+        margin-bottom: 12px !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03) !important;
+        transition: all 0.2s ease !important;
+    }
+    .feature-item-card:hover {
+        border-color: #cbd5e1 !important;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06) !important;
+    }
+    .feature-item-main { flex: 1 !important; }
+    .feature-item-header {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        margin-bottom: 4px !important;
+    }
+    .feature-item-title {
+        margin: 0 !important;
+        font-size: 0.98rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+    }
+    .feature-item-subtitle {
+        margin: 0 0 4px 0 !important;
+        font-size: 0.82rem !important;
+        color: #64748b !important;
+    }
+    .feature-item-detail {
+        margin: 0 !important;
+        font-size: 0.82rem !important;
+        color: #334155 !important;
+    }
+    .feature-item-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
+    }
+    .btn-action-apply {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        background: #eff6ff !important;
+        color: #1d4ed8 !important;
+        border: 1px solid #bfdbfe !important;
+        padding: 6px 14px !important;
+        border-radius: 8px !important;
+        font-size: 0.8rem !important;
+        font-weight: 750 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .btn-action-apply:hover {
+        background: #dbeafe !important;
+        border-color: #93c5fd !important;
+    }
+    .btn-action-delete {
+        background: #ffffff !important;
+        color: #94a3b8 !important;
+        border: 1px solid #e2e8f0 !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .btn-action-delete:hover {
+        background: #fef2f2 !important;
+        color: #ef4444 !important;
+        border-color: #fecaca !important;
+    }
+    .btn-action-primary {
+        background: linear-gradient(135deg, #1d4ed8, #2563eb) !important;
+        color: #ffffff !important;
+        border: none !important;
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        font-size: 0.82rem !important;
+        font-weight: 750 !important;
+        cursor: pointer !important;
+    }
+
+    /* Badges & Pills */
+    .status-pill-green {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        background: #ecfdf5 !important;
+        color: #065f46 !important;
+        border: 1px solid #a7f3d0 !important;
+        padding: 2px 8px !important;
+        border-radius: 999px !important;
+        font-size: 0.72rem !important;
+        font-weight: 800 !important;
+    }
+    .status-pill-gray {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        border: 1px solid #cbd5e1 !important;
+        padding: 2px 8px !important;
+        border-radius: 999px !important;
+        font-size: 0.72rem !important;
+        font-weight: 750 !important;
+    }
+    .tag-badge {
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+        padding: 2px 7px !important;
+        border-radius: 6px !important;
+        font-size: 0.74rem !important;
+        font-weight: 700 !important;
+    }
+
+    /* Empty States */
+    .feature-empty-state {
+        text-align: center !important;
+        padding: 44px 20px !important;
+    }
+    .feature-empty-state .empty-icon {
+        font-size: 2.8rem !important;
+        margin-bottom: 10px !important;
+    }
+    .feature-empty-state h4 {
+        margin: 0 0 6px 0 !important;
+        font-size: 1.15rem !important;
+        color: #0f172a !important;
+        font-weight: 800 !important;
+    }
+    .feature-empty-state p {
+        margin: 0 !important;
+        font-size: 0.86rem !important;
+        color: #64748b !important;
+    }
+
+    /* Recent Item Thumb */
+    .recent-thumb {
+        width: 64px !important;
+        height: 64px !important;
+        border-radius: 10px !important;
+        object-fit: cover !important;
+        flex-shrink: 0 !important;
+    }
+    .recent-time {
+        font-size: 0.74rem !important;
+        color: #94a3b8 !important;
+        font-weight: 600 !important;
+    }
+
+    /* Comparison Matrix Table */
+    .compare-table-wrapper {
+        overflow-x: auto !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 14px !important;
+    }
+    .compare-matrix-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        background: #ffffff !important;
+    }
+    .compare-matrix-table th, .compare-matrix-table td {
+        padding: 12px 16px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        border-right: 1px solid #f1f5f9 !important;
+        font-size: 0.84rem !important;
+        text-align: left !important;
+        vertical-align: middle !important;
+    }
+    .compare-matrix-table th:last-child, .compare-matrix-table td:last-child {
+        border-right: none !important;
+    }
+    .matrix-th-feature, .matrix-td-feature {
+        background: #f8fafc !important;
+        font-weight: 800 !important;
+        color: #334155 !important;
+        width: 160px !important;
+        min-width: 140px !important;
+    }
+    .compare-card-top img {
+        width: 100% !important;
+        height: 110px !important;
+        border-radius: 10px !important;
+        object-fit: cover !important;
+        margin-bottom: 8px !important;
+    }
+    .compare-card-top h5 {
+        margin: 0 0 6px 0 !important;
+        font-size: 0.9rem !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+    }
+    .btn-remove-col {
+        background: #fef2f2 !important;
+        color: #ef4444 !important;
+        border: 1px solid #fecaca !important;
+        border-radius: 6px !important;
+        padding: 3px 8px !important;
+        font-size: 0.72rem !important;
+        font-weight: 750 !important;
+        cursor: pointer !important;
+    }
+
+    .searchbar-glow-pulse {
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.4) !important;
+        transition: box-shadow 0.3s ease !important;
+    }
+
+</style>
 </head>
 <body class="apartment-page">
 <header class="topbar compact">
@@ -972,6 +1411,27 @@
         <button class="primary small" id="listingSearchButton" style="background: linear-gradient(135deg, #2563eb, #7c3aed); border: none; font-weight: 800;">Search</button>
     </div>
     <nav class="nav">
+        <div class="apartments-header-actions">
+            <button type="button" class="topbar-action-pill" onclick="triggerPropertySearchFocus()" title="Search Properties">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Search</span>
+            </button>
+            <button type="button" class="topbar-action-pill" onclick="openSavedSearchesDrawer()" title="Saved Searches">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                <span>Saved</span>
+                <span class="action-count-pill" id="navSavedSearchesCount">0</span>
+            </button>
+            <button type="button" class="topbar-action-pill" onclick="openCompareDrawer()" title="Compare Properties">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="3" width="8" height="18" rx="2"/><rect x="14" y="3" width="8" height="18" rx="2"/></svg>
+                <span>Compare</span>
+                <span class="action-count-pill" id="navCompareCount">0</span>
+            </button>
+            <button type="button" class="topbar-action-pill" onclick="openRecentlyViewedDrawer()" title="Recently Viewed">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Recent</span>
+                <span class="action-count-pill" id="navRecentlyViewedCount">0</span>
+            </button>
+        </div>
         <a href="/" class="smartsociety-btn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
             SmartSociety
@@ -1092,6 +1552,30 @@
             </div>
         </div>
 
+        
+        <!-- 4 Customer Quick Features Toolbar -->
+        <div class="apartments-quick-features-bar" id="apartmentsFeaturesToolbar">
+            <button type="button" class="feature-bar-btn" id="btnQuickSearch" onclick="triggerPropertySearchFocus()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Search properties</span>
+            </button>
+            <button type="button" class="feature-bar-btn" id="btnQuickSavedSearches" onclick="openSavedSearchesDrawer()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <span>Saved searches</span>
+                <span class="feature-badge" id="savedSearchesCountBadge">0</span>
+            </button>
+            <button type="button" class="feature-bar-btn" id="btnQuickCompare" onclick="openCompareDrawer()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="3" width="8" height="18" rx="2"/><rect x="14" y="3" width="8" height="18" rx="2"/></svg>
+                <span>Compare properties</span>
+                <span class="feature-badge" id="compareCountBadge">0</span>
+            </button>
+            <button type="button" class="feature-bar-btn" id="btnQuickRecent" onclick="openRecentlyViewedDrawer()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Recently viewed</span>
+                <span class="feature-badge" id="recentlyViewedCountBadge">0</span>
+            </button>
+        </div>
+
         <!--  Smart AI Recommendations Banner -->
         <div id="aiRecommendationBanner" style="background: linear-gradient(135deg, #0f172a, #1e1b4b); color: #ffffff; padding: 18px 24px; border-radius: 16px; margin-top: 16px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(15,23,42,0.25);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
@@ -1193,5 +1677,73 @@
 <script src="/propertydirect/js/apartments.js?v=20261008-admin-approved-sync-v1"></script>
 <script src="/propertydirect/js/public-workflow.js?v=20260929-1"></script>
 <script src="/propertydirect/js/owner-details-flow.js?v=20261008-owner-flow-v1"></script>
+
+<!-- ================= SAVED SEARCHES MODAL ================= -->
+<div class="pd-feature-overlay" id="savedSearchesModal" onclick="if(event.target === this) closeAllFeatureDrawers()">
+    <div class="pd-feature-modal">
+        <div class="pd-modal-header">
+            <h3><span>💾</span> Saved Searches & Alerts</h3>
+            <button type="button" class="btn-modal-close" onclick="closeAllFeatureDrawers()">✕</button>
+        </div>
+        <div class="pd-modal-body">
+            <!-- Save current search form -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 10px 0; font-size: 0.92rem; font-weight: 800; color: #0f172a;">➕ Save Active Discovery Criteria</h4>
+                <form id="newSavedSearchForm" onsubmit="saveCurrentSearch(event)" style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; gap: 10px;">
+                        <input id="savedSearchName" placeholder="Search name (e.g. Bangalore 2 BHK Rent)" style="flex: 1; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.84rem;" required>
+                        <button type="submit" class="btn-action-primary" style="white-space: nowrap;">Save Search</button>
+                    </div>
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #475569; cursor: pointer;">
+                        <input type="checkbox" id="savedSearchAlerts" checked style="accent-color: #2563eb;">
+                        <span>Notify me when new matching properties are posted</span>
+                    </label>
+                </form>
+            </div>
+
+            <!-- List of Saved Searches -->
+            <div id="savedSearchesContainer">
+                <div class="feature-empty-state">
+                    <div class="empty-icon">⏳</div>
+                    <h4>Loading saved searches...</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= PROPERTY COMPARISON MODAL ================= -->
+<div class="pd-feature-overlay" id="compareModal" onclick="if(event.target === this) closeAllFeatureDrawers()">
+    <div class="pd-feature-modal modal-wide">
+        <div class="pd-modal-header">
+            <h3><span>⚖️</span> Property Comparison Engine</h3>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button type="button" class="btn-remove-col" onclick="clearComparisonList()">Clear Comparison</button>
+                <button type="button" class="btn-modal-close" onclick="closeAllFeatureDrawers()">✕</button>
+            </div>
+        </div>
+        <div class="pd-modal-body" id="compareModalContent">
+            <!-- Dynamic comparison matrix injected by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ================= RECENTLY VIEWED MODAL ================= -->
+<div class="pd-feature-overlay" id="recentlyViewedModal" onclick="if(event.target === this) closeAllFeatureDrawers()">
+    <div class="pd-feature-modal">
+        <div class="pd-modal-header">
+            <h3><span>👁️</span> Recently Viewed Properties</h3>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <button type="button" class="btn-remove-col" onclick="clearRecentlyViewed()">Clear History</button>
+                <button type="button" class="btn-modal-close" onclick="closeAllFeatureDrawers()">✕</button>
+            </div>
+        </div>
+        <div class="pd-modal-body" id="recentlyViewedContainer">
+            <!-- Dynamic recently viewed list injected by JS -->
+        </div>
+    </div>
+</div>
+
+<script src="/propertydirect/js/apartments-features.js?v=20261009-fix-perf-v2"></script>
 </body>
 </html>

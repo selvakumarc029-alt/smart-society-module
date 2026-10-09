@@ -992,7 +992,7 @@
             loadSuperadminGovernance();
         } else if (role === "agent" || role === "vendor" || role === "owner") {
             if (panel === "listings") loadOwnerListings();
-            else if (panel === "leads" || panel === "overview") loadAgentEnquiries();
+            else if (role !== "owner" && (panel === "leads" || panel === "overview")) loadAgentEnquiries();
             else if (panel === "tours" || panel === "visits") loadOwnerVisits();
         }
     });

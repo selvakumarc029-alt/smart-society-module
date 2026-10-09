@@ -4485,7 +4485,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
 
-                Enquiries & Messages
+                Client Leads &amp; Enquiries
                 <span id="sidebarEnquiriesBadge" style="margin-left:auto; background:rgba(59,130,246,0.25); color:#60a5fa; font-size:0.72rem; padding:2px 7px; border-radius:10px; font-weight:800; display:none;">0</span>
             </button>
 
@@ -4496,22 +4496,6 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
                 Reports & Complaints
 
                 <span id="sidebarOpenReportsBadge" style="margin-left:auto; background:rgba(239,68,68,0.25); color:#f87171; font-size:0.72rem; padding:2px 7px; border-radius:10px; font-weight:800; display:none;">0</span>
-
-            </button>
-
-            <button type="button" data-panel="metadata" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('metadata');}return false;">
-
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-
-                Categories & Locations
-
-            </button>
-
-            <button type="button" data-panel="content" onclick="if(window.switchTabAndFilter){window.switchTabAndFilter('content');}return false;">
-
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:8px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-
-                Featured & Content
 
             </button>
 
@@ -4601,19 +4585,19 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel" data-view="overview">
 
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+            <div class="overview-hero-bar">
 
                 <div>
 
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Platform Operations Overview</h2>
+                    <h2>Platform Operations Overview</h2>
 
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Real-time metrics and system activity across customers, properties, verifications, enquiries, and moderation queues. <em>Click any summary card to view relevant filtered records.</em></p>
+                    <p>Live platform metrics & moderation activity.</p>
 
                 </div>
 
-                <div style="display:flex; align-items:center; gap:10px;">
+                <div style="display:flex; align-items:center; gap:12px;">
 
-                    <span style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; font-weight:700; color:#059669; background:#ecfdf5; padding:5px 12px; border-radius:999px; border:1px solid #a7f3d0;">
+                    <span style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; font-weight:750; color:#059669; background:#ecfdf5; padding:6px 14px; border-radius:999px; border:1px solid #a7f3d0;">
 
                         <span style="width:7px; height:7px; border-radius:50%; background:#10b981; display:inline-block;"></span>
 
@@ -4621,7 +4605,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
                     </span>
 
-                    <button type="button" onclick="loadOverview()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                    <button type="button" onclick="loadOverview()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:10px; font-weight:750; font-size:0.82rem; cursor:pointer; box-shadow:0 2px 8px rgba(15,23,42,0.12);">
 
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
 
@@ -4636,215 +4620,94 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
 
             <!-- Summary Cards Grid (Clickable) -->
+            <div class="dash-grid overview-summary-grid" style="display:grid !important; grid-template-columns:repeat(4, minmax(0, 1fr)) !important; gap:18px !important; margin-bottom:28px !important; width:100% !important;">
 
-            <div class="dash-grid" style="grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important; gap:16px; margin-bottom:24px;">
-
-                <!-- Pending Approvals Card -->
-
+                <!-- Approvals Card -->
                 <article onclick="switchTabAndFilter('my-properties', 'PENDING_APPROVAL')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#fffbeb; border:1px solid #fde68a; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(217,119,6,0.15)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#b45309; text-transform:uppercase; letter-spacing:0.06em;">Pending Approvals</span>
-
-                        <span style="font-size:0.9rem;">⏳</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#fffdfa; border:1px solid #fed7aa; box-shadow:0 1px 4px rgba(217,119,6,0.06);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#9a3412;">Approvals</span>
+                        <span class="stat-card-icon" style="background:#ffedd5;">⏳</span>
                     </div>
-
-                    <strong id="overviewPendingApprovals" style="font-size:1.8rem; font-weight:800; color:#92400e; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#b45309; font-size:0.76rem; font-weight:700;">Submissions awaiting review →</small>
-
+                    <strong id="overviewPendingApprovals" style="color:#9a3412;">0</strong>
+                    <small style="color:#c2410c;">Awaiting review →</small>
                 </article>
 
-
-
-                <!-- Posting Approvals Card -->
-
+                <!-- Verifications Card -->
                 <article onclick="switchTabAndFilter('verifications', 'PENDING')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Owner/Builder Verification</span>
-
-                        <span style="font-size:0.9rem;">🛡️</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#f8fafc; border:1px solid #e2e8f0; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#334155;">Verifications</span>
+                        <span class="stat-card-icon" style="background:#e2e8f0;">🛡️</span>
                     </div>
-
-                    <strong id="overviewPendingVerifications" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#64748b; font-size:0.76rem;">Pending verification reviews →</small>
-
+                    <strong id="overviewPendingVerifications" style="color:#0f172a;">0</strong>
+                    <small style="color:#64748b;">Seller KYC reviews →</small>
                 </article>
 
-
-
-                <!-- Active Properties Card -->
-
+                <!-- Properties Card -->
                 <article onclick="switchTabAndFilter('my-properties', 'ACTIVE')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ecfdf5; border:1px solid #a7f3d0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(5,150,105,0.15)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#047857; text-transform:uppercase; letter-spacing:0.06em;">Active Properties</span>
-
-                        <span style="font-size:0.9rem;">🏡</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#f0fdf4; border:1px solid #bbf7d0; box-shadow:0 1px 4px rgba(5,150,105,0.06);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#166534;">Properties</span>
+                        <span class="stat-card-icon" style="background:#dcfce7;">🏡</span>
                     </div>
-
-                    <strong id="overviewActiveProperties" style="font-size:1.8rem; font-weight:800; color:#065f46; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#047857; font-size:0.76rem; font-weight:700;">Live on public marketplace →</small>
-
+                    <strong id="overviewActiveProperties" style="color:#14532d;">0</strong>
+                    <small style="color:#15803d;">Live listings →</small>
                 </article>
 
-
-
-                <!-- Customer Directory Card -->
-
+                <!-- Customers Card -->
                 <article onclick="switchTabAndFilter('users', 'ALL')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#eff6ff; border:1px solid #bfdbfe; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(37,99,235,0.15)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#1d4ed8; text-transform:uppercase; letter-spacing:0.06em;">Customer Directory</span>
-
-                        <span style="font-size:0.9rem;">👥</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#eff6ff; border:1px solid #bfdbfe; box-shadow:0 1px 4px rgba(37,99,235,0.06);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#1e40af;">Customers</span>
+                        <span class="stat-card-icon" style="background:#dbeafe;">👥</span>
                     </div>
-
-                    <strong id="overviewTotalUsers" style="font-size:1.8rem; font-weight:800; color:#1e40af; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#1d4ed8; font-size:0.76rem; font-weight:700;">Registered platform accounts →</small>
-
+                    <strong id="overviewTotalUsers" style="color:#1e40af;">0</strong>
+                    <small style="color:#2563eb;">Registered accounts →</small>
                 </article>
-
-
-
-
 
                 <!-- Enquiries Card -->
-
                 <article onclick="switchTabAndFilter('enquiries', 'ENQUIRIES')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Customer Enquiries</span>
-
-                        <span style="font-size:0.9rem;">📩</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#faf5ff; border:1px solid #e9d5ff; box-shadow:0 1px 4px rgba(126,34,206,0.06);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#6b21a8;">Client Leads &amp; Enquiries</span>
+                        <span class="stat-card-icon" style="background:#f3e8ff;">📩</span>
                     </div>
-
-                    <strong id="overviewTotalEnquiries" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#64748b; font-size:0.76rem;">Lead inquiries across listings →</small>
-
+                    <strong id="overviewTotalEnquiries" style="color:#581c87;">0</strong>
+                    <small style="color:#7e22ce;">Buyer leads &amp; enquiries →</small>
                 </article>
 
-
-
-                <!-- Scheduled Visits Card -->
-
+                <!-- Site Visits Card -->
                 <article onclick="switchTabAndFilter('enquiries', 'VISITS')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#ffffff; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:0.06em;">Scheduled Visits</span>
-
-                        <span style="font-size:0.9rem;">📅</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#f0f9ff; border:1px solid #bae6fd; box-shadow:0 1px 4px rgba(2,132,199,0.06);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#075985;">Site Visits</span>
+                        <span class="stat-card-icon" style="background:#e0f2fe;">📅</span>
                     </div>
-
-                    <strong id="overviewScheduledVisits" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#64748b; font-size:0.76rem;">Site visit appointments →</small>
-
+                    <strong id="overviewScheduledVisits" style="color:#0c4a6e;">0</strong>
+                    <small style="color:#0284c7;">Scheduled tours →</small>
                 </article>
 
-
-
-                <!-- Open Reports & Complaints Card -->
-
+                <!-- Reports Card -->
                 <article onclick="switchTabAndFilter('reports', 'OPEN')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#fef2f2; border:1px solid #fecaca; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(220,38,38,0.15)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#dc2626; text-transform:uppercase; letter-spacing:0.06em;">Open Reports</span>
-
-                        <span style="font-size:0.9rem;">🚨</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#fff1f2; border:1px solid #fecdd3; box-shadow:0 1px 4px rgba(225,29,72,0.06);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#9f1239;">Reports</span>
+                        <span class="stat-card-icon" style="background:#ffe4e6;">🚨</span>
                     </div>
-
-                    <strong id="overviewOpenReports" style="font-size:1.8rem; font-weight:800; color:#b91c1c; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#dc2626; font-size:0.76rem; font-weight:700;">Consumer complaints flagged →</small>
-
+                    <strong id="overviewOpenReports" style="color:#881337;">0</strong>
+                    <small style="color:#be123c;">Flagged complaints →</small>
                 </article>
 
-
-
-                <!-- System Audit History Card -->
-
+                <!-- Audit Logs Card -->
                 <article onclick="switchTabAndFilter('audit', 'ALL')"
-
-                    style="cursor:pointer; padding:18px; border-radius:16px; background:#f8fafc; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.04); transition:transform 0.15s, box-shadow 0.15s;"
-
-                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.08)';"
-
-                    onmouseout="this.style.transform='none'; this.style.boxShadow='0 1px 3px rgba(0,0,0,0.04)';">
-
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-
-                        <span style="font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.06em;">Audit History</span>
-
-                        <span style="font-size:0.9rem;">📜</span>
-
+                    style="cursor:pointer; padding:18px 20px; border-radius:16px; background:#f8fafc; border:1px solid #e2e8f0; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+                    <div class="stat-card-header">
+                        <span class="stat-card-title" style="color:#334155;">Audit Logs</span>
+                        <span class="stat-card-icon" style="background:#f1f5f9;">📜</span>
                     </div>
-
-                    <strong id="overviewTotalAudit" style="font-size:1.8rem; font-weight:800; color:#0f172a; display:block; margin:6px 0 2px 0;">0</strong>
-
-                    <small style="color:#64748b; font-size:0.76rem;">Logged administrative events →</small>
-
+                    <strong id="overviewTotalAudit" style="color:#0f172a;">0</strong>
+                    <small style="color:#475569;">System events →</small>
                 </article>
 
             </div>
@@ -4852,59 +4715,49 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
 
             <!-- Actionable Notifications & Moderation Alerts -->
-
-            <div class="dash-card" style="margin-bottom:24px; padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
-
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-
-                    <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0; display:flex; align-items:center; gap:8px;">
-
-                        <span>🔔</span> Actionable Notifications & Moderation Alerts
-
-                    </h3>
-
+            <div class="dash-card" style="margin-bottom:24px; padding:22px 26px; background:#ffffff; border-radius:18px; border:1px solid #e2e8f0; box-shadow:0 4px 16px rgba(15,23,42,0.03);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:1.25rem;">🔔</span>
+                        <div>
+                            <h3 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin:0;">Actionable Notifications & Moderation Alerts</h3>
+                            <p style="font-size:0.8rem; color:#64748b; margin:2px 0 0 0;">Priority system queues requiring administrative intervention.</p>
+                        </div>
+                    </div>
                 </div>
-
-                <div id="overviewNotificationsList" style="display:flex; flex-direction:column; gap:10px;">
-
-                    <div style="padding:14px; text-align:center; color:#64748b; font-size:0.85rem;">Checking moderation queues...</div>
-
+                <div id="overviewNotificationsList" class="overview-notif-grid">
+                    <div style="padding:16px; text-align:center; color:#64748b; font-size:0.85rem; grid-column:1/-1;">Checking moderation queues...</div>
                 </div>
-
             </div>
 
-
-
-            <!-- Real-Time Recent Activity Feed -->
-
-            <div class="dash-card" style="padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
-
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-
+            <!-- Real-Time Recent Activity Feed (Single Card List View) -->
+            <div class="dash-card overview-activity-master-card" style="background:#ffffff !important; border:1px solid #e2e8f0 !important; border-radius:18px !important; box-shadow:0 4px 20px rgba(15,23,42,0.04) !important; padding:24px 28px !important; width:100% !important; box-sizing:border-box !important; margin-bottom:24px !important;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
                     <div>
-
-                        <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0;">Recent Administrative & System Activity</h3>
-
-                        <p style="font-size:0.82rem; color:#64748b; margin:2px 0 0 0;">Chronological stream of property approvals, seller verifications, account modifications, and reports.</p>
-
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:3px;">
+                            <span style="font-size:1.15rem;">⚡</span>
+                            <h3 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin:0;">Recent Administrative &amp; System Activity</h3>
+                        </div>
+                        <p style="font-size:0.82rem; color:#64748b; margin:0;">Chronological stream of property approvals, seller verifications, account modifications, and reports.</p>
                     </div>
-
-                    <button type="button" onclick="switchTabAndFilter('audit', 'ALL')"
-
-                        style="padding:6px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-size:0.78rem; font-weight:700; cursor:pointer;">
-
-                        View Full Audit Log →
-
-                    </button>
-
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:0.75rem; font-weight:700; color:#16a34a; background:#f0fdf4; border:1px solid #bbf7d0; padding:5px 12px; border-radius:999px; display:inline-flex; align-items:center; gap:5px;">
+                            <span style="width:6px; height:6px; border-radius:50%; background:#16a34a;"></span> Live Stream
+                        </span>
+                        <button type="button" onclick="loadOverview()" title="Refresh Activity Stream"
+                            style="padding:7px 12px; border-radius:10px; border:1px solid #cbd5e1; background:#f8fafc; color:#475569; font-size:0.8rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:5px; transition:all 0.15s ease;">
+                            <span>↻</span> Refresh
+                        </button>
+                        <button type="button" onclick="switchTabAndFilter('audit', 'ALL')"
+                            style="padding:7px 14px; border-radius:10px; border:1px solid #cbd5e1; background:#ffffff; color:#0f172a; font-size:0.8rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s ease;">
+                            View Full Audit Log →
+                        </button>
+                    </div>
                 </div>
 
-                <div id="overviewRecentActivity" style="display:flex; flex-direction:column; gap:8px;">
-
-                    <div style="padding:14px; text-align:center; color:#64748b; font-size:0.85rem;">Loading recent system events...</div>
-
+                <div id="overviewRecentActivity" class="overview-activity-list">
+                    <div style="padding:24px; text-align:center; color:#64748b; font-size:0.85rem;">Loading recent system events...</div>
                 </div>
-
             </div>
 
         </section>
@@ -4915,19 +4768,19 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="users">
 
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
+            <div class="overview-hero-bar">
 
                 <div>
 
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">User Management & Directory</h2>
+                    <h2>User Management & Directory</h2>
 
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Real-time permanent registry of all customers, buyers, tenants, property owners, and builders stored in the database.</p>
+                    <p>Registered customer, owner, and builder registry.</p>
 
                 </div>
 
                 <div style="display:flex; align-items:center; gap:10px;">
 
-                    <button type="button" id="refreshUsersBtn" onclick="loadUsers()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
+                    <button type="button" id="refreshUsersBtn" onclick="loadUsers()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:10px; font-weight:750; font-size:0.82rem; cursor:pointer; box-shadow:0 2px 8px rgba(15,23,42,0.12);">
 
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
 
@@ -5129,27 +4982,20 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="verifications">
 
-            <div class="dash-card table-card">
-
-                <div class="card-head">
-
-                    <div>
-
-                        <h2>Owner & Builder Posting Approvals</h2>
-
-                        <p>Review applications from customers and builders requesting permission to list properties on PropertyDirect.</p>
-
-                    </div>
-
-                    <button type="button" id="refreshAppsBtn" class="primary small" style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); display:inline-flex; align-items:center; gap:6px;">
-
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-
-                        Refresh Applications
-
-                    </button>
-
+            <div class="overview-hero-bar">
+                <div>
+                    <h2>Owner & Builder Posting Approvals</h2>
+                    <p>Owner and builder KYC verification queue.</p>
                 </div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button type="button" id="refreshAppsBtn" onclick="loadApplications()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:10px; font-weight:750; font-size:0.82rem; cursor:pointer; box-shadow:0 2px 8px rgba(15,23,42,0.12);">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                        Refresh Applications
+                    </button>
+                </div>
+            </div>
+
+            <div class="dash-card table-card">
 
 
 
@@ -5207,32 +5053,19 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="my-properties">
 
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
-
+            <div class="overview-hero-bar">
                 <div>
-
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Property Inventory & Approval Queue</h2>
-
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Complete inventory of submitted, approved, active, and sold properties with full administrative review powers.</p>
-
+                    <h2>Property Inventory & Approval Queue</h2>
+                    <p>Listing inventory & marketplace moderation.</p>
                 </div>
-
                 <div style="display:flex; align-items:center; gap:10px;">
-
-                    <button type="button" onclick="switchTabAndFilter('add-property')" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
-
+                    <button type="button" onclick="switchTabAndFilter('add-property')" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:10px; font-weight:750; font-size:0.82rem; cursor:pointer;">
                         ＋ Create Listing on Behalf
-
                     </button>
-
-                    <button type="button" onclick="loadInventory()" class="small" style="padding:8px 14px; border-radius:10px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; cursor:pointer;">
-
+                    <button type="button" onclick="loadInventory()" class="small" style="padding:8px 14px; border-radius:10px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; font-size:0.82rem; cursor:pointer;">
                         Refresh
-
                     </button>
-
                 </div>
-
             </div>
 
 
@@ -5355,885 +5188,660 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="add-property">
 
-            <div class="dash-card">
+            <div class="dash-card wizard-card" id="addPropertyWizardCard" style="background:#ffffff; border-radius:20px; border:1px solid #e2e8f0; padding:28px 32px; box-shadow:0 10px 30px rgba(15,23,42,0.04); margin-bottom:30px;">
 
-                <div class="card-head">
-
+                <!-- Header -->
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; padding-bottom:18px; border-bottom:1px solid #f1f5f9; flex-wrap:wrap; gap:14px;">
                     <div>
-
-                        <h3> Add New Property Listing</h3>
-
-                        <p>Enter complete property specifications, photos, and owner authorization for platform
-
-                            publication.</p>
-
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+                            <span style="width:36px; height:36px; border-radius:10px; background:#eff6ff; color:#2563eb; display:inline-flex; align-items:center; justify-content:center; font-size:1.15rem;">🏢</span>
+                            <h2 style="font-size:1.4rem; font-weight:800; color:#0f172a; margin:0;">Post Listing on Behalf of Owner / Builder</h2>
+                        </div>
+                        <p style="font-size:0.84rem; color:#64748b; margin:0;">Create &amp; publish verified property listings.</p>
                     </div>
-
+                    <button type="button" onclick="switchTabAndFilter('my-properties')" style="padding:8px 16px; border-radius:10px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-size:0.82rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:all 0.15s ease;">
+                        ← Back to Inventory
+                    </button>
                 </div>
 
-                <form class="form-grid" id="postApartmentForm">
-
-                    <!-- Identified Owner / Builder Section -->
-
-                    <div style="grid-column: 1 / -1; background:#f0fdf4; border:1px solid #bbf7d0; padding:16px 20px; border-radius:14px; margin-bottom:12px;">
-
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-
-                            <span style="font-size:1.2rem;">🏢</span>
-
-                            <strong style="color:#166534; font-size:0.94rem;">Posting on Behalf of Verified Owner or Builder *</strong>
-
+                <!-- Interactive Stepper Wizard Navigation Bar -->
+                <div class="wizard-stepper-bar">
+                    <button type="button" class="wizard-stepper-item active" id="wizardStepItem1" onclick="validateAndGoToStep(1)">
+                        <span class="wizard-stepper-num">1</span>
+                        <div class="wizard-stepper-text">
+                            <span class="wizard-stepper-title">Basic Info</span>
+                            <span class="wizard-stepper-sub">Owner & Type</span>
                         </div>
-
-                        <p style="margin:0 0 10px 0; font-size:0.82rem; color:#15803d; line-height:1.4;">
-
-                            Administrators post listings on behalf of an identified owner or builder. Every listing permanently retains its actual owner/builder and submitting administrator account.
-
-                        </p>
-
-                        <label style="display:flex; flex-direction:column; gap:6px; font-size:0.84rem; font-weight:700; color:#1e293b;">
-
-                            Select Identified Owner or Builder Account *
-
-                            <select id="adminOwnerSelect" name="ownerId" required style="width:100%; padding:11px 14px; border-radius:10px; border:1px solid #86efac; background:#ffffff; font-weight:700; font-size:0.86rem; color:#0f172a;">
-
-                                <option value="">— Choose Verified Owner or Builder Account —</option>
-
-                            </select>
-
-                        </label>
-
-                    </div>
-
-
-
-                    <div class="property-form-section" style="grid-column: 1 / -1;">
-
-                        <strong>Step 1 — Basic Information</strong>
-
-                        <small>Provide title, listing type (Sale/Rent/Lease), property type, and category.</small>
-
-                    </div>
-
-
-
-                    <label style="grid-column: 1 / -1;">Property Title *
-
-                        <input name="title" required placeholder="e.g. Spacious 3 BHK Luxury Villa in Anna Nagar">
-
-                    </label>
-
-
-
-                    <label>Listing Type (Purpose) *
-
-                        <select name="type">
-
-                            <option value="SALE">Sale</option>
-
-                            <option value="RENT" selected>Rent</option>
-
-                            <option value="LEASE">Lease</option>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <label>Property Category *
-
-                        <select id="pdCategoryGroupSelect">
-
-                            <option value="RESIDENTIAL">Residential (Apartment, Villa, House, Floor, Plot, Farm House)
-
-                            </option>
-
-                            <option value="COMMERCIAL">Commercial (Office, Shop, Showroom, Warehouse, Factory,
-
-                                Commercial Land)</option>
-
-                            <option value="OTHER">Other (PG, Hostel, Agricultural Land)</option>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <label>Property Type (Sub-category) *
-
-                        <select id="pdSubtypeSelect" name="propertyType">
-
-                            <optgroup label=" Residential">
-
-                                <option value="APARTMENT" selected>Apartment</option>
-
-                                <option value="VILLA">Villa</option>
-
-                                <option value="INDEPENDENT_HOUSE">Independent House</option>
-
-                                <option value="BUILDER_FLOOR">Builder Floor</option>
-
-                                <option value="PLOT">Plot</option>
-
-                                <option value="FARM_HOUSE">Farm House</option>
-
-                            </optgroup>
-
-                            <optgroup label=" Commercial">
-
-                                <option value="OFFICE">Office</option>
-
-                                <option value="SHOP">Shop</option>
-
-                                <option value="SHOWROOM">Showroom</option>
-
-                                <option value="WAREHOUSE">Warehouse</option>
-
-                                <option value="FACTORY">Factory</option>
-
-                                <option value="COMMERCIAL_LAND">Commercial Land</option>
-
-                            </optgroup>
-
-                            <optgroup label=" Other">
-
-                                <option value="PG">PG</option>
-
-                                <option value="HOSTEL">Hostel</option>
-
-                                <option value="AGRICULTURAL_LAND">Agricultural Land</option>
-
-                            </optgroup>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <button type="button" class="primary pd-form-step-btn"
-
-                        style="grid-column: 1 / -1; width: fit-content; margin-top: 10px;"
-
-                        onclick="goToAddPropertyStep(2)">Save Step 1 & Next</button>
-
-
-
-                    <!-- Step 2 — Location Hierarchy (Country -> State -> City -> District -> Area -> Locality -> Pincode) -->
-
-                    <div class="property-form-section" id="addPropertyStep2" style="grid-column: 1 / -1; margin-top: 24px;">
-
-                        <strong>Step 2 — Location Hierarchy & Mapping</strong>
-
-                        <small>Structured 7-tier geographic mapping: Country → State → City → District → Area → Locality
-
-                            → Pincode.</small>
-
-                    </div>
-
-
-
-                    <label style="grid-column: 1 / -1;">Full Street Address *
-
-                        <input name="address" required placeholder="Building No, Street Name, Floor, Landmark">
-
-                    </label>
-
-
-
-                    <label>Country *
-
-                        <select>
-
-                            <option value="India" selected>India ()</option>
-
-                            <option value="United Arab Emirates">United Arab Emirates ()</option>
-
-                            <option value="Singapore">Singapore ()</option>
-
-                            <option value="United States">United States ()</option>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <label>State *
-
-                        <input value="Tamil Nadu" placeholder="e.g. Tamil Nadu, Karnataka, Maharashtra">
-
-                    </label>
-
-
-
-                    <label>City *
-
-                        <input name="city" value="Chennai" required placeholder="e.g. Chennai, Bangalore, Mumbai">
-
-                    </label>
-
-
-
-                    <label>District *
-
-                        <input value="Chennai District" placeholder="e.g. Chennai District, Bengaluru Urban">
-
-                    </label>
-
-
-
-                    <label>Area / Zone *
-
-                        <input value="Central Chennai" placeholder="e.g. Central Chennai, North Bangalore">
-
-                    </label>
-
-
-
-                    <label>Locality / Sub-locality *
-
-                        <input name="locality" value="Anna Nagar" required placeholder="e.g. Anna Nagar, Indiranagar, Whitefield">
-
-                    </label>
-
-
-
-                    <label>Pincode *
-
-                        <input name="pincode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" value="600040" required placeholder="600040">
-
-                    </label>
-
-
-
-                    <label>Latitude (GPS)
-
-                        <input name="latitude" type="number" step="any" value="13.0827" placeholder="e.g. 13.0827">
-
-                    </label>
-
-
-
-                    <label>Longitude (GPS)
-
-                        <input name="longitude" type="number" step="any" value="80.2707" placeholder="e.g. 80.2707">
-
-                    </label>
-
-
-
-                    <button type="button" class="primary pd-form-step-btn"
-
-                        style="grid-column: 1 / -1; width: fit-content; margin-top: 10px;"
-
-                        onclick="goToAddPropertyStep(3)">Save Step 2 & Next</button>
-
-
-
-                    <!-- Step 3 — Property Details -->
-
-                    <div class="property-form-section" id="addPropertyStep3" style="grid-column: 1 / -1; margin-top: 24px;">
-
-                        <strong>Step 3 — Property Details & Specifications</strong>
-
-                        <small>Specify pricing, room count, areas, floor position, facing, and property age.</small>
-
-                    </div>
-
-
-
-                    <label>Price / Rent (INR) *
-
-                        <input name="price" type="number" min="1" required placeholder="e.g. 7500000">
-
-                    </label>
-
-
-
-                    <label>Bedrooms (BHK) *
-
-                        <select name="bhk" required>
-
-                            <option value="1 BHK">1 BHK</option>
-
-                            <option value="2 BHK">2 BHK</option>
-
-                            <option value="3 BHK" selected>3 BHK</option>
-
-                            <option value="4 BHK">4 BHK</option>
-
-                            <option value="5+ BHK">5+ BHK</option>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <label>Bathrooms *
-
-                        <select name="bathrooms" required>
-
-                            <option value="1">1 Bathroom</option>
-
-                            <option value="2" selected>2 Bathrooms</option>
-
-                            <option value="3">3 Bathrooms</option>
-
-                            <option value="4+">4+ Bathrooms</option>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <label>Carpet Area (sq ft) *
-
-                        <input name="areaSqft" type="number" min="1" required placeholder="e.g. 1250">
-
-                    </label>
-
-
-
-                    <label>Built-up Area (sq ft) *
-
-                        <input type="number" min="1" required placeholder="e.g. 1450">
-
-                    </label>
-
-
-
-                    <label>Plot Area (sq ft / cents)
-
-                        <input placeholder="Optional for plots / villas">
-
-                    </label>
-
-
-
-                    <label>Floor *
-
-                        <input type="number" min="0" value="4" placeholder="e.g. 4">
-
-                    </label>
-
-
-
-                    <label>Total Floors *
-
-                        <input type="number" min="1" value="12" placeholder="e.g. 12">
-
-                    </label>
-
-
-
-                    <label>Facing *
-
-                        <select name="facing">
-
-                            <option value="East" selected>East Facing</option>
-
-                            <option value="West">West Facing</option>
-
-                            <option value="North">North Facing</option>
-
-                            <option value="South">South Facing</option>
-
-                            <option value="North-East">North-East Facing</option>
-
-                            <option value="South-East">South-East Facing</option>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <label>Property Age *
-
-                        <select>
-
-                            <option value="Under Construction">Under Construction</option>
-
-                            <option value="New / 0-1 Year">New (0-1 Year)</option>
-
-                            <option value="1-3 Years" selected>1-3 Years</option>
-
-                            <option value="3-5 Years">3-5 Years</option>
-
-                            <option value="5-10 Years">5-10 Years</option>
-
-                            <option value="10+ Years">10+ Years</option>
-
-                        </select>
-
-                    </label>
-
-
-
-                    <button type="button" class="primary pd-form-step-btn"
-
-                        style="grid-column: 1 / -1; width: fit-content; margin-top: 10px;"
-
-                        onclick="goToAddPropertyStep(4)">Save Step 3 & Next</button>
-
-
-
-                    <!-- Step 4 — Amenities -->
-
-                    <div class="property-form-section" id="addPropertyStep4" style="grid-column: 1 / -1; margin-top: 24px;">
-
-                        <strong>Step 4 — Amenities & Facilities</strong>
-
-                        <small>Select all available property features and society amenities.</small>
-
-                    </div>
-
-
-
-                    <div
-
-                        style="grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid #e2e8f0;">
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Parking" checked style="width: 18px; height: 18px; accent-color: #2563eb;">
-
-                            Parking
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Lift" checked style="width: 18px; height: 18px; accent-color: #2563eb;">
-
-                            Lift
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Gym" checked style="width: 18px; height: 18px; accent-color: #2563eb;"> ️
-
-                            Gym
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Swimming Pool" checked style="width: 18px; height: 18px; accent-color: #2563eb;">
-
-                            Swimming Pool
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Security" checked style="width: 18px; height: 18px; accent-color: #2563eb;"> ️
-
-                            Security
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="CCTV" checked style="width: 18px; height: 18px; accent-color: #2563eb;">
-
-                            CCTV
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Garden" checked style="width: 18px; height: 18px; accent-color: #2563eb;">
-
-                            Garden
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Clubhouse" checked style="width: 18px; height: 18px; accent-color: #2563eb;"> ️
-
-                            Clubhouse
-
-                        </label>
-
-                        <label
-
-                            style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #1e293b; cursor: pointer;">
-
-                            <input type="checkbox" name="amenities" value="Power Backup" checked style="width: 18px; height: 18px; accent-color: #2563eb;">
-
-                            Power Backup
-
-                        </label>
-
-                    </div>
-
-
-
-                    <!-- Step 5 — Media & Categorized Image Management -->
-
-                    <div class="property-form-section" style="grid-column: 1 / -1; margin-top: 24px;">
-
-                        <strong>Step 5 — Media & Categorized Image Management</strong>
-
-                        <small>Upload multiple photos tagged by room category (Main Image, Living Room, Bedroom,
-
-                            Kitchen, Bathroom, Balcony, Exterior, Parking, Amenities, Floor Plan).</small>
-
-                    </div>
-
-
-
-                    <div
-
-                        style="grid-column: 1 / -1; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #cbd5e1;">
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-
-                            <label>Select Room Category / Tag *
-
-                                <select id="pdImageCategoryTag">
-
-                                    <option value="Main Image" selected> Main Image (Primary Cover)</option>
-
-                                    <option value="Living Room">️ Living Room</option>
-
-                                    <option value="Bedroom">️ Bedroom</option>
-
-                                    <option value="Kitchen"> Kitchen</option>
-
-                                    <option value="Bathroom"> Bathroom</option>
-
-                                    <option value="Balcony"> Balcony</option>
-
-                                    <option value="Exterior"> Exterior</option>
-
-                                    <option value="Parking"> Parking</option>
-
-                                    <option value="Amenities">️ Amenities</option>
-
-                                    <option value="Floor Plan"> Floor Plan</option>
-
+                    </button>
+                    <button type="button" class="wizard-stepper-item" id="wizardStepItem2" onclick="validateAndGoToStep(2)">
+                        <span class="wizard-stepper-num">2</span>
+                        <div class="wizard-stepper-text">
+                            <span class="wizard-stepper-title">Location</span>
+                            <span class="wizard-stepper-sub">Hierarchy & GPS</span>
+                        </div>
+                    </button>
+                    <button type="button" class="wizard-stepper-item" id="wizardStepItem3" onclick="validateAndGoToStep(3)">
+                        <span class="wizard-stepper-num">3</span>
+                        <div class="wizard-stepper-text">
+                            <span class="wizard-stepper-title">Specifications</span>
+                            <span class="wizard-stepper-sub">Price & Rooms</span>
+                        </div>
+                    </button>
+                    <button type="button" class="wizard-stepper-item" id="wizardStepItem4" onclick="validateAndGoToStep(4)">
+                        <span class="wizard-stepper-num">4</span>
+                        <div class="wizard-stepper-text">
+                            <span class="wizard-stepper-title">Amenities</span>
+                            <span class="wizard-stepper-sub">Facilities</span>
+                        </div>
+                    </button>
+                    <button type="button" class="wizard-stepper-item" id="wizardStepItem5" onclick="validateAndGoToStep(5)">
+                        <span class="wizard-stepper-num">5</span>
+                        <div class="wizard-stepper-text">
+                            <span class="wizard-stepper-title">Photos & Media</span>
+                            <span class="wizard-stepper-sub">Gallery</span>
+                        </div>
+                    </button>
+                    <button type="button" class="wizard-stepper-item" id="wizardStepItem6" onclick="validateAndGoToStep(6)">
+                        <span class="wizard-stepper-num">6</span>
+                        <div class="wizard-stepper-text">
+                            <span class="wizard-stepper-title">Review & Publish</span>
+                            <span class="wizard-stepper-sub">Contact & Launch</span>
+                        </div>
+                    </button>
+                </div>
+
+                <form id="postApartmentForm" novalidate>
+
+                    <!-- ================= STEP 1: BASIC INFO & OWNER ================= -->
+                    <div class="wizard-step-pane active" id="wizardStepPane1">
+                        <!-- Owner Assignment Card -->
+                        <div style="background:linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border:1.5px solid #86efac; padding:18px 22px; border-radius:14px; margin-bottom:24px;">
+                            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                                <span style="font-size:1.25rem;">🛡️</span>
+                                <strong style="color:#15803d; font-size:0.95rem; font-weight:800;">Assigned Owner or Builder Account *</strong>
+                                <span style="margin-left:auto; font-size:0.74rem; font-weight:750; color:#166534; background:#dcfce7; padding:3px 10px; border-radius:999px;">Admin Proxy Mode</span>
+                            </div>
+                            <p style="margin:0 0 12px 0; font-size:0.82rem; color:#166534; line-height:1.4;">
+                                Administrators post listings on behalf of an identified owner or builder. Every listing permanently retains its legal owner and submitting administrator account.
+                            </p>
+                            <div class="form-field">
+                                <select id="adminOwnerSelect" name="ownerId" required style="width:100%; padding:12px 16px; border-radius:10px; border:1.5px solid #86efac; background:#ffffff; font-weight:750; font-size:0.88rem; color:#0f172a; cursor:pointer;">
+                                    <option value="">— Choose Verified Owner or Builder Account —</option>
                                 </select>
-
-                            </label>
-
-
-
-                            <label>Upload Image File *
-
-                                <input type="file" accept="image/*" id="propertyPhotoFiles" name="photos" multiple required>
-
-                            </label>
-
+                            </div>
                         </div>
 
-
-
-                        <!-- Uploaded Image Gallery Management Grid -->
-
-                        <strong
-
-                            style="display: block; font-size: 0.88rem; color: #0f172a; margin-bottom: 10px;">Uploaded
-
-                            Media Gallery (Admin Controls: Delete, Set Primary, Reorder)</strong>
-
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;"
-
-                            id="adminImageManagementGrid">
-
-                            <!-- Image 1 (Primary) -->
-
-                            <div
-
-                                style="background: #ffffff; border: 2px solid #2563eb; border-radius: 12px; padding: 10px; position: relative;">
-
-                                <span
-
-                                    style="position: absolute; top: 14px; left: 14px; background: #2563eb; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 999px;">
-
-                                    Main Image (Primary)</span>
-
-                                <img src="/propertydirect/images/orchid_enclave.jpg"
-
-                                    style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;"
-
-                                    alt="Main Exterior">
-
-                                <small
-
-                                    style="display: block; font-weight: 700; color: #475569; margin-bottom: 6px;">Tag:
-
-                                    Main Image · Exterior</small>
-
-                                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Primary cover image updated!')"> Primary</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image moved up!')">⬆️ Up</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image moved down!')">⬇️ Down</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image deleted!')">️ Delete</button>
-
-                                </div>
-
+                        <div class="form-grid-two">
+                            <div class="form-field full">
+                                <label>Property Title <span style="color:#ef4444;">*</span></label>
+                                <input name="title" required placeholder="e.g. Spacious 3 BHK Luxury Villa in Anna Nagar West">
+                                <small class="field-hint">A clear, descriptive headline attracts 3x more buyer inquiries.</small>
                             </div>
 
-
-
-                            <!-- Image 2 (Living Room) -->
-
-                            <div
-
-                                style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 10px; position: relative;">
-
-                                <span
-
-                                    style="position: absolute; top: 14px; left: 14px; background: #0f172a; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 999px;">️
-
-                                    Living Room</span>
-
-                                <img src="/shared/images/apartment-living-1.webp"
-
-                                    style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;"
-
-                                    alt="Living Room">
-
-                                <small
-
-                                    style="display: block; font-weight: 700; color: #475569; margin-bottom: 6px;">Tag:
-
-                                    Living Room</small>
-
-                                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Set as Primary cover image!')"> Set Primary</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image moved up!')">⬆️ Up</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image moved down!')">⬇️ Down</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image deleted!')">️ Delete</button>
-
-                                </div>
-
+                            <div class="form-field">
+                                <label>Listing Type (Purpose) <span style="color:#ef4444;">*</span></label>
+                                <select name="type">
+                                    <option value="RENT" selected>Rent</option>
+                                    <option value="SALE">Sale</option>
+                                    <option value="LEASE">Lease</option>
+                                </select>
                             </div>
 
-
-
-                            <!-- Image 3 (Floor Plan) -->
-
-                            <div
-
-                                style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 10px; position: relative;">
-
-                                <span
-
-                                    style="position: absolute; top: 14px; left: 14px; background: #0f172a; color: #ffffff; font-size: 0.72rem; font-weight: 800; padding: 3px 8px; border-radius: 999px;">
-
-                                    Floor Plan</span>
-
-                                <img src="/shared/images/propertydirect-cinematic-1.webp"
-
-                                    style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 8px;"
-
-                                    alt="Floor Plan">
-
-                                <small
-
-                                    style="display: block; font-weight: 700; color: #475569; margin-bottom: 6px;">Tag:
-
-                                    Floor Plan</small>
-
-                                <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Set as Primary cover image!')"> Set Primary</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image moved up!')">⬆️ Up</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #e2e8f0; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image moved down!')">⬇️ Down</button>
-
-                                    <button type="button"
-
-                                        style="padding: 4px 8px; font-size: 0.72rem; font-weight: 700; background: #fee2e2; color: #991b1b; border: none; border-radius: 6px; cursor: pointer;"
-
-                                        onclick="showToast('Image deleted!')">️ Delete</button>
-
-                                </div>
-
+                            <div class="form-field">
+                                <label>Property Category <span style="color:#ef4444;">*</span></label>
+                                <select id="pdCategoryGroupSelect">
+                                    <option value="RESIDENTIAL" selected>Residential (Apartment, Villa, House, Plot)</option>
+                                    <option value="COMMERCIAL">Commercial (Office, Shop, Showroom, Warehouse)</option>
+                                    <option value="OTHER">Other (PG, Hostel, Agricultural Land)</option>
+                                </select>
                             </div>
 
+                            <div class="form-field full">
+                                <label>Property Type (Sub-category) <span style="color:#ef4444;">*</span></label>
+                                <select id="pdSubtypeSelect" name="propertyType">
+                                    <optgroup label="Residential">
+                                        <option value="APARTMENT" selected>Apartment</option>
+                                        <option value="VILLA">Villa</option>
+                                        <option value="INDEPENDENT_HOUSE">Independent House</option>
+                                        <option value="BUILDER_FLOOR">Builder Floor</option>
+                                        <option value="PLOT">Plot</option>
+                                        <option value="FARM_HOUSE">Farm House</option>
+                                    </optgroup>
+                                    <optgroup label="Commercial">
+                                        <option value="OFFICE">Office</option>
+                                        <option value="SHOP">Shop</option>
+                                        <option value="SHOWROOM">Showroom</option>
+                                        <option value="WAREHOUSE">Warehouse</option>
+                                        <option value="FACTORY">Factory</option>
+                                        <option value="COMMERCIAL_LAND">Commercial Land</option>
+                                    </optgroup>
+                                    <optgroup label="Other">
+                                        <option value="PG">PG</option>
+                                        <option value="HOSTEL">Hostel</option>
+                                        <option value="AGRICULTURAL_LAND">Agricultural Land</option>
+                                    </optgroup>
+                                </select>
+                            </div>
                         </div>
 
+                        <div class="wizard-nav-actions">
+                            <span style="font-size:0.8rem; color:#64748b; font-weight:600;">Step 1 of 6 · Basic Details</span>
+                            <button type="button" class="primary" onclick="validateAndGoToStep(2)" style="padding:10px 22px; border-radius:12px; font-weight:750; font-size:0.86rem; display:inline-flex; align-items:center; gap:8px;">
+                                Continue to Location Hierarchy →
+                            </button>
+                        </div>
                     </div>
 
+                    <!-- ================= STEP 2: LOCATION HIERARCHY ================= -->
+                    <div class="wizard-step-pane" id="wizardStepPane2">
+                        <div style="margin-bottom:18px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">📍 Location Hierarchy & Mapping</h3>
+                            <p style="font-size:0.82rem; color:#64748b; margin:0;">Structured 7-tier geographic mapping powering locality-based search filters and GPS coordinates.</p>
+                        </div>
 
+                        <div class="form-grid-two">
+                            <div class="form-field full">
+                                <label>Full Street Address <span style="color:#ef4444;">*</span></label>
+                                <input name="address" required placeholder="Building No, Street Name, Floor, Landmark">
+                            </div>
 
-                    <label>Property Video Tour Link (YouTube / MP4)
+                            <div class="form-field">
+                                <label>Country <span style="color:#ef4444;">*</span></label>
+                                <select name="country">
+                                    <option value="India" selected>India</option>
+                                    <option value="United Arab Emirates">United Arab Emirates</option>
+                                    <option value="Singapore">Singapore</option>
+                                    <option value="United States">United States</option>
+                                </select>
+                            </div>
 
-                        <input type="url" placeholder="https://www.youtube.com/watch?v=sample">
+                            <div class="form-field">
+                                <label>State <span style="color:#ef4444;">*</span></label>
+                                <input name="state" value="Tamil Nadu" placeholder="e.g. Tamil Nadu, Karnataka, Maharashtra">
+                            </div>
 
-                    </label>
+                            <div class="form-field">
+                                <label>City <span style="color:#ef4444;">*</span></label>
+                                <input name="city" value="Chennai" required placeholder="e.g. Chennai, Bangalore, Mumbai">
+                            </div>
 
+                            <div class="form-field">
+                                <label>District <span style="color:#ef4444;">*</span></label>
+                                <input name="district" value="Chennai District" placeholder="e.g. Chennai District, Bengaluru Urban">
+                            </div>
 
+                            <div class="form-field">
+                                <label>Area / Zone <span style="color:#ef4444;">*</span></label>
+                                <input name="area" value="Central Chennai" placeholder="e.g. Central Chennai, North Bangalore">
+                            </div>
 
-                    <label>Property Brochure (PDF Document)
+                            <div class="form-field">
+                                <label>Locality / Sub-locality <span style="color:#ef4444;">*</span></label>
+                                <input name="locality" value="Anna Nagar" required placeholder="e.g. Anna Nagar, Indiranagar, Whitefield">
+                            </div>
 
-                        <input type="file" accept=".pdf">
+                            <div class="form-field">
+                                <label>Pincode <span style="color:#ef4444;">*</span></label>
+                                <input name="pincode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" value="600040" required placeholder="600040">
+                            </div>
 
-                    </label>
+                            <div class="form-field">
+                                <label>Latitude (GPS)</label>
+                                <input name="latitude" type="number" step="any" value="13.0827" placeholder="e.g. 13.0827">
+                            </div>
 
+                            <div class="form-field">
+                                <label>Longitude (GPS)</label>
+                                <input name="longitude" type="number" step="any" value="80.2707" placeholder="e.g. 80.2707">
+                            </div>
+                        </div>
 
-
-                    <label>Virtual Tour 360° Link (VR)
-
-                        <input type="url" placeholder="https://my.matterport.com/show/?m=sample">
-
-                    </label>
-
-
-
-                    <!-- Step 6 — Description -->
-
-                    <div class="property-form-section" style="grid-column: 1 / -1; margin-top: 24px;">
-
-                        <strong>Step 6 — Property Description</strong>
-
-                        <small>Provide a detailed description highlighting room layout, ventilation, orientation, and
-
-                            nearby landmarks.</small>
-
+                        <div class="wizard-nav-actions">
+                            <button type="button" onclick="goToAddPropertyStep(1)" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                                ← Back to Basic Info
+                            </button>
+                            <button type="button" class="primary" onclick="validateAndGoToStep(3)" style="padding:10px 22px; border-radius:12px; font-weight:750; font-size:0.86rem; display:inline-flex; align-items:center; gap:8px;">
+                                Continue to Specifications →
+                            </button>
+                        </div>
                     </div>
 
+                    <!-- ================= STEP 3: SPECIFICATIONS ================= -->
+                    <div class="wizard-step-pane" id="wizardStepPane3">
+                        <div style="margin-bottom:18px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">📐 Property Details & Specifications</h3>
+                            <p style="font-size:0.82rem; color:#64748b; margin:0;">Pricing, room counts, area dimensions, floor elevation, facing orientation, and property age.</p>
+                        </div>
 
+                        <div class="form-grid-two">
+                            <div class="form-field">
+                                <label>Price / Rent (INR) <span style="color:#ef4444;">*</span></label>
+                                <input name="price" type="number" min="1" required placeholder="e.g. 7500000 or 35000" value="7500000">
+                            </div>
 
-                    <label style="grid-column: 1 / -1;">Detailed Property Description *
+                            <div class="form-field">
+                                <label>Bedrooms (BHK) <span style="color:#ef4444;">*</span></label>
+                                <select name="bhk" required>
+                                    <option value="1 BHK">1 BHK</option>
+                                    <option value="2 BHK">2 BHK</option>
+                                    <option value="3 BHK" selected>3 BHK</option>
+                                    <option value="4 BHK">4 BHK</option>
+                                    <option value="5+ BHK">5+ BHK</option>
+                                </select>
+                            </div>
 
-                        <textarea name="description" rows="6" required style="min-height: 120px;"
+                            <div class="form-field">
+                                <label>Bathrooms <span style="color:#ef4444;">*</span></label>
+                                <select name="bathrooms" required>
+                                    <option value="1">1 Bathroom</option>
+                                    <option value="2" selected>2 Bathrooms</option>
+                                    <option value="3">3 Bathrooms</option>
+                                    <option value="4+">4+ Bathrooms</option>
+                                </select>
+                            </div>
 
-                            placeholder="Describe the property in detail... Mention layout, ventilation, floor position, orientation, nearby schools/tech parks, and tenant guidelines."></textarea>
+                            <div class="form-field">
+                                <label>Carpet Area (sq ft) <span style="color:#ef4444;">*</span></label>
+                                <input name="areaSqft" type="number" min="1" required placeholder="e.g. 1250" value="1250">
+                            </div>
 
-                    </label>
+                            <div class="form-field">
+                                <label>Built-up Area (sq ft) <span style="color:#ef4444;">*</span></label>
+                                <input name="builtUpArea" type="number" min="1" required placeholder="e.g. 1450" value="1450">
+                            </div>
 
+                            <div class="form-field">
+                                <label>Plot Area (sq ft / cents)</label>
+                                <input name="plotArea" placeholder="Optional for plots / independent villas">
+                            </div>
 
+                            <div class="form-field">
+                                <label>Floor Number <span style="color:#ef4444;">*</span></label>
+                                <input name="floor" type="number" min="0" value="4" placeholder="e.g. 4">
+                            </div>
 
-                    <!-- Step 7 — Contact Information -->
+                            <div class="form-field">
+                                <label>Total Floors in Building <span style="color:#ef4444;">*</span></label>
+                                <input name="totalFloors" type="number" min="1" value="12" placeholder="e.g. 12">
+                            </div>
 
-                    <div class="property-form-section" style="grid-column: 1 / -1; margin-top: 24px;">
+                            <div class="form-field">
+                                <label>Facing Direction <span style="color:#ef4444;">*</span></label>
+                                <select name="facing">
+                                    <option value="East" selected>East Facing</option>
+                                    <option value="West">West Facing</option>
+                                    <option value="North">North Facing</option>
+                                    <option value="South">South Facing</option>
+                                    <option value="North-East">North-East Facing</option>
+                                    <option value="South-East">South-East Facing</option>
+                                </select>
+                            </div>
 
-                        <strong>Step 7 — Contact Information</strong>
+                            <div class="form-field">
+                                <label>Property Age <span style="color:#ef4444;">*</span></label>
+                                <select name="propertyAge">
+                                    <option value="Under Construction">Under Construction</option>
+                                    <option value="New / 0-1 Year">New (0-1 Year)</option>
+                                    <option value="1-3 Years" selected>1-3 Years</option>
+                                    <option value="3-5 Years">3-5 Years</option>
+                                    <option value="5-10 Years">5-10 Years</option>
+                                    <option value="10+ Years">10+ Years</option>
+                                </select>
+                            </div>
+                        </div>
 
-                        <small>Provide owner/agent contact details for verified customer enquiries.</small>
-
+                        <div class="wizard-nav-actions">
+                            <button type="button" onclick="goToAddPropertyStep(2)" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                                ← Back to Location
+                            </button>
+                            <button type="button" class="primary" onclick="validateAndGoToStep(4)" style="padding:10px 22px; border-radius:12px; font-weight:750; font-size:0.86rem; display:inline-flex; align-items:center; gap:8px;">
+                                Continue to Amenities →
+                            </button>
+                        </div>
                     </div>
 
+                    <!-- ================= STEP 4: AMENITIES ================= -->
+                    <div class="wizard-step-pane" id="wizardStepPane4">
+                        <div style="margin-bottom:18px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">✨ Amenities & Facilities</h3>
+                            <p style="font-size:0.82rem; color:#64748b; margin:0;">Select all available residential features and society amenities.</p>
+                        </div>
 
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:12px;">
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Parking" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🚗 Dedicated Parking</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Lift" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🛗 High-speed Lift</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Gym" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🏋️ Fitness Gym</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Swimming Pool" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🏊 Swimming Pool</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Security" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🛡️ 24/7 Gated Security</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="CCTV" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>📹 CCTV Surveillance</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Garden" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🌳 Landscaped Garden</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Clubhouse" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🏛️ Community Clubhouse</span>
+                            </label>
+                            <label class="amenity-toggle-card selected">
+                                <input type="checkbox" name="amenities" value="Power Backup" checked onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>⚡ 100% Power Backup</span>
+                            </label>
+                            <label class="amenity-toggle-card">
+                                <input type="checkbox" name="amenities" value="Water Supply" onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>💧 24hr Water Supply</span>
+                            </label>
+                            <label class="amenity-toggle-card">
+                                <input type="checkbox" name="amenities" value="Gas Pipeline" onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🔥 Piped Gas Connection</span>
+                            </label>
+                            <label class="amenity-toggle-card">
+                                <input type="checkbox" name="amenities" value="Kids Play Area" onchange="this.closest('.amenity-toggle-card').classList.toggle('selected', this.checked)">
+                                <span>🛝 Children's Play Area</span>
+                            </label>
+                        </div>
 
-                    <label>Owner / Agent Name *
+                        <div class="wizard-nav-actions">
+                            <button type="button" onclick="goToAddPropertyStep(3)" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                                ← Back to Specifications
+                            </button>
+                            <button type="button" class="primary" onclick="goToAddPropertyStep(5)" style="padding:10px 22px; border-radius:12px; font-weight:750; font-size:0.86rem; display:inline-flex; align-items:center; gap:8px;">
+                                Continue to Photos & Media →
+                            </button>
+                        </div>
+                    </div>
 
-                        <input name="ownerName" required placeholder="e.g. Rajesh Kumar (Apex Brokerage)">
+                    <!-- ================= STEP 5: PHOTOS & MEDIA ================= -->
+                    <div class="wizard-step-pane" id="wizardStepPane5">
+                        <div style="margin-bottom:18px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">📸 Media & Categorized Image Management</h3>
+                            <p style="font-size:0.82rem; color:#64748b; margin:0;">Upload multiple photos tagged by room category (Main Exterior, Living Room, Bedroom, Floor Plan).</p>
+                        </div>
 
-                    </label>
+                        <div style="background:#f8fafc; padding:22px; border-radius:16px; border:1.5px dashed #cbd5e1; margin-bottom:20px; text-align:center;">
+                            <div style="display:flex; justify-content:center; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:14px;">
+                                <div class="form-field" style="width:auto; min-width:240px; text-align:left;">
+                                    <label>Tag Category for Next Photo</label>
+                                    <select id="pdImageCategoryTag">
+                                        <option value="Main Image" selected>Main Image (Primary Cover)</option>
+                                        <option value="Living Room">Living Room</option>
+                                        <option value="Bedroom">Master Bedroom</option>
+                                        <option value="Kitchen">Kitchen</option>
+                                        <option value="Bathroom">Bathroom</option>
+                                        <option value="Balcony">Balcony & View</option>
+                                        <option value="Exterior">Building Exterior</option>
+                                        <option value="Floor Plan">Architectural Floor Plan</option>
+                                    </select>
+                                </div>
+                                <div class="form-field" style="width:auto; min-width:260px; text-align:left;">
+                                    <label>Choose Photo Files <span style="color:#ef4444;">*</span></label>
+                                    <input type="file" accept="image/*" id="propertyPhotoFiles" name="photos" multiple style="background:#ffffff; padding:9px;">
+                                </div>
+                            </div>
+                            <small style="color:#64748b; font-size:0.76rem; display:block;">Supported Formats: JPG, PNG, WEBP · High-resolution property photography renders best on search portals.</small>
+                        </div>
 
+                        <strong style="display:block; font-size:0.88rem; color:#0f172a; margin-bottom:10px;">Uploaded Media Gallery</strong>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin-bottom:24px;" id="adminImageManagementGrid">
+                            <!-- Image 1 -->
+                            <div style="background:#ffffff; border:2px solid #2563eb; border-radius:12px; padding:10px; position:relative; box-shadow:0 2px 8px rgba(37,99,235,0.08);">
+                                <span style="position:absolute; top:14px; left:14px; background:#2563eb; color:#ffffff; font-size:0.7rem; font-weight:800; padding:3px 8px; border-radius:999px;">Primary Cover</span>
+                                <img src="/propertydirect/images/orchid_enclave.jpg" style="width:100%; height:110px; object-fit:cover; border-radius:8px; margin-bottom:8px;" alt="Main Exterior">
+                                <small style="display:block; font-weight:700; color:#475569; margin-bottom:6px;">Main Exterior</small>
+                            </div>
+                            <!-- Image 2 -->
+                            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px; position:relative;">
+                                <span style="position:absolute; top:14px; left:14px; background:#0f172a; color:#ffffff; font-size:0.7rem; font-weight:800; padding:3px 8px; border-radius:999px;">Living Room</span>
+                                <img src="/shared/images/apartment-living-1.webp" style="width:100%; height:110px; object-fit:cover; border-radius:8px; margin-bottom:8px;" alt="Living Room">
+                                <small style="display:block; font-weight:700; color:#475569; margin-bottom:6px;">Interior Living Room</small>
+                            </div>
+                            <!-- Image 3 -->
+                            <div style="background:#ffffff; border:1px solid #cbd5e1; border-radius:12px; padding:10px; position:relative;">
+                                <span style="position:absolute; top:14px; left:14px; background:#0f172a; color:#ffffff; font-size:0.7rem; font-weight:800; padding:3px 8px; border-radius:999px;">Floor Plan</span>
+                                <img src="/shared/images/propertydirect-cinematic-1.webp" style="width:100%; height:110px; object-fit:cover; border-radius:8px; margin-bottom:8px;" alt="Floor Plan">
+                                <small style="display:block; font-weight:700; color:#475569; margin-bottom:6px;">Architectural Plan</small>
+                            </div>
+                        </div>
 
+                        <div class="form-grid-two">
+                            <div class="form-field">
+                                <label>Property Video Tour Link (YouTube / MP4)</label>
+                                <input type="url" name="videoUrl" placeholder="https://www.youtube.com/watch?v=sample">
+                            </div>
+                            <div class="form-field">
+                                <label>Virtual Tour 360° Link (Matterport / VR)</label>
+                                <input type="url" name="virtualTourUrl" placeholder="https://my.matterport.com/show/?m=sample">
+                            </div>
+                        </div>
 
-                    <label>Phone Number *
+                        <div class="wizard-nav-actions">
+                            <button type="button" onclick="goToAddPropertyStep(4)" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                                ← Back to Amenities
+                            </button>
+                            <button type="button" class="primary" onclick="goToAddPropertyStep(6)" style="padding:10px 22px; border-radius:12px; font-weight:750; font-size:0.86rem; display:inline-flex; align-items:center; gap:8px;">
+                                Continue to Review & Publish →
+                            </button>
+                        </div>
+                    </div>
 
-                        <input name="ownerPhone" type="tel" required placeholder="+91 98765 43210">
+                    <!-- ================= STEP 6: DESCRIPTION & CONTACT ================= -->
+                    <div class="wizard-step-pane" id="wizardStepPane6">
+                        <div style="margin-bottom:18px;">
+                            <h3 style="font-size:1.1rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">📝 Description & Verification Contacts</h3>
+                            <p style="font-size:0.82rem; color:#64748b; margin:0;">Provide compelling listing description and designated contact points for verified enquiries.</p>
+                        </div>
 
-                    </label>
+                        <div class="form-field full" style="margin-bottom:18px;">
+                            <label>Detailed Property Description <span style="color:#ef4444;">*</span></label>
+                            <textarea name="description" rows="5" required style="min-height:120px;" placeholder="Describe the property in detail... Mention layout, ventilation, floor position, orientation, nearby schools/tech parks, and tenant guidelines.">Spacious and beautifully maintained 3 BHK apartment in Anna Nagar West. Features premium fixtures, modular kitchen, cross ventilation, 2 covered car parks, and power backup.</textarea>
+                        </div>
 
+                        <div class="form-grid-two" style="margin-bottom:24px;">
+                            <div class="form-field">
+                                <label>Owner / Agent Name <span style="color:#ef4444;">*</span></label>
+                                <input name="ownerName" id="ownerNameInput" required placeholder="e.g. Rajesh Kumar" value="Rajesh Kumar">
+                            </div>
+                            <div class="form-field">
+                                <label>Phone Number <span style="color:#ef4444;">*</span></label>
+                                <input name="ownerPhone" id="ownerPhoneInput" type="tel" required placeholder="+91 98765 43210" value="+91 98765 43210">
+                            </div>
+                            <div class="form-field full">
+                                <label>Email Address <span style="color:#ef4444;">*</span></label>
+                                <input name="ownerEmail" id="ownerEmailInput" type="email" required placeholder="owner@propertydirect.in" value="owner@propertydirect.in">
+                            </div>
+                        </div>
 
+                        <!-- Publishing Confirmation Badge -->
+                        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:18px 22px; display:flex; align-items:center; gap:14px; margin-bottom:24px;">
+                            <span style="font-size:1.4rem;">🚀</span>
+                            <div>
+                                <strong style="font-size:0.92rem; color:#0f172a; display:block;">Ready for Immediate Marketplace Publication</strong>
+                                <span style="font-size:0.8rem; color:#64748b;">As an administrator, submitting this listing bypasses standard queue moderation and activates the property immediately.</span>
+                            </div>
+                        </div>
 
-                    <label>Email Address *
-
-                        <input name="ownerEmail" type="email" required placeholder="agent@apexrealty.in">
-
-                    </label>
-
-
-
-                    <button type="submit" class="primary" data-property-api-action="publish-owner-listing"
-
-                        style="grid-column: 1 / -1; width: fit-content; margin-top: 18px;"
-
-                        >Submit Property
-
-                        Listing</button>
+                        <div class="wizard-nav-actions">
+                            <button type="button" onclick="goToAddPropertyStep(5)" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; font-size:0.85rem; cursor:pointer;">
+                                ← Back to Photos
+                            </button>
+                            <button type="submit" class="primary" data-property-api-action="publish-owner-listing" style="padding:12px 28px; border-radius:12px; font-weight:800; font-size:0.92rem; box-shadow:0 6px 20px rgba(37,99,235,0.3); display:inline-flex; align-items:center; gap:8px;">
+                                🚀 Publish Property Listing on Behalf
+                            </button>
+                        </div>
+                    </div>
 
                 </form>
 
             </div>
 
         </section>
+
+        <!-- Script for Wizard Step Switching & Validation -->
+        <script>
+            (function() {
+                let currentWizardStep = 1;
+
+                window.goToAddPropertyStep = function(stepNum) {
+                    if (stepNum < 1) stepNum = 1;
+                    if (stepNum > 6) stepNum = 6;
+                    currentWizardStep = stepNum;
+
+                    for (let i = 1; i <= 6; i++) {
+                        const pane = document.getElementById('wizardStepPane' + i);
+                        const item = document.getElementById('wizardStepItem' + i);
+                        if (pane) {
+                            pane.classList.toggle('active', i === stepNum);
+                            pane.style.display = (i === stepNum) ? 'block' : 'none';
+                        }
+                        if (item) {
+                            item.classList.toggle('active', i === stepNum);
+                            item.classList.toggle('completed', i < stepNum);
+                        }
+                    }
+
+                    const wizardCard = document.getElementById('addPropertyWizardCard');
+                    if (wizardCard) {
+                        const rect = wizardCard.getBoundingClientRect();
+                        if (rect.top < 85) {
+                            const targetY = window.pageYOffset + rect.top - 85;
+                            window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
+                        }
+                    }
+                };
+
+                window.validateAndGoToStep = function(targetStep) {
+                    const form = document.getElementById('postApartmentForm');
+                    if (!form) return;
+
+                    // If jumping forward, validate each required step in sequence
+                    if (targetStep > 1) {
+                        const owner = document.getElementById('adminOwnerSelect')?.value;
+                        if (!owner) {
+                            if (window.showToast) window.showToast('Please select a verified owner or builder account first.', true);
+                            window.goToAddPropertyStep(1);
+                            document.getElementById('adminOwnerSelect')?.focus();
+                            return;
+                        }
+                        const title = form.querySelector('[name="title"]')?.value?.trim();
+                        if (!title) {
+                            if (window.showToast) window.showToast('Please enter a property title.', true);
+                            window.goToAddPropertyStep(1);
+                            form.querySelector('[name="title"]')?.focus();
+                            return;
+                        }
+                    }
+
+                    if (targetStep > 2) {
+                        const addr = form.querySelector('[name="address"]')?.value?.trim();
+                        const city = form.querySelector('[name="city"]')?.value?.trim();
+                        const loc = form.querySelector('[name="locality"]')?.value?.trim();
+                        const pin = form.querySelector('[name="pincode"]')?.value?.trim();
+                        if (!addr || !city || !loc || !pin) {
+                            if (window.showToast) window.showToast('Please fill in street address, city, locality, and pincode.', true);
+                            window.goToAddPropertyStep(2);
+                            if (!addr) form.querySelector('[name="address"]')?.focus();
+                            else if (!city) form.querySelector('[name="city"]')?.focus();
+                            else if (!loc) form.querySelector('[name="locality"]')?.focus();
+                            else if (!pin) form.querySelector('[name="pincode"]')?.focus();
+                            return;
+                        }
+                    }
+
+                    if (targetStep > 3) {
+                        const price = Number(form.querySelector('[name="price"]')?.value || 0);
+                        const area = Number(form.querySelector('[name="areaSqft"]')?.value || 0);
+                        if (!price || price <= 0 || !area || area <= 0) {
+                            if (window.showToast) window.showToast('Please enter valid pricing and carpet area.', true);
+                            window.goToAddPropertyStep(3);
+                            if (!price || price <= 0) form.querySelector('[name="price"]')?.focus();
+                            else if (!area || area <= 0) form.querySelector('[name="areaSqft"]')?.focus();
+                            return;
+                        }
+                    }
+
+                    window.goToAddPropertyStep(targetStep);
+                };
+
+                // Dynamic Category Subtype Filter
+                function initCategoryFilter() {
+                    const groupSel = document.getElementById('pdCategoryGroupSelect');
+                    const subtypeSel = document.getElementById('pdSubtypeSelect');
+                    if (!groupSel || !subtypeSel) return;
+
+                    groupSel.addEventListener('change', function() {
+                        const val = this.value;
+                        const optgroups = subtypeSel.querySelectorAll('optgroup');
+                        let firstOption = null;
+
+                        optgroups.forEach(og => {
+                            const label = (og.label || '').toUpperCase();
+                            if (val === 'RESIDENTIAL' && label === 'RESIDENTIAL') {
+                                og.style.display = '';
+                                if (!firstOption) firstOption = og.querySelector('option');
+                            } else if (val === 'COMMERCIAL' && label === 'COMMERCIAL') {
+                                og.style.display = '';
+                                if (!firstOption) firstOption = og.querySelector('option');
+                            } else if (val === 'OTHER' && label === 'OTHER') {
+                                og.style.display = '';
+                                if (!firstOption) firstOption = og.querySelector('option');
+                            } else {
+                                og.style.display = 'none';
+                            }
+                        });
+
+                        if (firstOption) {
+                            subtypeSel.value = firstOption.value;
+                        }
+                    });
+                }
+
+                // Auto-fill owner details when selecting from dropdown
+                function initOwnerAutoFill() {
+                    const ownerSel = document.getElementById('adminOwnerSelect');
+                    if (!ownerSel) return;
+                    ownerSel.addEventListener('change', function() {
+                        const uid = Number(this.value);
+                        if (!uid || !window.state || !Array.isArray(window.state.users)) return;
+                        const u = window.state.users.find(x => x.id === uid);
+                        if (u) {
+                            const nameInp = document.getElementById('ownerNameInput');
+                            const phoneInp = document.getElementById('ownerPhoneInput');
+                            const emailInp = document.getElementById('ownerEmailInput');
+                            if (nameInp && u.name) nameInp.value = u.name;
+                            if (phoneInp && u.phone) phoneInp.value = u.phone;
+                            if (emailInp && u.email) emailInp.value = u.email;
+                        }
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        initCategoryFilter();
+                        initOwnerAutoFill();
+                    });
+                } else {
+                    initCategoryFilter();
+                    initOwnerAutoFill();
+                }
+            })();
+        </script>
 
 
 
@@ -6427,36 +6035,25 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="enquiries">
 
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
-
-                <div style="flex:1 1 340px; min-width:240px;">
-
-                    <h2 style="font-size:1.35rem; font-weight:800; color:#0f172a; margin:0 0 2px 0; line-height:1.2;">Customer Enquiries &amp; Visit Tracking</h2>
-
-                    <p style="font-size:0.84rem; color:#64748b; margin:0; line-height:1.35;">Track customer inquiries across properties and projects, respond to messages, and manage site visit appointments.</p>
-
+            <div class="overview-hero-bar">
+                <div>
+                    <h2>Client Leads &amp; Enquiries</h2>
+                    <p>Live buyer inquiries, client leads, and site visit requests.</p>
                 </div>
-
                 <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
-
                     <button type="button" id="subtabEnquiriesBtn" class="pill-btn active" onclick="switchEnquirySubtab('enquiries')"
-
                         style="padding:7px 16px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#0f172a; color:#ffffff;">
-
-                        Customer Inquiries
-
+                        Client Leads &amp; Inquiries
                     </button>
-
                     <button type="button" id="subtabVisitsBtn" class="pill-btn" onclick="switchEnquirySubtab('visits')"
-
                         style="padding:7px 16px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; border:1px solid #cbd5e1; background:#ffffff; color:#334155;">
-
                         Scheduled Visits
-
                     </button>
-
+                    <button type="button" onclick="openAdminLeadModal()" class="primary small"
+                        style="background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); display:inline-flex; align-items:center; gap:6px; padding:7px 16px; border-radius:10px; font-weight:750; font-size:0.82rem; cursor:pointer; box-shadow:0 2px 8px rgba(37,99,235,0.2);">
+                        ＋ Record Client Lead
+                    </button>
                 </div>
-
             </div>
 
 
@@ -6473,13 +6070,13 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
                             <tr style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
 
-                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Date</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Lead Ref / Date</th>
 
-                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Customer Contact</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Client Name &amp; Contact</th>
 
-                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Property / Project</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Interested Property / Project</th>
 
-                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Customer Message & Reply</th>
+                                <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Customer Inquiry Message &amp; Reply</th>
 
                                 <th style="padding:14px 18px; font-size:0.76rem; font-weight:800; color:#475569; text-transform:uppercase;">Status</th>
 
@@ -6505,7 +6102,7 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
             <!-- Subtab 2: Visits -->
 
-            <div id="subtabVisitsView" class="dash-card table-card" style="display:none; padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
+            <div id="subtabVisitsView" class="dash-card table-card hidden" hidden style="display:none !important; padding:0; overflow:hidden; border-radius:16px; border:1px solid #e2e8f0; background:#ffffff;">
 
                 <div class="dashboard-table-scroll">
 
@@ -6551,38 +6148,22 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="reports">
 
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
-
+            <div class="overview-hero-bar">
                 <div>
-
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Reports & Moderation Complaints</h2>
-
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Investigate user-reported misleading listings, inaccurate pricing, fraudulent photos, or violations of platform guidelines.</p>
-
+                    <h2>Reports &amp; Moderation Complaints</h2>
+                    <p>User reports &amp; marketplace violations.</p>
                 </div>
-
                 <div style="display:flex; align-items:center; gap:10px;">
-
                     <select id="reportStatusFilter" style="padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.84rem; font-weight:700; background:#f8fafc; color:#334155;">
-
                         <option value="">All Reports</option>
-
                         <option value="OPEN">🚨 Open Complaints Only</option>
-
                         <option value="RESOLVED">✓ Resolved</option>
-
                         <option value="DISMISSED">Dismissed</option>
-
                     </select>
-
-                    <button type="button" onclick="loadReports()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
-
+                    <button type="button" onclick="loadReports()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:10px; font-weight:750; font-size:0.82rem; cursor:pointer;">
                         Refresh
-
                     </button>
-
                 </div>
-
             </div>
 
 
@@ -6629,173 +6210,8 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
 
 
-        <!-- ================= CATEGORIES, AMENITIES & LOCATIONS PANEL ================= -->
 
-        <section class="dash-panel hidden" data-view="metadata">
 
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
-
-                <div>
-
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Property Categories, Amenities & Locations</h2>
-
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Platform metadata catalog powering search filters, property listings, and locality breakdowns with live counts.</p>
-
-                </div>
-
-                <div class="metadata-action-buttons" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-
-                    <!-- Add Category Button -->
-
-                    <button type="button" onclick="openMetadataDetailModal('Category')" id="btnAddCategoryMeta" class="btn-meta-action btn-meta-category"
-
-                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(37,99,235,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);">
-
-                        <span style="width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
-
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="M15 3v18"></path><path d="M3 9h18"></path><path d="M3 15h18"></path></svg>
-
-                        </span>
-
-                        <span>+ Add Category</span>
-
-                        <span id="metaCatBadge" style="padding:2px 7px; border-radius:999px; background:rgba(255,255,255,0.22); font-size:0.72rem; font-weight:700;">Catalog</span>
-
-                    </button>
-
-
-
-                    <!-- Add Amenity Button -->
-
-                    <button type="button" onclick="openMetadataDetailModal('Amenity')" id="btnAddAmenityMeta" class="btn-meta-action btn-meta-amenity"
-
-                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #065f46 0%, #059669 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(5,150,105,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);">
-
-                        <span style="width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
-
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-
-                        </span>
-
-                        <span>+ Add Amenity</span>
-
-                        <span id="metaAmenBadge" style="padding:2px 7px; border-radius:999px; background:rgba(255,255,255,0.22); font-size:0.72rem; font-weight:700;">Catalog</span>
-
-                    </button>
-
-
-
-                    <!-- Add Location Button -->
-
-                    <button type="button" onclick="openMetadataDetailModal('Location')" id="btnAddLocationMeta" class="btn-meta-action btn-meta-location"
-
-                        style="display:inline-flex; align-items:center; gap:10px; padding:10px 18px; border-radius:14px; background:linear-gradient(135deg, #9a3412 0%, #ea580c 100%); color:#ffffff; font-weight:750; font-size:0.86rem; cursor:pointer; border:1px solid rgba(255,255,255,0.22); box-shadow:0 6px 18px rgba(234,88,12,0.3); transition:all 0.22s cubic-bezier(0.4, 0, 0.2, 1);">
-
-                        <span style="width:26px; height:26px; border-radius:8px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
-
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-
-                        </span>
-
-                        <span>+ Add Location</span>
-
-                        <span id="metaLocBadge" style="padding:2px 7px; border-radius:999px; background:rgba(255,255,255,0.22); font-size:0.72rem; font-weight:700;">Catalog</span>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- Categories Card -->
-
-            <div class="dash-card" style="margin-bottom:22px; padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
-
-                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Supported Property Categories</h3>
-
-                <div id="metaCategoriesGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
-
-                    <div style="color:#64748b; font-size:0.85rem;">Loading categories...</div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- Amenities Card -->
-
-            <div class="dash-card" style="margin-bottom:22px; padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
-
-                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Standard Amenities Catalog</h3>
-
-                <div id="metaAmenitiesGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-
-                    <div style="color:#64748b; font-size:0.85rem;">Loading amenities...</div>
-
-                </div>
-
-            </div>
-
-
-
-            <!-- Locations Card -->
-
-            <div class="dash-card" style="padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0;">
-
-                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Supported Tier 1 & Tier 2 Cities</h3>
-
-                <div id="metaLocationsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
-
-                    <div style="color:#64748b; font-size:0.85rem;">Loading locations...</div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ================= FEATURED LISTINGS & PUBLIC CONTENT PANEL ================= -->
-
-        <section class="dash-panel hidden" data-view="content">
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
-
-                <div>
-
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Featured Listings & Public Content</h2>
-
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Spotlight verified properties on the PropertyDirect homepage hero section and search results.</p>
-
-                </div>
-
-                <button type="button" onclick="switchTabAndFilter('my-properties', 'ACTIVE')" class="primary small" style="background:#0f172a;">
-
-                    Browse Properties to Feature →
-
-                </button>
-
-            </div>
-
-
-
-            <div class="dash-card" style="padding:20px 24px; background:#ffffff; border-radius:16px; border:1px solid #e2e8f0; margin-bottom:24px;">
-
-                <h3 style="font-size:1.05rem; font-weight:800; color:#0f172a; margin:0 0 14px 0;">Currently Featured Properties</h3>
-
-                <div id="featuredListingsContainer" style="display:flex; flex-direction:column; gap:12px;">
-
-                    <div style="color:#64748b; font-size:0.85rem;">Loading featured listings...</div>
-
-                </div>
-
-            </div>
-
-        </section>
 
 
 
@@ -6803,24 +6219,17 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="audit">
 
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; flex-wrap:wrap; gap:14px;">
-
+            <div class="overview-hero-bar">
                 <div>
-
-                    <h2 style="font-size:1.45rem; font-weight:800; color:#0f172a; margin:0 0 4px 0;">Administrative Audit History & Event Logs</h2>
-
-                    <p style="font-size:0.88rem; color:#64748b; margin:0;">Permanent, tamper-evident audit trail of all moderation decisions, property submissions, approvals, rejections, and user status changes.</p>
-
+                    <h2>Administrative Audit History &amp; Event Logs</h2>
+                    <p>Tamper-evident audit trail &amp; system activity.</p>
                 </div>
-
-                <button type="button" onclick="loadAudit()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:6px;">
-
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-
-                    Refresh Audit Log
-
-                </button>
-
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <button type="button" onclick="loadAudit()" class="primary small" style="background:#0f172a; display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:10px; font-weight:750; font-size:0.82rem; cursor:pointer;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                        Refresh Audit Log
+                    </button>
+                </div>
             </div>
 
 
@@ -6923,19 +6332,14 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         <section class="dash-panel hidden" data-view="profile">
 
-            <div class="dash-card">
-
-                <div class="card-head">
-
-                    <div>
-
-                        <h3> Agent & Brokerage Profile</h3>
-
-                        <p>RERA Registration, license details, contact phone, and operating cities.</p>
-
-                    </div>
-
+            <div class="overview-hero-bar">
+                <div>
+                    <h2>Platform Administrator Profile</h2>
+                    <p>Admin credentials &amp; contact settings.</p>
                 </div>
+            </div>
+
+            <div class="dash-card">
 
                 <form class="form-grid">
 
@@ -7613,20 +7017,6 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
         }
 
-        function goToAddPropertyStep(stepNumber) {
-
-            const target = document.getElementById('addPropertyStep' + stepNumber);
-
-            if (target) {
-
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                showToast('Step ' + (stepNumber - 1) + ' saved. Proceeding with Step ' + stepNumber + '.');
-
-            }
-
-        }
-
         function exportAnalyticsReportCSV() {
 
             const csvContent = "data:text/csv;charset=utf-8,Metric,Value\nTotal Listings,124\nActive Leads,45\nSite Visits,18\nTransactions Closed,12";
@@ -8009,77 +7399,64 @@ html body.app-dashboard :is(.dash-sidebar, .sidebar, .vendor-sidebar, .agent-sid
 
     
 
-    <!-- ================= DETAILED METADATA CREATOR MODAL ================= -->
 
-    
 
-    <!-- ================= DETAILED METADATA CREATOR MODAL ================= -->
 
-    <div class="modal hidden" id="metadataDetailModal" role="dialog" aria-modal="true" aria-labelledby="metaModalTitle" style="z-index:999999;">
-
-        <div class="modal-card" style="width:min(620px, 94vw) !important; max-height:88vh; overflow-y:auto; padding:28px 32px !important; border-radius:20px; box-shadow:0 25px 60px rgba(15,23,42,0.35); background:#ffffff;">
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
-
-                <div style="display:flex; align-items:center; gap:14px;">
-
-                    <div id="metaModalIconBadge" style="width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-
-                        <!-- SVG injected by JS -->
-
-                    </div>
-
-                    <div>
-
-                        <h2 id="metaModalTitle" style="font-size:1.35rem; font-weight:800; color:#0f172a; margin:0 0 2px 0;">Configure Catalog Item</h2>
-
-                        <p id="metaModalSubtitle" style="font-size:0.82rem; color:#64748b; margin:0;">Platform metadata taxonomy specification.</p>
-
-                    </div>
-
+    <!-- Modal: Record Client Lead -->
+    <div id="adminRecordLeadModal" class="modal hidden" role="dialog" aria-modal="true" style="z-index:999999; display:none;">
+        <div class="modal-card" style="width:min(580px, 94vw) !important; max-height:90vh; overflow-y:auto; padding:26px 30px !important; border-radius:18px;">
+            <button type="button" class="close" onclick="closeAdminLeadModal()">×</button>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+                <span style="width:40px; height:40px; border-radius:10px; background:#eff6ff; color:#2563eb; display:inline-flex; align-items:center; justify-content:center; font-size:1.2rem;">📋</span>
+                <div>
+                    <h2 style="font-size:1.3rem; font-weight:800; color:#0f172a; margin:0;">Record Client Lead &amp; Enquiry</h2>
+                    <p style="font-size:0.82rem; color:#64748b; margin:2px 0 0 0;">Capture incoming phone, email, or walk-in buyer/tenant leads.</p>
                 </div>
-
-                <button type="button" class="close" onclick="closeModal('metadataDetailModal')" aria-label="Close" style="width:34px; height:34px; border-radius:10px; border:1px solid #e2e8f0; background:#f8fafc; color:#64748b; font-size:1.1rem; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.15s ease;">✕</button>
-
             </div>
-
-
-
-            <form id="metadataDetailForm" onsubmit="submitMetadataDetail(event)">
-
-                <input type="hidden" id="metaItemType" value="Category">
-
-
-
-                <!-- Dynamic Form Fields injected via JS based on type -->
-
-                <div id="metaDynamicFields" style="display:flex; flex-direction:column; gap:16px;">
-
-                    <!-- Injected dynamically -->
-
+            <form id="adminRecordLeadForm" onsubmit="handleSaveAdminLead(event)" style="display:grid; gap:16px;">
+                <div>
+                    <label style="font-size:0.82rem; font-weight:750; color:#334155; display:block; margin-bottom:6px;">Target Property Listing</label>
+                    <select id="adminLeadListingSelect" name="listingId" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem; font-weight:600;">
+                        <option value="">— General Marketplace / Platform Enquiry —</option>
+                    </select>
                 </div>
-
-
-
-                <div class="pd-modal-actions" style="display:flex; justify-content:flex-end; align-items:center; gap:12px; margin-top:24px; padding-top:16px; border-top:1px solid #f1f5f9;">
-
-                    <button type="button" onclick="closeModal('metadataDetailModal')" class="modal-cancel" style="padding:10px 18px; border-radius:12px; border:1px solid #cbd5e1; background:#ffffff; color:#475569; font-weight:700; font-size:0.85rem; cursor:pointer;">Cancel</button>
-
-                    <button type="submit" id="metaSubmitBtn" class="primary" style="padding:10px 24px; border-radius:12px; font-weight:750; font-size:0.85rem; color:#ffffff; border:none; cursor:pointer; box-shadow:0 4px 14px rgba(15,23,42,0.2);">
-
-                        Save & Publish Item
-
-                    </button>
-
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:750; color:#334155; display:block; margin-bottom:6px;">Client Name *</label>
+                        <input type="text" name="name" required placeholder="e.g. Ramesh Kumar" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:750; color:#334155; display:block; margin-bottom:6px;">Client Phone *</label>
+                        <input type="tel" name="phone" required placeholder="e.g. +91 98450 12345" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem;">
+                    </div>
                 </div>
-
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:750; color:#334155; display:block; margin-bottom:6px;">Client Email *</label>
+                        <input type="email" name="email" required placeholder="e.g. ramesh@example.com" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem;">
+                    </div>
+                    <div>
+                        <label style="font-size:0.82rem; font-weight:750; color:#334155; display:block; margin-bottom:6px;">Inquiry Type *</label>
+                        <select name="type" required style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem;">
+                            <option value="PURCHASE">Purchase Inquiry</option>
+                            <option value="RENTAL">Rental Inquiry</option>
+                            <option value="SITE_VISIT">Site Visit Booking</option>
+                            <option value="OFFER">Price Offer / Deal</option>
+                            <option value="GENERAL">General Support</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size:0.82rem; font-weight:750; color:#334155; display:block; margin-bottom:6px;">Inquiry Requirements / Notes</label>
+                    <textarea name="message" rows="3" placeholder="Budget range, desired move-in date, room configuration, special preferences..." style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; font-size:0.86rem;"></textarea>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+                    <button type="button" onclick="closeAdminLeadModal()" class="small" style="padding:10px 18px; border-radius:10px; border:1px solid #cbd5e1; background:#ffffff; color:#334155; font-weight:700; cursor:pointer;">Cancel</button>
+                    <button type="submit" class="primary small" style="background:#0f172a; padding:10px 22px; border-radius:10px; font-weight:750; cursor:pointer;">Save &amp; Register Lead</button>
+                </div>
             </form>
-
         </div>
-
     </div>
-
-
 
     <!-- PropertyDirect Unified Platform Admin Script -->
 

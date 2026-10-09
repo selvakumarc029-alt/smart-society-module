@@ -12,4 +12,7 @@ scratch/*.png
 scratch/*.jpg
 scratch/*.log
 *cookies.txt
+*.class
+scratch/*-classes/
+scratch/*.args
 

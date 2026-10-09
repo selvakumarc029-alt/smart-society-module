@@ -1,0 +1,11 @@
+# Isolate the Smart Society preview from other applications on localhost.
+server:
+  servlet:
+    session:
+      cookie:
+        name: SMARTSOCIETY_SESSION
+
+smartsociety:
+  saas:
+    upi-id: ${SMARTSOCIETY_SAAS_UPI_ID:}
+    payee-name: ${SMARTSOCIETY_SAAS_PAYEE_NAME:}

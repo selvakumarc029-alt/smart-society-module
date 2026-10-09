@@ -36,6 +36,17 @@ public class AdminInsightsApiController {
     private final NotificationRepository notifications;
     private final SocietyRentChangeRepository rents;
 
+    @GetMapping("/service-requests")
+    public List<CommonMaintenanceTicket> serviceRequests() {
+        String tenant = current.requireTenantId();
+        return tickets.findAll().stream()
+                .filter(ticket -> Objects.equals(tenant, ticket.getTenantId()))
+                .filter(ticket -> "smartsociety".equalsIgnoreCase(ticket.getSourcePlatform())
+                        || "smartapartment".equalsIgnoreCase(ticket.getSourcePlatform()))
+                .sorted(Comparator.comparing((CommonMaintenanceTicket ticket) -> String.valueOf(ticket.getCreatedAt())).reversed())
+                .toList();
+    }
+
     static Map<String,Object> view(Object... pairs) {
         Map<String,Object> result=new LinkedHashMap<>();
         for(int i=0;i<pairs.length;i+=2) result.put((String)pairs[i],pairs[i+1]);
@@ -71,13 +82,36 @@ public class AdminInsightsApiController {
                 "residents",rows.stream().mapToInt(f->((Number)f.get("residents")).intValue()).sum());}).toList();
         return view("blocks",groups,"flats",flats,"totalTenants",people.stream().filter(r->"TENANT".equalsIgnoreCase(r.getResidentType())).count(),"totalResidents",people.size());
     }
+    public record NewBlock(@NotBlank @Size(max=100) String name, @Min(1) @Max(200) int totalFloors) {}
+    public record ResidentNotice(@NotBlank @Email String email, @NotBlank @Size(max=2000) String message) {}
+    @PostMapping("/resident-notifications") @Transactional
+    public Map<String,Object> notifyResident(@Valid @RequestBody ResidentNotice request) {
+        String tenant = current.requireTenantId();
+        var recipient = users.findByEmailIgnoreCase(request.email().trim())
+            .filter(user -> Objects.equals(tenant, user.getTenantId()) && user.getRole() != UserRole.SUPER_ADMIN)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipient was not found in this society"));
+        var notification = new Notification(); notification.setTenantId(tenant); notification.setUserId(recipient.getId());
+        notification.setType("SOCIETY_MESSAGE"); notification.setTitle("Message from your society admin");
+        notification.setMessage(request.message().trim()); notification.setReadStatus(false);
+        notifications.save(notification);
+        return view("id", notification.getId(), "sent", true);
+    }
+    @PostMapping("/blocks") @Transactional
+    public Map<String,Object> addBlock(@Valid @RequestBody NewBlock request) {
+        String tenant=current.requireTenantId(), name=request.name().trim();
+        if(blocks.findByTenantId(tenant).stream().anyMatch(b->name.equalsIgnoreCase(b.getName())))
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"A block with this name already exists.");
+        Block block=new Block();block.setTenantId(tenant);block.setName(name);block.setTotalFloors(request.totalFloors());
+        blocks.save(block);
+        return view("id",block.getId(),"name",block.getName(),"totalFloors",block.getTotalFloors());
+    }
     private LocalDate[] range(LocalDate start,LocalDate end){
         start=start==null?LocalDate.now():start;end=end==null?start:end;
         if(end.isBefore(start)||end.isAfter(start.plusDays(30)))throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Choose a date range of up to 31 days");
         return new LocalDate[]{start,end};
     }
     @GetMapping("/maintenance")
-    public Map<String,Object> maintenance(@RequestParam(required=false) LocalDate start,@RequestParam(required=false) LocalDate end){
+    public Map<String,Object> maintenance(@RequestParam(name="start", required=false) LocalDate start,@RequestParam(name="end", required=false) LocalDate end){
         var dates=range(start,end);String tenant=current.requireTenantId();var workers=users.findByTenantIdAndRole(tenant,UserRole.MAINTENANCE_STAFF);
         var byId=new HashMap<Long,AppUser>();workers.forEach(w->byId.put(w.getId(),w));
         List<Map<String,Object>> rows=new ArrayList<>();
@@ -100,7 +134,7 @@ public class AdminInsightsApiController {
     }
     private boolean inRange(LocalDateTime value,LocalDate[] dates){return value!=null&&!value.toLocalDate().isBefore(dates[0])&&!value.toLocalDate().isAfter(dates[1]);}
     @GetMapping("/security")
-    public Map<String,Object> security(@RequestParam(required=false) LocalDate start,@RequestParam(required=false) LocalDate end){
+    public Map<String,Object> security(@RequestParam(name="start", required=false) LocalDate start,@RequestParam(name="end", required=false) LocalDate end){
         var dates=range(start,end);String tenant=current.requireTenantId();
         var sessions=securityLogs.findByTenantIdAndLoginAtBetweenOrderByLoginAtDesc(tenant,dates[0].atStartOfDay(),dates[1].atTime(LocalTime.MAX)).stream()
                 .map(s->view("name",s.getGuardName(),"login",s.getLoginAt(),"logout",s.getLogoutAt(),"endReason",s.getEndReason())).toList();
@@ -132,7 +166,7 @@ public class AdminInsightsApiController {
                 "rents",rents.findByTenantIdOrderByEffectiveDateDescIdDesc(tenant).stream().map(r->view("id",r.getId(),"apartmentId",r.getApartment().getId(),"unitNo",r.getApartment().getUnitNo(),"landlord",r.getLandlordName(),"previousRent",r.getPreviousRent(),"monthlyRent",r.getMonthlyRent(),"effectiveDate",r.getEffectiveDate(),"notes",r.getNotes())).toList());
     }
     @PostMapping("/dues/{apartmentId}/notice") @Transactional
-    public Map<String,Object> notice(@PathVariable Long apartmentId){
+    public Map<String,Object> notice(@PathVariable("apartmentId") Long apartmentId){
         String tenant=current.requireTenantId();var flat=apartments.lockForAdmin(tenant,apartmentId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Flat not found"));
         var row=dues(tenant).stream().filter(r->Objects.equals(apartmentId,r.get("apartmentId"))).findFirst().orElseThrow(()->new ResponseStatusException(HttpStatus.CONFLICT,"This flat has no pending dues"));
         String title="Dues reminder · "+flat.getUnitNo();
@@ -149,7 +183,7 @@ public class AdminInsightsApiController {
             @NotNull @DecimalMin("0.01") @Digits(integer=12,fraction=2) BigDecimal newRent,@NotNull @FutureOrPresent LocalDate effectiveDate,
             @NotBlank @Size(max=200) String landlordName,@Size(max=1000) String notes,Long expectedLatestId){}
     @PostMapping("/rents/{apartmentId}") @Transactional
-    public Map<String,Object> rent(@PathVariable Long apartmentId,@Valid @RequestBody RentRequest r){
+    public Map<String,Object> rent(@PathVariable("apartmentId") Long apartmentId,@Valid @RequestBody RentRequest r){
         var actor=current.requireUser();String tenant=actor.getTenantId();var flat=apartments.lockForAdmin(tenant,apartmentId).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Flat not found"));
         var history=rents.findByTenantIdAndApartmentIdOrderByEffectiveDateDescIdDesc(tenant,apartmentId);
         var latest=history.isEmpty()?null:history.getFirst();

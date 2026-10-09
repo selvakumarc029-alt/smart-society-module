@@ -1,8 +1,77 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Super Admin Dashboard')}"></head>
+<head th:replace="~{fragments/layout :: head('Super Admin Dashboard')}"><style>#adminCategoryCardsGrid > [data-cat-key][hidden] { display:none !important; }</style><style>#categoryPackagesModal .modal-header { display:flex !important; justify-content:space-between; align-items:center; flex-wrap:nowrap; } #categoryPackagesModal .modal-header > div { flex:1; min-width:0; } #categoryPackagesModal .modal-header .btn-close { flex:0 0 auto; margin-left:auto !important; }</style></head>
 <body class="dashboard-body bg-light" data-platform="smartapartment" data-dashboard-role="superadmin">
     <style>
+        body[data-dashboard-role="superadmin"] #sidebar > .sidebar-header {
+            box-sizing:border-box !important;
+            height:var(--society-aligned-header-height, 88px) !important;
+            min-height:var(--society-aligned-header-height, 88px) !important;
+            max-height:var(--society-aligned-header-height, 88px) !important;
+            flex:0 0 var(--society-aligned-header-height, 88px) !important;
+        }
+        body[data-dashboard-role="superadmin"] .profile-password-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 20px !important;
+        }
+        body[data-dashboard-role="superadmin"] .profile-password-grid label > span {
+            height: auto !important;
+            min-height: 18px !important;
+            max-height: none !important;
+            line-height: 1.4 !important;
+        }
+        body[data-dashboard-role="superadmin"] .profile-password {
+            position: relative !important;
+            height: 44px !important;
+            min-height: 44px !important;
+        }
+        body[data-dashboard-role="superadmin"] .profile-password input { padding-right: 48px !important; }
+        body[data-dashboard-role="superadmin"] .profile-password button {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            position: absolute !important;
+            top: 50% !important;
+            right: 4px !important;
+            transform: translateY(-50%) !important;
+            width: 36px !important;
+            height: 36px !important;
+            min-height: 36px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1 !important;
+        }
+        body[data-dashboard-role="superadmin"] #dashboardPasswordForm .profile-settings__section-title { align-items: center; }
+        body[data-dashboard-role="superadmin"] #dashboardPasswordForm .profile-settings__actions { align-items: center; gap: 12px; }
+        @media (max-width: 1100px) {
+            body[data-dashboard-role="superadmin"] .profile-password-grid { grid-template-columns: minmax(0, 1fr) !important; }
+        }
+        body[data-dashboard-role="superadmin"] #residentAdminInbox {
+            display: block;
+            margin: 24px 0 !important;
+            padding: 0 !important;
+            min-width: 0;
+            border: 1px solid #dfe6f1 !important;
+            border-radius: 18px !important;
+            background: #fff !important;
+            box-shadow: 0 8px 24px rgba(28,43,72,.06) !important;
+            overflow: hidden;
+        }
+        body[data-dashboard-role="superadmin"] #residentAdminInbox > .card-header {
+            padding: 24px !important;
+            margin: 0 !important;
+            border-bottom: 1px solid #e9edf4 !important;
+            background: #fff !important;
+        }
+        body[data-dashboard-role="superadmin"] #residentAdminInbox > .card-body {
+            padding: 24px !important;
+            margin: 0 !important;
+        }
+        body[data-dashboard-role="superadmin"] #residentAdminInbox > .card-body > .text-center { padding: 20px 0 !important; }
+        @media (max-width: 640px) {
+            body[data-dashboard-role="superadmin"] #residentAdminInbox > .card-header,
+            body[data-dashboard-role="superadmin"] #residentAdminInbox > .card-body { padding: 16px !important; }
+        }
         #sidebar {
             pointer-events: auto !important;
             display: flex !important;
@@ -40,9 +109,9 @@
             background: #f8fafc !important;
         }
         .main-content .topbar {
-            height: var(--dashboard-topbar-height, 88px) !important;
-            min-height: var(--dashboard-topbar-height, 88px) !important;
-            max-height: var(--dashboard-topbar-height, 88px) !important;
+            height: var(--society-aligned-header-height, 88px) !important;
+            min-height: var(--society-aligned-header-height, 88px) !important;
+            max-height: var(--society-aligned-header-height, 88px) !important;
             padding: 16px 32px !important;
             border-bottom: 1px solid #e2e8f0 !important;
             background: #ffffff !important;
@@ -1086,21 +1155,18 @@
     </style>
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
     <div class="dashboard-layout">
-        
+
         <!-- Sidebar Navigation -->
         <aside class="sidebar bg-dark text-white shadow-lg animate__animated animate__fadeInLeft" id="sidebar">
-            <div class="sidebar-header p-4 border-bottom border-secondary d-flex align-items-center gap-3">
+            <div class="sidebar-header p-4 border-bottom border-secondary d-flex align-items-center gap-3" style="height:var(--society-aligned-header-height,88px) !important; min-height:var(--society-aligned-header-height,88px) !important; max-height:var(--society-aligned-header-height,88px) !important; flex:0 0 var(--society-aligned-header-height,88px) !important; box-sizing:border-box !important;">
                 <span class="sidebar-home-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M4 14.5 16 4l12 10.5V28h-8v-8h-8v8H4Z"/><path d="M9.5 9V5.5h4"/></svg></span>
-                <h4 class="mb-0 fw-bold">Smart<span class="text-primary">Apartment</span></h4>
+                <h4 class="mb-0 fw-bold">Smart<span class="text-primary">Apartment</span><span class="society-dashboard-role-label" style="display:block !important; margin-top:4px; font-size:12px !important; font-weight:600; line-height:1.3 !important; color:#a9c4ff !important; letter-spacing:.04em;">Superadmin Dashboard</span></h4>
             </div>
             <nav class="nav flex-column py-3 sidebar-nav" aria-label="Dashboard sections">
                 <a href="#overview" class="nav-link btn btn-link text-start text-decoration-none active" data-panel="overview" onclick="openPanel('overview'); return false;"><i class="fa-solid fa-house me-2"></i> Overview</a>
                 <a href="#societies" class="nav-link btn btn-link text-start text-decoration-none" data-panel="societies" onclick="openPanel('societies'); return false;"><i class="fa-solid fa-city me-2"></i> Societies</a>
-                <a href="#subscriptions" class="nav-link btn btn-link text-start text-decoration-none" data-panel="subscriptions" onclick="openPanel('subscriptions'); return false;"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Subscriptions</a>
-                <a href="#users" class="nav-link btn btn-link text-start text-decoration-none" data-panel="users" onclick="openPanel('users'); return false;"><i class="fa-solid fa-users me-2"></i> Users</a>
-                <a href="#access-roles" class="nav-link btn btn-link text-start text-decoration-none" data-panel="access-roles" onclick="openPanel('access-roles'); return false;"><i class="fa-solid fa-user-shield me-2"></i> Roles & Access</a>
-                <a href="#finance-setup" class="nav-link btn btn-link text-start text-decoration-none" data-panel="finance-setup" onclick="openPanel('finance-setup'); return false;"><i class="fa-solid fa-receipt me-2"></i> Subscription Payments</a>
-                <a href="#service-requests" class="nav-link btn btn-link text-start text-decoration-none" data-panel="service-requests" onclick="openPanel('service-requests'); return false;"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Service Requests</a>
+                <a href="#subscriptions" class="nav-link btn btn-link text-start text-decoration-none" data-panel="subscriptions" onclick="openPanel('subscriptions'); return false;"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Subscriptions &amp; Payments</a>
+                <a href="#users" class="nav-link btn btn-link text-start text-decoration-none" data-panel="users" onclick="openPanel('users'); return false;"><i class="fa-solid fa-users me-2"></i> Users &amp; Roles</a>
                 <a href="#home-services" class="nav-link btn btn-link text-start text-decoration-none" data-panel="home-services" id="sidebarSuperadminHomeServicesLink" onclick="forceOpenPanel('home-services'); return false;"><i class="fa-solid fa-broom me-2 text-warning"></i> Home Services & Pricing</a>
                 <a href="#settings" class="nav-link btn btn-link text-start text-decoration-none" data-panel="settings" onclick="openPanel('settings'); return false;"><i class="fa-solid fa-gear me-2"></i> Settings</a>
             </nav>
@@ -1126,7 +1192,7 @@
 
             <!-- Dashboard Content Container -->
             <div class="container-fluid p-4 dashboard-container">
-                
+
                 <!-- Overview Panel -->
                 <section data-view="overview" class="animate__animated animate__fadeIn">
                     <div class="superadmin-kpi-grid stats mb-4" id="superadminOverviewStats">
@@ -1479,370 +1545,7 @@
                             </table>
                         </div>
                     </div>
-                </section>
-
-                <!-- Users -->
-                <section class="d-none" data-view="users">
-                    <div class="superadmin-section-card p-4">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.15rem; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
-                                    <i class="fa-solid fa-users"></i>
-                                </div>
-                                <div>
-                                    <h4 class="superadmin-section-title">Platform Users Directory</h4>
-                                    <p class="superadmin-section-desc">Manage system administrators, facility managers, security staff, and resident profiles.</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge rounded-pill px-3 py-1.5 fw-bold" id="usersCountBadge" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-size: 0.78rem;">0 users</span>
-                                <div class="superadmin-view-toggle">
-                                    <button type="button" class="active" id="btnUsersCardsView" onclick="toggleUsersView('cards')"><i class="fa-solid fa-grip"></i> Cards</button>
-                                    <button type="button" id="btnUsersTableView" onclick="toggleUsersView('table')"><i class="fa-solid fa-table-list"></i> Table</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card View Container -->
-                        <div id="usersCardsContainer">
-                            <!-- Cards Grid -->
-                            <div class="superadmin-cards-grid d-none" id="usersCardsGrid"></div>
-
-                            <!-- Empty State Card -->
-                            <div class="superadmin-empty-state text-center w-100" id="usersEmptyState">
-                                <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3 shadow-xs" style="width: 58px; height: 58px; font-size: 1.4rem; color: #1d4ed8; border: 1.5px solid #cbd5e1;">
-                                    <i class="fa-solid fa-user-group"></i>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important; font-size: 1.05rem;">No Platform Users Found</h6>
-                                <p class="text-secondary small mb-0 mx-auto" style="max-width: 480px; line-height: 1.5; color: #334155 !important;">
-                                    User accounts for platform administrators, society admins, staff members, and residents will appear here once loaded.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Table View Container (Preserved for compatibility) -->
-                        <div class="table-responsive dashboard-table-scroll d-none mt-2" id="usersTableContainer">
-                            <table class="table table-hover align-middle" data-table="users">
-                                <thead class="table-light"><tr><th>Name</th><th>Role</th><th>Society</th><th>Status</th><th>Action</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Settings (Specifically Redesigned as per user request) -->
-                <section class="d-none animate__animated animate__fadeIn" data-view="settings">
-                    <div class="superadmin-section-card p-4">
-                        <!-- Header -->
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.15rem; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
-                                    <i class="fa-solid fa-sliders"></i>
-                                </div>
-                                <div>
-                                    <h4 class="superadmin-section-title">Platform Settings &amp; Governance</h4>
-                                    <p class="superadmin-section-desc">Global platform configuration, tenant onboarding rules, email routing, session security, and data compliance policies.</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5" id="settingsSavedAt" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-size: 0.78rem;">
-                                    <i class="fa-solid fa-circle-check text-primary"></i>No changes saved yet
-                                </span>
-                                <button class="btn btn-primary rounded-pill px-4 py-1.5 shadow-sm fw-bold" data-action="save">
-                                    <i class="fa-solid fa-floppy-disk me-1.5"></i>Save Settings
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- 4 Clean Aligned Metric / Governance Status Cards -->
-                        <div class="finance-kpi-grid mb-4">
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0;">
-                                    <i class="fa-solid fa-shield-heart"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Platform Status</span>
-                                    <strong class="d-block fw-bold text-success my-0.5" style="font-size: 1.35rem; letter-spacing: -0.02em;">Live &amp; Healthy</strong>
-                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Services operational</small>
-                                </div>
-                            </article>
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
-                                    <i class="fa-solid fa-user-shield"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Onboarding Pipeline</span>
-                                    <strong class="d-block fw-bold text-dark my-0.5" id="settingsApprovalPreview" style="font-size: 1.35rem; letter-spacing: -0.02em;">Auto-Approve</strong>
-                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">For paid subscribers</small>
-                                </div>
-                            </article>
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #f0f9ff; color: #0284c7; border: 1.5px solid #bae6fd;">
-                                    <i class="fa-solid fa-paper-plane"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Email Relay</span>
-                                    <strong class="d-block fw-bold text-dark my-0.5" style="font-size: 1.35rem; letter-spacing: -0.02em;">Active SMTP</strong>
-                                    <small class="text-secondary fw-semibold d-block text-truncate" id="settingsHostPreview" style="font-size: 0.78rem;">smtp.mailgun.org</small>
-                                </div>
-                            </article>
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #fffbeb; color: #d97706; border: 1.5px solid #fde68a;">
-                                    <i class="fa-solid fa-clock-rotate-left"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Audit Retention</span>
-                                    <strong class="d-block fw-bold text-dark my-0.5" id="settingsRetentionPreview" style="font-size: 1.35rem; letter-spacing: -0.02em;">36 Months</strong>
-                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Compliant storage</small>
-                                </div>
-                            </article>
-                        </div>
-
-                        <!-- Categorized Settings Sections in Clean 2-Column Responsive Layout -->
-                        <div class="row g-4 mb-4">
-                            <!-- Card 1: Platform Identity & Tenant Onboarding -->
-                            <div class="col-12 col-lg-6">
-                                <div class="p-4 rounded-4 h-100" style="background: #ffffff; border: 1.5px solid #e2e8f0; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
-                                    <div class="d-flex align-items-center gap-2.5 pb-3 mb-3 border-bottom" style="border-color: #f1f5f9 !important;">
-                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: #eff6ff; color: #1d4ed8; font-size: 1rem;">
-                                            <i class="fa-solid fa-building-gear"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.98rem;">Tenant Onboarding &amp; Operations</h6>
-                                            <small class="text-secondary" style="font-size: 0.78rem;">Registration rules and customer communication channel</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="supportEmail" class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                            <i class="fa-solid fa-envelope text-primary me-1"></i>Support Email Address
-                                        </label>
-                                        <div class="position-relative">
-                                            <input type="email" class="form-control rounded-3 border-light-subtle shadow-none py-2 ps-4" id="supportEmail" value="support@smartapartment.local" placeholder="support@domain.com">
-                                            <i class="fa-solid fa-at position-absolute text-muted" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.82rem;"></i>
-                                        </div>
-                                        <div class="form-text text-muted small mt-1" style="font-size: 0.74rem;">Default return email on onboarding invites, invoices, and password resets.</div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="approvalRule" class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                            <i class="fa-solid fa-stamp text-primary me-1"></i>Tenant Approval Rule
-                                        </label>
-                                        <select class="form-select rounded-3 border-light-subtle shadow-none py-2" id="approvalRule">
-                                            <option value="Auto approve paid tenants">Auto approve paid tenants (Recommended)</option>
-                                            <option value="Manual review">Manual review required for all societies</option>
-                                            <option value="Auto approve with 14-day trial">Auto approve with 14-day trial</option>
-                                        </select>
-                                        <div class="form-text text-muted small mt-1" style="font-size: 0.74rem;">Determines whether newly submitted society registrations become active immediately.</div>
-                                    </div>
-
-                                    <div>
-                                        <label for="maintenanceMode" class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                            <i class="fa-solid fa-screwdriver-wrench text-warning me-1"></i>Platform Maintenance Mode
-                                        </label>
-                                        <select class="form-select rounded-3 border-light-subtle shadow-none py-2" id="maintenanceMode">
-                                            <option value="Disabled">Disabled (Normal Operations - All Users Allowed)</option>
-                                            <option value="Enabled - Show Maintenance Page">Enabled (Show Maintenance Page to Residents &amp; Admins)</option>
-                                        </select>
-                                        <div class="form-text text-muted small mt-1" style="font-size: 0.74rem;">When enabled, only Super Administrators can sign in to perform upgrades.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 2: Email Routing & Infrastructure -->
-                            <div class="col-12 col-lg-6">
-                                <div class="p-4 rounded-4 h-100" style="background: #ffffff; border: 1.5px solid #e2e8f0; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
-                                    <div class="d-flex align-items-center gap-2.5 pb-3 mb-3 border-bottom" style="border-color: #f1f5f9 !important;">
-                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: #f0f9ff; color: #0284c7; font-size: 1rem;">
-                                            <i class="fa-solid fa-envelope-circle-check"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.98rem;">SMTP &amp; Communication Relay</h6>
-                                            <small class="text-secondary" style="font-size: 0.78rem;">Transactional email delivery host and dispatcher configuration</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="smtpHost" class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                            <i class="fa-solid fa-server text-info me-1"></i>SMTP Relay Host
-                                        </label>
-                                        <div class="position-relative">
-                                            <input type="text" class="form-control rounded-3 border-light-subtle shadow-none py-2 ps-4" id="smtpHost" value="smtp.mailgun.org" placeholder="smtp.provider.com">
-                                            <i class="fa-solid fa-network-wired position-absolute text-muted" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.82rem;"></i>
-                                        </div>
-                                        <div class="form-text text-muted small mt-1" style="font-size: 0.74rem;">Outbound transactional mail service endpoint for notices and billing reports.</div>
-                                    </div>
-
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-6">
-                                            <label class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                                <i class="fa-solid fa-hashtag text-info me-1"></i>SMTP Port
-                                            </label>
-                                            <input type="text" class="form-control rounded-3 border-light-subtle shadow-none py-2" value="587 (TLS)" readonly style="background: #f8fafc;">
-                                        </div>
-                                        <div class="col-6">
-                                            <label class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                                <i class="fa-solid fa-lock text-info me-1"></i>Encryption
-                                            </label>
-                                            <input type="text" class="form-control rounded-3 border-light-subtle shadow-none py-2" value="STARTTLS / SSL" readonly style="background: #f8fafc;">
-                                        </div>
-                                    </div>
-
-                                    <div class="p-3 rounded-3" style="background: #f8fafc; border: 1px dashed #cbd5e1;">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <span class="small fw-bold text-dark d-flex align-items-center gap-1.5" style="font-size: 0.8rem;">
-                                                <i class="fa-solid fa-circle-check text-success"></i>SMTP Gateway Health
-                                            </span>
-                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1 fw-bold" style="font-size: 0.72rem;">Connected</span>
-                                        </div>
-                                        <div class="text-secondary small mt-1" style="font-size: 0.74rem;">Average notification dispatch delivery latency is currently &lt; 1.2s.</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 3: Security & Session Limits -->
-                            <div class="col-12 col-lg-6">
-                                <div class="p-4 rounded-4 h-100" style="background: #ffffff; border: 1.5px solid #e2e8f0; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
-                                    <div class="d-flex align-items-center gap-2.5 pb-3 mb-3 border-bottom" style="border-color: #f1f5f9 !important;">
-                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: #e0e7ff; color: #4338ca; font-size: 1rem;">
-                                            <i class="fa-solid fa-shield-halved"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.98rem;">Session Governance &amp; Security</h6>
-                                            <small class="text-secondary" style="font-size: 0.78rem;">Concurrent session controls and administrator security baseline</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="sessionLimit" class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                            <i class="fa-solid fa-laptop-code text-primary me-1"></i>Global User Session Limit
-                                        </label>
-                                        <div class="position-relative">
-                                            <input type="number" class="form-control rounded-3 border-light-subtle shadow-none py-2 ps-4" id="sessionLimit" value="5" min="1" max="50">
-                                            <i class="fa-solid fa-desktop position-absolute text-muted" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.82rem;"></i>
-                                        </div>
-                                        <div class="form-text text-muted small mt-1" style="font-size: 0.74rem;">Maximum concurrent active device sessions permitted per administrative profile.</div>
-                                    </div>
-
-                                    <div class="p-3 rounded-3 mt-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <strong class="d-block text-dark small" style="font-size: 0.82rem;">Enforce 2FA for SuperAdmins</strong>
-                                                <small class="text-secondary" style="font-size: 0.74rem;">Mandate authenticator app verification on login</small>
-                                            </div>
-                                            <div class="form-check form-switch m-0">
-                                                <input class="form-check-input" type="checkbox" id="settingsMfaToggle" checked style="cursor: pointer;">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 4: Compliance & Data Retention -->
-                            <div class="col-12 col-lg-6">
-                                <div class="p-4 rounded-4 h-100" style="background: #ffffff; border: 1.5px solid #e2e8f0; box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);">
-                                    <div class="d-flex align-items-center gap-2.5 pb-3 mb-3 border-bottom" style="border-color: #f1f5f9 !important;">
-                                        <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; background: #fffbeb; color: #d97706; font-size: 1rem;">
-                                            <i class="fa-solid fa-database"></i>
-                                        </div>
-                                        <div>
-                                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.98rem;">Data Retention &amp; Compliance</h6>
-                                            <small class="text-secondary" style="font-size: 0.78rem;">Archival schedules, transaction records, and storage standards</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="retentionPolicy" class="form-label text-secondary small fw-bold text-uppercase mb-1" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                            <i class="fa-solid fa-calendar-days text-warning me-1"></i>Data Retention Policy (Months)
-                                        </label>
-                                        <div class="position-relative">
-                                            <input type="number" class="form-control rounded-3 border-light-subtle shadow-none py-2 ps-4" id="retentionPolicy" value="36" min="6" max="120">
-                                            <i class="fa-solid fa-clock-rotate-left position-absolute text-muted" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.82rem;"></i>
-                                        </div>
-                                        <div class="form-text text-muted small mt-1" style="font-size: 0.74rem;">Duration financial invoices, gate entries, and complaints remain archived online.</div>
-                                    </div>
-
-                                    <div class="p-3 rounded-3 mt-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <strong class="d-block text-dark small" style="font-size: 0.82rem;">Automatic Database Snapshots</strong>
-                                                <small class="text-secondary" style="font-size: 0.74rem;">Encrypted daily backups stored off-site</small>
-                                            </div>
-                                            <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1 fw-bold" style="font-size: 0.72rem;">Enabled (Daily)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bottom Footer Actions -->
-                        <div class="pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-3" style="border-color: #f1f5f9 !important;">
-                            <span class="small text-secondary" style="font-size: 0.8rem;">
-                                <i class="fa-solid fa-circle-info text-primary me-1"></i>Configuration changes take effect immediately across all tenant workspaces.
-                            </span>
-                            <div class="d-flex align-items-center gap-2">
-                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 superadmin-cancel-btn" onclick="restoreDefaultSettings()">
-                                    <i class="fa-solid fa-rotate-left me-1.5"></i>Reset Defaults
-                                </button>
-                                <button class="btn btn-primary rounded-pill px-4 py-2 shadow-sm fw-bold" data-action="save">
-                                    <i class="fa-solid fa-floppy-disk me-1.5"></i>Save Settings
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Roles & Access -->
-                <section class="d-none" data-view="access-roles">
-                    <div class="superadmin-section-card p-4">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.15rem; background: #e0e7ff; color: #4338ca; border: 1.5px solid #c7d2fe;">
-                                    <i class="fa-solid fa-user-shield"></i>
-                                </div>
-                                <div>
-                                    <h4 class="superadmin-section-title">Global Roles & Access Control</h4>
-                                    <p class="superadmin-section-desc">Configure security levels, data scopes, session timeouts, and governance policies across platform roles.</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge rounded-pill px-3 py-1.5 fw-bold" id="rolesCountBadge" style="background: #e0e7ff; color: #4338ca; border: 1.5px solid #c7d2fe; font-size: 0.78rem;">0 roles</span>
-                                <div class="superadmin-view-toggle">
-                                    <button type="button" class="active" id="btnRolesCardsView" onclick="toggleRolesView('cards')"><i class="fa-solid fa-grip"></i> Cards</button>
-                                    <button type="button" id="btnRolesTableView" onclick="toggleRolesView('table')"><i class="fa-solid fa-table-list"></i> Table</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card View Container -->
-                        <div id="rolesCardsContainer">
-                            <!-- Cards Grid -->
-                            <div class="superadmin-cards-grid d-none" id="rolesCardsGrid"></div>
-
-                            <!-- Empty State Card -->
-                            <div class="superadmin-empty-state text-center w-100" id="rolesEmptyState">
-                                <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3 shadow-xs" style="width: 58px; height: 58px; font-size: 1.4rem; color: #4338ca; border: 1.5px solid #cbd5e1;">
-                                    <i class="fa-solid fa-shield-halved"></i>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important; font-size: 1.05rem;">No Role Policies Found</h6>
-                                <p class="text-secondary small mb-0 mx-auto" style="max-width: 480px; line-height: 1.5; color: #334155 !important;">
-                                    Role-based access control policies for platform administrators, society managers, and staff will appear here.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Table View Container (Preserved for compatibility) -->
-                        <div class="table-responsive dashboard-table-scroll d-none mt-2" id="rolesTableContainer">
-                            <table class="table table-hover align-middle" id="accessRolesTable">
-                                <thead class="table-light"><tr><th>Role Name</th><th>Permissions Level</th><th>Status</th><th>Action</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Subscription payments -->
-                <section class="d-none" data-view="finance-setup">
+                <div id="subscriptionPaymentsWorkspace" data-subscription-payments class="mt-4">
                     <div class="superadmin-section-card p-4">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
                             <div class="d-flex align-items-center gap-3">
@@ -1945,150 +1648,111 @@
                             </table>
                         </div>
                     </div>
-                </section>
+                </div></section>
 
-                <!-- Service Requests Section -->
-                <section class="d-none animate__animated animate__fadeIn" data-view="service-requests">
+                <!-- Users -->
+                <section class="d-none" data-view="users">
                     <div class="superadmin-section-card p-4">
-                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
                             <div class="d-flex align-items-center gap-3">
                                 <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.15rem; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
-                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    <i class="fa-solid fa-users"></i>
                                 </div>
                                 <div>
-                                    <h4 class="superadmin-section-title">Service & Maintenance Requests</h4>
-                                    <p class="superadmin-section-desc">Live service requests submitted across SmartSociety and PropertyDirect platforms.</p>
+                                    <h4 class="superadmin-section-title">Platform Users Directory</h4>
+                                    <p class="superadmin-section-desc">Manage system administrators, facility managers, security staff, and resident profiles.</p>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <button class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1.5 fw-bold" id="btnRefreshServiceRequests" onclick="loadSmartSocietySuperAdminServiceRequests(this)"><i class="fa-solid fa-rotate me-1.5"></i>Refresh</button>
-                                <span class="badge rounded-pill px-3 py-1.5 fw-bold" id="ssServiceRowCount" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; font-size: 0.78rem;">0 records</span>
+                                <span class="badge rounded-pill px-3 py-1.5 fw-bold" id="usersCountBadge" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-size: 0.78rem;">0 users</span>
                                 <div class="superadmin-view-toggle">
-                                    <button type="button" class="active" id="btnServiceCardsView" onclick="toggleServiceRequestsView('cards')"><i class="fa-solid fa-grip"></i> Cards</button>
-                                    <button type="button" id="btnServiceTableView" onclick="toggleServiceRequestsView('table')"><i class="fa-solid fa-table-list"></i> Table</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 4 Clean Aligned Metric / KPI Cards -->
-                        <div class="finance-kpi-grid">
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
-                                    <i class="fa-solid fa-screwdriver-wrench"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Total Requests</span>
-                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssTotalServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
-                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">All logged tickets</small>
-                                </div>
-                            </article>
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #fffbeb; color: #d97706; border: 1.5px solid #fde68a;">
-                                    <i class="fa-solid fa-clock"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Pending / Requested</span>
-                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssPendingServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
-                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Awaiting technician</small>
-                                </div>
-                            </article>
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #f0f9ff; color: #0284c7; border: 1.5px solid #bae6fd;">
-                                    <i class="fa-solid fa-spinner"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">In Progress</span>
-                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssInProgressServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
-                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Active technician work</small>
-                                </div>
-                            </article>
-                            <article class="finance-kpi-card">
-                                <div class="finance-kpi-icon" style="background: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0;">
-                                    <i class="fa-solid fa-circle-check"></i>
-                                </div>
-                                <div class="min-w-0">
-                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Resolved</span>
-                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssResolvedServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
-                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Successfully closed</small>
-                                </div>
-                            </article>
-                        </div>
-
-                        <!-- Filter and Search Row with Clean Alignments -->
-                        <div class="row g-3 mb-4 pt-3 border-top" style="border-color: #f1f5f9 !important;">
-                            <div class="col-12 col-md-4">
-                                <label class="form-label text-secondary small fw-bold text-uppercase mb-1.5" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                    <i class="fa-solid fa-layer-group text-primary me-1"></i>Platform Source
-                                </label>
-                                <select id="ssServicePlatformFilter" class="form-select rounded-3 border-light-subtle shadow-none py-2" onchange="filterSmartSocietyServiceRequests()">
-                                    <option value="ALL">All Platforms</option>
-                                    <option value="smartsociety">SmartSociety</option>
-                                    <option value="propertydirect">PropertyDirect</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <label class="form-label text-secondary small fw-bold text-uppercase mb-1.5" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                    <i class="fa-solid fa-filter text-primary me-1"></i>Status Filter
-                                </label>
-                                <select id="ssServiceStatusFilter" class="form-select rounded-3 border-light-subtle shadow-none py-2" onchange="filterSmartSocietyServiceRequests()">
-                                    <option value="ALL">All Statuses</option>
-                                    <option value="PENDING">Pending / Requested</option>
-                                    <option value="IN_PROGRESS">In Progress</option>
-                                    <option value="RESOLVED">Resolved</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <label class="form-label text-secondary small fw-bold text-uppercase mb-1.5" style="font-size: 0.74rem; letter-spacing: 0.03em;">
-                                    <i class="fa-solid fa-magnifying-glass text-primary me-1"></i>Search Requests
-                                </label>
-                                <div class="position-relative">
-                                    <input type="text" id="ssServiceSearchInput" class="form-control rounded-3 border-light-subtle shadow-none py-2 ps-4" placeholder="Search requester, service, address..." oninput="filterSmartSocietyServiceRequests()">
-                                    <i class="fa-solid fa-search position-absolute text-muted" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.82rem;"></i>
+                                    <button type="button" class="active" id="btnUsersCardsView" onclick="toggleUsersView('cards')"><i class="fa-solid fa-grip"></i> Cards</button>
+                                    <button type="button" id="btnUsersTableView" onclick="toggleUsersView('table')"><i class="fa-solid fa-table-list"></i> Table</button>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Card View Container -->
-                        <div id="serviceCardsContainer">
-                            <div class="service-requests-cards-grid" id="serviceCardsGrid"></div>
+                        <div id="usersCardsContainer">
+                            <!-- Cards Grid -->
+                            <div class="superadmin-cards-grid d-none" id="usersCardsGrid"></div>
 
                             <!-- Empty State Card -->
-                            <div class="superadmin-empty-state text-center w-100 py-4 d-none" id="serviceEmptyState">
+                            <div class="superadmin-empty-state text-center w-100" id="usersEmptyState">
                                 <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3 shadow-xs" style="width: 58px; height: 58px; font-size: 1.4rem; color: #1d4ed8; border: 1.5px solid #cbd5e1;">
-                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    <i class="fa-solid fa-user-group"></i>
                                 </div>
-                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important; font-size: 1.05rem;">No Service Requests Found</h6>
-                                <p class="text-secondary small mb-3 mx-auto" style="max-width: 480px; line-height: 1.5; color: #334155 !important;">
-                                    There are currently no maintenance or service requests matching your selected platform or status criteria.
+                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important; font-size: 1.05rem;">No Platform Users Found</h6>
+                                <p class="text-secondary small mb-0 mx-auto" style="max-width: 480px; line-height: 1.5; color: #334155 !important;">
+                                    User accounts for platform administrators, society admins, staff members, and residents will appear here once loaded.
                                 </p>
-                                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3.5 py-1.5 fw-bold" onclick="window.resetServiceFilters()">
-                                    <i class="fa-solid fa-arrow-rotate-left me-1.5"></i>Reset Filters
-                                </button>
                             </div>
                         </div>
 
                         <!-- Table View Container (Preserved for compatibility) -->
-                        <div class="table-responsive dashboard-table-scroll d-none mt-2" id="serviceTableContainer">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Ticket ID</th>
-                                        <th>Platform</th>
-                                        <th>Requester</th>
-                                        <th>Service Details</th>
-                                        <th>Service Address</th>
-                                        <th>Schedule & Priority</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="smartSocietyServiceRequestsTable">
-                                    <tr><td colspan="8" class="text-center text-muted py-4">Loading service requests...</td></tr>
-                                </tbody>
+                        <div class="table-responsive dashboard-table-scroll d-none mt-2" id="usersTableContainer">
+                            <table class="table table-hover align-middle" data-table="users">
+                                <thead class="table-light"><tr><th>Name</th><th>Role</th><th>Society</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
-                </section>
+                <div id="rolesAccessWorkspace" class="mt-4">
+                    <div class="superadmin-section-card p-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.15rem; background: #e0e7ff; color: #4338ca; border: 1.5px solid #c7d2fe;">
+                                    <i class="fa-solid fa-user-shield"></i>
+                                </div>
+                                <div>
+                                    <h4 class="superadmin-section-title">Global Roles & Access Control</h4>
+                                    <p class="superadmin-section-desc">Configure security levels, data scopes, session timeouts, and governance policies across platform roles.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <span class="badge rounded-pill px-3 py-1.5 fw-bold" id="rolesCountBadge" style="background: #e0e7ff; color: #4338ca; border: 1.5px solid #c7d2fe; font-size: 0.78rem;">0 roles</span>
+                                <div class="superadmin-view-toggle">
+                                    <button type="button" class="active" id="btnRolesCardsView" onclick="toggleRolesView('cards')"><i class="fa-solid fa-grip"></i> Cards</button>
+                                    <button type="button" id="btnRolesTableView" onclick="toggleRolesView('table')"><i class="fa-solid fa-table-list"></i> Table</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card View Container -->
+                        <div id="rolesCardsContainer">
+                            <!-- Cards Grid -->
+                            <div class="superadmin-cards-grid d-none" id="rolesCardsGrid"></div>
+
+                            <!-- Empty State Card -->
+                            <div class="superadmin-empty-state text-center w-100" id="rolesEmptyState">
+                                <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3 shadow-xs" style="width: 58px; height: 58px; font-size: 1.4rem; color: #4338ca; border: 1.5px solid #cbd5e1;">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important; font-size: 1.05rem;">No Role Policies Found</h6>
+                                <p class="text-secondary small mb-0 mx-auto" style="max-width: 480px; line-height: 1.5; color: #334155 !important;">
+                                    Role-based access control policies for platform administrators, society managers, and staff will appear here.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Table View Container (Preserved for compatibility) -->
+                        <div class="table-responsive dashboard-table-scroll d-none mt-2" id="rolesTableContainer">
+                            <table class="table table-hover align-middle" id="accessRolesTable">
+                                <thead class="table-light"><tr><th>Role Name</th><th>Permissions Level</th><th>Status</th><th>Action</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div></section>
+
+                <!-- Settings (Specifically Redesigned as per user request) -->
+                <section class="d-none animate__animated animate__fadeIn" data-view="settings"></section>
+
+                <!-- Roles & Access -->
+
+
+                <!-- Subscription payments -->
+
 
                 <!-- Home Services & Pricing CRUD Management Panel -->
                 <!-- Home Services & Pricing Catalog Management Panel -->
@@ -2263,18 +1927,6 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5" id="homeServicesSyncPill" style="background: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0; font-size: 0.78rem;">
-                                    <i class="fa-solid fa-circle-check text-success"></i>Live Synced with Resident App
-                                </span>
-                                <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1.5 fw-bold btn-sm shadow-xs" onclick="window.loadAdminPackages()">
-                                    <i class="fa-solid fa-rotate me-1.5"></i>Refresh
-                                </button>
-                                <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-1.5 fw-bold btn-sm superadmin-cancel-btn" onclick="window.resetToDefaultPricingCatalog()">
-                                    <i class="fa-solid fa-arrow-rotate-left me-1.5"></i>Reset Defaults
-                                </button>
-                                <button type="button" class="btn btn-primary rounded-pill px-3.5 py-1.5 fw-bold btn-sm shadow-sm" onclick="window.openAddPackageModal()">
-                                    <i class="fa-solid fa-plus me-1.5"></i>Add Custom Package
-                                </button>
                             </div>
                         </div>
 
@@ -2401,13 +2053,18 @@
             </div>
         </main>
     </div>
-    
+
     <div id="toast" class="toast hidden bg-dark text-white p-3 rounded-3 shadow-lg position-fixed bottom-0 end-0 m-4" style="z-index: 1050;"></div>
 
     <style>
+        #platformUserModal .modal-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; }
+        #platformUserModal .modal-header > div { flex:1; min-width:0; }
+        #platformUserModal .modal-header .btn-close { flex:0 0 auto; margin-left:auto !important; }
         #platformNoticeModal .modal-dialog { max-width: 760px; }
         #platformNoticeModal .modal-content { overflow: hidden; background: #fff; }
-        #platformNoticeModal .modal-header { padding: 1.5rem 1.75rem; background: linear-gradient(135deg, #2856e8, #503ee7) !important; }
+        #platformNoticeModal .modal-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; padding: 1.5rem 1.75rem; background: linear-gradient(135deg, #2856e8, #503ee7) !important; }
+        #platformNoticeModal .modal-header > div { flex:1; min-width:0; }
+        #platformNoticeModal .modal-header .btn-close { flex:0 0 auto; margin-left:auto !important; }
         #platformNoticeModal .notice-kicker { color: rgba(255,255,255,.76); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
         #platformNoticeModal .notice-intro { display: flex; gap: .8rem; align-items: flex-start; padding: .95rem 1rem; border: 1px solid #dbe7ff; border-radius: 14px; background: #f4f7ff; color: #355078; }
         #platformNoticeModal .notice-intro i { color: #3159e8; padding-top: .15rem; }
@@ -2456,7 +2113,9 @@
         #addSocietyModal { overflow: hidden; }
         #addSocietyModal .modal-dialog { width: min(980px, calc(100vw - 2rem)); max-width: 980px; height: min(900px, calc(100dvh - 2rem)); margin: 1rem auto; }
         #addSocietyModal .modal-content { display:flex; height:100%; max-height:none; overflow:hidden; border:0; }
-        #addSocietyModal .modal-header { flex:0 0 auto; color:#fff; background:linear-gradient(135deg,#2856e8,#503ee7); }
+        #addSocietyModal .modal-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; flex:0 0 auto; color:#fff; background:linear-gradient(135deg,#2856e8,#503ee7); }
+        #addSocietyModal .modal-header > div { flex:1; min-width:0; }
+        #addSocietyModal .modal-header .btn-close { flex:0 0 auto; margin-left:auto !important; }
         #addSocietyModal form { display:flex; flex:1 1 auto; flex-direction:column; min-height:0; overflow:hidden; }
         #addSocietyModal .modal-body { flex:1 1 auto; min-height:0; overflow-x:hidden; overflow-y:auto !important; overscroll-behavior:contain; scrollbar-gutter:stable; -webkit-overflow-scrolling:touch; background:#f7f9fd; }
         #addSocietyModal .modal-body::-webkit-scrollbar { width:10px; }
@@ -2486,11 +2145,13 @@
         #addSocietyModal .society-approval-box span { display:block; margin-top:.18rem; color:#75839a; font-size:.72rem; line-height:1.4; }
         #addSocietyModal .modal-footer { flex:0 0 auto; background:#fff; }
         @media (max-width: 767px) { #addSocietyModal .modal-dialog { width:calc(100vw - 1rem); height:calc(100dvh - 1rem); margin:.5rem auto; } #addSocietyModal .society-form-section { padding:1rem; } }
-        #subscriptionPlanModal { z-index:12060; overflow:hidden; }
+        body[data-dashboard-role="superadmin"] #subscriptionPlanModal.show { z-index:12060 !important; }
+        #subscriptionPlanModal { overflow:hidden; }
         body.plan-editor-open .modal-backdrop { z-index:12050 !important; }
         #subscriptionPlanModal .modal-dialog { width:min(860px,calc(100vw - 2rem)); max-width:860px; height:calc(100dvh - 2rem); margin:1rem auto; }
         #subscriptionPlanModal .modal-content { display:flex; height:100%; max-height:none; overflow:hidden; }
-        #subscriptionPlanModal .modal-header { flex:0 0 auto; padding:.9rem 1.25rem; }
+        #subscriptionPlanModal .modal-header { display:flex; justify-content:space-between; align-items:center; flex:0 0 auto; padding:.9rem 1.25rem; }
+        #subscriptionPlanModal .modal-header .btn-close { flex-shrink:0; margin-left:auto; }
         #subscriptionPlanModal form { display:flex; flex:1 1 auto; flex-direction:column; min-height:0; overflow:hidden; }
         #subscriptionPlanModal .modal-body { flex:1 1 auto; min-height:0; overflow-x:hidden; overflow-y:auto !important; overscroll-behavior:contain; scrollbar-gutter:stable; padding:1.15rem 1.25rem !important; }
         #subscriptionPlanModal .modal-footer { flex:0 0 auto; padding:.8rem 1.25rem !important; }
@@ -2510,11 +2171,14 @@
         #subscriptionPlanModal .plan-editor-publishing { padding-bottom:.2rem; }
         #subscriptionPlanModalStatus { flex:1; min-height:1.15rem; color:#c62828; font-size:.78rem; font-weight:700; }
         @media (max-width:640px) { #subscriptionPlanModal .modal-dialog { width:calc(100vw - 1rem); height:calc(100dvh - 1rem); margin:.5rem auto; } #subscriptionPlanModal .plan-editor-intro,#subscriptionPlanModal .plan-editor-publishing { flex-direction:column; } #subscriptionPlanModal .plan-status-switch { flex:auto; width:100%; } #subscriptionPlanModal .plan-editor-grid,#subscriptionPlanModal .plan-feature-grid { grid-template-columns:1fr; } #subscriptionPlanModal .plan-editor-grid .wide { grid-column:auto; } }
-        #rolePolicyModal { z-index:12070; overflow:hidden; }
+        body[data-dashboard-role="superadmin"] #rolePolicyModal.show { z-index:12070 !important; }
+        #rolePolicyModal { overflow:hidden; }
         body.role-policy-editor-open .modal-backdrop { z-index:12065 !important; }
         #rolePolicyModal .modal-dialog { width:min(900px,calc(100vw - 2rem)); max-width:900px; height:calc(100dvh - 2rem); margin:1rem auto; }
         #rolePolicyModal .modal-content { display:flex; height:100%; overflow:hidden; }
-        #rolePolicyModal .modal-header { flex:0 0 auto; padding:.9rem 1.25rem; }
+        #rolePolicyModal .modal-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:nowrap; flex:0 0 auto; padding:.9rem 1.25rem; }
+        #rolePolicyModal .modal-header > div { flex:1; min-width:0; }
+        #rolePolicyModal .modal-header .btn-close { flex:0 0 auto; margin-left:auto !important; }
         #rolePolicyModal form { display:flex; flex:1 1 auto; flex-direction:column; min-height:0; overflow:hidden; }
         #rolePolicyModal .modal-body { flex:1 1 auto; min-height:0; overflow-x:hidden; overflow-y:auto !important; overscroll-behavior:contain; scrollbar-gutter:stable; padding:1.1rem 1.25rem !important; background:#f7f9fd; }
         #rolePolicyModal .modal-footer { flex:0 0 auto; padding:.8rem 1.25rem !important; background:#fff; }
@@ -2540,7 +2204,7 @@
         #rolePolicyModal .policy-switch .form-check-label { flex:1 1 auto; min-width:0; margin:0; color:#273349; font-size:.79rem !important; line-height:1.3; cursor:pointer; }
         #rolePolicyModalStatus { flex:1; min-height:1.1rem; color:#c62828; font-size:.76rem; font-weight:700; }
         @media(max-width:700px){#rolePolicyModal .modal-dialog{width:calc(100vw - 1rem);height:calc(100dvh - 1rem);margin:.5rem auto}#rolePolicyModal .policy-option-grid,#rolePolicyModal .policy-switch-grid{grid-template-columns:1fr}}
-        section[data-view="finance-setup"] { color:#1d2738; }
+        [data-subscription-payments] { color:#1d2738; }
         .subscription-payment-heading { display:flex; justify-content:space-between; align-items:flex-end; gap:1.25rem; margin-bottom:1.4rem; }
         .subscription-payment-heading span { display:block; margin-bottom:.25rem; color:#3159e8; font-size:.7rem; font-weight:850; letter-spacing:.09em; }
         .subscription-payment-heading h3 { margin:0; font-size:1.55rem; font-weight:800; letter-spacing:-.025em; }
@@ -3126,37 +2790,6 @@
             return true;
         };
 
-        // Service Requests View Switcher (Cards vs Table)
-        window.toggleServiceRequestsView = function(mode) {
-            const cardsCont = document.getElementById('serviceCardsContainer');
-            const tableCont = document.getElementById('serviceTableContainer');
-            const btnCards = document.getElementById('btnServiceCardsView');
-            const btnTable = document.getElementById('btnServiceTableView');
-            if (mode === 'table') {
-                cardsCont?.classList.add('d-none');
-                tableCont?.classList.remove('d-none');
-                btnCards?.classList.remove('active');
-                btnTable?.classList.add('active');
-            } else {
-                cardsCont?.classList.remove('d-none');
-                tableCont?.classList.add('d-none');
-                btnCards?.classList.add('active');
-                btnTable?.classList.remove('active');
-            }
-        };
-
-        // Service Requests Filter Reset Helper
-        window.resetServiceFilters = function() {
-            const platformFilter = document.getElementById("ssServicePlatformFilter");
-            const statusFilter = document.getElementById("ssServiceStatusFilter");
-            const searchInput = document.getElementById("ssServiceSearchInput");
-            if (platformFilter) platformFilter.value = "ALL";
-            if (statusFilter) statusFilter.value = "ALL";
-            if (searchInput) searchInput.value = "";
-            filterSmartSocietyServiceRequests();
-            window.showToast("Filters reset to show all service requests.");
-        };
-
         // Ensure injected floating header meta (Live workspace, duplicate SA avatar) is completely stripped
         function purgeHeaderMeta() {
             document.querySelectorAll(".dashboard-header-meta, .dashboard-live-status, .dashboard-avatar").forEach(el => el.remove());
@@ -3171,522 +2804,41 @@
 
         const dashboardTitles = {
             overview: "Overview", "audit-logs": "Granular Audit Logs",
-            societies: "Societies", subscriptions: "Subscriptions", users: "Users",
+            societies: "Societies", subscriptions: "Subscriptions & Payments", users: "Users & Roles",
             "access-roles": "Roles & Access",
             "finance-setup": "Subscription Payments", "service-requests": "Service & Maintenance Requests",
             "home-services": "Home Services & Pricing Catalog", "service-pricing": "Home Services & Pricing Catalog",
             settings: "Settings"
         };
-        
-        let allSmartSocietyServiceRequests = [];
-
-        async function loadSmartSocietySuperAdminServiceRequests(btn) {
-            const table = document.getElementById("smartSocietyServiceRequestsTable");
-            const cardsGrid = document.getElementById("serviceCardsGrid");
-            if (!table && !cardsGrid) return;
-
-            let icon = null;
-            if (btn) {
-                icon = btn.querySelector("i");
-                if (icon) icon.classList.add("fa-spin");
-                btn.disabled = true;
-            }
-
-            try {
-                const response = await fetch("/api/maintenance");
-                if (!response.ok) throw new Error("Failed to load service requests");
-                allSmartSocietyServiceRequests = await response.json();
-                
-                const openCount = allSmartSocietyServiceRequests.filter(t => !/RESOLVED|CLOSED/i.test(t.ticketStatus || "")).length;
-                const openTicketsEl = document.getElementById("overviewOpenTickets");
-                if (openTicketsEl) openTicketsEl.textContent = openCount;
-
-                filterSmartSocietyServiceRequests();
-                if (btn) {
-                    window.showToast("✓ Service requests refreshed.");
-                }
-            } catch (error) {
-                if (table) table.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4">Unable to load service requests: ${error.message}</td></tr>`;
-                window.showToast("Failed to load service requests: " + error.message, true);
-            } finally {
-                if (btn) {
-                    if (icon) icon.classList.remove("fa-spin");
-                    btn.disabled = false;
-                }
-            }
-        }
-
-        function renderSmartSocietyServiceRequests(tickets) {
-            const table = document.getElementById("smartSocietyServiceRequestsTable");
-            const cardsGrid = document.getElementById("serviceCardsGrid");
-            const emptyState = document.getElementById("serviceEmptyState");
-            const countBadge = document.getElementById("ssServiceRowCount");
-
-            const total = allSmartSocietyServiceRequests.length;
-            const pending = allSmartSocietyServiceRequests.filter(t => /PENDING|REQUESTED|OPEN/i.test(t.ticketStatus || "")).length;
-            const inProgress = allSmartSocietyServiceRequests.filter(t => /IN_PROGRESS|ASSIGNED/i.test(t.ticketStatus || "")).length;
-            const resolved = allSmartSocietyServiceRequests.filter(t => /RESOLVED|CLOSED/i.test(t.ticketStatus || "")).length;
-
-            const totalEl = document.getElementById("ssTotalServiceRequests");
-            const pendingEl = document.getElementById("ssPendingServiceRequests");
-            const inProgressEl = document.getElementById("ssInProgressServiceRequests");
-            const resolvedEl = document.getElementById("ssResolvedServiceRequests");
-
-            if (totalEl) totalEl.textContent = total;
-            if (pendingEl) pendingEl.textContent = pending;
-            if (inProgressEl) inProgressEl.textContent = inProgress;
-            if (resolvedEl) resolvedEl.textContent = resolved;
-
-            if (countBadge) {
-                countBadge.textContent = `${tickets.length} record${tickets.length === 1 ? '' : 's'}`;
-            }
-
-            if (!tickets.length) {
-                if (table) table.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">No service requests found.</td></tr>`;
-                if (cardsGrid) {
-                    cardsGrid.innerHTML = '';
-                    cardsGrid.classList.add('d-none');
-                }
-                if (emptyState) emptyState.classList.remove('d-none');
-                return;
-            }
-
-            if (emptyState) emptyState.classList.add('d-none');
-            if (cardsGrid) cardsGrid.classList.remove('d-none');
-
-            const escapeText = text => String(text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-            // Helper to parse complex ticket description lines
-            function parseTicketDescription(rawDesc) {
-                if (!rawDesc) return { meta: {}, scopeList: [], notes: "" };
-                const meta = {};
-                const scopeList = [];
-                const notesLines = [];
-                
-                // Clean character artifacts if present
-                const cleanDesc = String(rawDesc).replace(/\?\u0085/g, "★").replace(/\?1/g, "₹");
-                const lines = cleanDesc.split(/\r?\n/);
-                lines.forEach(line => {
-                    const trimmed = line.trim();
-                    if (!trimmed) return;
-                    const colonIdx = trimmed.indexOf(":");
-                    if (colonIdx > 0) {
-                        const key = trimmed.substring(0, colonIdx).trim().toLowerCase();
-                        const val = trimmed.substring(colonIdx + 1).trim();
-                        if (key.includes("scope")) {
-                            val.split(";").forEach(s => {
-                                const item = s.trim();
-                                if (item) scopeList.push(item);
-                            });
-                        } else if (key.includes("payment status")) {
-                            meta.paymentStatus = val;
-                        } else if (key.includes("transaction id")) {
-                            meta.transactionId = val;
-                        } else if (key.includes("payment mode")) {
-                            meta.paymentMode = val;
-                        } else if (key.includes("amount")) {
-                            meta.amount = val;
-                        } else if (key.includes("coupon")) {
-                            meta.coupon = val;
-                        } else if (key.includes("slot")) {
-                            meta.slot = val;
-                        } else if (key.includes("customer address") || key === "address") {
-                            meta.address = val;
-                        } else if (key === "service" || key.includes("sub-service")) {
-                            meta.service = val;
-                        } else if (key === "platform") {
-                            meta.platform = val;
-                        } else if (key === "requester") {
-                            meta.requester = val;
-                        } else if (key.includes("phone")) {
-                            meta.phone = val;
-                        } else {
-                            notesLines.push(trimmed);
-                        }
-                    } else {
-                        notesLines.push(trimmed);
-                    }
-                });
-                return { meta, scopeList, notes: notesLines.join("\n").trim() };
-            }
-
-            // Render Card Grid View
-            if (cardsGrid) {
-                cardsGrid.innerHTML = tickets.map(ticket => {
-                    const status = String(ticket.ticketStatus || "PENDING").toUpperCase();
-                    const isPending = /PENDING|REQUESTED|OPEN/i.test(status);
-                    const isInProgress = /IN_PROGRESS|ASSIGNED/i.test(status);
-                    const isResolved = /RESOLVED|CLOSED/i.test(status);
-                    
-                    const statusBadgeCls = isResolved ? "bg-success-subtle text-success-emphasis border border-success-subtle" :
-                                           isInProgress ? "bg-info-subtle text-info-emphasis border border-info-subtle" :
-                                           "bg-warning-subtle text-warning-emphasis border border-warning-subtle";
-                    
-                    const statusIcon = isResolved ? "fa-circle-check" :
-                                       isInProgress ? "fa-spinner fa-spin-pulse" :
-                                       "fa-clock";
-
-                    const isPropertyDirect = ticket.sourcePlatform === "propertydirect";
-                    const platformBadge = isPropertyDirect ? 
-                        `<span class="badge rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center" style="background: #fffbeb; color: #d97706; border: 1.5px solid #fde68a; font-size: 0.76rem; gap: 8px;"><i class="fa-solid fa-house-chimney me-1.5"></i><span>PropertyDirect</span></span>` :
-                        `<span class="badge rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe; font-size: 0.76rem; gap: 8px;"><i class="fa-solid fa-building me-1.5"></i><span>SmartSociety</span></span>`;
-
-                    const createdDate = ticket.createdAt ? new Date(ticket.createdAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "—";
-                    const preferredDate = ticket.preferredAt ? new Date(ticket.preferredAt).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "Flexible";
-                    const priority = escapeText(ticket.priority || "MEDIUM").toUpperCase();
-                    const priorityCls = priority === "HIGH" || priority === "URGENT" ? "badge bg-danger-subtle text-danger-emphasis border border-danger-subtle" :
-                                        priority === "LOW" ? "badge bg-secondary-subtle text-secondary border border-secondary-subtle" :
-                                        "badge bg-primary-subtle text-primary-emphasis border border-primary-subtle";
-
-                    const parsed = parseTicketDescription(ticket.description);
-                    const displayAmount = parsed.meta.amount || ticket.priceLabel || "Free / Standard";
-                    const payStatus = (parsed.meta.paymentStatus || ticket.paymentStatus || "PAID").toUpperCase();
-                    const isPaid = /PAID|COMPLETED|SUCCESS/.test(payStatus);
-                    const paymentStatusBadge = isPaid ?
-                        `<span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-1 fw-bold d-inline-flex align-items-center" style="font-size: 0.74rem; gap: 8px;"><i class="fa-solid fa-circle-check me-1.5"></i><span>${escapeText(payStatus)}</span></span>` :
-                        `<span class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3 py-1 fw-bold d-inline-flex align-items-center" style="font-size: 0.74rem; gap: 8px;"><i class="fa-solid fa-clock me-1.5"></i><span>${escapeText(payStatus)}</span></span>`;
-
-                    return `
-                        <div class="service-request-card">
-                            <!-- Top Header: Ticket ID, Platform, Priority & Live Status -->
-                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pb-2.5 border-bottom" style="border-color: #f1f5f9 !important;">
-                                <div class="d-flex align-items-center gap-2 flex-wrap">
-                                    <span class="badge rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center" style="background: #f8fafc; color: #0f172a; border: 1.5px solid #cbd5e1; font-size: 0.8rem; gap: 8px;">
-                                        <i class="fa-solid fa-ticket text-primary me-1.5"></i>
-                                        <span>#${ticket.id}</span>
-                                    </span>
-                                    ${platformBadge}
-                                    <span class="${priorityCls} rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center" style="font-size: 0.75rem; gap: 8px;">
-                                        <i class="fa-solid fa-flag me-1.5"></i>
-                                        <span>${priority}</span>
-                                    </span>
-                                    ${ticket.serviceCategory ? `
-                                        <span class="badge rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center" style="background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; font-size: 0.75rem; gap: 8px;">
-                                            <i class="fa-solid fa-layer-group text-secondary me-1.5"></i>
-                                            <span>${escapeText(ticket.serviceCategory)}</span>
-                                        </span>
-                                    ` : ''}
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <span class="badge rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center ${statusBadgeCls}" style="font-size: 0.78rem; gap: 8px;">
-                                        <i class="fa-solid ${statusIcon} me-1.5"></i>
-                                        <span>${status.replace("_", " ")}</span>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <!-- Spacious 2-Column Split Body -->
-                            <div class="service-card-body-grid">
-                                <!-- Left Column: Requester, Service Package & Address -->
-                                <div class="d-flex flex-column gap-3">
-                                    <!-- Requester Profile -->
-                                    <div class="service-info-subcard">
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.15rem; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
-                                                <i class="fa-solid fa-user"></i>
-                                            </div>
-                                            <div class="min-w-0 flex-grow-1">
-                                                <div class="fw-bold text-dark text-truncate" style="font-size: 1rem; color: #0f172a !important;">
-                                                    ${escapeText(ticket.requesterName || parsed.meta.requester || "Anonymous Requester")}
-                                                </div>
-                                                <div class="d-flex align-items-center gap-3 flex-wrap small mt-1.5" style="font-size: 0.82rem;">
-                                                    ${(ticket.requesterPhone || parsed.meta.phone) ? `
-                                                        <a href="tel:${escapeText(ticket.requesterPhone || parsed.meta.phone)}" onclick="window.handleCallPhone(event, '${escapeText(ticket.requesterPhone || parsed.meta.phone)}')" class="text-decoration-none fw-semibold text-primary d-inline-flex align-items-center" style="gap: 8px;">
-                                                            <i class="fa-solid fa-phone me-1.5"></i>
-                                                            <span>${escapeText(ticket.requesterPhone || parsed.meta.phone)}</span>
-                                                        </a>
-                                                    ` : ''}
-                                                    ${ticket.requesterEmail ? `
-                                                        <span class="text-muted d-inline-flex align-items-center" style="gap: 8px;">
-                                                            <i class="fa-solid fa-envelope me-1.5"></i>
-                                                            <span>${escapeText(ticket.requesterEmail)}</span>
-                                                        </span>
-                                                    ` : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Service Package & Address -->
-                                    <div class="service-info-subcard">
-                                        <div class="mb-3">
-                                            <span class="text-uppercase text-muted fw-bold d-block mb-1.5" style="font-size: 0.68rem; letter-spacing: 0.05em;">Service Requested</span>
-                                            <div class="d-flex align-items-center gap-2.5 fw-bold text-dark" style="font-size: 1.05rem; color: #0f172a !important; line-height: 1.35;">
-                                                <i class="fa-solid fa-screwdriver-wrench text-primary flex-shrink-0 me-2" style="font-size: 1rem;"></i>
-                                                <span>${escapeText(ticket.serviceType || parsed.meta.service || "Standard Request")}</span>
-                                            </div>
-                                            ${ticket.serviceOption ? `
-                                                <div class="d-inline-flex align-items-center mt-2 px-3 py-1 rounded-pill bg-light border" style="font-size: 0.78rem; gap: 8px;">
-                                                    <span class="text-muted fw-semibold">Tier:</span>
-                                                    <span class="fw-bold text-dark">${escapeText(ticket.serviceOption)}</span>
-                                                </div>
-                                            ` : ''}
-                                        </div>
-                                        
-                                        <div class="pt-2.5 border-top small" style="border-color: #e2e8f0 !important; font-size: 0.84rem;">
-                                            <div class="d-flex align-items-start gap-2.5 text-secondary" style="line-height: 1.5;">
-                                                <i class="fa-solid fa-location-dot text-danger flex-shrink-0 mt-1 me-2" style="font-size: 0.95rem;"></i>
-                                                <div>
-                                                    <strong class="text-dark" style="margin-right: 8px;">Service Address:</strong>
-                                                    <span class="text-secondary">${escapeText(ticket.serviceAddress || parsed.meta.address || "Address on file")}</span>
-                                                </div>
-                                            </div>
-                                            ${(ticket.externalReference || ticket.title) ? `
-                                                <div class="d-flex align-items-center gap-2 mt-2 text-secondary">
-                                                    <i class="fa-solid fa-tag text-muted flex-shrink-0 me-2" style="font-size: 0.85rem;"></i>
-                                                    <strong class="text-dark" style="margin-right: 6px;">Ref:</strong>
-                                                    <code class="px-2.5 py-0.5 bg-white border rounded text-dark font-monospace fw-semibold" style="font-size: 0.78rem; letter-spacing: 0.02em;">${escapeText(ticket.externalReference || ticket.title)}</code>
-                                                </div>
-                                            ` : ''}
-                                        </div>
-                                    </div>
-
-                                    <!-- Schedule Timestamps -->
-                                    <div class="service-info-subcard py-3 px-3">
-                                        <div class="row g-2 align-items-center">
-                                            <div class="col-12 col-sm-6">
-                                                <span class="text-muted d-block fw-bold text-uppercase mb-1.5" style="font-size: 0.68rem; letter-spacing: 0.05em;">Preferred Timing</span>
-                                                <div class="d-flex align-items-center gap-2 fw-semibold text-dark flex-wrap" style="font-size: 0.84rem; line-height: 1.4;">
-                                                    <i class="fa-regular fa-calendar-check text-primary flex-shrink-0 me-2" style="font-size: 0.95rem;"></i>
-                                                    <span style="white-space: nowrap;">${preferredDate}</span>
-                                                    ${parsed.meta.slot ? `<span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2.5 py-0.5 fw-bold ms-1" style="font-size: 0.7rem;">${escapeText(parsed.meta.slot)}</span>` : ''}
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-sm-6 ps-sm-3 border-start-sm" style="border-left: 1px solid #e2e8f0;">
-                                                <span class="text-muted d-block fw-bold text-uppercase mb-1.5" style="font-size: 0.68rem; letter-spacing: 0.05em;">Logged Date</span>
-                                                <div class="d-flex align-items-center gap-2 text-secondary" style="font-size: 0.84rem; line-height: 1.4; white-space: nowrap;">
-                                                    <i class="fa-regular fa-clock text-muted flex-shrink-0 me-2" style="font-size: 0.9rem;"></i>
-                                                    <span style="white-space: nowrap;">${createdDate}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Right Column: Booking & Financial Card + Assigned Technician -->
-                                <div class="d-flex flex-column gap-3">
-                                    <!-- Booking & Financial Summary -->
-                                    <div class="service-info-subcard" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important; border: 1.5px solid #e2e8f0 !important;">
-                                        <div class="d-flex justify-content-between align-items-center mb-2">
-                                            <span class="text-uppercase fw-bold text-secondary small d-inline-flex align-items-center" style="font-size: 0.7rem; letter-spacing: 0.05em; gap: 8px;">
-                                                <i class="fa-solid fa-receipt text-primary me-2"></i>
-                                                <span>Payment & Booking</span>
-                                            </span>
-                                            ${paymentStatusBadge}
-                                        </div>
-                                        
-                                        <div class="d-flex align-items-center gap-2.5 mb-2.5">
-                                            <span class="fw-bold text-dark" style="font-size: 1.55rem; letter-spacing: -0.02em; color: #0f172a !important;">
-                                                ${displayAmount}
-                                            </span>
-                                            ${parsed.meta.coupon ? `
-                                                <span class="badge rounded-pill bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2.5 py-1 small fw-bold d-inline-flex align-items-center" style="font-size: 0.74rem; gap: 8px;">
-                                                    <i class="fa-solid fa-ticket-simple me-1.5"></i>
-                                                    <span>${escapeText(parsed.meta.coupon)}</span>
-                                                </span>
-                                            ` : ''}
-                                        </div>
-
-                                        <div class="pt-2 border-top small" style="border-color: #e2e8f0 !important; font-size: 0.8rem; line-height: 1.6;">
-                                            <div class="d-flex justify-content-between align-items-center py-1">
-                                                <span class="text-muted">Payment Mode:</span>
-                                                <strong class="text-dark">${escapeText(parsed.meta.paymentMode || "Direct Booking")}</strong>
-                                            </div>
-                                            ${parsed.meta.transactionId ? `
-                                                <div class="d-flex justify-content-between align-items-center py-1">
-                                                    <span class="text-muted">Transaction ID:</span>
-                                                    <code class="text-dark fw-bold font-monospace" style="font-size: 0.78rem;">${escapeText(parsed.meta.transactionId)}</code>
-                                                </div>
-                                            ` : ''}
-                                            ${parsed.meta.slot ? `
-                                                <div class="d-flex justify-content-between align-items-center py-1">
-                                                    <span class="text-muted">Booking Slot:</span>
-                                                    <span class="badge bg-light text-dark border px-2.5 py-0.5 rounded-pill fw-semibold">${escapeText(parsed.meta.slot)}</span>
-                                                </div>
-                                            ` : ''}
-                                        </div>
-                                    </div>
-
-                                    <!-- Assigned Technician / Vendor -->
-                                    ${ticket.vendorName ? `
-                                        <div class="service-info-subcard" style="background: #f0fdf4 !important; border: 1.5px solid #bbf7d0 !important;">
-                                            <div class="d-flex justify-content-between align-items-center mb-1.5">
-                                                <span class="text-uppercase fw-bold text-success small d-inline-flex align-items-center" style="font-size: 0.7rem; letter-spacing: 0.05em; gap: 8px;">
-                                                    <i class="fa-solid fa-user-gear me-2"></i>
-                                                    <span>Assigned Technician</span>
-                                                </span>
-                                                <span class="badge bg-success text-white rounded-pill px-2.5 py-0.5 fw-bold" style="font-size: 0.7rem;">Active</span>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between gap-2 mt-1">
-                                                <div>
-                                                    <strong class="text-dark d-block" style="font-size: 0.98rem; color: #064e3b !important;">${escapeText(ticket.vendorName)}</strong>
-                                                    ${ticket.vendorPhone ? `
-                                                        <a href="tel:${escapeText(ticket.vendorPhone)}" onclick="window.handleCallPhone(event, '${escapeText(ticket.vendorPhone)}')" class="small text-success text-decoration-none fw-semibold d-inline-flex align-items-center mt-1" style="gap: 8px;">
-                                                            <i class="fa-solid fa-phone me-1.5"></i>
-                                                            <span>${escapeText(ticket.vendorPhone)}</span>
-                                                        </a>
-                                                    ` : ''}
-                                                </div>
-                                            </div>
-                                            ${ticket.vendorNotes ? `
-                                                <div class="mt-2 pt-2 border-top border-success-subtle small text-dark opacity-85 d-flex align-items-center" style="font-size: 0.8rem; gap: 8px;">
-                                                    <i class="fa-solid fa-circle-check text-success flex-shrink-0 me-2"></i>
-                                                    <span>${escapeText(ticket.vendorNotes)}</span>
-                                                </div>
-                                            ` : ''}
-                                        </div>
-                                    ` : `
-                                        <div class="service-info-subcard text-center py-3" style="background: #f8fafc; border: 1.5px dashed #cbd5e1;">
-                                            <i class="fa-solid fa-user-clock text-secondary fs-5 mb-1 d-block opacity-60"></i>
-                                            <small class="text-muted fw-semibold d-block">Technician not yet dispatched</small>
-                                        </div>
-                                    `}
-                                </div>
-                            </div>
-
-                            <!-- Package Features & Scope Included Section (Structured Chips) -->
-                            ${parsed.scopeList && parsed.scopeList.length > 0 ? `
-                                <div class="p-3 rounded-3" style="background: #f0fdfa; border: 1.5px solid #ccfbf1;">
-                                    <div class="fw-bold mb-2.5 d-flex align-items-center gap-2" style="color: #0f766e !important; font-size: 0.82rem;">
-                                        <i class="fa-solid fa-list-check flex-shrink-0 me-2" style="font-size: 0.9rem;"></i>
-                                        <span>Package Features & Scope Included (${parsed.scopeList.length}):</span>
-                                    </div>
-                                    <div class="d-flex flex-wrap gap-2">
-                                        ${parsed.scopeList.map(item => `
-                                            <span class="service-scope-chip d-inline-flex align-items-center" style="gap: 8px;">
-                                                <i class="fa-solid fa-check text-success flex-shrink-0 me-1.5" style="font-size: 0.8rem;"></i>
-                                                <span>${escapeText(item)}</span>
-                                            </span>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            ` : ''}
-
-                            <!-- Notes & Special Requirements -->
-                            ${parsed.notes ? `
-                                <div class="service-notes-box">
-                                    <div class="fw-bold mb-1 d-flex align-items-center" style="color: #92400e !important; font-size: 0.8rem; gap: 8px;">
-                                        <i class="fa-solid fa-comment-dots text-warning me-2"></i>
-                                        <span>Additional Requirements & Customer Notes:</span>
-                                    </div>
-                                    <div style="font-size: 0.82rem; line-height: 1.5; color: #78350f;">${escapeText(parsed.notes)}</div>
-                                </div>
-                            ` : ''}
-
-                            <!-- Card Footer: Quick Action Buttons & Status Update -->
-                            <div class="pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2 mt-auto" style="border-color: #f1f5f9 !important;">
-                                <div class="d-flex align-items-center gap-2 flex-wrap">
-                                    <span class="small text-secondary">Status is updated by the assigned maintenance worker.</span>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    ${(ticket.requesterPhone || parsed.meta.phone) ? `
-                                        <a href="tel:${escapeText(ticket.requesterPhone || parsed.meta.phone)}" onclick="window.handleCallPhone(event, '${escapeText(ticket.requesterPhone || parsed.meta.phone)}')" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center" style="font-size: 0.78rem; gap: 8px;">
-                                            <i class="fa-solid fa-phone me-2"></i><span>Call Requester</span>
-                                        </a>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join("");
-            }
-
-            // Render Table View
-            if (table) {
-                table.innerHTML = tickets.map(ticket => {
-                    const status = String(ticket.ticketStatus || "PENDING").toUpperCase();
-                    const badgeCls = /RESOLVED|CLOSED/.test(status) ? "bg-success" : /IN_PROGRESS|ASSIGNED/.test(status) ? "bg-info text-dark" : "bg-warning text-dark";
-                    const platformBadge = ticket.sourcePlatform === "propertydirect" ? '<span class="badge bg-warning text-dark">PropertyDirect</span>' : '<span class="badge bg-primary">SmartSociety</span>';
-                    const createdDate = ticket.createdAt ? new Date(ticket.createdAt).toLocaleString("en-IN") : "—";
-                    const preferredDate = ticket.preferredAt ? new Date(ticket.preferredAt).toLocaleString("en-IN") : "Flexible";
-                    
-                    return `
-                        <tr>
-                            <td><strong>#${ticket.id}</strong><br><small class="text-muted">${createdDate}</small></td>
-                            <td>${platformBadge}</td>
-                            <td>
-                                <strong>${escapeText(ticket.requesterName || "—")}</strong><br>
-                                <small class="text-muted"><i class="fa-solid fa-phone me-1"></i>${escapeText(ticket.requesterPhone || "—")}</small><br>
-                                <small class="text-muted">${escapeText(ticket.requesterEmail || "")}</small>
-                            </td>
-                            <td>
-                                <strong class="text-primary">${escapeText(ticket.serviceCategory || "—")}</strong><br>
-                                <span class="small fw-semibold">${escapeText(ticket.serviceType || "—")}</span><br>
-                                <small class="text-muted">${escapeText(ticket.serviceOption || "Standard")}</small>
-                            </td>
-                            <td>
-                                <span class="small">${escapeText(ticket.serviceAddress || "—")}</span><br>
-                                <small class="text-muted">Ref: ${escapeText(ticket.externalReference || ticket.title || "—")}</small>
-                            </td>
-                            <td>
-                                <span class="small"><i class="fa-regular fa-clock me-1"></i>${preferredDate}</span><br>
-                                <span class="badge bg-secondary-subtle text-secondary small">${escapeText(ticket.priority || "MEDIUM")}</span>
-                            </td>
-                            <td><span class="badge ${badgeCls}">${status.replace("_", " ")}</span></td>
-                            <td>
-                                <span class="small text-muted">Worker updates status</span>
-                            </td>
-                        </tr>
-                        ${ticket.description ? `<tr class="table-light"><td colspan="8" class="small text-muted py-2 px-4"><i class="fa-solid fa-quote-left me-2"></i><strong>Requirement:</strong> ${escapeText(ticket.description)}</td></tr>` : ''}
-                    `;
-                }).join("");
-            }
-        }
-
-        function filterSmartSocietyServiceRequests() {
-            const platform = document.getElementById("ssServicePlatformFilter")?.value || "ALL";
-            const status = document.getElementById("ssServiceStatusFilter")?.value || "ALL";
-            const query = (document.getElementById("ssServiceSearchInput")?.value || "").toLowerCase().trim();
-
-            const filtered = allSmartSocietyServiceRequests.filter(ticket => {
-                const matchPlatform = platform === "ALL" || (ticket.sourcePlatform || "").toLowerCase() === platform.toLowerCase();
-                const ticketStatus = String(ticket.ticketStatus || "PENDING").toUpperCase();
-                const matchStatus = status === "ALL" || 
-                    (status === "PENDING" && /PENDING|REQUESTED|OPEN/i.test(ticketStatus)) ||
-                    (status === "IN_PROGRESS" && /IN_PROGRESS|ASSIGNED/i.test(ticketStatus)) ||
-                    (status === "RESOLVED" && /RESOLVED|CLOSED/i.test(ticketStatus));
-                
-                const fullText = `${ticket.id} ${ticket.requesterName} ${ticket.requesterPhone} ${ticket.requesterEmail} ${ticket.serviceCategory} ${ticket.serviceType} ${ticket.serviceAddress} ${ticket.description}`.toLowerCase();
-                const matchQuery = !query || fullText.includes(query);
-
-                return matchPlatform && matchStatus && matchQuery;
-            });
-
-            renderSmartSocietyServiceRequests(filtered);
-        }
 
         window.forceOpenPanel = function(panel) {
             if (!document.querySelector(`[data-view="${panel}"]`)) panel = "overview";
             console.log("Switching to panel: " + panel);
-            
+
             // 1. Hide all views
             document.querySelectorAll("[data-view]").forEach(view => {
                 view.classList.add("hidden", "d-none");
                 view.style.display = "none";
             });
-            
+
             // 2. Show the selected view
             const selectedView = document.querySelector(`[data-view="${panel}"]`);
             if (selectedView) {
                 selectedView.classList.remove("hidden", "d-none");
                 selectedView.style.display = "";
             }
-            
+
             // 3. Update active states on nav links
             document.querySelectorAll("[data-panel]").forEach(button => {
                 const active = (button.dataset.panel === panel);
                 button.classList.toggle("active", active);
                 button.setAttribute("aria-selected", active ? "true" : "false");
             });
-            
+
             // 4. Update title
             const titleEl = document.getElementById("title");
             if (titleEl) {
                 titleEl.textContent = dashboardTitles[panel] || "Dashboard";
-            }
-
-            if (panel === "service-requests") {
-                loadSmartSocietySuperAdminServiceRequests();
             }
 
             if (panel === "subscriptions" && typeof window.renderSubscriptionCatalogue === "function") {
@@ -3704,7 +2856,7 @@
             const dashboardTopbar = document.getElementById("dashboardTopbar");
             dashboardTopbar?.classList.toggle("overview-context", isOverview);
             dashboardTopbar?.classList.toggle("d-none", !isOverview);
-            
+
             // 5. Update URL Hash silently
             if (location.hash !== `#${panel}`) {
                 history.pushState(null, "", `#${panel}`);
@@ -4075,20 +3227,20 @@
             window.renderSubscriptionCatalogue = function(plans, tenants) {
                 const cards = document.getElementById("subscriptionPlanCards");
                 const assignmentBody = document.getElementById("societyPlanAssignmentTable");
-                
-                const rawPlans = (Array.isArray(plans) && plans.length > 0) 
-                    ? plans 
+
+                const rawPlans = (Array.isArray(plans) && plans.length > 0)
+                    ? plans
                     : (window.platformPlans && window.platformPlans.length ? window.platformPlans : (window.defaultSmartSocietyPlans || [
                         { id: 1, name: "Gold Plan", planCode: "GOLD", description: "Essential apartment society management for small to mid-sized gated communities.", monthlyPrice: 2999, maxApartments: 150, maxResidents: 500, storageGb: 10, auditHistoryDays: 90, visitorManagement: true, billingManagement: true, complaintManagement: true, announcementManagement: true, active: true },
                         { id: 2, name: "Platinum Plan", planCode: "PLATINUM", description: "Advanced automation and amenities management for growing residential complexes.", monthlyPrice: 5999, maxApartments: 400, maxResidents: 1500, storageGb: 30, auditHistoryDays: 180, featured: true, visitorManagement: true, billingManagement: true, amenityBooking: true, expenseManagement: true, analytics: true, prioritySupport: true, active: true },
                         { id: 3, name: "Diamond Plan", planCode: "DIAMOND", description: "Enterprise society operating system with full API access, unlimited scale, and dedicated SLA.", monthlyPrice: 9999, maxApartments: 1000, maxResidents: 4000, storageGb: 100, auditHistoryDays: 365, visitorManagement: true, billingManagement: true, amenityBooking: true, expenseManagement: true, analytics: true, apiAccess: true, prioritySupport: true, active: true }
                     ]));
-                    
+
                 const tierKeys = ["gold", "platinum", "diamond"];
                 const cataloguePlans = [];
-                
+
                 for (const tier of tierKeys) {
-                    const matches = rawPlans.filter(p => 
+                    const matches = rawPlans.filter(p =>
                         (p.planCode && p.planCode.toLowerCase() === tier) ||
                         (p.name && p.name.toLowerCase().includes(tier))
                     );
@@ -4103,12 +3255,12 @@
                         if (def) cataloguePlans.push(def);
                     }
                 }
-                
+
                 // Also include any custom non-standard tier plans if active and not legacy
-                const extraPlans = rawPlans.filter(p => 
-                    p.active !== false && 
-                    p.planCode !== "PREMIUM" && 
-                    !tierKeys.some(tier => 
+                const extraPlans = rawPlans.filter(p =>
+                    p.active !== false &&
+                    p.planCode !== "PREMIUM" &&
+                    !tierKeys.some(tier =>
                         (p.planCode && p.planCode.toLowerCase() === tier) ||
                         (p.name && p.name.toLowerCase().includes(tier))
                     )
@@ -4127,12 +3279,12 @@
                         const nameLower = String(plan.name || plan.planCode || "").toLowerCase();
                         const tierKey = nameLower.includes("diamond") ? "diamond" : nameLower.includes("platinum") ? "platinum" : "gold";
                         const isFeatured = !!plan.featured || tierKey === "platinum";
-                        
+
                         card.className = `subscription-catalogue-card plan-${tierKey}${isFeatured ? " featured" : ""}`;
-                        
+
                         let tierTagHtml = '<span class="tier-tag tier-tag-gold"><i class="fa-solid fa-crown text-warning me-1"></i>ESSENTIAL TIER</span>';
                         let btnClass = "btn btn-outline-primary rounded-pill w-100 fw-bold btn-edit-plan";
-                        
+
                         if (tierKey === "platinum") {
                             tierTagHtml = '<span class="tier-tag tier-tag-platinum"><i class="fa-solid fa-bolt me-1"></i>MOST POPULAR</span>';
                             btnClass = "btn btn-primary rounded-pill w-100 fw-bold shadow-sm btn-edit-plan";
@@ -4140,7 +3292,7 @@
                             tierTagHtml = '<span class="tier-tag tier-tag-diamond"><i class="fa-solid fa-gem text-info me-1"></i>ENTERPRISE TIER</span>';
                             btnClass = "btn btn-dark rounded-pill w-100 fw-bold btn-edit-plan";
                         }
-                        
+
                         const statusHtml = plan.active === false
                             ? '<span class="status-tag text-secondary"><i class="fa-solid fa-circle-xmark text-danger me-1"></i>Inactive</span>'
                             : '<span class="status-tag"><i class="fa-solid fa-circle-check me-1"></i>Active</span>';
@@ -4169,7 +3321,7 @@
                                 "Multi-society governance"
                             ].filter(Boolean);
                         }
-                        
+
                         card.innerHTML = `
                             <div class="subscription-catalogue-card__top">
                                 ${tierTagHtml}
@@ -4204,9 +3356,9 @@
                     let assigned = 0;
                     if (tenantsList.length > 0) {
                         assignmentBody.replaceChildren(...tenantsList.map(tenant => {
-                            const current = planById.get(String(tenant.subscriptionPlanId)); 
+                            const current = planById.get(String(tenant.subscriptionPlanId));
                             if (current) assigned++;
-                            const row = document.createElement("tr"); 
+                            const row = document.createElement("tr");
                             row.dataset.tenantId = tenant.id;
                             const options = cataloguePlans.map(p => `<option value="${p.id}" ${String(p.id) === String(tenant.subscriptionPlanId) ? "selected" : ""}>${escapeText(p.name)}</option>`).join("");
                             row.innerHTML = `
@@ -4253,10 +3405,10 @@
                     { id: 3, name: "Diamond Plan", planCode: "DIAMOND", description: "Enterprise society operating system with full API access, unlimited scale, and dedicated SLA.", monthlyPrice: 9999, maxApartments: 1000, maxResidents: 4000, storageGb: 100, auditHistoryDays: 365, visitorManagement: true, billingManagement: true, amenityBooking: true, expenseManagement: true, analytics: true, apiAccess: true, prioritySupport: true, active: true }
                 ];
                 const pool = (window.platformPlans && window.platformPlans.length) ? window.platformPlans : defaultPlans;
-                
+
                 // 1. Check direct ID match
                 let plan = pool.find(p => String(p.id) === idStr);
-                
+
                 // 2. If not found, match by tier keyword
                 if (!plan) {
                     const tierName = idStr.toLowerCase().includes("gold") || idStr === "1" ? "gold" :
@@ -4288,7 +3440,7 @@
             planModal?.addEventListener("click", event => { if (event.target === planModal) closePlanModal(); });
             document.getElementById("btnAddSubscriptionPlan")?.addEventListener("click", () => showPlanModal(null));
             document.addEventListener("click", event => { const button = event.target.closest("[data-plan-action]"); if (!button) return; const row = button.closest("tr"); const mappedName = row?.children[1]?.textContent.trim().toLowerCase(); const plan = button.dataset.planAction === "review" ? (window.platformPlans || []).find(item => item.name.toLowerCase() === mappedName || item.name.toLowerCase().replace(/ plan$/, "") === mappedName) : (window.platformPlans || []).find(item => String(item.id) === row?.dataset.planId); if (plan) showPlanModal(plan); else showToast("The linked plan is not available in the global catalogue."); });
-            
+
             planForm?.addEventListener("submit", async event => {
                 event.preventDefault();
                 if (!planForm.checkValidity()) { planForm.reportValidity(); return; }
@@ -4328,7 +3480,7 @@
                 save.disabled = true;
                 status.textContent = "";
                 save.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Saving…';
-                
+
                 let savedPlan = null;
                 try {
                     const response = await fetch(`/api/platform/plans${id ? `/${id}` : ""}`, {
@@ -4365,7 +3517,7 @@
                 }
                 closePlanModal();
                 showToast(`✓ ${payload.name} updated successfully.`);
-                
+
                 if (typeof loadPlatformBackendData === "function") {
                     try {
                         await loadPlatformBackendData();
@@ -4592,7 +3744,7 @@
                     const emergency = Boolean(document.getElementById("noticeEmergency")?.checked);
                     const editId = document.getElementById("editPlatformNoticeId")?.value || "";
                     const editing = Boolean(editId);
-                    
+
                     if (!editing && target === "SPECIFIC_SOCIETY" && !specificSocietyId) {
                         if (typeof showToast === "function") showToast("⚠️ Please select a specific target society");
                         return;
@@ -4602,38 +3754,38 @@
                         if (typeof showToast === "function") showToast("⚠️ Notice message content is required");
                         return;
                     }
-                    
+
                     try {
                         btnSendNotice.disabled = true;
                         btnSendNotice.innerHTML = `<i class="fa-solid fa-spinner fa-spin me-2"></i>${editing ? "Saving changes..." : "Sending Notice..."}`;
-                        
+
                         const response = await fetch(editing ? `/api/superadmin/notices/${editId}` : "/api/superadmin/notices", {
                             method: editing ? "PUT" : "POST",
                             headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ 
-                                target, 
-                                specificSocietyId, 
-                                title, 
-                                message, 
-                                category, 
+                            body: JSON.stringify({
+                                target,
+                                specificSocietyId,
+                                title,
+                                message,
+                                category,
                                 priority,
                                 validDays,
                                 emergency
                             })
                         });
-                        
+
                         const result = await response.json().catch(() => ({}));
-                        
+
                         if (!response.ok) {
                             throw new Error(result.message || "Failed to send platform notice");
                         }
-                        
+
                         closeNoticeModal();
-                        
+
                         const form = document.getElementById("platformNoticeForm");
                         if (form) form.reset();
                         window.toggleNoticeTargetOptions("");
-                        
+
                         const msgText = editing ? "✓ Platform notice updated successfully." : `✓ Notice sent to ${result.societyCount || 0} society${result.societyCount === 1 ? '' : 'ies'} and ${result.notifiedUsers || 0} users.`;
                         if (typeof showToast === "function") {
                             showToast(msgText);
@@ -4707,7 +3859,7 @@
             } catch (e) {}
 
             // Load remote configuration from server
-            fetch('/api/superadmin/security/config', {headers:{Accept:'application/json'}})
+            if (document.getElementById('supportEmail')) fetch('/api/superadmin/security/config', {headers:{Accept:'application/json'}})
                 .then(response => response.ok ? response.json() : [])
                 .then(configs => {
                     if (Array.isArray(configs)) {
@@ -4727,7 +3879,7 @@
             });
 
             // Save Settings Action
-            document.querySelectorAll('[data-action="save"]').forEach(btn => {
+            document.querySelectorAll('[data-view="settings"] [data-action="save"]').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     e.preventDefault();
                     const email = document.getElementById("supportEmail")?.value || "support@smartapartment.local";
@@ -4738,7 +3890,7 @@
                     const retention = document.getElementById("retentionPolicy")?.value || "36";
 
                     const settingsObj = { supportEmail: email, approvalRule: rule, maintenanceMode: mode, smtpHost: host, sessionLimit: limit, retentionPolicy: retention };
-                    
+
                     // Persist to localStorage immediately
                     try {
                         localStorage.setItem("smartsociety_platform_settings", JSON.stringify(settingsObj));
@@ -5182,7 +4334,7 @@
                         const statusBadge = isApproved
                             ? '<span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Approved</span>'
                             : '<span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2.5 py-1 fw-semibold"><i class="fa-solid fa-clock me-1"></i>Pending / Suspended</span>';
-                        
+
                         const actionBtn = isApproved
                             ? `<button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2.5 py-1 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'suspend-society', this)" title="Suspend this society"><i class="fa-solid fa-ban me-1"></i>Suspend</button>`
                             : `<button type="button" class="btn btn-sm btn-success rounded-pill px-2.5 py-1 fw-semibold" onclick="window.triggerSocietyAction('${t.id}', 'approve-society', this)" title="Approve and activate society"><i class="fa-solid fa-check me-1"></i>Approve</button>`;
@@ -5242,7 +4394,7 @@
                                             </div>
                                             ${statusBadge}
                                         </div>
-                                        
+
                                         <div class="d-flex align-items-center justify-content-between p-2 px-2.5 rounded-3 mb-3" style="background: #f8fafc; border: 1.5px solid #e2e8f0;">
                                             <div class="d-flex align-items-center gap-1.5">
                                                 <i class="fa-solid fa-crown" style="color: #d97706; font-size: 0.85rem;"></i>
@@ -5384,6 +4536,9 @@
             window.syncRolesCardViews = function(rolesList) {
                 const roles = rolesList || window.platformRolePolicies || [];
                 const tableBody = document.querySelector('#accessRolesTable tbody');
+                tableBody?.querySelectorAll('tr[data-role-policy-id]').forEach(row => {
+                    if (['ACCOUNTANT', 'FACILITY_MANAGER'].includes(row.cells[0]?.textContent.trim().toUpperCase())) row.remove();
+                });
                 const cardsGrid = document.getElementById('rolesCardsGrid');
                 const emptyState = document.getElementById('rolesEmptyState');
                 const countBadge = document.getElementById('rolesCountBadge');
@@ -5404,6 +4559,7 @@
                     });
                 }
 
+                itemsToRender = itemsToRender.filter(role => !['ACCOUNTANT', 'FACILITY_MANAGER'].includes(String(role.role).toUpperCase()));
                 if (countBadge) {
                     countBadge.textContent = `${itemsToRender.length} roles`;
                 }
@@ -5743,6 +4899,55 @@
         });
     </script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261008-dialog-position-v4"></script>
+<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261009-category-add-v7"></script>
+<script src="/smartapartment/js/saas-renewal.js"></script><style id="society-onboarding-field-alignment">
+    #addSocietyModal .society-form-section .form-label {
+        display: block;
+        line-height: 1.4;
+        margin: 0 0 8px;
+    }
+    #addSocietyModal .society-form-section input.form-control,
+    #addSocietyModal .society-form-section select.form-select {
+        height: 48px;
+        min-height: 48px;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    #addSocietyModal .password-field {
+        position: relative;
+        display: block;
+        height: 48px;
+        margin: 0;
+    }
+    #addSocietyModal .password-field input.form-control {
+        width: 100%;
+        padding-right: 84px;
+    }
+    #addSocietyModal .password-field button[data-toggle-society-password] {
+        position: absolute !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        top: 50% !important;
+        right: 6px !important;
+        bottom: auto !important;
+        left: auto !important;
+        transform: translateY(-50%) !important;
+        width: 68px;
+        height: 36px;
+        min-height: 36px;
+        margin: 0 !important;
+        padding: 0 10px;
+        line-height: 1;
+        box-shadow: none;
+    }
+    #addSocietyModal .password-requirements {
+        align-items: center;
+        gap: 8px 16px;
+        margin-top: 0;
+        line-height: 1.5;
+    }
+    #addSocietyModal .password-requirements span { display: inline-flex; align-items: center; }
+</style>
 </body>
 </html>

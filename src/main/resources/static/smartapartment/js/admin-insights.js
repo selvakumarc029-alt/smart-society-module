@@ -11,7 +11,10 @@
   async function api(path,options={}) {
     const response=await fetch(root+path,{credentials:'same-origin',headers:{Accept:'application/json','Content-Type':'application/json'},...options});
     const data=await response.json().catch(()=>({}));
-    if(response.redirected||!response.ok)throw Error(data.detail||data.message||data.error||'Unable to load data. Refresh or sign in again.');
+    if(response.redirected||response.status===401)throw Error('Sign in with your society admin account to load saved records.');
+    if(response.status===403)throw Error('Your account does not have access to these society admin records.');
+    if(response.status===404)throw Error('This dashboard API is unavailable. Restart the Smart Society server with the latest build.');
+    if(!response.ok)throw Error(data.detail||data.message||data.error||'Unable to load data. Try Refresh again.');
     return data;
   }
   function message(kind,text,error=false){const n=$(`insights-${kind}-message`);if(n){n.textContent=text;n.classList.toggle('text-danger',error);}}
@@ -90,7 +93,8 @@
     });
     const panelKind={'occupancy':'occupancy','maintenance-overview':'maintenance','security-access':'security','billing':'billing'};
     function visible(){for(const [panel,kind] of Object.entries(panelKind)){const node=document.querySelector(`[data-view="${panel}"]`);if(node&&!node.classList.contains('d-none')&&!node.hidden)return kind;}}
-    document.addEventListener('click',event=>{const link=event.target.closest('[data-panel]');if(link&&panelKind[link.dataset.panel])load(panelKind[link.dataset.panel]);});
+    document.addEventListener('society:panelchange',event=>{const kind=panelKind[event.detail.panel];if(kind)load(kind);});
+    document.addEventListener('society:occupancyupdated',()=>load('occupancy'));
     window.addEventListener('hashchange',()=>{const kind=visible();if(kind)load(kind);});const kind=visible();if(kind)load(kind);
     setInterval(()=>{if(!document.hidden){const kind=visible();if(kind&&!$('insights-rent-form').contains(document.activeElement))load(kind,true);}},30000);
   });

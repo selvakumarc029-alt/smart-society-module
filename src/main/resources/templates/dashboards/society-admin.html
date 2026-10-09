@@ -1,10 +1,336 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/layout :: head('SmartApartment Society Admin')}">
-</head>
+<style>        .service-requests-cards-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 580px), 1fr)) !important;
+            gap: 1.5rem !important;
+            width: 100% !important;
+        }
+
+        @media (min-width: 1440px) {
+            .service-requests-cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 640px), 1fr)) !important;
+                gap: 1.75rem !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .service-requests-cards-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+
+        .service-request-card {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 20px !important;
+            padding: 1.5rem 1.75rem !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.25rem !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            position: relative !important;
+        }
+
+        .service-request-card:hover {
+            transform: translateY(-3px) !important;
+            border-color: #93c5fd !important;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.09) !important;
+        }
+
+        .service-card-body-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 1.25rem !important;
+        }
+
+        @media (max-width: 991px) {
+            .service-card-body-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+
+        .service-info-subcard {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            padding: 1.1rem 1.25rem !important;
+        }
+
+        .service-request-card i.fa-solid,
+        .service-request-card i.fa-regular {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            vertical-align: middle !important;
+            line-height: 1 !important;
+            margin-right: 0.5rem !important;
+        }
+
+        .service-request-card .rounded-circle i.fa-solid,
+        .service-request-card .rounded-circle i.fa-regular {
+            margin-right: 0 !important;
+        }
+
+        .service-scope-chip {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.55rem !important;
+            padding: 0.4rem 0.85rem !important;
+            font-size: 0.79rem !important;
+            font-weight: 600 !important;
+            color: #0f766e !important;
+            background: #f0fdfa !important;
+            border: 1px solid #99f6e4 !important;
+            border-radius: 9999px !important;
+            line-height: 1.3 !important;
+        }
+
+        .service-scope-chip i {
+            margin-right: 0.45rem !important;
+        }
+
+        .service-request-card .btn-group .btn {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            font-weight: 600 !important;
+        }
+        .service-request-card .btn-outline-warning.active {
+            background-color: #d97706 !important;
+            border-color: #d97706 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35) !important;
+        }
+        .service-request-card .btn-outline-info.active {
+            background-color: #0284c7 !important;
+            border-color: #0284c7 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35) !important;
+        }
+        .service-request-card .btn-outline-success.active {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35) !important;
+        }
+
+        .service-notes-box {
+            background: #fffbeb !important;
+            border: 1px solid #fde68a !important;
+            border-radius: 12px !important;
+            padding: 0.9rem 1.15rem !important;
+            color: #78350f !important;
+            font-size: 0.82rem !important;
+            line-height: 1.55 !important;
+            white-space: pre-line !important;
+            word-break: break-word !important;
+        }
+
+</style></head>
 <body class="dashboard-body bg-light" data-platform="smartsociety" data-dashboard-role="admin">
+<style>        .service-requests-cards-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 580px), 1fr)) !important;
+            gap: 1.5rem !important;
+            width: 100% !important;
+        }
+
+        @media (min-width: 1440px) {
+            .service-requests-cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(min(100%, 640px), 1fr)) !important;
+                gap: 1.75rem !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .service-requests-cards-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+
+        .service-request-card {
+            background: #ffffff !important;
+            border: 1.5px solid #e2e8f0 !important;
+            border-radius: 20px !important;
+            padding: 1.5rem 1.75rem !important;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05) !important;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1.25rem !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            position: relative !important;
+        }
+
+        .service-request-card:hover {
+            transform: translateY(-3px) !important;
+            border-color: #93c5fd !important;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.09) !important;
+        }
+
+        .service-card-body-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 1.25rem !important;
+        }
+
+        @media (max-width: 991px) {
+            .service-card-body-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }
+
+        .service-info-subcard {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 14px !important;
+            padding: 1.1rem 1.25rem !important;
+        }
+
+        .service-request-card i.fa-solid,
+        .service-request-card i.fa-regular {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            vertical-align: middle !important;
+            line-height: 1 !important;
+            margin-right: 0.5rem !important;
+        }
+
+        .service-request-card .rounded-circle i.fa-solid,
+        .service-request-card .rounded-circle i.fa-regular {
+            margin-right: 0 !important;
+        }
+
+        .service-scope-chip {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 0.55rem !important;
+            padding: 0.4rem 0.85rem !important;
+            font-size: 0.79rem !important;
+            font-weight: 600 !important;
+            color: #0f766e !important;
+            background: #f0fdfa !important;
+            border: 1px solid #99f6e4 !important;
+            border-radius: 9999px !important;
+            line-height: 1.3 !important;
+        }
+
+        .service-scope-chip i {
+            margin-right: 0.45rem !important;
+        }
+
+        .service-request-card .btn-group .btn {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            font-weight: 600 !important;
+        }
+        .service-request-card .btn-outline-warning.active {
+            background-color: #d97706 !important;
+            border-color: #d97706 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35) !important;
+        }
+        .service-request-card .btn-outline-info.active {
+            background-color: #0284c7 !important;
+            border-color: #0284c7 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35) !important;
+        }
+        .service-request-card .btn-outline-success.active {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35) !important;
+        }
+
+        .service-notes-box {
+            background: #fffbeb !important;
+            border: 1px solid #fde68a !important;
+            border-radius: 12px !important;
+            padding: 0.9rem 1.15rem !important;
+            color: #78350f !important;
+            font-size: 0.82rem !important;
+            line-height: 1.55 !important;
+            white-space: pre-line !important;
+            word-break: break-word !important;
+        }
+
+</style>
 <link rel="stylesheet" href="/smartapartment/css/admin-insights.css?v=20261008-insights-v1">
     <style>
+        .resident-notification-dialog #dashboardActionFields { display: block !important; }
+        .resident-notification-dialog #dashboardActionFields > label { width: 100% !important; }
+        .resident-notification-dialog textarea { width: 100% !important; min-height: 150px !important; resize: vertical; box-sizing: border-box; }
+        .resident-notification-dialog .modal-card { width: min(560px, calc(100vw - 32px)) !important; }
+        /* Make overview workspaces distinct cards instead of unbounded sections. */
+        body[data-platform="smartsociety"][data-dashboard-role="admin"] #residentAdminInbox,
+        body[data-platform="smartsociety"][data-dashboard-role="admin"] #gateManagementPanel {
+            display: block;
+            min-width: 0;
+            margin: 24px 0 !important;
+            padding: 0 !important;
+            border: 1px solid #dfe6f1 !important;
+            border-radius: 18px !important;
+            background: #fff !important;
+            box-shadow: 0 8px 24px rgba(28, 43, 72, .06) !important;
+            overflow: hidden;
+        }
+        #residentAdminInbox > .card-header, #gateManagementPanel > .card-header {
+            padding: 24px !important;
+            margin: 0 !important;
+            border-bottom: 1px solid #e9edf4 !important;
+            background: #fff !important;
+        }
+        #residentAdminInbox > .card-body, #gateManagementPanel > .card-body {
+            padding: 24px !important;
+            margin: 0 !important;
+        }
+        #residentAdminInbox > .card-body > .text-center { padding: 20px 0 !important; }
+        #gateManagementPanel .table-responsive { margin-bottom: 20px; }
+        @media (max-width: 640px) {
+            #residentAdminInbox > .card-header, #gateManagementPanel > .card-header,
+            #residentAdminInbox > .card-body, #gateManagementPanel > .card-body { padding: 16px !important; }
+        }
+        /* Profile layout is scoped to this Smart Society admin template. */
+        .profile-settings { padding: 0; min-width: 0; }
+        .profile-settings .profile-settings__heading { padding: 0 0 24px; align-items: center; }
+        .profile-settings .profile-settings__heading > div { min-width: 0; }
+        .profile-settings .profile-settings__heading h2 { font-size: 1.7rem; }
+        .profile-settings .profile-settings__state { margin: 0; }
+        .profile-settings .profile-settings__summary { grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1.25fr); padding: 24px; gap: 20px; }
+        .profile-settings .profile-settings__summary dl { align-items: stretch; }
+        .profile-settings .profile-settings__section { padding: 24px; margin-top: 20px; }
+        .profile-settings .profile-settings__section-title { align-items: center; }
+        .profile-settings .profile-settings__section-title > div { min-width: 0; }
+        .profile-settings .profile-form-grid { gap: 24px !important; }
+        .profile-settings .profile-form-grid label > span { height: auto !important; min-height: 18px !important; max-height: none !important; line-height: 1.4 !important; }
+        .profile-settings .profile-password input { padding-right: 48px !important; }
+        .profile-settings .profile-preference-grid { gap: 16px; }
+        .profile-settings .profile-preference-grid > label { margin: 0; min-width: 0; }
+        .profile-settings .profile-select { flex-wrap: wrap; }
+        .profile-settings .profile-select select { flex: 1 1 160px !important; max-width: 100%; min-width: 0; }
+        .profile-settings .profile-settings__actions { align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 24px; padding-top: 20px; }
+        .profile-settings .profile-settings__actions .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; }
+        @media (max-width: 1200px) {
+            .profile-settings .profile-settings__summary { grid-template-columns: 64px minmax(0, 1fr); }
+            .profile-settings .profile-settings__summary dl { grid-column: 1 / -1; }
+            .profile-settings .profile-settings__heading { flex-wrap: wrap; gap: 16px; }
+        }
+        @media (max-width: 640px) {
+            .profile-settings .profile-form-grid, .profile-settings .profile-preference-grid { grid-template-columns: minmax(0, 1fr) !important; }
+            .profile-settings .profile-settings__heading { align-items: flex-start; }
+            .profile-settings .profile-settings__summary, .profile-settings .profile-settings__section { padding: 16px; }
+            .profile-settings .profile-settings__summary dl { grid-template-columns: minmax(0, 1fr); }
+            .profile-settings .profile-settings__actions { align-items: stretch; }
+        }
         /* Keep the dashboard in one viewport.  The sidebar and workspace then
            scroll independently instead of letting the document end mid-panel. */
         html { height: 100%; overflow: hidden; }
@@ -13,12 +339,24 @@
         body.dashboard-body .sidebar { height: 100dvh; min-height: 0; overflow: hidden !important; display: flex !important; flex-direction: column !important; }
         body.dashboard-body .sidebar .sidebar-nav { flex: 1 1 auto !important; min-height: 0 !important; overflow-y: auto !important; overflow-x: hidden !important; }
         body.dashboard-body .main-content { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto !important; }
+        body.dashboard-body[data-platform="smartsociety"][data-dashboard-role="admin"] #sidebar .sidebar-header {
+            box-sizing: border-box;
+            flex: 0 0 var(--society-admin-header-height, 88px) !important;
+            height: var(--society-admin-header-height, 88px) !important;
+            min-height: var(--society-admin-header-height, 88px) !important;
+            max-height: var(--society-admin-header-height, 88px) !important;
+        }
         #sidebar {
             pointer-events: auto !important;
         }
         #sidebar .nav-link {
             pointer-events: auto !important;
             cursor: pointer !important;
+        }
+        /* The shared shell already supplies a menu toggle and close button. */
+        body.dashboard-body[data-platform="smartsociety"][data-dashboard-role="admin"] .dashboard-sidebar-open,
+        body.dashboard-body[data-platform="smartsociety"][data-dashboard-role="admin"] .dashboard-sidebar-close[aria-label="Close sidebar"] {
+            display: none !important;
         }
         .society-sync-button {
             display: inline-flex;
@@ -282,12 +620,14 @@
             background: #ffffff !important;
             box-shadow: 0 7px 22px rgba(28,43,72,.06) !important;
         }
+        [data-view="subscriptions"] .subscription-summary-grid.subscription-validity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
         [data-view="subscriptions"] .subscription-summary-card > span { color: #6d798e !important; font-size: .67rem !important; font-weight: 800 !important; letter-spacing: .05em !important; text-transform: uppercase !important; }
         [data-view="subscriptions"] .subscription-summary-card > strong { margin: .45rem 0 .35rem !important; font-size: 1.38rem !important; line-height: 1.15 !important; }
         [data-view="subscriptions"] .subscription-summary-card > small { color: #6d798e !important; font-size: .72rem !important; line-height: 1.35 !important; }
         @media (max-width: 1100px) { [data-view="subscriptions"] .subscription-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
         @media (max-width: 767px) {
-            [data-view="subscriptions"] .subscription-summary-grid { grid-template-columns: 1fr !important; }
+            [data-view="subscriptions"] .subscription-summary-grid,
+            [data-view="subscriptions"] .subscription-summary-grid.subscription-validity-grid { grid-template-columns: 1fr !important; }
             .billing-summary-row { grid-template-columns: 1fr; }
             .billing-summary-item + .billing-summary-item { border-left: 0; border-top: 1px solid #e2e8f0; }
         }
@@ -328,13 +668,107 @@
             display: flex !important;
             align-items: center !important;
             justify-content: space-between !important;
-            flex-wrap: nowrap !important;
+            flex-wrap: wrap !important;
             gap: 1rem !important;
-            height: 72px !important;
+            height: auto !important;
             min-height: 72px !important;
-            max-height: 72px !important;
+            max-height: none !important;
             box-sizing: border-box !important;
-            overflow: hidden !important;
+            overflow: visible !important;
+        }
+
+        body[data-platform="smartsociety"][data-dashboard-role="admin"] .topbar .dashboard-header-meta,
+        body[data-platform="smartsociety"][data-dashboard-role="admin"] .topbar .dashboard-live-status,
+        body[data-platform="smartsociety"][data-dashboard-role="admin"] .topbar .dashboard-avatar {
+            display: none !important;
+        }
+
+        body.dashboard-body[data-platform="smartsociety"] .main-content :is(#panel-occupancy,#panel-maintenance-overview,#panel-security-access,#panel-residents,#panel-billing,#panel-visitors,#panel-complaints,#panel-announcements,#panel-payments) > .card {
+            background: #fff !important;
+            border: 1px solid #dbe3ef !important;
+            border-radius: 20px !important;
+            box-shadow: 0 8px 28px rgba(15, 23, 42, .06) !important;
+            padding: 28px !important;
+            margin: 0 !important;
+        }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-heading { align-items: flex-start; gap: 20px; }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-heading p { margin-bottom: 0; }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-actions { justify-content: flex-end; gap: 10px; }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-metrics { margin: 20px 0 24px; }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-filters { padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 14px; }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-filters label { max-width: none; }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .table-responsive { border: 1px solid #e2e8f0; border-radius: 14px; }
+        :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .table { margin-bottom: 0; }
+        body.dashboard-body .main-content :is(#panel-residents,#panel-visitors,#panel-complaints,#panel-announcements,#panel-payments) > .card > .card-header {
+            background: #fff !important;
+            padding: 0 0 20px !important;
+            margin: 0 !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            gap: 16px;
+        }
+        body.dashboard-body .main-content :is(#panel-residents,#panel-visitors,#panel-complaints,#panel-announcements,#panel-payments) > .card > .card-body {
+            padding: 20px 0 0 !important;
+            margin: 0 !important;
+        }
+        :is(#panel-residents,#panel-visitors,#panel-complaints,#panel-announcements,#panel-payments) .table { margin-bottom: 0; border: 1px solid #e2e8f0; }
+        body.dashboard-body #panel-visitors .table-responsive { border: 1px solid #e2e8f0; border-radius: 14px; overflow-x: auto; }
+        body.dashboard-body #panel-visitors table { width: 100%; min-width: 900px; table-layout: auto !important; }
+        body.dashboard-body #panel-visitors :is(th,td) { padding: 16px !important; vertical-align: middle; }
+        body.dashboard-body #panel-visitors :is(th,td):nth-child(2),
+        body.dashboard-body #panel-visitors :is(th,td):nth-child(4),
+        body.dashboard-body #panel-visitors :is(th,td):nth-child(5),
+        body.dashboard-body #panel-visitors :is(th,td):nth-child(6) { white-space: nowrap !important; word-break: normal !important; }
+        body.dashboard-body #panel-visitors td:nth-child(3) { min-width: 180px; max-width: 280px; overflow-wrap: anywhere; }
+        body.dashboard-body #panel-visitors td button { min-width: 100px; min-height: 42px; margin: 0; }
+        body.dashboard-body .main-content #panel-service-requests > .superadmin-section-card { background:#fff!important;border:1px solid #dbe3ef!important;border-radius:20px!important;box-shadow:0 8px 28px rgba(15,23,42,.06)!important;padding:28px!important; }
+        #panel-service-requests .superadmin-section-title { font-size:1.35rem; font-weight:700; margin:0 0 6px; color:#2563eb; }
+        #panel-service-requests .superadmin-section-desc { margin:0; color:#64748b; font-size:.95rem; }
+        #panel-service-requests .finance-kpi-grid { display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:20px 0 24px; }
+        #panel-service-requests .finance-kpi-card { display:flex!important;align-items:center;gap:14px;min-width:0;padding:20px;background:#f8fafc!important;border:1px solid #dbe3ef!important;border-radius:14px!important; }
+        #panel-service-requests .finance-kpi-icon { display:flex!important;align-items:center;justify-content:center;width:44px!important;height:44px!important;flex:0 0 44px;border-radius:12px; }
+        #panel-service-requests .superadmin-view-toggle { display:flex;gap:4px;padding:4px;background:#f1f5f9;border:1px solid #dbe3ef;border-radius:12px; }
+        #panel-service-requests .superadmin-view-toggle button { border:0;border-radius:8px;background:transparent;color:#475569;padding:8px 14px;min-height:38px;font-weight:600; }
+        #panel-service-requests .superadmin-view-toggle button.active { background:#2563eb;color:#fff; }
+        #panel-service-requests .form-label { display:block;line-height:22px;margin-bottom:8px; }
+        #panel-service-requests :is(.form-select,.form-control) { width:100%!important;min-height:44px;border:1px solid #cbd5e1!important;border-radius:10px; }
+        #panel-service-requests #ssServiceSearchInput { padding-left:34px!important; }
+        @media(max-width:1199px) { #panel-service-requests .finance-kpi-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        @media(max-width:575px) { #panel-service-requests .finance-kpi-grid { grid-template-columns:1fr; } body.dashboard-body .main-content #panel-service-requests > .superadmin-section-card { padding:18px!important; } }
+        body.dashboard-body #panel-announcements .form-label { display:flex!important;align-items:center;gap:4px;line-height:24px;margin-bottom:8px!important; }
+        body.dashboard-body #panel-announcements .form-label > span { display:inline!important;margin:0!important; }
+        body.dashboard-body #panel-announcements :is(input,select) { min-height:44px; }
+        body.dashboard-body #panel-announcements > .card { margin-bottom:24px!important; }
+        body.dashboard-body #panel-payments article.card {display:flex!important;flex-direction:column;gap:8px;padding:20px!important;border:1px solid #dbe3ef!important;border-radius:14px!important;background:#f8fafc!important;box-shadow:none!important;min-height:140px;}
+        body.dashboard-body #panel-payments .card-body > .row:nth-child(2) {margin:0 0 20px!important;padding:20px!important;background:#f8fafc!important;border:1px solid #e2e8f0!important;border-radius:14px!important;}
+        #panel-payments :is(.form-control,.form-select,#clearPaymentFilters) {min-height:44px!important;width:100%!important;}
+        #panel-payments .form-label {display:block;margin-bottom:8px;line-height:22px;}
+        #panel-payments .table-responsive {border:1px solid #e2e8f0;border-radius:14px;overflow-x:auto;}
+        #panel-payments table {display:block;width:100%;border:0!important;}
+#panel-payments table thead {display:none;}
+#panel-payments table tbody {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;padding:16px;}
+#panel-payments table tr {display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px;border:1px solid #dbe3ef;border-radius:14px;background:white;}
+#panel-payments table td {display:block;border:0!important;padding:0!important;overflow-wrap:anywhere;background:transparent!important;box-shadow:none!important;}
+#panel-payments table td::before {content:attr(data-label);display:block;font-size:12px;font-weight:700;color:#64748b;margin-bottom:6px;}
+#panel-payments table td[colspan],#panel-payments table td:last-child {grid-column:1/-1;}
+#panel-payments table button {min-height:42px;}
+        #panel-payments :is(th,td) {padding:16px!important;vertical-align:middle;}
+        body.dashboard-body #panel-complaints table { width: 100%; min-width: 850px; table-layout: auto !important; }
+        body.dashboard-body #panel-complaints :is(th,td) { padding: 16px !important; vertical-align: middle; }
+        body.dashboard-body #panel-complaints td:first-child { min-width: 240px; max-width: 400px; overflow-wrap: anywhere; }
+        body.dashboard-body #panel-complaints :is(th,td):not(:first-child) { white-space: nowrap !important; }
+        body.dashboard-body #panel-complaints td:last-child { min-width: 240px; }
+        body.dashboard-body #panel-complaints button { min-height: 42px; font-weight: 600; opacity: 1; }
+        body.dashboard-body #panel-complaints button.btn-primary { background: #2563eb !important; border: 1px solid #2563eb !important; color: #fff !important; }
+        body.dashboard-body #panel-complaints button.btn-outline-danger { background: #fff !important; border: 1px solid #dc2626 !important; color: #b91c1c !important; }
+        body.dashboard-body #panel-complaints button.btn-primary:hover { background: #1d4ed8 !important; }
+        body.dashboard-body #panel-complaints button.btn-outline-danger:hover { background: #fee2e2 !important; }
+        body.dashboard-body #panel-complaints .status { background: #fff1f2 !important; color: #be123c !important; border: 1px solid #fecdd3 !important; }
+        body.dashboard-body #panel-complaints .status:is(.progress,.in-progress) { background: #eff6ff !important; color: #1d4ed8 !important; border-color: #bfdbfe !important; }
+        body.dashboard-body #panel-complaints .status:is(.resolved,.closed,.active) { background: #ecfdf5 !important; color: #047857 !important; border-color: #a7f3d0 !important; }
+        @media (max-width: 575px) {
+            body.dashboard-body[data-platform="smartsociety"] .main-content :is(#panel-occupancy,#panel-maintenance-overview,#panel-security-access,#panel-residents,#panel-billing,#panel-visitors,#panel-complaints,#panel-announcements,#panel-payments) > .card { padding: 18px !important; }
+            :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-actions { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            :is([data-view="occupancy"],[data-view="maintenance-overview"],[data-view="security-access"],[data-view="billing"]) .insights-filters { padding: 14px; }
         }
 
         .topbar > div:first-child {
@@ -354,9 +788,9 @@
         .header-actions {
             display: flex !important;
             align-items: center !important;
-            flex-wrap: nowrap !important;
+            flex-wrap: wrap !important;
             gap: 0.65rem !important;
-            flex-shrink: 0 !important;
+            flex-shrink: 1 !important;
         }
 
         .header-actions #adminHeaderChatBtn {
@@ -868,12 +1302,12 @@
     </style>
     <link rel="stylesheet" href="/shared/css/dashboard-sidebar-final.css?v=20260916-sidebar-final-v1">
     <div class="dashboard-layout">
-        
+
         <!-- Sidebar Navigation -->
         <aside class="sidebar bg-dark text-white shadow-lg animate__animated animate__fadeInLeft" id="sidebar">
             <div class="sidebar-header p-4 border-bottom border-secondary d-flex align-items-center gap-3">
                 <span class="sidebar-home-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M4 14.5 16 4l12 10.5V28h-8v-8h-8v8H4Z"/><path d="M9.5 9V5.5h4"/></svg></span>
-                <h4 class="mb-0 fw-bold">Smart<span class="text-primary">Apartment</span></h4>
+                <h4 class="mb-0 fw-bold">Smart<span class="text-primary">Apartment</span><span class="society-dashboard-role-label" style="display:block !important; margin-top:4px; font-size:12px !important; font-weight:600; line-height:1.3 !important; color:#a9c4ff !important; letter-spacing:.04em;">Admin Dashboard</span></h4>
             </div>
             <nav class="nav flex-column py-3 sidebar-nav" aria-label="Dashboard sections">
                 <a href="#overview" class="nav-link btn btn-link text-start text-decoration-none active" data-panel="overview" onclick="openPanel('overview'); return false;"><i class="fa-solid fa-house me-2"></i> Overview</a>
@@ -884,13 +1318,11 @@
                 <a href="#billing" class="nav-link btn btn-link text-start text-decoration-none" data-panel="billing" onclick="openPanel('billing'); return false;"><i class="fa-solid fa-file-invoice-dollar me-2"></i> Billing</a>
                 <a href="#visitors" class="nav-link btn btn-link text-start text-decoration-none" data-panel="visitors" onclick="openPanel('visitors'); return false;"><i class="fa-solid fa-address-card me-2"></i> Visitors</a>
                 <a href="#complaints" class="nav-link btn btn-link text-start text-decoration-none" data-panel="complaints" onclick="openPanel('complaints'); return false;"><i class="fa-solid fa-triangle-exclamation me-2"></i> Complaints</a>
+                <a href="#service-requests" class="nav-link btn btn-link text-start text-decoration-none" data-panel="service-requests" onclick="openPanel('service-requests'); return false;"><i class="fa-solid fa-screwdriver-wrench me-2"></i> Service Requests</a>
                 <a href="#maintenance-chat" class="nav-link btn btn-link text-start text-decoration-none" data-panel="maintenance-chat" onclick="openPanel('maintenance-chat'); return false;"><i class="fa-solid fa-headset me-2 text-warning"></i> Maintenance Escalations & Chat <span class="badge bg-danger ms-auto" id="adminMaintChatBadge" style="display:none;">0</span></a>
                 <a href="#announcements" class="nav-link btn btn-link text-start text-decoration-none" data-panel="announcements" onclick="openPanel('announcements'); return false;"><i class="fa-solid fa-bullhorn me-2"></i> Announcements</a>
-                <a href="#staff" class="nav-link btn btn-link text-start text-decoration-none" data-panel="staff" onclick="openPanel('staff'); return false;"><i class="fa-solid fa-broom me-2"></i> Domestic Staff</a>
-                <a href="#deliveries" class="nav-link btn btn-link text-start text-decoration-none" data-panel="deliveries" onclick="openPanel('deliveries'); return false;"><i class="fa-solid fa-box me-2"></i> Deliveries</a>
-                <a href="#payments" class="nav-link btn btn-link text-start text-decoration-none" data-panel="payments" onclick="openPanel('payments'); return false;"><i class="fa-solid fa-credit-card me-2"></i> Payments</a>
+                <a href="#gate-entries" class="nav-link btn btn-link text-start text-decoration-none" data-panel="gate-entries" onclick="openPanel('gate-entries'); return false;"><i class="fa-solid fa-torii-gate me-2"></i> Gate Entries</a><a href="#payments" class="nav-link btn btn-link text-start text-decoration-none" data-panel="payments" onclick="openPanel('payments'); return false;"><i class="fa-solid fa-credit-card me-2"></i> Payments</a>
                 <a href="#subscriptions" class="nav-link btn btn-link text-start text-decoration-none" data-panel="subscriptions" onclick="openPanel('subscriptions'); return false;"><i class="fa-solid fa-cloud me-2"></i> SaaS Plan</a>
-                <a href="#reports" class="nav-link btn btn-link text-start text-decoration-none" data-panel="reports" onclick="openPanel('reports'); return false;"><i class="fa-solid fa-chart-pie me-2"></i> Reports</a>
             </nav>
             <div class="sidebar-footer p-3 mt-auto border-top border-secondary text-center">
                 <a class="btn btn-outline-light w-100 rounded-pill" href="/dashboards/logout">
@@ -907,7 +1339,7 @@
                     <h2 class="mb-0 fw-bold text-dark" id="title">Overview</h2>
                 </div>
                 <div class="d-flex align-items-center gap-3 header-actions">
-                    <button type="button" class="btn btn-outline-warning text-dark rounded-pill px-3 shadow-sm fw-semibold" onclick="openPanel('maintenance-chat')">
+                    <button type="button" id="adminHeaderChatBtn" class="btn btn-outline-warning text-dark rounded-pill px-3 shadow-sm fw-semibold" onclick="openPanel('maintenance-chat')">
                         <i class="fa-solid fa-headset me-1 text-warning"></i>Maintenance Escalations
                         <span class="badge bg-danger ms-1 text-white" id="adminHeaderChatBadge" style="display:none;">0</span>
                     </button>
@@ -920,7 +1352,8 @@
 
             <!-- Dashboard Content Container -->
             <div class="container-fluid p-4 dashboard-container">
-                
+                <div id="societyAdminLoadState" class="alert alert-warning" role="status" hidden></div>
+
                 <!-- Overview Panel -->
                 <section id="overview" data-view="overview" class="animate__animated animate__fadeIn">
                     <div class="overview-kpi-grid stats mb-4" id="overviewStatsGrid">
@@ -973,7 +1406,7 @@
                             </div>
                         </article>
                     </div>
-                    
+
                 </section>
 
                 <!-- Control Center -->
@@ -984,7 +1417,7 @@
                         <div class="col-md-3"><article class="card p-4 text-center h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Gate Exceptions</span><strong class="fs-2 fw-bold text-danger mt-2 d-block">5</strong></article></div>
                         <div class="col-md-3"><article class="card p-4 text-center h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Billing Actions</span><strong class="fs-2 fw-bold text-success mt-2 d-block">46</strong></article></div>
                     </div>
-                    
+
                     <div class="card shadow-sm border-0 rounded-4 mb-4 monitoring-card">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
                             <h4 class="fw-bold mb-0">Admin Approval & Assignment Center</h4>
@@ -1004,7 +1437,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="card shadow-sm border-0 rounded-4 mb-4">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
                             <h4 class="fw-bold mb-0">Action Queue</h4>
@@ -1046,22 +1479,22 @@
 
 
                 <!-- Residents -->
-                
+
 <section id="occupancy" data-view="occupancy" class="d-none admin-insights"><div class="card p-4">
-<div class="insights-heading"><div><h3>Block-wise Occupancy</h3><p class="text-muted">Tenants are residents registered as tenants. Filled and available flats are counted separately for each block.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="occupancy">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="occupancy">Export CSV</button></div></div><p id="insights-occupancy-message" role="status" aria-live="polite"></p><div id="insights-occupancy-metrics" class="insights-metrics"></div>
+<div class="insights-heading"><div><h3>Block-wise Occupancy</h3><p class="text-muted">Tenants are residents registered as tenants. Filled and available flats are counted separately for each block.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" id="occupancy-add-block">+ Add Block</button><button type="button" class="btn btn-primary" id="occupancy-add-flat">+ Add Flat</button></div></div><p id="insights-occupancy-message" role="status" aria-live="polite"></p><div id="insights-occupancy-metrics" class="insights-metrics"></div>
 <div class="insights-filters"><label>Block<select id="insights-block" class="form-select"><option value="">All blocks</option></select></label><label>Flat status<select id="insights-occupancy-status" class="form-select"><option value="">All statuses</option><option>Filled</option><option>Available</option><option>Unavailable</option></select></label><label>Find flat or resident<input id="insights-flat-search" class="form-control" type="search" placeholder="Flat number or resident name"></label></div>
-<h4>Block summary</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Total flats</th><th scope="col">Filled</th><th scope="col">Available</th><th scope="col">Unavailable</th><th scope="col">Tenants</th><th scope="col">Residents</th></tr></thead><tbody id="insights-block-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
-<h4>Flat details</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Flat</th><th scope="col">BHK / type</th><th scope="col">Floor</th><th scope="col">Status</th><th scope="col">Tenants</th><th scope="col">Residents</th></tr></thead><tbody id="insights-flat-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
+<h4>Block summary</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Total flats</th><th scope="col">Filled</th><th scope="col">Available</th><th scope="col">Unavailable</th><th scope="col">Tenants</th><th scope="col">Residents</th></tr></thead><tbody id="insights-block-rows"><tr><td colspan="7">Loading saved records…</td></tr></tbody></table></div>
+<h4>Flat details</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Flat</th><th scope="col">BHK / type</th><th scope="col">Floor</th><th scope="col">Status</th><th scope="col">Tenants</th><th scope="col">Residents</th></tr></thead><tbody id="insights-flat-rows"><tr><td colspan="7">Loading saved records…</td></tr></tbody></table></div>
 </div></section>
 <section id="maintenance-overview" data-view="maintenance-overview" class="d-none admin-insights"><div class="card p-4">
-<div class="insights-heading"><div><h3>Maintenance Overview</h3><p class="text-muted">Saved attendance, checkouts, recorded breaks, and worker reports in one workspace.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="maintenance">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="maintenance">Export CSV</button></div></div><p id="insights-maintenance-message" role="status" aria-live="polite"></p><div id="insights-maintenance-metrics" class="insights-metrics"></div><form class="insights-filters" data-insights-date-form="maintenance"><label>From<input class="form-control" type="date" id="insights-maintenance-start" required></label><label>To<input class="form-control" type="date" id="insights-maintenance-end" required></label><button type="submit" class="btn btn-outline-primary">Apply dates</button></form>
-<h4>Attendance &amp; breaks</h4><p class="text-muted">Older attendance may include only its last recorded break. New breaks are saved individually.</p><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Worker</th><th scope="col">Date</th><th scope="col">Check-in</th><th scope="col">Checkout</th><th scope="col">Attendance</th><th scope="col">Break time</th><th scope="col">Working time</th><th scope="col">Attendance notes</th></tr></thead><tbody id="insights-maintenance-rows"><tr><td colspan="8">Select Refresh to load records.</td></tr></tbody></table></div>
-<div class="insights-heading"><h4>Work reports</h4><button type="button" class="btn btn-outline-primary" data-insights-export="reports">Export work reports</button></div><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Reference</th><th scope="col">Worker</th><th scope="col">Work</th><th scope="col">Flat / address</th><th scope="col">Status</th><th scope="col">Report / completion notes</th><th scope="col">Updated</th></tr></thead><tbody id="insights-work-report-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
+<div class="insights-heading"><div><h3>Maintenance Overview</h3><p class="text-muted">Saved attendance, checkouts, recorded breaks, and worker reports in one workspace.</p></div></div><p id="insights-maintenance-message" role="status" aria-live="polite"></p><div id="insights-maintenance-metrics" class="insights-metrics"></div><form class="insights-filters" data-insights-date-form="maintenance"><label>From<input class="form-control" type="date" id="insights-maintenance-start" required></label><label>To<input class="form-control" type="date" id="insights-maintenance-end" required></label><button type="submit" class="btn btn-outline-primary">Apply dates</button></form>
+<h4>Attendance &amp; breaks</h4><p class="text-muted">Older attendance may include only its last recorded break. New breaks are saved individually.</p><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Worker</th><th scope="col">Date</th><th scope="col">Check-in</th><th scope="col">Checkout</th><th scope="col">Attendance</th><th scope="col">Break time</th><th scope="col">Working time</th><th scope="col">Attendance notes</th></tr></thead><tbody id="insights-maintenance-rows"><tr><td colspan="8">Loading saved records…</td></tr></tbody></table></div>
+<div class="insights-heading"><h4>Work reports</h4><button type="button" class="btn btn-outline-primary" data-insights-export="reports">Export work reports</button></div><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Reference</th><th scope="col">Worker</th><th scope="col">Work</th><th scope="col">Flat / address</th><th scope="col">Status</th><th scope="col">Report / completion notes</th><th scope="col">Updated</th></tr></thead><tbody id="insights-work-report-rows"><tr><td colspan="7">Loading saved records…</td></tr></tbody></table></div>
 </div></section>
 <section id="security-access" data-view="security-access" class="d-none admin-insights"><div class="card p-4">
-<div class="insights-heading"><div><h3>Security Login &amp; Logout</h3><p class="text-muted">Guard account access, separate from duty check-in and checkout. Tracking begins with this update.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="security">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="security">Export CSV</button></div></div><p id="insights-security-message" role="status" aria-live="polite"></p><div id="insights-security-metrics" class="insights-metrics"></div><form class="insights-filters" data-insights-date-form="security"><label>From<input class="form-control" type="date" id="insights-security-start" required></label><label>To<input class="form-control" type="date" id="insights-security-end" required></label><button type="submit" class="btn btn-outline-primary">Apply dates</button></form>
-<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Security guard</th><th scope="col">Login</th><th scope="col">Logout / session end</th><th scope="col">Session status</th></tr></thead><tbody id="insights-security-rows"><tr><td colspan="4">Select Refresh to load records.</td></tr></tbody></table></div>
-<h4>Duty attendance</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Security guard</th><th scope="col">Date</th><th scope="col">Duty check-in</th><th scope="col">Duty checkout</th></tr></thead><tbody id="insights-security-duty-rows"><tr><td colspan="4">Select Refresh to load records.</td></tr></tbody></table></div>
+<div class="insights-heading"><div><h3>Security Login &amp; Logout</h3><p class="text-muted">Guard account access, separate from duty check-in and checkout. Tracking begins with this update.</p></div></div><p id="insights-security-message" role="status" aria-live="polite"></p><div id="insights-security-metrics" class="insights-metrics"></div><form class="insights-filters" data-insights-date-form="security"><label>From<input class="form-control" type="date" id="insights-security-start" required></label><label>To<input class="form-control" type="date" id="insights-security-end" required></label><button type="submit" class="btn btn-outline-primary">Apply dates</button></form>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Security guard</th><th scope="col">Login</th><th scope="col">Logout / session end</th><th scope="col">Session status</th></tr></thead><tbody id="insights-security-rows"><tr><td colspan="4">Loading saved records…</td></tr></tbody></table></div>
+<h4>Duty attendance</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Security guard</th><th scope="col">Date</th><th scope="col">Duty check-in</th><th scope="col">Duty checkout</th></tr></thead><tbody id="insights-security-duty-rows"><tr><td colspan="4">Loading saved records…</td></tr></tbody></table></div>
 </div></section>
 
 <section id="residents" class="d-none animate__animated animate__fadeIn" data-view="residents">
@@ -1072,7 +1505,6 @@
                                 <button class="btn btn-primary rounded-pill btn-sm" data-action="add" data-table="residents"><i class="fa-solid fa-house-user me-1"></i> Add Resident</button>
                                 <button class="btn btn-outline-primary rounded-pill btn-sm" data-action="add" data-table="security-users"><i class="fa-solid fa-shield-halved me-1"></i> Add Security</button>
                                 <button class="btn btn-outline-primary rounded-pill btn-sm" data-action="add" data-table="maintenance-users"><i class="fa-solid fa-screwdriver-wrench me-1"></i> Add Maintenance</button>
-                                <button class="btn btn-outline-primary rounded-pill btn-sm" data-action="add" data-table="accountant-users"><i class="fa-solid fa-calculator me-1"></i> Add Accountant</button>
                             </div>
                         </div>
                         <div class="card-body px-4 pb-4 table-responsive">
@@ -1090,8 +1522,8 @@
                 <!-- Billing -->
                 <section id="billing" class="d-none animate__animated animate__fadeIn" data-view="billing">
 <div class="admin-insights card p-4 mb-4" id="admin-billing-overview">
-<div class="insights-heading"><div><h3>Billing Overview &amp; Pending Dues</h3><p class="text-muted">Outstanding maintenance invoices by flat. Notices reach only residents assigned to the selected flat; one reminder per day.</p></div><div class="insights-actions"><button type="button" class="btn btn-primary" data-insights-refresh="billing">Refresh</button><button type="button" class="btn btn-outline-primary" data-insights-export="billing">Export CSV</button></div></div><p id="insights-billing-message" role="status" aria-live="polite"></p><div id="insights-billing-metrics" class="insights-metrics"></div>
-<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Flat</th><th scope="col">Pending amount</th><th scope="col">Overdue amount</th><th scope="col">Outstanding invoices</th><th scope="col">Action</th></tr></thead><tbody id="insights-dues-rows"><tr><td colspan="6">Select Refresh to load records.</td></tr></tbody></table></div>
+<div class="insights-heading"><div><h3>Billing Overview &amp; Pending Dues</h3><p class="text-muted">Outstanding maintenance invoices by flat. Notices reach only residents assigned to the selected flat; one reminder per day.</p></div></div><p id="insights-billing-message" role="status" aria-live="polite"></p><div id="insights-billing-metrics" class="insights-metrics"></div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Block</th><th scope="col">Flat</th><th scope="col">Pending amount</th><th scope="col">Overdue amount</th><th scope="col">Outstanding invoices</th><th scope="col">Action</th></tr></thead><tbody id="insights-dues-rows"><tr><td colspan="6">Loading saved records…</td></tr></tbody></table></div>
 <h4>Landlord rent increase</h4><p class="text-muted">Record the landlord rental amount separately. Saving sends a notice to that flat’s residents; it does not alter maintenance charges or existing invoices.</p>
 <form id="insights-rent-form" class="insights-rent-form">
 <label>Flat<select id="insights-rent-flat" class="form-select" required><option value="">Select flat</option></select></label>
@@ -1102,7 +1534,7 @@
 <label>Landlord instructions / reference<input id="insights-rent-note" class="form-control" maxlength="1000"></label>
 <div class="insights-rent-submit insights-actions"><button type="button" id="insights-rent-reset" class="btn btn-outline-secondary">Reset rent form</button><button type="submit" class="btn btn-primary">Save landlord rent increase</button></div>
 </form>
-<h4>Rent change history</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Flat</th><th scope="col">Landlord</th><th scope="col">Previous rent</th><th scope="col">New rent</th><th scope="col">Effective date</th><th scope="col">Status</th><th scope="col">Notes</th></tr></thead><tbody id="insights-rent-rows"><tr><td colspan="7">Select Refresh to load records.</td></tr></tbody></table></div>
+<h4>Rent change history</h4><div class="table-responsive"><table class="table align-middle"><thead><tr><th scope="col">Flat</th><th scope="col">Landlord</th><th scope="col">Previous rent</th><th scope="col">New rent</th><th scope="col">Effective date</th><th scope="col">Status</th><th scope="col">Notes</th></tr></thead><tbody id="insights-rent-rows"><tr><td colspan="7">Loading saved records…</td></tr></tbody></table></div>
 </div>
                     <div class="billing-workspace">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
@@ -1112,7 +1544,7 @@
                             </div>
                             <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="openAdminItemizedModal()"><i class="fa-solid fa-plus me-2"></i>Create Invoice</button>
                         </div>
-                        
+
                         <div class="card-body px-4 pb-4">
                             <div class="row g-3 bg-light rounded-4 p-3 border border-light-subtle billing-info-grid">
                                 <div class="col-md-3">
@@ -1160,7 +1592,7 @@
                         </div>
                     </div>
                 </section>
-                
+
                 <!-- Admin Streamlined Invoice Generation Modal -->
                 <div id="adminItemizedModal" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px); z-index: 99999; justify-content: center; align-items: center; padding: 1.25rem;">
                     <div style="background: #ffffff; width: 100%; max-width: 580px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35); overflow: hidden; color: #0f172a; border: 1px solid #e2e8f0; animation: fadeIn 0.2s ease-out;">
@@ -1323,7 +1755,7 @@
                         const dueBadge = document.getElementById('summaryDueDateBadge');
                         const monthVal = monthInput?.value || "2026-08";
                         if (monthBadge) monthBadge.textContent = formatMonthDisplay(monthVal);
-                        if (dueInput && (!dueInput.value || dueInput.value.startsWith("2026-"))) {
+                        if (dueInput && !dueInput.value) {
                             dueInput.value = monthVal + "-15";
                         }
                         if (dueBadge && dueInput) dueBadge.textContent = formatDueDateDisplay(dueInput.value);
@@ -1472,7 +1904,151 @@
                     </div>
                 </section>
 
-                <!-- Complaints -->
+                <section id="gate-entries" data-view="gate-entries" class="d-none">
+<div class="card p-4" style="background:white!important;border:1px solid #dbe3ef!important;border-radius:20px!important;padding:28px!important;box-shadow:0 8px 28px rgba(15,23,42,.06)!important;">
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3"><div><h4>Gate Entries</h4><p class="text-muted mb-0">Gate entry and exit records saved by security for your society. Updates automatically every 15 seconds.</p></div><button type="button" class="btn btn-outline-primary" id="adminGateEntriesRefresh">Refresh</button></div>
+<p id="adminGateEntriesStatus" role="status" aria-live="polite"></p>
+<div class="table-responsive"><table class="table align-middle" style="min-width:1000px"><thead><tr><th>Visitor</th><th>Flat</th><th>Purpose</th><th>Entry gate</th><th>Entry time</th><th>Exit gate</th><th>Exit time</th><th>Status</th></tr></thead><tbody id="adminGateEntriesRows"></tbody></table></div>
+</div></section><!-- Complaints -->
+                <!-- Service Requests Section -->
+                <section class="d-none animate__animated animate__fadeIn" id="service-requests" data-view="service-requests">
+                    <div class="superadmin-section-card p-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; font-size: 1.15rem; background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                </div>
+                                <div>
+                                    <h4 class="superadmin-section-title">Service & Maintenance Requests</h4>
+                                    <p class="superadmin-section-desc">Service requests submitted by residents of your society.</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                <button class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1.5 fw-bold" id="btnRefreshServiceRequests" onclick="loadSmartSocietySuperAdminServiceRequests(this)"><i class="fa-solid fa-rotate me-1.5"></i>Refresh</button>
+                                <span class="badge rounded-pill px-3 py-1.5 fw-bold" id="ssServiceRowCount" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; font-size: 0.78rem;">0 records</span>
+                                <div class="superadmin-view-toggle">
+                                    <button type="button" class="active" id="btnServiceCardsView" onclick="toggleServiceRequestsView('cards')"><i class="fa-solid fa-grip"></i> Cards</button>
+                                    <button type="button" id="btnServiceTableView" onclick="toggleServiceRequestsView('table')"><i class="fa-solid fa-table-list"></i> Table</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4 Clean Aligned Metric / KPI Cards -->
+                        <div class="finance-kpi-grid">
+                            <article class="finance-kpi-card">
+                                <div class="finance-kpi-icon" style="background: #eff6ff; color: #1d4ed8; border: 1.5px solid #bfdbfe;">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Total Requests</span>
+                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssTotalServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
+                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">All logged tickets</small>
+                                </div>
+                            </article>
+                            <article class="finance-kpi-card">
+                                <div class="finance-kpi-icon" style="background: #fffbeb; color: #d97706; border: 1.5px solid #fde68a;">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Pending / Requested</span>
+                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssPendingServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
+                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Awaiting technician</small>
+                                </div>
+                            </article>
+                            <article class="finance-kpi-card">
+                                <div class="finance-kpi-icon" style="background: #f0f9ff; color: #0284c7; border: 1.5px solid #bae6fd;">
+                                    <i class="fa-solid fa-spinner"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">In Progress</span>
+                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssInProgressServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
+                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Active technician work</small>
+                                </div>
+                            </article>
+                            <article class="finance-kpi-card">
+                                <div class="finance-kpi-icon" style="background: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0;">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
+                                <div class="min-w-0">
+                                    <span class="d-block small fw-bold text-secondary text-uppercase" style="font-size: 0.72rem; letter-spacing: 0.04em;">Resolved</span>
+                                    <strong class="d-block fw-bold text-dark my-0.5" id="ssResolvedServiceRequests" style="font-size: 1.6rem; letter-spacing: -0.02em;">0</strong>
+                                    <small class="text-secondary fw-semibold d-block" style="font-size: 0.78rem;">Successfully closed</small>
+                                </div>
+                            </article>
+                        </div>
+
+                        <!-- Filter and Search Row with Clean Alignments -->
+                        <div class="row g-3 mb-4 pt-3 border-top" style="border-color: #f1f5f9 !important;">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label text-secondary small fw-bold text-uppercase mb-1.5" style="font-size: 0.74rem; letter-spacing: 0.03em;">
+                                    <i class="fa-solid fa-layer-group text-primary me-1"></i>Platform Source
+                                </label>
+                                <select id="ssServicePlatformFilter" class="form-select" disabled><option value="ALL">SmartSociety</option></select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label text-secondary small fw-bold text-uppercase mb-1.5" style="font-size: 0.74rem; letter-spacing: 0.03em;">
+                                    <i class="fa-solid fa-filter text-primary me-1"></i>Status Filter
+                                </label>
+                                <select id="ssServiceStatusFilter" class="form-select rounded-3 border-light-subtle shadow-none py-2" onchange="filterSmartSocietyServiceRequests()">
+                                    <option value="ALL">All Statuses</option>
+                                    <option value="PENDING">Pending / Requested</option>
+                                    <option value="IN_PROGRESS">In Progress</option>
+                                    <option value="RESOLVED">Resolved</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label text-secondary small fw-bold text-uppercase mb-1.5" style="font-size: 0.74rem; letter-spacing: 0.03em;">
+                                    <i class="fa-solid fa-magnifying-glass text-primary me-1"></i>Search Requests
+                                </label>
+                                <div class="position-relative">
+                                    <input type="text" id="ssServiceSearchInput" class="form-control rounded-3 border-light-subtle shadow-none py-2 ps-4" placeholder="Search requester, service, address..." oninput="filterSmartSocietyServiceRequests()">
+                                    <i class="fa-solid fa-search position-absolute text-muted" style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.82rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card View Container -->
+                        <div id="serviceCardsContainer">
+                            <div class="service-requests-cards-grid" id="serviceCardsGrid"></div>
+
+                            <!-- Empty State Card -->
+                            <div class="superadmin-empty-state text-center w-100 py-4 d-none" id="serviceEmptyState">
+                                <div class="rounded-circle bg-white d-inline-flex align-items-center justify-content-center mb-3 shadow-xs" style="width: 58px; height: 58px; font-size: 1.4rem; color: #1d4ed8; border: 1.5px solid #cbd5e1;">
+                                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-1" style="color: #0f172a !important; font-size: 1.05rem;">No Service Requests Found</h6>
+                                <p class="text-secondary small mb-3 mx-auto" style="max-width: 480px; line-height: 1.5; color: #334155 !important;">
+                                    There are currently no maintenance or service requests matching your selected platform or status criteria.
+                                </p>
+                                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3.5 py-1.5 fw-bold" onclick="window.resetServiceFilters()">
+                                    <i class="fa-solid fa-arrow-rotate-left me-1.5"></i>Reset Filters
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table View Container (Preserved for compatibility) -->
+                        <div class="table-responsive dashboard-table-scroll d-none mt-2" id="serviceTableContainer">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Ticket ID</th>
+                                        <th>Platform</th>
+                                        <th>Requester</th>
+                                        <th>Service Details</th>
+                                        <th>Service Address</th>
+                                        <th>Schedule & Priority</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="smartSocietyServiceRequestsTable">
+                                    <tr><td colspan="8" class="text-center text-muted py-4">Loading service requests...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
                 <section id="complaints" class="d-none animate__animated animate__fadeIn" data-view="complaints">
                     <div class="card shadow-sm border-0 rounded-4">
                         <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
@@ -1671,7 +2247,7 @@
                 </section>
 
                 <!-- Amenities -->
-                
+
 
                 <!-- Announcements -->
                 <section id="announcements" class="d-none animate__animated animate__fadeIn" data-view="announcements">
@@ -1715,80 +2291,22 @@
                 </section>
 
                 <!-- Billing Rules -->
-                
+
 
                 <!-- Domestic Staff -->
-                <section id="staff" class="d-none animate__animated animate__fadeIn" data-view="staff">
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Domestic Staff Registry</h4><p class="text-muted small mb-0">Maintain verified worker details, service coverage, working hours, and secure society access.</p></div>
-                            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2" id="staffRegistryState">New staff record</span>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <form class="row g-3 form-grid mb-4 bg-light p-3 rounded-4" id="staffForm" novalidate>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Full name</label><input class="form-control" name="name" placeholder="Worker name" required></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Mobile number</label><input class="form-control" name="phone" inputmode="tel" placeholder="10-digit number" required></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Service</label><select class="form-select" name="serviceType"><option>Housekeeping</option><option>Cook</option><option>Driver</option><option>Caregiver</option><option>Gardener</option><option>Electrician</option><option>Plumber</option><option>Other</option></select></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Identity status</label><select class="form-select" name="identityStatus"><option>VERIFIED</option><option>PENDING</option><option>REJECTED</option></select></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Assigned block / area</label><input class="form-control" name="assignedArea" placeholder="A Block / Common area"></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Emergency contact</label><input class="form-control" name="emergencyContact" inputmode="tel" placeholder="Name or phone"></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Address / ID proof reference</label><input class="form-control" name="addressProof" placeholder="ID proof or address verification"></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Working days</label><input class="form-control" name="workingDays" placeholder="Mon–Sat"></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Shift starts</label><input class="form-control" name="shiftStart" type="time"></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Shift ends</label><input class="form-control" name="shiftEnd" type="time"></div>
-                                <div class="col-md-4"><label class="form-label small fw-bold">Admin notes</label><input class="form-control" name="notes" placeholder="Access instructions or remarks"></div>
-                                <div class="col-12 text-end d-flex justify-content-end gap-2"><button class="btn btn-outline-secondary rounded-pill px-4 d-none" id="cancelStaffEdit" type="button">Cancel</button><button class="btn btn-primary rounded-pill px-4" data-advanced-action="create-staff" type="submit" id="saveStaff"><i class="fa-solid fa-user-plus me-2"></i>Register Staff</button></div>
-                            </form>
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light"><tr><th>Staff member</th><th>Service &amp; area</th><th>Contact</th><th>Schedule</th><th>Verification</th><th>Access pass</th><th>Action</th></tr></thead>
-                                    <tbody id="staffBody"><tr><td colspan="7" class="text-muted text-center py-4">Loading staff records…</td></tr></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+
 
                 <!-- Deliveries -->
-                <section id="deliveries" class="d-none animate__animated animate__fadeIn" data-view="deliveries">
-                    <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center card-head">
-                            <div><h4 class="fw-bold mb-1">Parcel Desk</h4><p class="text-muted small mb-0">Capture the complete parcel journey from courier arrival through secure resident collection.</p></div>
-                            <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle px-3 py-2" id="deliveryDeskState">New arrival</span>
-                        </div>
-                        <div class="card-body px-4 pb-4">
-                            <form class="row g-3 form-grid mb-4 bg-light p-3 rounded-4" id="deliveryForm" novalidate>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Flat / unit</label><input class="form-control" name="unitNo" placeholder="A-101" required></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Courier / provider</label><input class="form-control" name="provider" placeholder="Courier / store" required></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Tracking number</label><input class="form-control" name="trackingNumber" placeholder="AWB / order ID"></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Agent name</label><input class="form-control" name="agentName"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Agent phone</label><input class="form-control" name="phone" inputmode="tel"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Recipient / resident</label><input class="form-control" name="recipientName" placeholder="Recipient name"></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Package type</label><select class="form-select" name="packageType"><option>PARCEL</option><option>FOOD</option><option>GROCERY</option><option>DOCUMENT</option><option>MEDICINE</option><option>FRAGILE</option></select></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Condition</label><select class="form-select" name="packageCondition"><option>GOOD</option><option>FRAGILE</option><option>DAMAGED</option><option>SEALED</option></select></div>
-                                <div class="col-md-2"><label class="form-label small fw-bold">Storage location</label><input class="form-control" name="storageLocation" placeholder="Rack / desk no."></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Photo / proof reference</label><input class="form-control" name="photoReference" placeholder="Photo filename or note"></div>
-                                <div class="col-md-12"><label class="form-label small fw-bold">Delivery notes</label><input class="form-control" name="deliveryNotes" placeholder="COD note, special handling, gate instruction, or any issue"></div>
-                                <div class="col-12 text-end d-flex justify-content-end gap-2"><button class="btn btn-outline-secondary rounded-pill px-4 d-none" id="cancelDeliveryEdit" type="button">Cancel</button><button class="btn btn-primary rounded-pill px-4" data-advanced-action="create-delivery" type="submit" id="saveDelivery"><i class="fa-solid fa-box-open me-2"></i>Record Arrival</button></div>
-                            </form>
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-light"><tr><th>Recipient &amp; flat</th><th>Courier / tracking</th><th>Package &amp; condition</th><th>Storage / notes</th><th>Arrival / collection</th><th>Status</th><th>Action</th></tr></thead>
-                                    <tbody id="deliveriesBody"><tr><td colspan="7" class="text-muted text-center py-4">Loading delivery records…</td></tr></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+
 
                 <!-- Polls -->
-                
+
 
                 <!-- Assets -->
-                
+
 
                 <!-- Expenses -->
-                
+
 
                 <!-- Payments -->
                 <section id="payments" class="d-none animate__animated animate__fadeIn" data-view="payments">
@@ -1806,7 +2324,7 @@
                             </div>
                             <div class="row g-3 align-items-end mb-3 bg-light rounded-4 p-3">
                                 <div class="col-md-4"><label class="form-label small fw-bold">Search flat or reference</label><input id="paymentSearch" class="form-control" placeholder="e.g. A-204 or transaction ID"></div>
-                                <div class="col-md-3"><label class="form-label small fw-bold">Payment method</label><select id="paymentModeFilter" class="form-select"><option value="">All methods</option><option value="UPI">UPI</option><option value="BANK_TRANSFER">Bank transfer</option><option value="CASH">Cash</option><option value="CHEQUE">Cheque</option></select></div>
+                                <div class="col-md-3"><label class="form-label small fw-bold">Payment method</label><select id="paymentModeFilter" class="form-select"><option value="">All methods</option><option value="UPI">UPI</option><option value="BANK_TRANSFER">Bank transfer</option><option value="CARD">Card</option><option value="ONLINE">Online</option><option value="CASH">Cash</option><option value="CHEQUE">Cheque</option></select></div>
                                 <div class="col-md-3"><label class="form-label small fw-bold">Billing month</label><input id="paymentMonthFilter" type="month" class="form-control"></div>
                                 <div class="col-md-2"><button id="clearPaymentFilters" type="button" class="btn btn-outline-secondary w-100">Clear filters</button></div>
                             </div>
@@ -1819,28 +2337,23 @@
 
                 <!-- Subscriptions -->
                 <section id="subscriptions" class="d-none animate__animated animate__fadeIn" data-view="subscriptions">
-                    <div class="card shadow-sm border-0 rounded-4 mb-4"><div class="card-body p-4 d-flex flex-wrap justify-content-between gap-3 align-items-center"><div><span id="saasHeroStatus" class="badge bg-secondary-subtle text-secondary-emphasis border mb-2">Loading subscription</span><h3 id="saasHeroPlan" class="fw-bold mb-1">Plan details</h3><p id="saasHeroDescription" class="text-muted mb-0">Checking the subscription assigned to this society workspace.</p></div><div class="d-flex flex-wrap gap-2"><a href="/saas" class="btn btn-outline-primary rounded-pill"><i class="fa-solid fa-layer-group me-2"></i>View plan catalogue</a><button type="button" class="btn btn-primary rounded-pill" data-subscription-action="support"><i class="fa-solid fa-headset me-2"></i>Contact support</button></div></div></div>
+                    <div class="card shadow-sm border-0 rounded-4 mb-4"><div class="card-body p-4 d-flex flex-wrap justify-content-between gap-3 align-items-center"><div><span id="saasHeroStatus" class="badge bg-secondary-subtle text-secondary-emphasis border mb-2">Loading subscription</span><h3 id="saasHeroPlan" class="fw-bold mb-1">Plan details</h3><p id="saasHeroDescription" class="text-muted mb-0">Checking the subscription assigned to this society workspace.</p></div><div class="d-flex flex-wrap gap-2"><button type="button" id="saasCatalogueButton" class="btn btn-outline-primary rounded-pill">View plan catalogue</button><button type="button" id="saasRenewButton" class="btn btn-primary rounded-pill">Renew plan</button><button type="button" class="btn btn-primary rounded-pill" data-subscription-action="support"><i class="fa-solid fa-headset me-2"></i>Contact support</button></div></div></div>
+                    <p id="saasExpiryNotice" role="status" class="alert alert-info" hidden></p>
+                    <div class="subscription-summary-grid subscription-validity-grid">
+                        <article class="subscription-summary-card"><span>Plan starts on</span><strong id="saasStartDate">Loading…</strong><small>Subscription activation date</small></article>
+                        <article class="subscription-summary-card"><span>Plan ends on</span><strong id="saasEndDate">Loading…</strong><small>Current subscription validity</small></article>
+                    </div>
                     <div class="subscription-summary-grid">
                         <article class="subscription-summary-card"><span>Active plan</span><strong class="text-dark" id="saasCurrentPlan">Loading…</strong><small id="saasPlanCycle">Billing cycle</small></article>
                         <article class="subscription-summary-card"><span>Plan status</span><strong class="text-success" id="saasPlanStatus">Loading…</strong><small id="saasPlanStarted">Activation date</small></article>
                         <article class="subscription-summary-card"><span>Flat capacity</span><strong class="text-info" id="saasFlatCapacity">Loading…</strong><small id="saasFlatRemaining">Capacity remaining</small></article>
                         <article class="subscription-summary-card"><span>Next renewal</span><strong class="text-warning" id="saasNextRenewal">Loading…</strong><small id="saasRenewalAmount">Renewal amount</small></article>
                     </div>
-                    <div class="card shadow-sm border-0 rounded-4 mt-4"><div class="card-header bg-transparent border-0 pt-4 px-4 d-flex flex-wrap gap-3 justify-content-between align-items-center card-head"><div><h4 class="fw-bold mb-1">SaaS invoice history</h4><p class="text-muted mb-0">Subscription invoices and payment confirmation for this workspace.</p></div><button type="button" class="btn btn-outline-primary rounded-pill btn-sm" data-subscription-action="export"><i class="fa-solid fa-download me-1"></i>Export invoice history</button></div><div class="card-body px-4 pb-4"><div class="table-responsive"><table class="table table-hover align-middle mb-0" id="saasInvoiceTable"><thead class="table-light"><tr><th>Invoice number</th><th>Plan</th><th>Billing cycle</th><th>Amount</th><th>Payment status</th><th>Invoice date</th><th>Action</th></tr></thead><tbody><tr><td colspan="7" class="text-center text-muted py-5">Loading invoice history…</td></tr></tbody></table></div></div></div>
-                </section>
-
-                <!-- Reports -->
-                <section id="reports" class="d-none animate__animated animate__fadeIn" data-view="reports">
-                    <div class="card shadow-sm border-0 rounded-4 mb-4"><div class="card-body p-4 d-flex flex-wrap justify-content-between gap-3 align-items-center"><div><span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle mb-2">Society reporting workspace</span><h3 class="fw-bold mb-1">Reports and analytics</h3><p class="text-muted mb-0">Review financial, operational and service health before exporting a committee-ready report.</p></div><button type="button" class="btn btn-primary rounded-pill" data-society-report="all"><i class="fa-solid fa-file-arrow-down me-2"></i>Export reporting pack</button></div></div>
-                    <div class="card shadow-sm border-0 rounded-4 mb-4"><div class="card-body p-4"><div class="row g-3 align-items-end"><div class="col-md-4"><label class="form-label fw-semibold">Reporting period</label><select class="form-select" id="reportPeriod"><option>Current month</option><option>Previous month</option><option>Current financial year</option></select></div><div class="col-md-4"><label class="form-label fw-semibold">Focus area</label><select class="form-select" id="reportFocus"><option>All operational areas</option><option>Billing and collections</option><option>Gate and visitor operations</option><option>Complaints and service teams</option><option>Occupancy and residents</option></select></div><div class="col-md-4 d-flex gap-2"><button type="button" class="btn btn-outline-primary flex-grow-1" data-society-report="refresh"><i class="fa-solid fa-rotate me-2"></i>Refresh insights</button><button type="button" class="btn btn-primary flex-grow-1" data-society-report="all"><i class="fa-solid fa-download me-2"></i>Export CSV</button></div></div><p class="small text-muted mb-0 mt-3" id="reportPreparedAt"><i class="fa-regular fa-clock me-1"></i>Prepared from the latest available society records.</p></div></div>
-                    <div class="row g-4 mb-4 stats"><div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="small text-muted fw-bold text-uppercase">Billing collection</span><strong class="fs-2 text-primary d-block mt-2">86%</strong><small class="text-muted mt-2">Rs. 4.30L collected of Rs. 5.00L billed</small></article></div><div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="small text-muted fw-bold text-uppercase">Visitor entries</span><strong class="fs-2 text-info d-block mt-2">1,248</strong><small class="text-muted mt-2">42 delayed exits requiring review</small></article></div><div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="small text-muted fw-bold text-uppercase">Complaint SLA</span><strong class="fs-2 text-success d-block mt-2">14h</strong><small class="text-muted mt-2">92% resolved within target</small></article></div><div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="small text-muted fw-bold text-uppercase">Occupancy</span><strong class="fs-2 text-dark d-block mt-2">94%</strong><small class="text-muted mt-2">301 occupied of 320 total flats</small></article></div></div>
-                    <div class="card shadow-sm border-0 rounded-4"><div class="card-header bg-transparent border-0 pt-4 px-4"><h4 class="fw-bold mb-1">Reports ready to export</h4><p class="text-muted mb-0">Download individual operational registers.</p></div><div class="list-group list-group-flush"><button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 px-4" data-society-report="billing"><span><i class="fa-solid fa-receipt text-primary me-2"></i>Monthly billing and collections</span><i class="fa-solid fa-download"></i></button><button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 px-4" data-society-report="visitors"><span><i class="fa-solid fa-user-shield text-primary me-2"></i>Visitor and gate activity</span><i class="fa-solid fa-download"></i></button><button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 px-4" data-society-report="complaints"><span><i class="fa-solid fa-screwdriver-wrench text-primary me-2"></i>Complaint resolution register</span><i class="fa-solid fa-download"></i></button><button type="button" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3 px-4" data-society-report="expenses"><span><i class="fa-solid fa-wallet text-primary me-2"></i>Expenses and approvals</span><i class="fa-solid fa-download"></i></button></div></div>
-                    <div class="card shadow-sm border-0 rounded-4 mt-4"><div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center"><div><h4 class="fw-bold mb-1">Recent report activity</h4><p class="text-muted mb-0">Latest scheduled and on-demand reports.</p></div><span class="badge bg-success-subtle text-success-emphasis border border-success-subtle">Exports enabled</span></div><div class="card-body px-4 pb-4"><div class="table-responsive"><table class="table align-middle mb-0"><thead class="table-light"><tr><th>Report</th><th>Period</th><th>Prepared for</th><th>Last generated</th><th>Status</th><th>Action</th></tr></thead><tbody><tr><td>Monthly billing and collections</td><td>August 2026</td><td>Society committee</td><td>Today, 10:30 AM</td><td><span class="status active">Ready</span></td><td><button type="button" class="btn btn-sm btn-outline-primary" data-society-report="billing">Download</button></td></tr><tr><td>Visitor and gate activity</td><td>August 2026</td><td>Security lead</td><td>Today, 09:15 AM</td><td><span class="status active">Ready</span></td><td><button type="button" class="btn btn-sm btn-outline-primary" data-society-report="visitors">Download</button></td></tr><tr><td>Complaint resolution register</td><td>August 2026</td><td>Maintenance committee</td><td>Yesterday, 06:00 PM</td><td><span class="status active">Ready</span></td><td><button type="button" class="btn btn-sm btn-outline-primary" data-society-report="complaints">Download</button></td></tr></tbody></table></div></div></div>
                 </section>
 
                 <!-- Home Services & Pricing CRUD Management Panel -->
                                 <!-- Home Services & Pricing CRUD Management Panel (Resident Dashboard Card Model) -->
-                
+
 
                 <!-- Add / Edit Service Package Modal -->
                 <div class="modal fade hidden" id="homeServicePackageModal" tabindex="-1" aria-labelledby="modalPackageTitle" aria-hidden="true" style="display: none !important; z-index: 1065;">
@@ -1946,7 +2459,7 @@
             </div>
         </main>
     </div>
-    
+
     <div id="toast" class="toast hidden bg-dark text-white p-3 rounded-3 shadow-lg position-fixed bottom-0 end-0 m-4" style="z-index: 1050;"></div>
 
     <div class="society-sync-dialog hidden" id="societyNoticeDialog" role="dialog" aria-modal="true" aria-labelledby="societyNoticeTitle">
@@ -1955,7 +2468,7 @@
             <span class="small text-primary fw-bold text-uppercase">Society communication</span>
             <h2 id="societyNoticeTitle" class="mt-1 mb-2">Send dashboard notice</h2>
             <p class="text-muted mb-4">Send a notice to one role. It will appear in that role’s Announcements area.</p>
-            <form id="societyNoticeForm" class="row g-3">
+            <form id="societyNoticeForm" class="row g-3"><div class="col-12"><p id="societyNoticeStatus" role="status" aria-live="polite" class="mb-0"></p></div>
                 <div class="col-12"><label class="form-label fw-semibold" for="societyNoticeAudience">Send to *</label><select class="form-select" id="societyNoticeAudience" required><option value="RESIDENTS">Resident dashboard</option><option value="MAINTENANCE">Maintenance dashboard</option><option value="SECURITY">Security dashboard</option></select></div>
                 <div class="col-12"><label class="form-label fw-semibold" for="societyNoticeTitleInput">Notice title *</label><input class="form-control" id="societyNoticeTitleInput" maxlength="120" placeholder="e.g. Water supply maintenance" required></div>
                 <div class="col-12"><label class="form-label fw-semibold" for="societyNoticeMessage">Message *</label><textarea class="form-control" id="societyNoticeMessage" rows="5" maxlength="3000" placeholder="Write the notice details clearly…" required></textarea></div>
@@ -1988,21 +2501,23 @@
             </div>
         </div>
     </div>
-    
+
     <div th:replace="~{fragments/layout :: scripts}"></div>
     <!-- Advanced scripts for Admin -->
     <script th:src="@{/smartapartment/js/advanced-dashboard.js}"></script>
     <script th:src="@{/smartapartment/js/owner-property-workflow.js}"></script>
     <script>
         window.openPanel = function(panel, updateHistory = true) {
-            if (!panel || ['amenities', 'billing-rules', 'home-services', 'service-pricing', 'polls', 'assets', 'expenses'].includes(panel)) panel = 'overview';
+            if (!panel || ['amenities', 'billing-rules', 'home-services', 'service-pricing', 'polls', 'assets', 'expenses', 'reports'].includes(panel)) panel = 'overview';
             if (panel === 'service-pricing' || panel === 'home-services') {
                 panel = 'home-services';
             }
-            const selectedView = document.querySelector('[data-view="' + panel + '"]') 
+            const selectedView = Array.from(document.querySelectorAll('[data-view]')).find(view => view.dataset.view === panel)
                 || (panel === 'home-services' ? document.querySelector('[data-view="service-pricing"], #home-services-panel, #service-pricing-panel') : null)
                 || document.querySelector('[data-view="overview"]');
             if (!selectedView) return;
+            panel = selectedView.dataset.view;
+            const previousView = document.querySelector('[data-view]:not(.d-none):not(.hidden)');
 
             document.querySelectorAll('[data-panel]').forEach(function(button) {
                 const btnPanel = button.dataset.panel;
@@ -2032,13 +2547,13 @@
                 "property-approvals": "Owner Property Approvals",
                 billing: "Maintenance Billing",
                 visitors: "Visitor Management",
-                complaints: "Complaints",
+                complaints: "Complaints", "service-requests": "Service Requests",
                 "maintenance-chat": "Maintenance Escalations & Chat",
                 amenities: "Amenities",
                 announcements: "Announcements",
                 "billing-rules": "Recurring Charge Rules",
-                staff: "Domestic Staff",
-                deliveries: "Delivery Management",
+                "gate-entries": "Gate Entries",
+
                 occupancy: "Block-wise Occupancy",
                 "maintenance-overview": "Maintenance Overview",
                 "security-access": "Security Login & Logout",
@@ -2048,12 +2563,15 @@
                 payments: "Payments",
                 "home-services": "Home Services & Pricing Catalog",
                 "service-pricing": "Home Services & Pricing Catalog",
-                subscriptions: "SaaS Plan",
-                reports: "Reports"
+                subscriptions: "SaaS Plan"
             };
-            if (title && titles[panel]) {
-                title.textContent = titles[panel];
+            if (title) {
+                title.textContent = titles[panel] || (panel === 'profile' ? 'Profile Settings' : 'Overview');
             }
+            if (previousView !== selectedView) {
+                document.querySelector('.main-content')?.scrollTo({ top: 0, behavior: 'instant' });
+            }
+            document.dispatchEvent(new CustomEvent('society:panelchange', { detail: { panel } }));
 
             if (panel === "maintenance-chat") {
                 loadAdminMaintThreads();
@@ -2151,7 +2669,7 @@
             }
         };
 
-        
+
         /* ==========================================================================
            Dynamic Maintenance Worker Registry & Real-Time Chat Sync
            ========================================================================== */
@@ -2668,7 +3186,7 @@
                 const tickets = JSON.parse(stored);
                 const table = document.querySelector('[data-table="complaints"]');
                 if (!table) return;
-                
+
                 tickets.forEach(t => {
                     const row = [...table.querySelectorAll('tr')].find(tr => tr.cells[0]?.textContent?.trim().includes(t.id) || tr.cells[1]?.textContent?.trim().includes(t.summary));
                     if (row && row.cells.length >= 4) {
@@ -2690,8 +3208,97 @@
 <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
 <script defer src="/smartapartment/js/admin-invoice-selection.js?v=20261008-flat-billing-v1"></script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-<script src="/smartapartment/js/gate-management.js?v=20260916-multigate-v1"></script>
+<script src="/smartapartment/js/gate-management.js?v=20261009-guard-roster-v3"></script>
 
-<script defer src="/smartapartment/js/admin-insights.js?v=20261008-insights-v1"></script>
-</body>
+<script defer src="/smartapartment/js/admin-insights.js?v=20261009-occupancy-v2"></script>
+<script defer src="/smartapartment/js/admin-occupancy-editor.js?v=20261009-v1"></script>
+<script src="/smartapartment/js/society-service-requests.js"></script><style>
+body.dashboard-body #panel-maintenance-chat > .card {padding:18px 20px!important;margin-bottom:20px!important;background:#fff!important;border:1px solid #dbe3ef!important;border-radius:16px!important;}
+#panel-maintenance-chat > .card > div > div:first-child {flex-wrap:wrap;gap:10px!important;}
+body.dashboard-body #panel-maintenance-chat .admin-chat-deck {gap:20px!important;height:calc(100dvh - 250px)!important;min-height:480px!important;max-height:680px!important;}
+body.dashboard-body #panel-maintenance-chat .admin-chat-sidebar {width:290px!important;min-width:260px!important;max-width:300px!important;}
+#panel-maintenance-chat .admin-chat-sidebar > div:first-child {padding:16px!important;}
+#panel-maintenance-chat .admin-chat-sidebar > div:first-child > div {flex-wrap:wrap;gap:10px!important;margin-bottom:12px!important;padding:0!important;}
+#panel-maintenance-chat .admin-chat-sidebar label {font-size:13px!important;line-height:20px;}
+#panel-maintenance-chat .admin-chat-sidebar button {min-height:34px!important;padding:6px 10px!important;font-size:12px!important;}
+#panel-maintenance-chat #adminWorkerSelect {min-height:42px!important;font-size:13px!important;border-radius:10px!important;}
+#panel-maintenance-chat .admin-chat-window > div:first-child {padding:16px 20px!important;align-items:flex-start!important;gap:12px;flex-wrap:wrap;}
+#panel-maintenance-chat .admin-chat-window > div:first-child > div {min-width:0;flex:1 1 280px;gap:12px!important;}
+#panel-maintenance-chat .admin-chat-window > div:first-child > div > div:last-child {min-width:0;}
+#panel-maintenance-chat .admin-chat-window > div:first-child > div > div:last-child > div:first-child {flex-wrap:wrap;gap:8px!important;}
+#panel-maintenance-chat #adminActiveTitle {font-size:16px!important;line-height:1.4;}
+#panel-maintenance-chat #adminActiveSubtitle {font-size:12px!important;line-height:1.6;margin-top:6px!important;}
+#panel-maintenance-chat #adminActiveStatusBadge {font-size:11px;white-space:nowrap;align-self:flex-start;}
+body.dashboard-body #panel-maintenance-chat .admin-threads-container {padding:12px!important;gap:12px!important;}
+body.dashboard-body #panel-maintenance-chat .admin-thread-card {padding:12px!important;}
+#panel-maintenance-chat #adminMaintMessagesContainer {padding:20px!important;gap:14px!important;}
+@media(max-width:900px) {body.dashboard-body #panel-maintenance-chat .admin-chat-deck {flex-direction:column!important;height:auto!important;max-height:none!important;overflow:visible!important;}body.dashboard-body #panel-maintenance-chat .admin-chat-sidebar {width:100%!important;max-width:none!important;min-width:0!important;max-height:300px;}body.dashboard-body #panel-maintenance-chat .admin-chat-window {width:100%!important;min-height:500px;}}
+</style><script src="/smartapartment/js/admin-gate-entries.js"></script><script src="/smartapartment/js/saas-renewal.js"></script><style id="billing-workspace-cards">
+body.dashboard-body[data-platform="smartsociety"] .main-content #panel-billing .billing-workspace {
+ background:#fff!important;border:1px solid #dbe3ef!important;border-radius:20px!important;
+ box-shadow:0 8px 24px rgba(15,23,42,.05)!important;padding:24px!important;margin:24px 0!important;
+ overflow:hidden;
+}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-workspace .card-header {
+ display:flex;flex-wrap:wrap;gap:16px;align-items:center;padding:0 0 20px!important;margin:0!important;
+ border-bottom:1px solid #e2e8f0!important;background:transparent!important;
+}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-workspace .card-body {padding:20px 0 0!important;}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-info-grid {
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px!important;
+ padding:0!important;margin:0!important;background:transparent!important;border:0!important;
+}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-info-grid > div {
+ width:auto!important;padding:16px!important;margin:0!important;background:#f8fafc;
+ border:1px solid #e2e8f0;border-radius:12px;min-width:0;
+}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-info-grid strong {white-space:normal;overflow-wrap:anywhere;}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .payment-proof-head {gap:16px;flex-wrap:wrap;padding-bottom:20px;margin:0 0 20px;border-bottom:1px solid #e2e8f0;}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-proof-empty {padding:18px;border-radius:12px;border:1px solid #e2e8f0;background:#f8fafc;min-height:76px;}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-summary-row {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;border:0!important;margin:0 0 20px;padding:0;}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-summary-item {padding:16px;border:1px solid #e2e8f0!important;border-radius:12px;background:#f8fafc;}
+body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-workspace button {min-height:42px;}
+@media(max-width:1000px){body.dashboard-body[data-platform="smartsociety"] #panel-billing .billing-info-grid {grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:575px){body.dashboard-body[data-platform="smartsociety"] .main-content #panel-billing .billing-workspace {padding:18px!important;}body.dashboard-body[data-platform="smartsociety"] #panel-billing :is(.billing-info-grid,.billing-summary-row) {grid-template-columns:1fr;}}
+</style><style id="society-notice-layout">
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeDialog {position:fixed!important;inset:0!important;display:flex!important;justify-content:center!important;align-items:center!important;padding:24px!important;background:rgba(15,23,42,.6)!important;z-index:12080!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeDialog.hidden {display:none!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeDialog .modal-card {position:relative!important;width:min(720px,100%)!important;max-width:720px!important;max-height:calc(100dvh - 48px)!important;overflow-y:auto!important;background:white!important;border:1px solid #dbe3ef!important;border-radius:20px!important;padding:28px!important;margin:0!important;box-shadow:0 24px 64px rgba(15,23,42,.25)!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeClose {position:absolute!important;right:20px!important;top:20px!important;width:40px!important;height:40px!important;display:flex!important;justify-content:center;align-items:center;border:1px solid #dbe3ef!important;border-radius:50%!important;background:#f1f5f9!important;color:#475569!important;font-size:24px!important;padding:0!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeTitle {font-size:24px!important;font-weight:700!important;padding-right:48px;line-height:1.3!important;margin:12px 0!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeForm {margin:0!important;gap:18px!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeForm > div {padding:0!important;margin:0!important;width:100%;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeForm .form-label {display:block;margin-bottom:8px;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeForm :is(.form-control,.form-select) {min-height:46px!important;width:100%!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeMessage {min-height:140px!important;resize:vertical;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeForm > div:last-child {display:flex!important;justify-content:flex-end!important;padding-top:18px!important;border-top:1px solid #e2e8f0;gap:12px!important;}
+body.dashboard-body[data-platform="smartsociety"] #societyNoticeForm button {min-height:44px!important;padding:10px 20px!important;border-radius:10px!important;}
+#societyNoticeStatus:empty {display:none;}
+@media(max-width:575px){body.dashboard-body[data-platform="smartsociety"] #societyNoticeDialog {padding:12px!important;}body.dashboard-body[data-platform="smartsociety"] #societyNoticeDialog .modal-card {padding:22px 18px!important;max-height:calc(100dvh - 24px)!important;}}
+</style><style id="admin-action-receipt-layout">
+body.dashboard-body[data-platform="smartsociety"] #dashboardActionText:has(.receipt-line) {display:grid!important;gap:12px!important;margin:20px 0!important;line-height:1.5!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardActionText .receipt-line {display:grid!important;grid-template-columns:150px minmax(0,1fr)!important;gap:12px!important;padding:14px 16px!important;margin:0!important;border:1px solid #e2e8f0!important;background:#f8fafc!important;border-radius:12px!important;color:#334155!important;white-space:normal!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardActionText .receipt-line strong {color:#475569!important;font-size:13px!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardActionText .receipt-line > span {overflow-wrap:anywhere;font-size:14px;}
+@media(max-width:575px){body.dashboard-body[data-platform="smartsociety"] #dashboardActionText .receipt-line {grid-template-columns:1fr!important;gap:6px!important;}}
+</style><style id="admin-password-alignment">
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-password-grid {display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:24px!important;align-items:start!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-password-grid > label {display:flex!important;flex-direction:column!important;gap:10px!important;margin:0!important;min-width:0;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-password-grid > label > span {margin:0!important;line-height:22px!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-password {position:relative!important;display:block!important;width:100%!important;height:48px!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-password input {display:block!important;width:100%!important;height:48px!important;min-height:48px!important;padding:12px 56px 12px 14px!important;margin:0!important;box-sizing:border-box!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-password button {position:absolute!important;top:50%!important;right:4px!important;bottom:auto!important;left:auto!important;transform:translateY(-50%)!important;display:flex!important;align-items:center!important;justify-content:center!important;width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;line-height:1!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-security-note {display:flex!important;align-items:flex-start!important;gap:14px!important;margin:24px 0!important;padding:18px!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-security-note strong {display:block!important;margin-bottom:6px!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-settings__actions {display:flex!important;justify-content:flex-end!important;gap:12px!important;margin-top:24px!important;padding-top:24px!important;border-top:1px solid #e2e8f0!important;}
+body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-settings__actions button {min-height:46px!important;display:inline-flex!important;align-items:center!important;gap:10px!important;}
+@media(max-width:1100px){body.dashboard-body[data-platform="smartsociety"] #dashboardPasswordForm .profile-password-grid {grid-template-columns:1fr!important;gap:20px!important;}}
+</style><style id="resident-registration-link-layout">
+body.dashboard-body[data-platform="smartsociety"] #dashboardActionFields .resident-registration-link-card {grid-column:1/-1!important;width:100%!important;max-width:none!important;box-sizing:border-box!important;padding:24px!important;margin:0 0 24px!important;}
+body.dashboard-body[data-platform="smartsociety"] .resident-registration-link-card :is(input,select) {min-width:0!important;min-height:46px!important;box-sizing:border-box;}
+body.dashboard-body[data-platform="smartsociety"] .resident-registration-link-card :is(button,a) {min-height:46px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px;flex-shrink:0;}
+body.dashboard-body[data-platform="smartsociety"] .resident-registration-link-card input {flex:1!important;}
+body.dashboard-body[data-platform="smartsociety"] .resident-registration-link-card :is(#residentSelfLinkOutput,#residentInviteStatus) {width:100%;}
+@media(max-width:650px){body.dashboard-body[data-platform="smartsociety"] #dashboardActionFields .resident-registration-link-card {padding:18px!important;}body.dashboard-body[data-platform="smartsociety"] .resident-registration-link-card div:has(> input) {display:flex!important;flex-wrap:wrap!important;gap:12px!important;}body.dashboard-body[data-platform="smartsociety"] .resident-registration-link-card div:has(> input) > input {flex-basis:100%!important;width:100%!important;}}
+</style></body>
 </html>

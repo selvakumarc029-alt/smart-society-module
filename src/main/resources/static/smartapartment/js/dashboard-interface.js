@@ -15,7 +15,10 @@
                 const height = Math.ceil(topbar.getBoundingClientRect().height);
                 if (height > 0 && height !== previousHeight) {
                     previousHeight = height;
-                    body.style.setProperty('--dashboard-topbar-height', height + 'px');
+                    body.style.setProperty('--dashboard-topbar-height', height + 'px'); body.style.setProperty('--society-aligned-header-height', height + 'px');
+                    if (body.dataset.dashboardRole === 'admin') {
+                        body.style.setProperty('--society-admin-header-height', height + 'px');
+                    }
                 }
             };
             new ResizeObserver(measure).observe(topbar);

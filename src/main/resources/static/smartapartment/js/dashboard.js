@@ -31,6 +31,7 @@ const titles = {
     "service-pricing": "Home Services & Pricing Catalog",
     maintenance: "Maintenance / Service Requests"
 };
+Object.assign(titles, { occupancy: "Block-wise Occupancy", "maintenance-overview": "Maintenance Overview", "security-access": "Security Login & Logout", "maintenance-chat": "Maintenance Escalations & Chat" });
 const securityPanelTitles = {
     overview: "Overview",
     verify: "Pass / OTP Verification",
@@ -51,7 +52,7 @@ const residentAdminInboxKey = "smartapartment-resident-admin-inbox:v1";
 const residentPaymentProofsKey = "smartapartment-resident-payment-proofs:v1";
 const rolePanelRoutes = {
     superadmin: ["monitoring", "audit-logs", "societies", "subscriptions"],
-    admin: ["residents", "billing", "visitors", "complaints"],
+    admin: ["occupancy", "residents", "billing", "complaints"],
     resident: ["maintenance", "billing", "pass", "services", "complaints", "amenities", "announcements", "deliveries", "profile"],
     security: ["entries", "pass", "visitors", "entries"],
     maintenance: ["tasks", "complaints", "tasks", "profile"]
@@ -239,10 +240,6 @@ function setupDetailedProfileSettings() {
             <div class="profile-settings__actions"><button type="submit" class="btn btn-primary"><i class="fa-solid fa-key"></i> Update password</button></div>
         </form>`;
     if (dashboardRole === "superadmin") {
-        const separator = document.createElement("div");
-        separator.className = "profile-platform-separator";
-        separator.innerHTML = "<span>Platform configuration</span><p>Controls below apply across the SmartSociety platform.</p>";
-        host.prepend(separator);
         host.prepend(profile);
     } else host.appendChild(profile);
 
@@ -842,6 +839,7 @@ async function loadSocietyBackendData() {
     if (dashboardRole === "superadmin") return loadPlatformBackendData();
     const request = async (path) => {
         const response = await fetch(`/api/society/${path}`, { headers: { Accept: "application/json" } });
+        if (response.redirected) throw new Error("Sign in with your society account to load saved records. Dashboard totals have not loaded.");
         if (response.status === 401) {
             window.location.href = "/?loginRequired=true";
             throw new Error("Authentication required");
@@ -903,6 +901,7 @@ async function loadSocietyBackendData() {
             else { const button=document.createElement("button");button.type="button";button.className="btn btn-sm btn-success";button.dataset.action="pay";button.textContent="Mark Paid";td.appendChild(button); }
             r.appendChild(td); return r;
         });
+        if (dashboardRole === "admin") updateBillingStats();
         fill('table[data-table="complaints"],table[data-table="maintenance-complaints"]', complaints, (x,c,s,table) => {
             if (dashboardRole === "resident") {
                 return buildResidentComplaintRow(x);
@@ -933,7 +932,7 @@ async function loadSocietyBackendData() {
             }
             r.appendChild(td);return r;
         });
-        fill('table[data-table="visitors"],table[data-table="entries"]', visitors, (v,c,s,table) => { const r=document.createElement("tr");r.dataset.recordId=v.id;c(r,v.name);if(dashboardRole==="admin"){c(r,v.unitNo);c(r,v.purpose);c(r,v.expectedAt);}else{c(r,v.phone);c(r,v.unitNo);if(table.dataset.table==="entries"){c(r,v.purpose);c(r,v.resident);}else{c(r,v.checkInAt||v.expectedAt);}}s(r,v.status);const td=document.createElement("td");if(v.status==="CHECKED_OUT")td.textContent="Checked out";else{const b=document.createElement("button");b.dataset.backendAction=v.status==="CHECKED_IN"?"visitor-checkout":"visitor-checkin";b.textContent=v.status==="CHECKED_IN"?"Check Out":"Check In";td.appendChild(b);}r.appendChild(td);return r; });
+        fill('table[data-table="visitors"],table[data-table="entries"]', visitors, (v,c,s,table) => { const r=document.createElement("tr");r.dataset.recordId=v.id;c(r,v.name);if(dashboardRole==="admin"){c(r,v.unitNo);c(r,v.purpose);c(r,v.expectedAt && !Number.isNaN(Date.parse(v.expectedAt)) ? new Date(v.expectedAt).toLocaleString("en-IN", {day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : (v.expectedAt || "—"));}else{c(r,v.phone);c(r,v.unitNo);if(table.dataset.table==="entries"){c(r,v.purpose);c(r,v.resident);}else{c(r,v.checkInAt||v.expectedAt);}}s(r,v.status);const td=document.createElement("td");if(v.status==="CHECKED_OUT")td.textContent="Checked out";else{const b=document.createElement("button");b.dataset.backendAction=v.status==="CHECKED_IN"?"visitor-checkout":"visitor-checkin";b.textContent=v.status==="CHECKED_IN"?"Check Out":"Check In";td.appendChild(b);}r.appendChild(td);return r; });
         const visitorCounters = document.querySelectorAll('[data-view="visitors"] .compact-stats strong');
         const visitorStatus = value => String(value || "").toUpperCase();
         if (visitorCounters[0]) visitorCounters[0].textContent = visitors.filter(visitor => ["WAITING", "EXPECTED", "PENDING"].includes(visitorStatus(visitor.status))).length;
@@ -961,8 +960,12 @@ async function loadSocietyBackendData() {
         const residentWelcomeName = document.getElementById("residentWelcomeName");
         if (residentWelcomeName && me?.name) residentWelcomeName.textContent = me.name;
         document.documentElement.dataset.backendConnected = "true";
+        const state = document.getElementById("societyAdminLoadState");
+        if (state) state.hidden = true;
     } catch (error) {
-        console.error("Dashboard backend hydration failed", error);
+        const state = document.getElementById("societyAdminLoadState");
+        if (state) { state.hidden = false; state.textContent = error.message || "Society records could not be loaded. Try refreshing the dashboard."; }
+        else console.error("Dashboard backend hydration failed", error);
     }
 }
 
@@ -970,22 +973,36 @@ function renderSocietySubscription(subscription) {
     const setText = (id, value) => { const node = document.getElementById(id); if (node) node.textContent = value; };
     const localDate = value => value ? new Date(`${value}T00:00:00`).toLocaleDateString("en-IN", {day:"2-digit", month:"short", year:"numeric"}) : "Not scheduled";
     const money = value => `Rs. ${Number(value || 0).toLocaleString("en-IN", {maximumFractionDigits: 2})}`;
-    const active = String(subscription.status || "INACTIVE").toUpperCase() === "ACTIVE";
+    const expired = subscription.expiryState === "EXPIRED";
+    const active = !expired && String(subscription.status || "INACTIVE").toUpperCase() === "ACTIVE";
     const planName = subscription.planName || "No plan assigned";
     const cycle = String(subscription.billingCycle || "Not configured").replaceAll("_", " ").toLowerCase();
 
     setText("saasHeroPlan", planName);
     setText("saasHeroDescription", active
         ? `${subscription.societyName || "This society"} is covered by the ${planName} plan. Capacity, renewal and invoice details are shown below.`
-        : "A platform subscription must be assigned before paid society services can be used.");
+        : subscription.planName ? `Your ${planName} plan is ${expired ? "expired" : "inactive"}. Review the validity dates and renew below.` : "Ask superadmin to assign a plan to this society before renewal.");
     const heroStatus = document.getElementById("saasHeroStatus");
     if (heroStatus) {
-        heroStatus.textContent = active ? "Subscription active" : "Subscription inactive";
+        heroStatus.textContent = expired ? "Subscription expired" : active ? "Subscription active" : "Subscription inactive";
         heroStatus.className = `badge border mb-2 ${active ? "bg-success-subtle text-success-emphasis border-success-subtle" : "bg-warning-subtle text-warning-emphasis border-warning-subtle"}`;
     }
     setText("saasCurrentPlan", planName);
+    setText("saasStartDate", subscription.startedOn ? localDate(subscription.startedOn) : "Not recorded");
+    setText("saasEndDate", localDate(subscription.renewsOn));
+    const expiryNotice = document.getElementById("saasExpiryNotice");
+    if (expiryNotice) {
+        const state = subscription.expiryState;
+        expiryNotice.hidden = !["EXPIRING", "EXPIRED"].includes(state);
+        expiryNotice.className = `alert ${state === "EXPIRED" ? "alert-danger" : "alert-warning"}`;
+        expiryNotice.textContent = state === "EXPIRED"
+            ? "Your plan has expired. The superadmin has an expiry alert and can suspend admin access. Contact platform support for renewal."
+            : `Your plan ends ${localDate(subscription.renewsOn)} (${subscription.daysRemaining} days remaining). An expiry alert is visible to the superadmin.`;
+    }
     setText("saasPlanCycle", cycle === "not configured" ? "Billing cycle not configured" : `${cycle[0].toUpperCase()}${cycle.slice(1)} billing`);
-    setText("saasPlanStatus", active ? "Active" : String(subscription.status || "Inactive").replaceAll("_", " "));
+    setText("saasPlanStatus", expired ? "Expired" : active ? "Active" : String(subscription.status || "Inactive").replaceAll("_", " "));
+    const statusNode = document.getElementById("saasPlanStatus");
+    if (statusNode) statusNode.className = active ? "text-success" : expired ? "text-danger" : "text-warning";
     setText("saasPlanStarted", subscription.startedOn ? `Activated ${localDate(subscription.startedOn)}` : "Activation date not recorded");
     setText("saasFlatCapacity", `${Number(subscription.usedFlats || 0).toLocaleString("en-IN")} / ${Number(subscription.maxFlats || 0).toLocaleString("en-IN")} flats`);
     setText("saasFlatRemaining", `${Number(subscription.remainingFlats || 0).toLocaleString("en-IN")} flats remaining`);
@@ -1006,7 +1023,7 @@ function renderSocietySubscription(subscription) {
     invoices.forEach(invoice => {
         const row = document.createElement("tr");
         const values = [invoice.number, invoice.plan, `${localDate(invoice.cycleStart)} – ${localDate(invoice.cycleEnd)}`, money(invoice.amount)];
-        values.forEach(value => { const cell = document.createElement("td"); cell.textContent = value; row.appendChild(cell); });
+        values.forEach(value => { const cell = document.createElement("td"); cell.dataset.label = ["Flat / billing cycle", "Amount", "Payment method", "Transaction reference", "Paid at"][row.children.length]; cell.textContent = value; row.appendChild(cell); });
         const statusCell = document.createElement("td");
         const badge = document.createElement("span"); badge.className = "status active"; badge.textContent = invoice.status || "Paid"; statusCell.appendChild(badge); row.appendChild(statusCell);
         const dateCell = document.createElement("td"); dateCell.textContent = localDate(invoice.invoiceDate); row.appendChild(dateCell);
@@ -1100,10 +1117,11 @@ async function loadPlatformBackendData(){
         renderSubscriptionCatalogue(plans, tenants);
         fill('#subscriptionPlansTable', plans, plan=>{const r=document.createElement("tr");r.dataset.planId=plan.id;td(r,plan.name);td(r,`Rs. ${plan.monthlyPrice}`);td(r,plan.maxApartments);td(r,plan.maxResidents);td(r,[plan.visitorManagement&&"Visitors",plan.amenityBooking&&"Amenities",plan.analytics&&"Analytics"].filter(Boolean).join(" · ") || "Core");const c=document.createElement("td");c.innerHTML="<button type='button' class='btn btn-sm btn-outline-primary' data-plan-action='edit'>Edit Plan</button>";r.appendChild(c);return r;});
         
-        window.platformRolePolicies = roles;
-        fill('#accessRolesTable', roles, ro=>{const r=document.createElement("tr");r.dataset.rolePolicyId=ro.id;td(r,ro.role);td(r,ro.permissions);const status=document.createElement("td");status.innerHTML=`<span class="badge ${ro.status==='Active'?'bg-success':'bg-secondary'}">${ro.status}</span>`;r.appendChild(status);const c=document.createElement("td");c.innerHTML="<button type='button' class='btn btn-sm btn-outline-primary' data-role-policy-edit>Edit</button>";r.appendChild(c);return r;});
+        const visibleRoles = roles.filter(ro => !['ACCOUNTANT', 'FACILITY_MANAGER'].includes(String(ro.role).toUpperCase()));
+        window.platformRolePolicies = visibleRoles;
+        fill('#accessRolesTable', visibleRoles, ro=>{const r=document.createElement("tr");r.dataset.rolePolicyId=ro.id;td(r,ro.role);td(r,ro.permissions);const status=document.createElement("td");status.innerHTML=`<span class="badge ${ro.status==='Active'?'bg-success':'bg-secondary'}">${ro.status}</span>`;r.appendChild(status);const c=document.createElement("td");c.innerHTML="<button type='button' class='btn btn-sm btn-outline-primary' data-role-policy-edit>Edit</button>";r.appendChild(c);return r;});
         if (typeof window.syncRolesCardViews === "function") {
-            window.syncRolesCardViews(roles);
+            window.syncRolesCardViews(visibleRoles);
         }
         fill('#privacyRequestsTable', privacyReqs, p=>{const r=document.createElement("tr");r.dataset.privacyRequestId=p.id;td(r,`PRQ-${p.id}`);td(r,p.details);td(r,p.requestType);const status=document.createElement("td");status.innerHTML=`<span class="badge ${p.status==='Pending'?'bg-warning text-dark':p.status==='Processed'?'bg-success':'bg-secondary'}">${p.status}</span>`;r.appendChild(status);const c=document.createElement("td");c.innerHTML=p.status==='Pending'?"<button type='button' class='btn btn-sm btn-outline-danger' data-privacy-review>Review</button>":"<span class='small text-muted'>Completed</span>";r.appendChild(c);return r;});
         fill('#paymentGatewaysTable', gateways, g=>{const r=document.createElement("tr");r.dataset.gatewayId=g.id;td(r,g.providerName);td(r,g.environment || "Sandbox");const status=document.createElement("td");status.innerHTML=`<span class="badge ${g.active?'bg-success':'bg-secondary'}">${g.active?'Active':'Disabled'}</span>`;r.appendChild(status);td(r,g.transactionFee || "—");const c=document.createElement("td");c.innerHTML=`<button type="button" class="btn btn-sm btn-outline-primary" data-gateway-config>Configure</button>`;r.appendChild(c);return r;});
@@ -1467,28 +1485,43 @@ function wireSocietyNoticeDialog() {
     const form = document.getElementById("societyNoticeForm");
     if (!trigger || !dialog || !form || trigger.dataset.noticeReady) return;
     trigger.dataset.noticeReady = "true";
-    const close = () => { dialog.classList.add("hidden"); dialog.setAttribute("aria-hidden", "true"); };
+    let sending = false;
+    const feedback = (message, error = false) => { const node = document.getElementById("societyNoticeStatus"); if (node) { node.textContent = message; node.className = error ? "text-danger mb-0" : "text-primary mb-0"; } };
+    const close = () => { if (sending) return; dialog.classList.add("hidden"); dialog.setAttribute("aria-hidden", "true"); trigger.focus(); };
     const open = () => { dialog.classList.remove("hidden"); dialog.setAttribute("aria-hidden", "false"); document.getElementById("societyNoticeTitleInput")?.focus(); };
+    dialog.setAttribute("aria-hidden", "true");
+    dialog.addEventListener("keydown", event => {
+        if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); close(); }
+        if (event.key !== "Tab") return;
+        const controls = [...dialog.querySelectorAll('button, input, select, textarea, a[href], [tabindex="0"]')].filter(node => !node.disabled && node.getClientRects().length);
+        const first = controls[0], last = controls[controls.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    });
     trigger.addEventListener("click", event => { event.preventDefault(); open(); });
     ["societyNoticeClose", "societyNoticeCancel"].forEach(id => document.getElementById(id)?.addEventListener("click", close));
     dialog.addEventListener("click", event => { if (event.target === dialog) close(); });
     form.addEventListener("submit", async event => {
         event.preventDefault();
+        if (sending || !form.reportValidity()) return;
         const send = document.getElementById("societyNoticeSend");
         const title = document.getElementById("societyNoticeTitleInput")?.value.trim() || "";
         const message = document.getElementById("societyNoticeMessage")?.value.trim() || "";
         const audience = document.getElementById("societyNoticeAudience")?.value || "RESIDENTS";
-        if (!title || !message) { showToast("Enter a notice title and message."); return; }
+        if (!title || !message) { feedback("Enter a notice title and message.", true); return; }
+        if (!["RESIDENTS", "MAINTENANCE", "SECURITY"].includes(audience)) { feedback("Choose a valid recipient role.", true); return; }
+        sending = true; feedback("Sending notice…");
         if (send) { send.disabled = true; send.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i>Sending…'; }
         try {
             const result = await mutateSociety("society/announcements", "POST", { title, message, audience, emergency: Boolean(document.getElementById("societyNoticeUrgent")?.checked), category: "GENERAL", effectiveFrom: null, validUntil: null, actionRequired: false, contactPerson: "", contactPhone: "", attachmentReference: "", inAppNotification: true, emailNotification: false });
-            form.reset();
+            sending = false; feedback(""); form.reset();
             close();
             await loadSocietyBackendData();
             showToast(`✓ Notice sent to ${result.recipientCount || 0} selected dashboard user(s).`);
         } catch (error) {
-            showToast(error.message || "Notice could not be sent.");
+            feedback(error.message || "Notice could not be sent. Your draft has been kept.", true);
         } finally {
+            sending = false;
             if (send) { send.disabled = false; send.innerHTML = '<i class="fa-solid fa-paper-plane me-2"></i>Send notice'; }
         }
     });
@@ -1504,27 +1537,27 @@ function renderPaymentRegister() {
     const month = document.getElementById("paymentMonthFilter")?.value || "";
     const filtered = records.filter(payment => {
         const searchable = `${payment.unitNo || ""} ${payment.transactionId || ""} ${payment.billMonth || ""}`.toLowerCase();
-        return (!search || searchable.includes(search)) && (!mode || payment.mode === mode) && (!month || String(payment.billMonth || "").startsWith(month));
+        return (!search || searchable.includes(search)) && (!mode || String(payment.mode || "").toUpperCase() === mode) && (!month || String(payment.billMonth || "").startsWith(month));
     });
     const body = document.querySelector('table[data-table="payments"] tbody');
     if (body) {
         body.replaceChildren(...filtered.map(payment => {
             const row = document.createElement("tr");
             const values = [`${payment.unitNo || "—"} · ${payment.billMonth || "Maintenance bill"}`, moneyLabel(payment.amount), payment.mode || "—", payment.transactionId || "—", payment.paidAt ? new Date(payment.paidAt).toLocaleString("en-IN", {dateStyle:"medium", timeStyle:"short"}) : "—"];
-            values.forEach(value => { const cell = document.createElement("td"); cell.textContent = value; row.appendChild(cell); });
-            const status = document.createElement("td"); const badge = document.createElement("span"); badge.className = `status ${statusClass(payment.status)}`; badge.textContent = payment.status || "SUCCESS"; status.appendChild(badge); row.appendChild(status);
-            const receipt = document.createElement("td"); const button = document.createElement("button"); button.type = "button"; button.className = "btn btn-sm btn-outline-primary"; button.dataset.paymentReceipt = JSON.stringify(payment); button.textContent = "View receipt"; receipt.appendChild(button); row.appendChild(receipt); return row;
+            values.forEach(value => { const cell = document.createElement("td"); cell.dataset.label = ["Flat / billing cycle", "Amount", "Payment method", "Transaction reference", "Paid at"][row.children.length]; cell.textContent = value; row.appendChild(cell); });
+            const status = document.createElement("td"); status.dataset.label = "Status"; const badge = document.createElement("span"); badge.className = `status ${statusClass(payment.status)}`; badge.textContent = payment.status || "SUCCESS"; status.appendChild(badge); row.appendChild(status);
+            const receipt = document.createElement("td"); receipt.dataset.label = "Receipt"; const button = document.createElement("button"); button.type = "button"; button.className = "btn btn-sm btn-outline-primary"; button.dataset.paymentReceipt = JSON.stringify(payment); button.textContent = "View receipt"; receipt.appendChild(button); row.appendChild(receipt); return row;
         }));
         if (!filtered.length) body.innerHTML = '<tr><td colspan="7" class="text-muted text-center py-4">No payments match the selected filters.</td></tr>';
     }
-    const collected = records.filter(item => String(item.status || "").toUpperCase() === "SUCCESS").reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const successful = records.filter(item => String(item.status || "").toUpperCase() === "SUCCESS"); const collected = successful.reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const outstandingBills = bills.filter(item => String(item.paymentStatus || "").toUpperCase() !== "PAID");
     const outstanding = outstandingBills.reduce((sum, item) => sum + Number(item.totalAmount || 0), 0);
     const currentMonth = new Date().toISOString().slice(0, 7);
-    const currentCollected = records.filter(item => String(item.paidAt || "").startsWith(currentMonth)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
-    const digital = records.filter(item => ["UPI", "BANK_TRANSFER", "CARD", "ONLINE"].includes(String(item.mode || "").toUpperCase())).length;
+    const currentCollected = successful.filter(item => String(item.paidAt || "").startsWith(currentMonth)).reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const digital = successful.filter(item => ["UPI", "BANK_TRANSFER", "CARD", "ONLINE"].includes(String(item.mode || "").toUpperCase())).length;
     const set = (id, value) => { const node = document.getElementById(id); if (node) node.textContent = value; };
-    set("paymentsCollected", moneyLabel(collected)); set("paymentsCount", `${records.length} successful payment${records.length === 1 ? "" : "s"}`); set("paymentsOutstanding", moneyLabel(outstanding)); set("paymentsDueCount", `${outstandingBills.length} pending bill${outstandingBills.length === 1 ? "" : "s"}`); set("paymentsThisMonth", moneyLabel(currentCollected)); set("paymentsDigitalRate", records.length ? `${Math.round((digital / records.length) * 100)}%` : "0%");
+    set("paymentsCollected", moneyLabel(collected)); set("paymentsCount", `${successful.length} successful payment${successful.length === 1 ? "" : "s"}`); set("paymentsOutstanding", moneyLabel(outstanding)); set("paymentsDueCount", `${outstandingBills.length} pending bill${outstandingBills.length === 1 ? "" : "s"}`); set("paymentsThisMonth", moneyLabel(currentCollected)); set("paymentsDigitalRate", successful.length ? `${Math.round((digital / successful.length) * 100)}%` : "0%");
 }
 
 function exportPaymentRegister() {
@@ -1570,10 +1603,6 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(error => showToast(error.message || "Expense could not be saved."));
     });
     document.getElementById("cancelExpenseEdit")?.addEventListener("click", resetExpenseForm);
-    ["paymentSearch", "paymentModeFilter", "paymentMonthFilter"].forEach(id => document.getElementById(id)?.addEventListener("input", renderPaymentRegister));
-    document.getElementById("paymentModeFilter")?.addEventListener("change", renderPaymentRegister);
-    document.getElementById("clearPaymentFilters")?.addEventListener("click", () => { ["paymentSearch", "paymentModeFilter", "paymentMonthFilter"].forEach(id => { const field = document.getElementById(id); if (field) field.value = ""; }); renderPaymentRegister(); });
-    document.getElementById("exportPayments")?.addEventListener("click", exportPaymentRegister);
 });
 
 document.addEventListener("click", event => {
@@ -1904,7 +1933,7 @@ function showActionReceipt({ title, lines }) {
     modal.querySelector("#dashboardActionText").innerHTML = lines.map(line => {
         const clean = String(line).replace(/^<strong>|<\/strong>/g, "");
         const [label, ...rest] = clean.split(":");
-        return `<span class="receipt-line"><strong>${label.trim()}:</strong><span>${rest.join(":").trim()}</span></span>`;
+        return `<span class="receipt-line"><strong>${escapeAttribute(label.trim())}:</strong><span>${escapeAttribute(rest.join(":").trim())}</span></span>`;
     }).join("");
     modal.querySelector("#dashboardActionFields").innerHTML = "";
     const save = modal.querySelector("#dashboardActionSave");
@@ -1914,6 +1943,8 @@ function showActionReceipt({ title, lines }) {
 }
 
 function openPanel(panel, updateHistory = true) {
+    if (dashboardRole === "superadmin" && panel === "finance-setup") panel = "subscriptions";
+    if (dashboardRole === "superadmin" && panel === "access-roles") panel = "users";
     if (!panel) panel = "overview";
     if (panel === "service-pricing" || panel === "home-services") {
         panel = "home-services";
@@ -2518,7 +2549,7 @@ function updateVisitorStats(button) {
 }
 
 function moneyNumber(value) {
-    return Number(String(value || "").replace(/[^\d]/g, "")) || 0;
+    return Number(String(value || "").replace(/Rs\.?/gi, "").replace(/[^\d.-]/g, "")) || 0;
 }
 
 function formatRs(value) {
@@ -3216,7 +3247,7 @@ function updateBillingStats(scope = document) {
         const amount = moneyNumber(row.children[2]?.textContent);
         const status = row.querySelector(".status")?.textContent.toLowerCase() || "";
         sum.total += amount;
-        if (status.includes("paid")) sum.collected += amount;
+        if (status.trim() === "paid") sum.collected += amount;
         else sum.pending += amount;
         return sum;
     }, { total: 0, collected: 0, pending: 0 });
@@ -4304,7 +4335,7 @@ function actionConfig(action, button) {
     const configs = {
         add: ["Add Detailed Record", `Create a complete item in ${titles[panel] || panel}.`, ["Name / title", "Category", "Effective date|date", "Responsible person", "Contact / reference", "Detailed notes|textarea"]],
         save: ["Save changes", `Confirm updates for ${titles[panel] || panel}.`, []],
-        notify: ["Send Notification", `Write a message for: ${context.target}.`, ["Message"]],
+        notify: ["Send Notification", `Write a message for: ${context.target}.`, [dashboardRole === "admin" && context.panel === "residents" ? "Message|textarea" : "Message"]],
         generate: ["Generate Detailed Monthly Bills", "Create itemized maintenance bills per flat with base rates, water meters, sinking funds, reserve funds, parking fees, and GST tax breakdowns.", ["Billing month", "Base rate (per sq.ft)", "Water sub-meter rate (per unit)", "Common power backup fee", "Sinking fund contribution", "Building repair reserve", "Covered parking fee", "GST tax rate (%)", "Payment due date"]],
         pay: dashboardRole === "admin"
             ? ["Mark Bill Paid", "Record verified payment details so the receipt is exact for this flat and resident.", ["Payment method", "Reference number", "Received date", "Proof / screenshot filename", "Admin note"]]
@@ -4366,7 +4397,7 @@ function openActionModal(action, button) {
     let linkBanner = "";
     if (tableName === "residents" && action === "add") {
         linkBanner = `
-            <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);">
+            <div class="resident-registration-link-card" style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);">
                 <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 240px;">
                         <strong style="display: block; font-size: 0.92rem; color: #1e40af; margin-bottom: 3px;">
@@ -4406,6 +4437,15 @@ function openActionModal(action, button) {
                         </button>
                     </div>
                     <div id="residentEmailSendStatus" style="display: none; font-size: 0.8rem; margin-top: 6px; font-weight: 600;"></div>
+                </div>
+                <div style="margin-top:16px;padding-top:16px;border-top:1px dashed #bfdbfe;">
+                    <label for="residentInviteWhatsappInput" style="display:block;font-weight:700;color:#1e3a8a;margin-bottom:8px;">Share registration link on WhatsApp</label>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                        <input type="tel" id="residentInviteWhatsappInput" placeholder="Country code + WhatsApp number, e.g. +919876543210" style="flex:1;min-width:220px;min-height:44px;padding:10px 12px;border:1px solid #93c5fd;border-radius:8px;">
+                        <button type="button" onclick="window.shareResidentSelfLinkWhatsapp()" style="min-height:44px;background:#059669;color:white;border:0;border-radius:8px;padding:10px 18px;font-weight:700;">Open WhatsApp</button>
+                    </div>
+                    <small style="display:block;margin-top:8px;color:#475569;">Opens a prepared message. Review it and tap Send in WhatsApp. Use a public website address so the resident can open the link.</small>
+                    <p id="residentWhatsappSendStatus" role="status" aria-live="polite" style="margin:8px 0 0;"></p>
                 </div>
             </div>
             <div class="flat-form-section"><strong>Or fill details directly below:</strong><span>Manual Admin Creation</span></div>
@@ -4448,8 +4488,33 @@ function openActionModal(action, button) {
             return section + actionInputMarkup(action, field, index, existingValues[index]);
         })
         .join("");
+    if (document.body.dataset.platform === "smartsociety" && dashboardRole === "admin") {
+        modal.querySelectorAll('#dashboardActionFields input[type="password"]').forEach(input => {
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = 'display:flex;align-items:center;gap:10px;width:100%;';
+            input.before(wrapper); wrapper.appendChild(input);
+            input.style.minWidth = '0'; input.style.flex = '1';
+            const toggle = document.createElement('button');
+            toggle.type = 'button'; toggle.textContent = 'Show';
+            toggle.setAttribute('aria-label','Show password'); toggle.setAttribute('aria-pressed','false');
+            toggle.style.cssText = 'flex:0 0 64px;min-height:44px;padding:8px;border:1px solid #bfdbfe;border-radius:10px;background:#eff6ff;color:#1d4ed8;font-weight:600;';
+            toggle.addEventListener('click', () => {
+                const show = input.type === 'password'; input.type = show ? 'text' : 'password';
+                toggle.textContent = show ? 'Hide' : 'Show';
+                toggle.setAttribute('aria-label',show ? 'Hide password' : 'Show password');
+                toggle.setAttribute('aria-pressed',String(show));
+            });
+            wrapper.appendChild(toggle);
+        });
+    }
     const save = modal.querySelector("#dashboardActionSave");
-    save.textContent = "Confirm";
+    const residentNotification = dashboardRole === "admin" && action === "notify" && getContext(button).panel === "residents";
+    modal.classList.toggle("resident-notification-dialog", residentNotification);
+    save.textContent = residentNotification ? "Send notification" : "Confirm";
+    if (residentNotification) {
+        const message = modal.querySelector('textarea');
+        if (message) { message.maxLength = 2000; message.rows = 5; message.placeholder = "Write your message to this resident…"; message.required = true; }
+    }
     save.onclick = null;
     modal.classList.remove("hidden");
     modal.querySelector("[data-action-input]")?.focus();
@@ -4527,6 +4592,17 @@ function closeActionModal() {
 }
 
 async function performAction(action, button, values = []) {
+    if (dashboardRole === "admin" && action === "notify" && getContext(button).panel === "residents") {
+        const contact = button.closest('tr')?.children[1]?.textContent || '';
+        const email = contact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+/i)?.[0];
+        const message = String(values[0] || '').trim();
+        if (!email) throw new Error("This recipient has no saved email account. Refresh the resident list and try again.");
+        if (!message || message.length > 2000) throw new Error("Enter a message of up to 2,000 characters.");
+        const response = await fetch('/api/society/admin-insights/resident-notifications', {method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify({email,message})});
+        const result = await response.json().catch(() => ({}));
+        if (response.redirected || !response.ok || result.sent !== true) throw new Error(result.message || "Notification could not be sent. Check your admin session and retry.");
+        return {title:"Notification sent", lines:["The message was saved to the recipient’s dashboard notifications."], persisted:true};
+    }
     const persistedCrud = await window.performPersistedCrudAction?.(action, button, values);
     if (persistedCrud) return persistedCrud;
     const context = getContext(button);
@@ -5236,6 +5312,22 @@ async function performAction(action, button, values = []) {
         addRow("billing", ["A-305", month, amount, "<span class='status pending'>Unpaid</span>", "<button data-action='pay'>Mark Paid</button>"]);
         updateBillingStats(button);
     }
+    if (dashboardRole === "admin" && action === "assign" && button.closest('[data-table="complaints"]')) {
+        const row = button.closest('tr');
+        const issue = row?.children[0]?.querySelector('strong')?.textContent || row?.children[0]?.textContent?.trim() || 'Complaint';
+        const formatTime = value => value ? new Date(value).toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'}) : 'Not scheduled';
+        persistDashboardState();
+        return {title:'Complaint assignment summary', lines:[
+            `<strong>Complaint:</strong> ${issue}`,
+            `<strong>Flat:</strong> ${row?.children[1]?.textContent?.trim() || 'Not recorded'}`,
+            `<strong>Assigned team:</strong> ${values[0] || 'Not selected'}`,
+            `<strong>Assigned person:</strong> ${values[1] || 'Not specified'}`,
+            `<strong>Priority:</strong> ${values[2] || 'NORMAL'}`,
+            `<strong>Start by:</strong> ${formatTime(values[3])}`,
+            `<strong>Complete by:</strong> ${formatTime(values[4])}`,
+            `<strong>Work instructions:</strong> ${values[5] || 'Not provided'}`
+        ]};
+    }
     const summary = messages[action] || `Completed ${context.target}`;
     if (action === "save" && dashboardRole === "superadmin") {
         setInlineState("settingsSavedAt", `Saved ${now}${note ? ` · ${note}` : ""}`);
@@ -5322,7 +5414,7 @@ async function submitActionModal() {
             showToast(error.message || "Amenity request could not be submitted");
         } finally {
             save.disabled = false;
-            if (activeAction) save.textContent = "Confirm";
+            if (activeAction) save.textContent = modal.classList.contains("resident-notification-dialog") ? "Send notification" : "Confirm";
         }
         return;
     }
@@ -5344,7 +5436,7 @@ async function submitActionModal() {
         showToast(error.message || "Action could not be saved");
     } finally {
         save.disabled = false;
-        if (activeAction) save.textContent = "Confirm";
+        if (activeAction) save.textContent = modal.classList.contains("resident-notification-dialog") ? "Send notification" : "Confirm";
     }
 }
 
@@ -5547,6 +5639,19 @@ window.copyGeneratedResidentUrl = function() {
     }
 };
 
+window.shareResidentSelfLinkWhatsapp = function() {
+    const number = (document.getElementById('residentInviteWhatsappInput')?.value || '').replace(/[\s()+-]/g,'');
+    const status = document.getElementById('residentWhatsappSendStatus');
+    if (!/^[1-9]\d{7,14}$/.test(number)) { status.textContent = 'Enter a valid WhatsApp number including its country code.'; status.style.color = '#dc2626'; return; }
+    let input = document.getElementById('generatedResidentUrlInput');
+    if (!input?.value) { window.generateResidentSelfLink(); input = document.getElementById('generatedResidentUrlInput'); }
+    if (!input?.value) { status.textContent = 'Unable to generate a registration link. Please retry.'; return; }
+    const message = `Please complete your Smart Society resident registration using this link: ${input.value}`;
+    window.open(`https://wa.me/${number}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+    status.textContent = 'WhatsApp opened. Review the message and tap Send to share the link.';
+    status.style.color = '#047857';
+};
+
 window.sendResidentSelfLinkEmail = async function() {
     const emailInput = document.getElementById("residentInviteEmailInput");
     const statusEl = document.getElementById("residentEmailSendStatus");
@@ -5596,8 +5701,9 @@ window.sendResidentSelfLinkEmail = async function() {
             },
             body: JSON.stringify({ email: email, registrationLink: registrationLink })
         });
-        const data = await resp.json().catch(() => ({}));
-        if (resp.ok && (data.sent !== false)) {
+        if (resp.redirected || !(resp.headers.get('content-type') || '').includes('application/json')) throw new Error('Sign in as society admin and retry.');
+        const data = await resp.json();
+        if (resp.ok && data.sent === true) {
             if (statusEl) {
                 statusEl.style.color = "#059669";
                 statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Registration link successfully sent to <strong>${escapeAttribute(email)}</strong>!`;
@@ -5708,3 +5814,11 @@ document.addEventListener("input", (e) => {
     }
 });
 
+
+ document.addEventListener("DOMContentLoaded", () => {
+    ["paymentSearch", "paymentModeFilter", "paymentMonthFilter"].forEach(id => document.getElementById(id)?.addEventListener("input", renderPaymentRegister));
+    document.getElementById("paymentModeFilter")?.addEventListener("change", renderPaymentRegister);
+    document.getElementById("clearPaymentFilters")?.addEventListener("click", () => { ["paymentSearch", "paymentModeFilter", "paymentMonthFilter"].forEach(id => { const field = document.getElementById(id); if (field) field.value = ""; }); renderPaymentRegister(); });
+    document.getElementById("exportPayments")?.addEventListener("click", exportPaymentRegister);
+
+});

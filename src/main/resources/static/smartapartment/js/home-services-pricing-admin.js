@@ -137,9 +137,17 @@
         }
 
         try {
-            const res = await fetch("/api/admin/home-services/packages", { credentials: "same-origin" });
+            const res = await fetch("/api/admin/home-services/packages", { credentials: "same-origin", headers: {Accept: "application/json"} });
+            if (res.redirected || res.status === 401 || res.status === 403) {
+                throw new Error("Your session is not authenticated as superadmin. Sign out and sign in again, then retry the catalogue.");
+            }
             if (!res.ok) throw new Error("Failed to load packages (" + res.status + ")");
-            _allPackages = await res.json();
+            if (!String(res.headers.get("content-type") || "").includes("application/json")) {
+                throw new Error("The pricing service returned an unexpected response. Refresh the page and retry.");
+            }
+            const packages = await res.json();
+            if (!Array.isArray(packages)) throw new Error("The pricing service returned invalid package data. Please retry.");
+            _allPackages = packages;
             renderAdminCategoryCards();
             updateCatalogKpis();
             if (_activeModalCategoryKey) {
@@ -218,6 +226,7 @@
             }
 
             const matchesQuery = !_currentSearchQuery || title.includes(_currentSearchQuery) || key.includes(_currentSearchQuery);
+            card.hidden = !(matchesType && matchesQuery);
 
             if (matchesType && matchesQuery) {
                 card.classList.remove("d-none");
@@ -632,6 +641,9 @@
             showToast("Add Package modal is available in package details view.", "info");
             return;
         }
+        wireModalCloseButtons();
+        modalEl.classList.remove("hidden");
+        modalEl.style.removeProperty("display");
         if (typeof bootstrap !== "undefined" && bootstrap.Modal) {
             bootstrap.Modal.getOrCreateInstance(modalEl).show();
         } else {
@@ -651,10 +663,21 @@
     window.openAddPackageForCategoryModal = function() {
         if (!_activeModalCategoryKey) return;
         const cat = CORE_CATEGORIES.find(c => c.key === _activeModalCategoryKey);
-        window.openAddPackageModal();
-        const catInput = document.getElementById("modalCategory");
-        if (catInput && cat) {
-            catInput.value = cat.dbCategories[0];
+        const categoryModal = document.getElementById("categoryPackagesModal");
+        const openForm = () => {
+            window.openAddPackageModal();
+            const catInput = document.getElementById("modalCategory");
+            if (catInput && cat) catInput.value = cat.dbCategories[0];
+        };
+        if (categoryModal?.classList.contains("show") && typeof bootstrap !== "undefined" && bootstrap.Modal) {
+            categoryModal.addEventListener("hidden.bs.modal", openForm, {once: true});
+            bootstrap.Modal.getOrCreateInstance(categoryModal).hide();
+        } else {
+            if (categoryModal) {
+                categoryModal.classList.remove("show");
+                categoryModal.style.display = "none";
+            }
+            openForm();
         }
     };
 

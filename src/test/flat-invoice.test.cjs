@@ -16,6 +16,11 @@ test('empty flat selection sends no invoice request',async()=>{const app=form();
 test('explicit batch action remains a separate endpoint without a single flat target',async()=>{const app=form('batch');await app.run();assert.equal(app.calls[0].url,'/api/billing/generate-detailed');assert.equal(app.calls[0].body.apartmentId,undefined);});
 test('failed or duplicate generation keeps the editor open and restores the submit button',async()=>{const app=form('flat',false);await app.run();assert.equal(app.element('adminItemizedModal').style.display,'flex');assert.match(app.toasts[0],/already exists/);assert.equal(app.submit.disabled,false);});
 test('busy submit cannot create duplicate requests',async()=>{const app=form();app.submit.disabled=true;await app.run();assert.equal(app.calls.length,0);});
+test('opening or changing an invoice month preserves a chosen due date',()=>{
+ const app=form();app.context.handleAdminMonthChange();assert.equal(app.element('adminBatchDueDate').value,'2026-10-20');
+ app.element('adminBatchMonth').value='2026-11';app.context.handleAdminMonthChange();assert.equal(app.element('adminBatchDueDate').value,'2026-10-20');
+ app.element('adminBatchDueDate').value='';app.context.handleAdminMonthChange();assert.equal(app.element('adminBatchDueDate').value,'2026-11-15');
+});
 test('invoice selector and resident refresh never initialize on PropertyDirect',()=>{for(const name of ['admin-invoice-selection','resident-billing-refresh'])vm.runInNewContext(fs.readFileSync(`src/main/resources/static/smartapartment/js/${name}.js`,'utf8'),{document:{body:{dataset:{platform:'propertydirect',dashboardRole:'admin'}}}});});
 function selector(ok=true){
  const fields={},handlers={},submit={};
@@ -28,4 +33,11 @@ test('BHK filtering only offers flats of the selected type and fills their store
 });
 test('failed loading disables invoice generation rather than falling back to all flats',async()=>{
  const app=selector(false);await app.context.window.loadAdminInvoiceFlats();assert.equal(app.submit.disabled,true);assert.match(app.get('adminInvoiceSelectionMessage').textContent,/Unable to load/);assert.equal(app.get('adminInvoiceScope').value,'flat');
+});
+test('an expired session shows a sign-in message without parsing the login HTML',async()=>{
+ const app=selector();let parsed=false;
+ app.context.fetch=async()=>({redirected:true,status:200,json:async()=>{parsed=true;throw Error('Unexpected token');}});
+ await app.context.window.loadAdminInvoiceFlats();assert.equal(parsed,false);assert.equal(app.submit.disabled,true);
+ assert.match(app.get('adminInvoiceSelectionMessage').textContent,/Sign in/);
+ assert.equal(app.get('adminInvoiceUnitType').options[0].text,'Flats unavailable');
 });

@@ -55,5 +55,8 @@ public class Tenant extends BaseEntity {
 
     private String subscriptionStatus;
 
+    // Separate access control from payment/subscription state.
+    private Boolean adminAccessSuspended = false;
+
     private boolean approved;
 }

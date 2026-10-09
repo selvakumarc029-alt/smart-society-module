@@ -358,7 +358,9 @@
         if (header) header.prepend(menuButton);
     }
 
-    if (role === "superadmin" || roleName === "Super Admin" || body.dataset.dashboardRole === "superadmin") {
+    const hideHeaderMeta = role === "superadmin" || roleName === "Super Admin" || body.dataset.dashboardRole === "superadmin"
+        || (body.dataset.platform === "smartsociety" && body.dataset.dashboardRole === "admin");
+    if (hideHeaderMeta) {
         header?.querySelectorAll(".dashboard-header-meta, .dashboard-live-status, .dashboard-avatar").forEach(el => el.remove());
     } else if (header && !header.querySelector(".dashboard-header-meta")) {
         const meta = document.createElement("div");
@@ -375,7 +377,7 @@
     }
 
     function placeThemeToggle() {
-        if (role === "superadmin" || roleName === "Super Admin" || body.dataset.dashboardRole === "superadmin") {
+        if (hideHeaderMeta) {
             header?.querySelectorAll(".dashboard-header-meta, .dashboard-live-status, .dashboard-avatar").forEach(el => el.remove());
             return;
         }

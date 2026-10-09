@@ -697,6 +697,18 @@ public class AuthController {
 
         session.setAttribute("dashboard:" + credential.platform() + ":" + credential.role(), Boolean.TRUE);
 
+        // Verified Smart Society dashboard credentials must also authenticate
+        // protected APIs; the dashboard flag alone is not a security context.
+        if (("smartapartment".equalsIgnoreCase(credential.platform()) || "smartsociety".equalsIgnoreCase(credential.platform()))
+                && "superadmin".equalsIgnoreCase(credential.role())) {
+            var societyAuthentication = new UsernamePasswordAuthenticationToken(credential.username(), null,
+                    java.util.List.of(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN")));
+            SecurityContext societyContext = SecurityContextHolder.createEmptyContext();
+            societyContext.setAuthentication(societyAuthentication);
+            SecurityContextHolder.setContext(societyContext);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, societyContext);
+        }
+
         if ("superadmin".equalsIgnoreCase(credential.role())) {
 
             session.setAttribute("dashboard:smartapartment:superadmin", Boolean.TRUE);

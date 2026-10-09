@@ -32,15 +32,20 @@
         options(field("adminInvoiceFlat"), [], "Select a flat type first");
         try {
             const response = await fetch("/api/society/apartments", {credentials: "same-origin", headers: {Accept: "application/json"}});
-            const data = await response.json();
-            if (response.redirected || !response.ok || !Array.isArray(data)) throw Error("Unable to load society flats. Refresh or sign in again.");
+            if (response.redirected || response.status === 401) throw Error("Sign in with your society admin account to select a flat.");
+            const data = await response.json().catch(() => null);
+            if (!response.ok || !Array.isArray(data)) throw Error("Unable to load society flats. Refresh or sign in again.");
             if (current !== generation) return;
             flats = data;
             const types = [...new Set(flats.map(flat => typeKey(flat.type)).filter(Boolean))].sort();
             options(field("adminInvoiceUnitType"), types.map(type => [type, type]), "Select BHK / flat type");
             if (!types.length) throw Error("No flats with a BHK type are registered. Add or update your society flats first.");
             submit.disabled = false;
-        } catch (error) { if (current === generation) field("adminInvoiceSelectionMessage").textContent = error.message; }
+        } catch (error) { if (current === generation) {
+            options(field("adminInvoiceUnitType"), [], "Flats unavailable");
+            options(field("adminInvoiceFlat"), [], "Flats unavailable");
+            field("adminInvoiceSelectionMessage").textContent = error.message;
+        } }
     };
     document.addEventListener("DOMContentLoaded", () => {
         field("adminInvoiceUnitType")?.addEventListener("change", selectType);

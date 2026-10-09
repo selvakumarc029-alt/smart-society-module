@@ -168,23 +168,6 @@ public class SocietyApiController {
         LocalDate renewsOn = tenant.getSubscriptionRenewsOn();
 
         List<Map<String, Object>> invoices = new ArrayList<>();
-        if (plan != null && startedOn != null && amount.compareTo(BigDecimal.ZERO) > 0) {
-            LocalDate invoiceDate = (renewsOn == null ? LocalDate.now().plusMonths(1) : renewsOn).minusMonths(1);
-            for (int index = 0; index < 3 && !invoiceDate.isBefore(startedOn); index++) {
-                LocalDate cycleEnd = invoiceDate.plusMonths(1).minusDays(1);
-                Map<String, Object> invoice = new LinkedHashMap<>();
-                invoice.put("number", "INV-SAAS-" + invoiceDate.toString().replace("-", ""));
-                invoice.put("plan", planName);
-                invoice.put("cycleStart", invoiceDate);
-                invoice.put("cycleEnd", cycleEnd);
-                invoice.put("amount", amount);
-                invoice.put("status", "PAID");
-                invoice.put("invoiceDate", invoiceDate);
-                invoices.add(invoice);
-                invoiceDate = invoiceDate.minusMonths(1);
-            }
-        }
-
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("societyName", tenant.getSocietyName());
         response.put("planName", planName);
@@ -196,6 +179,8 @@ public class SocietyApiController {
         response.put("remainingFlats", Math.max(0, maxFlats - usedFlats));
         response.put("startedOn", startedOn);
         response.put("renewsOn", renewsOn);
+        response.put("expiryState", com.smartapartment.controller.superadmin.SubscriptionLifecycleController.expiryState(renewsOn, LocalDate.now()));
+        response.put("daysRemaining", renewsOn == null ? null : java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), renewsOn));
         response.put("invoices", invoices);
         return response;
     }

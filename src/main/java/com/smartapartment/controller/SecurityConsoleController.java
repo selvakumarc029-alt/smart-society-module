@@ -95,6 +95,7 @@ public class SecurityConsoleController {
         String token=UUID.randomUUID().toString();
         session.setAttribute("securityConsoleGate",gate.getId()); session.setAttribute("securityConsoleToken",token);
         session.setAttribute("securityConsoleGuard",current.requireUser().getId());
+        session.setAttribute("securityConsoleTenant",current.requireTenantId());
         session.setAttribute("securityConsoleStarted",Instant.now());
         return Map.of("token",token,"gateId",gate.getId(),"startedAt",Instant.now());
     }

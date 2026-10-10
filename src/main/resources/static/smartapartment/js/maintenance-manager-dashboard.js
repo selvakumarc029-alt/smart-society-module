@@ -96,11 +96,14 @@
     // Load full dashboard summary
     async function loadDashboardSummary() {
         try {
-            const resp = await fetch('/api/maintenance/manager/summary');
+            const resp = await fetch('/api/maintenance/manager/summary', {
+                credentials: 'same-origin', headers: { Accept: 'application/json' }, cache: 'no-store'
+            });
             if (!resp.ok) {
+                const detail = await resp.json().catch(() => ({}));
                 if (resp.status === 401) throw new Error('Please sign in to load the worker board.');
                 if (resp.status === 403) throw new Error('Sign in with a maintenance manager or society admin account to view the worker board.');
-                throw new Error('Failed to load dashboard summary');
+                throw new Error((detail.message || detail.detail || 'The server could not load the worker board.') + ' (HTTP ' + resp.status + ')');
             }
             dashboardData = await resp.json();
             renderKpiCards(dashboardData);

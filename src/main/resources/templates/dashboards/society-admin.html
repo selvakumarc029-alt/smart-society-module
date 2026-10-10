@@ -2115,7 +2115,7 @@
                             <div class="px-3 py-2 border-bottom bg-white flex-shrink-0">
                                 <div class="d-flex justify-content-between align-items-center text-muted small px-1">
                                     <span class="fw-bold text-uppercase" style="font-size:0.68rem; letter-spacing:0.05em;"><i class="fa-solid fa-triangle-exclamation text-warning me-1"></i>Active Threads</span>
-                                    <span class="badge bg-warning-subtle text-dark border" id="adminActiveQueueCountBadge">2 Active</span>
+                                    <span class="badge bg-warning-subtle text-dark border" id="adminActiveQueueCountBadge">0 Active</span>
                                 </div>
                             </div>
                             <div class="overflow-y-auto flex-grow-1" id="adminMaintThreadsList" style="overflow-x:hidden;">
@@ -2133,16 +2133,16 @@
                                     </div>
                                     <div>
                                         <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-dark text-warning font-monospace fw-bold px-2 py-0.5 rounded" id="adminActiveTicketBadge">#REQ-1024</span>
-                                            <h5 class="fw-bold mb-0 text-dark" id="adminActiveTitle" style="font-size: 1.05rem;">AC Repair · Part Replacement Approval</h5>
+                                            <span class="badge bg-dark text-warning font-monospace fw-bold px-2 py-0.5 rounded" id="adminActiveTicketBadge"></span>
+                                            <h5 class="fw-bold mb-0 text-dark" id="adminActiveTitle" style="font-size: 1.05rem;">Select a saved conversation</h5>
                                         </div>
                                         <div class="text-muted small mt-0.5" id="adminActiveSubtitle" style="font-size:0.78rem;">
-                                            Escalated by: <strong class="text-dark">Kumar (AC Specialist)</strong> via Maintenance Desk · Flat A-101
+                                            Worker messages appear here after they are saved.
                                         </div>
                                     </div>
                                 </div>
                                 <span class="badge bg-warning text-dark rounded-pill px-3 py-1.5 fw-bold" id="adminActiveStatusBadge">
-                                    <i class="fa-solid fa-clock me-1"></i>Requires Approval
+                                    <i class="fa-solid fa-clock me-1"></i>No conversation selected
                                 </span>
                             </div>
 
@@ -2197,6 +2197,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="adminAddWorkerForm" onsubmit="handleAdminAddWorkerSubmit(event)">
+                    <div class="row g-3 px-3 pt-3"><div class="col-md-6"><label for="newWorkerEmail" class="form-label">Login email</label><input id="newWorkerEmail" type="email" class="form-control" required autocomplete="off"></div><div class="col-md-6"><label for="newWorkerPassword" class="form-label">Initial password</label><input id="newWorkerPassword" type="password" minlength="8" class="form-control" required autocomplete="new-password"></div></div>
                     <div class="modal-body p-4">
                         <div class="row g-3">
                             <div class="col-12">
@@ -2337,7 +2338,7 @@
 
                 <!-- Subscriptions -->
                 <section id="subscriptions" class="d-none animate__animated animate__fadeIn" data-view="subscriptions">
-                    <div class="card shadow-sm border-0 rounded-4 mb-4"><div class="card-body p-4 d-flex flex-wrap justify-content-between gap-3 align-items-center"><div><span id="saasHeroStatus" class="badge bg-secondary-subtle text-secondary-emphasis border mb-2">Loading subscription</span><h3 id="saasHeroPlan" class="fw-bold mb-1">Plan details</h3><p id="saasHeroDescription" class="text-muted mb-0">Checking the subscription assigned to this society workspace.</p></div><div class="d-flex flex-wrap gap-2"><button type="button" id="saasCatalogueButton" class="btn btn-outline-primary rounded-pill">View plan catalogue</button><button type="button" id="saasRenewButton" class="btn btn-primary rounded-pill">Renew plan</button><button type="button" class="btn btn-primary rounded-pill" data-subscription-action="support"><i class="fa-solid fa-headset me-2"></i>Contact support</button></div></div></div>
+                    <div class="card shadow-sm border-0 rounded-4 mb-4"><div class="card-body p-4 d-flex flex-wrap justify-content-between gap-3 align-items-center"><div><span id="saasHeroStatus" class="badge bg-secondary-subtle text-secondary-emphasis border mb-2">Loading subscription</span><h3 id="saasHeroPlan" class="fw-bold mb-1">Plan details</h3><p id="saasHeroDescription" class="text-muted mb-0">Checking the subscription assigned to this society workspace.</p></div><div class="d-flex flex-wrap gap-2"><button type="button" id="saasCatalogueButton" class="btn btn-outline-primary rounded-pill">View plan catalogue</button><button type="button" id="saasRenewButton" class="btn btn-primary rounded-pill">Renew plan</button></div></div></div>
                     <p id="saasExpiryNotice" role="status" class="alert alert-info" hidden></p>
                     <div class="subscription-summary-grid subscription-validity-grid">
                         <article class="subscription-summary-card"><span>Plan starts on</span><strong id="saasStartDate">Loading…</strong><small>Subscription activation date</small></article>
@@ -2600,10 +2601,10 @@
         window.escapeAdminHtml = escapeAdminHtml;
 
         let activeAdminMaintChat = {
-            conversationId: 'req_REQ-1024_admin',
-            ticketNumber: 'REQ-1024',
-            ticketTitle: 'AC Repair · Part Replacement Approval',
-            category: 'Part Replacement'
+            conversationId: '',
+            ticketNumber: '',
+            ticketTitle: '',
+            category: ''
         };
 
         window.playAdminMessageTone = function() {
@@ -2628,7 +2629,8 @@
 
         window.openAdminMaintThreadByKey = function(convKey) {
             const t = window.__adminThreadsCache ? window.__adminThreadsCache[convKey] : null;
-            const ticketNum = t ? (t.ticketNumber || '') : 'REQ-1024';
+            if (!t) return;
+            const ticketNum = t.ticketNumber || '';
             const ticketTitle = t ? (t.ticketTitle || t.title || 'Escalation Request') : 'Escalation Request';
             const lastSender = t ? (t.lastSender || 'Maintenance Team') : 'Maintenance Team';
             const category = t ? (t.category || 'Part Replacement') : 'General';
@@ -2657,7 +2659,7 @@
         };
 
         window.openAdminMaintThread = function(convId, ticketNumber, ticketTitle, category) {
-            const convKey = convId || (ticketNumber ? ('req_' + ticketNumber + '_admin') : 'req_REQ-1024_admin');
+            const convKey = convId || (ticketNumber ? ('req_' + ticketNumber + '_admin') : '');
             window.openAdminMaintThreadByKey(convKey);
         };
 
@@ -2673,71 +2675,25 @@
         /* ==========================================================================
            Dynamic Maintenance Worker Registry & Real-Time Chat Sync
            ========================================================================== */
-        const WORKERS_STORAGE_KEY = 'smartapartment_maintenance_workers';
-
-        const DEFAULT_MAINTENANCE_WORKERS = [
-            { id: 'kumar', name: 'Kumar (AC Specialist)', designation: 'AC Specialist', phone: '9876543210', shift: 'General (9 AM - 6 PM)', empId: 'REQ-1024', status: 'AVAILABLE', convKey: 'req_REQ-1024_admin', ticketNumber: 'REQ-1024' },
-            { id: 'suresh', name: 'Lead Engineer Suresh', designation: 'Maintenance Head', phone: '9876543211', shift: 'Morning (8 AM - 4 PM)', empId: 'T-102', status: 'AVAILABLE', convKey: 'req_T-102_admin', ticketNumber: 'T-102' },
-            { id: 'ramesh', name: 'Ramesh (Plumber)', designation: 'Senior Plumber', phone: '9876543212', shift: 'General (9 AM - 6 PM)', empId: 'MNT-103', status: 'AVAILABLE', convKey: 'maint_worker_ramesh_admin', ticketNumber: 'MNT-103' },
-            { id: 'vikas', name: 'Vikas (Electrician)', designation: 'Master Electrician', phone: '9876543213', shift: 'Evening (1 PM - 9 PM)', empId: 'MNT-104', status: 'AVAILABLE', convKey: 'maint_worker_vikas_admin', ticketNumber: 'MNT-104' }
-        ];
-
-        window.getMaintenanceWorkersList = function() {
-            try {
-                const stored = localStorage.getItem(WORKERS_STORAGE_KEY);
-                if (stored) {
-                    const list = JSON.parse(stored);
-                    if (Array.isArray(list) && list.length > 0) return list;
-                }
-            } catch (_) {}
-            localStorage.setItem(WORKERS_STORAGE_KEY, JSON.stringify(DEFAULT_MAINTENANCE_WORKERS));
-            return DEFAULT_MAINTENANCE_WORKERS;
-        };
-
-        window.saveMaintenanceWorkersList = function(list) {
-            localStorage.setItem(WORKERS_STORAGE_KEY, JSON.stringify(list));
-            window.dispatchEvent(new Event('smartapartment:workers-updated'));
-            loadAvailableMaintenanceWorkers();
-        };
+        let savedMaintenanceWorkers = [];
+        window.getMaintenanceWorkersList = function() {return savedMaintenanceWorkers;};
 
         window.loadAvailableMaintenanceWorkers = async function() {
             const select = document.getElementById('adminWorkerSelect');
             if (!select) return;
 
-            let workers = getMaintenanceWorkersList();
-
-            // Try to sync with backend team users if available
+            let workers = [];
             try {
-                const res = await fetch('/api/society/team-users');
-                if (res.ok) {
-                    const teamUsers = await res.json();
-                    if (Array.isArray(teamUsers)) {
-                        const maintUsers = teamUsers.filter(u => u.role === 'MAINTENANCE_STAFF');
-                        let changed = false;
-                        maintUsers.forEach(mu => {
-                            const workerId = 'worker_' + (mu.id || mu.email || mu.name.toLowerCase().replace(/[^a-z0-9]/g, ''));
-                            if (!workers.some(w => w.name.toLowerCase().trim() === mu.name.toLowerCase().trim() || String(w.id) === String(workerId))) {
-                                workers.push({
-                                    id: workerId,
-                                    name: mu.name,
-                                    designation: mu.designation || 'Maintenance Tech',
-                                    phone: mu.phone || '',
-                                    shift: mu.workShift || 'General Shift',
-                                    empId: mu.employeeId || 'STAFF',
-                                    status: 'AVAILABLE',
-                                    convKey: 'maint_worker_' + workerId + '_admin',
-                                    ticketNumber: mu.employeeId || 'STAFF'
-                                });
-                                changed = true;
-                            }
-                        });
-                        if (changed) {
-                            localStorage.setItem(WORKERS_STORAGE_KEY, JSON.stringify(workers));
-                        }
-                    }
-                }
-            } catch (_) {}
-
+                const response = await fetch('/api/society/team-users');
+                const items = await response.json();
+                if (!response.ok || response.redirected || !Array.isArray(items)) throw Error(items.detail || items.message || 'Workers could not load. Sign in and retry.');
+                workers = items.filter(item => item.role === 'MAINTENANCE_STAFF' && !item.accountLocked && item.status !== 'INACTIVE').map(item => ({id:String(item.id),name:item.name,designation:item.designation || '',phone:item.phone || '',shift:item.workShift || '',empId:item.employeeId || '',convKey:'maint_worker_'+item.id+'_admin',ticketNumber:item.employeeId || 'WORKER-'+item.id}));
+                savedMaintenanceWorkers = workers;
+            } catch (error) {
+                select.replaceChildren(new Option(error.message, ''));select.disabled=true;
+                return;
+            }
+            select.disabled=false;
             const currentVal = select.value;
             let optionsHtml = '<option value="">-- Choose Maintenance Worker --</option>';
             workers.forEach(w => {
@@ -2780,65 +2736,23 @@
             const designation = desigInput.value;
             const phone = phoneInput.value.trim();
             const shift = shiftInput.value;
-            const empId = empIdInput.value.trim() || ('MNT-' + Math.floor(100 + Math.random() * 900));
+            const empId = empIdInput.value.trim();
 
             if (!name) return;
 
-            const workerId = 'worker_' + Date.now();
-            const convKey = 'maint_worker_' + workerId + '_admin';
-            const newWorker = {
-                id: workerId,
-                name: name,
-                designation: designation,
-                phone: phone,
-                shift: shift,
-                empId: empId,
-                status: 'AVAILABLE',
-                convKey: convKey,
-                ticketNumber: empId
-            };
-
-            const list = getMaintenanceWorkersList();
-            list.push(newWorker);
-            saveMaintenanceWorkersList(list);
-
-            // Attempt backend team user registration
+            const email = document.getElementById('newWorkerEmail').value.trim();
+            const password = document.getElementById('newWorkerPassword').value;
+            const submit = document.querySelector('#adminAddWorkerForm [type="submit"]');
+            if (submit?.disabled) return;
+            if (submit) submit.disabled=true;
+            let saved;
             try {
-                fetch('/api/society/team-users', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        name: name,
-                        email: (name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'worker') + '@smartsociety.com',
-                        phone: phone,
-                        role: 'MAINTENANCE_STAFF',
-                        designation: designation,
-                        employeeId: empId,
-                        workShift: shift,
-                        temporaryPassword: 'Password123!'
-                    })
-                }).catch(() => {});
-            } catch (_) {}
-
-            // Send initial channel initialization message
-            try {
-                await fetch('/api/chat/send', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        conversationKey: convKey,
-                        channelType: 'MAINTENANCE_ADMIN',
-                        senderRole: 'ADMIN',
-                        senderName: 'Society Admin Board',
-                        senderEmail: 'admin@smartsociety.com',
-                        senderUnit: 'Admin Board',
-                        ticketNumber: empId,
-                        ticketTitle: `${name} (${designation})`,
-                        message: `Hello ${name}, welcome to the Smart Society maintenance team! This is your direct admin board channel for tasks, shift notes, and emergency escalations.`,
-                        priority: 'NORMAL'
-                    })
-                });
-            } catch (_) {}
+                const response = await fetch('/api/society/team-users', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,phone,role:'MAINTENANCE_STAFF',designation,employeeId:empId,workShift:shift,temporaryPassword:password})});
+                saved = await response.json().catch(() => null);
+                if(!response.ok || response.redirected || !saved) throw Error(saved?.detail || saved?.message || 'Worker account could not be created.');
+            } catch(error) {alert(error.message);return;}
+            finally {if(submit)submit.disabled=false;}
+            const workerId=String(saved.id);
 
             // Close modal
             const modalEl = document.getElementById('adminAddWorkerModal');
@@ -2865,33 +2779,18 @@
             alert(`Worker "${name}" (${designation}) added successfully!`);
         };
 
-        window.removeSelectedMaintenanceWorker = function() {
-            const select = document.getElementById('adminWorkerSelect');
-            const workerId = select?.value;
-            if (!workerId) return;
-
-            const list = getMaintenanceWorkersList();
-            const worker = list.find(w => String(w.id) === String(workerId));
-            if (!worker) return;
-
-            const confirmed = confirm(`Are you sure you want to remove worker "${worker.name}" from active maintenance staff?\n\nThis will remove them from the active chat dropdown and workforce list.`);
-            if (!confirmed) return;
-
-            const updated = list.filter(w => String(w.id) !== String(workerId));
-            saveMaintenanceWorkersList(updated);
-
-            select.value = '';
-            document.getElementById('adminRemoveWorkerBtn')?.classList.add('d-none');
-
-            // Switch to remaining worker or default thread
-            if (updated.length > 0) {
-                select.value = updated[0].id;
-                handleAdminWorkerDropdownChange(updated[0].id);
-            } else {
-                openAdminMaintThreadByKey('req_REQ-1024_admin');
-            }
-
-            alert(`Worker "${worker.name}" has been removed.`);
+        window.removeSelectedMaintenanceWorker = async function() {
+            const select=document.getElementById('adminWorkerSelect');const workerId=select?.value;
+            const worker=getMaintenanceWorkersList().find(item=>String(item.id)===String(workerId));
+            if(!worker || !confirm(`Deactivate ${worker.name}'s maintenance account? Its history will be preserved.`))return;
+            try {
+                const url='/api/society/records/team-users/'+workerId;
+                const read=await fetch(url);const record=await read.json();
+                if(!read.ok || read.redirected)throw Error(record.detail || record.message || 'Worker could not load.');
+                const response=await fetch(url,{method:'DELETE',headers:{'If-Match':String(record.version)}});const result=await response.json();
+                if(!response.ok || response.redirected)throw Error(result.detail || result.message || 'Worker could not be deactivated.');
+                await loadAvailableMaintenanceWorkers();alert(result.message);
+            }catch(error){alert(error.message);}
         };
 
         window.handleAdminWorkerDropdownChange = function(workerId) {
@@ -3017,7 +2916,8 @@
             const container = document.getElementById('adminMaintMessagesContainer');
             if (!container) return;
             try {
-                const targetKey = convId || activeAdminMaintChat.conversationId || 'req_REQ-1024_admin';
+                const targetKey = convId || activeAdminMaintChat.conversationId;
+                if (!targetKey) { container.textContent = 'Select a saved conversation to view messages.'; return; }
                 const res = await fetch(`/api/chat/messages?conversationId=${encodeURIComponent(targetKey)}&viewerRole=ADMIN`);
                 if (!res.ok) return;
                 const msgs = await res.json();
@@ -3063,7 +2963,7 @@
                                 <div class="admin-msg-row admin-msg-in">
                                     <div class="admin-bubble admin-bubble-in">
                                         <div class="admin-bubble-sender admin-bubble-sender-maint">
-                                            <i class="fa-solid fa-user-gear me-1"></i>${escapeAdminHtml(m.senderName || 'Kumar')}
+                                            <i class="fa-solid fa-user-gear me-1"></i>${escapeAdminHtml(m.senderName || 'Maintenance Team')}
                                         </div>
                                         <div class="admin-bubble-text">${safeMsg}</div>
                                         <div class="admin-bubble-meta">
@@ -3087,11 +2987,12 @@
 
         window.openAdminMaintThreadByKey = function(convKey) {
             const t = window.__adminThreadsCache ? window.__adminThreadsCache[convKey] : null;
+            if (!t) return;
             activeAdminMaintChat.conversationId = convKey;
             if (t) {
                 activeAdminMaintChat.ticketNumber = t.ticketNumber || '';
                 activeAdminMaintChat.ticketTitle = t.ticketTitle || t.title || 'Escalation';
-                activeAdminMaintChat.workerName = t.maintenanceUserName || 'Kumar';
+                activeAdminMaintChat.workerName = t.maintenanceUserName || 'Maintenance Team';
                 activeAdminMaintChat.flatNumber = t.customerUnit || t.unit || '';
             }
 
@@ -3115,6 +3016,7 @@
             if (e && e.preventDefault) e.preventDefault();
             const input = document.getElementById('adminMaintReplyInput');
             if (!input || !input.value.trim()) return;
+            if (!activeAdminMaintChat.conversationId) { alert('Choose a saved conversation before sending.'); return; }
             const text = input.value.trim();
             input.value = '';
             try {
@@ -3138,8 +3040,10 @@
                 if (res.ok) {
                     await loadAdminMaintMessages(activeAdminMaintChat.conversationId);
                     loadAdminMaintThreads(true);
-                }
+                } else { throw new Error('Message could not be saved. Sign in and retry.'); }
             } catch (err) {
+                input.value = text;
+                alert(err.message || 'Message could not be saved.');
                 console.error("Failed to send admin reply", err);
             }
         };
@@ -3210,7 +3114,7 @@
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
 <script src="/smartapartment/js/gate-management.js?v=20261009-guard-roster-v3"></script>
 
-<script defer src="/smartapartment/js/admin-insights.js?v=20261009-occupancy-v2"></script>
+<script defer src="/smartapartment/js/admin-insights.js?v=20261010-dues-feedback-v3"></script>
 <script defer src="/smartapartment/js/admin-occupancy-editor.js?v=20261009-v1"></script>
 <script src="/smartapartment/js/society-service-requests.js"></script><style>
 body.dashboard-body #panel-maintenance-chat > .card {padding:18px 20px!important;margin-bottom:20px!important;background:#fff!important;border:1px solid #dbe3ef!important;border-radius:16px!important;}

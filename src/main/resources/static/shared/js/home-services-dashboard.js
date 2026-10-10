@@ -5220,6 +5220,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
 
             // Fetch requests from MaintenanceRequestApiController (/api/maintenance/requests)
             let maintRequests = [];
+            if (isResident) {
             try {
                 const mRes = await fetch("/api/maintenance/requests?filter=all", {
                     headers: { "Accept": "application/json" }
@@ -5230,6 +5231,7 @@ window.closeSubServicesModal = function closeSubServicesModal() {
                 }
             } catch (mErr) {
                 console.warn("MaintenanceRequest fetch notice:", mErr.message);
+            }
             }
 
             // Unified bookings list

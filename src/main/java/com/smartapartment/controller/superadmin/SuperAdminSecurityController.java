@@ -12,14 +12,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/superadmin/security")
+@PreAuthorize("hasRole('SUPER_ADMIN')")
+@org.springframework.transaction.annotation.Transactional
 public class SuperAdminSecurityController {
 
     private final ApiIntegrationRepository integrations;
     private final SystemConfigurationRepository configurations;
+    private final com.smartapartment.repository.AuditLogRepository auditLogs;
 
-    public SuperAdminSecurityController(ApiIntegrationRepository integrations, SystemConfigurationRepository configurations) {
+    public SuperAdminSecurityController(ApiIntegrationRepository integrations, SystemConfigurationRepository configurations,
+                                        com.smartapartment.repository.AuditLogRepository auditLogs) {
         this.integrations = integrations;
         this.configurations = configurations;
+        this.auditLogs = auditLogs;
     }
 
     @GetMapping("/config")
@@ -35,8 +40,9 @@ public class SuperAdminSecurityController {
     @PutMapping("/config")
     public ResponseEntity<List<SystemConfiguration>> saveGlobalConfigs(@RequestBody java.util.Map<String, String> values) {
         seedConfigurations();
-        configurations.findAllByOrderByConfigKeyAsc().forEach(config -> { if (values.containsKey(config.getConfigKey())) config.setConfigValue(values.get(config.getConfigKey())); });
-        return ResponseEntity.ok(configurations.saveAll(configurations.findAllByOrderByConfigKeyAsc()));
+        List<SystemConfiguration> saved = configurations.findAllByOrderByConfigKeyAsc();
+        saved.forEach(config -> { if (values.containsKey(config.getConfigKey())) config.setConfigValue(values.get(config.getConfigKey())); });
+        return ResponseEntity.ok(configurations.saveAll(saved));
     }
 
     private void seedConfigurations() {
@@ -47,13 +53,12 @@ public class SuperAdminSecurityController {
 
     @PostMapping("/mfa-policy")
     public ResponseEntity<String> updateMfaPolicy(@RequestParam boolean requireMfaForAdmins) {
-        // Stubbed: Implement MFA policy update
-        return ResponseEntity.ok("MFA policy updated");
+        return ResponseEntity.status(org.springframework.http.HttpStatus.NOT_IMPLEMENTED)
+                .body("MFA enforcement is not configured. No policy change was applied.");
     }
 
     @GetMapping("/integrations")
     public ResponseEntity<List<ApiIntegration>> getIntegrations() {
-        seedIntegrations();
         return ResponseEntity.ok(integrations.findAllByOrderByCreatedAtAsc());
     }
 
@@ -75,18 +80,9 @@ public class SuperAdminSecurityController {
         return ResponseEntity.ok(integrations.save(integration));
     }
 
-    private void seedIntegrations() {
-        if (integrations.count() > 0) return;
-        ApiIntegration sms = new ApiIntegration();
-        sms.setServiceName("Twilio SMS"); sms.setDescription("Primary SMS gateway"); sms.setActive(true);
-        ApiIntegration email = new ApiIntegration();
-        email.setServiceName("SendGrid Email"); email.setDescription("Transactional emails"); email.setActive(true);
-        integrations.saveAll(List.of(sms, email));
-    }
-
     @GetMapping("/audit-logs")
-    public ResponseEntity<List<Object>> getSystemAuditLogs() {
-        // Fetch detailed system logs
-        return ResponseEntity.ok(List.of());
+    public ResponseEntity<List<com.smartapartment.entity.AuditLog>> getSystemAuditLogs() {
+        return ResponseEntity.ok(auditLogs.findAll(org.springframework.data.domain.PageRequest.of(0,100,
+                org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC,"createdAt"))).getContent());
     }
 }

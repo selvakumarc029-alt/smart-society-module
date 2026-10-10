@@ -105,7 +105,13 @@ public class SocietyApiController {
         }
         user.setFullName(name);
         user.setPhone(phone.isBlank() ? null : phone);
+        if (user.getRole() == UserRole.MAINTENANCE_STAFF && !designation.equals(clean(user.getDesignation()).trim()))
+            throw new org.springframework.web.server.ResponseStatusException(HttpStatus.FORBIDDEN, "Your administrator manages your designation");
         user.setDesignation(designation.isBlank() ? null : designation);
+        if (request.address() != null) user.setAddress(profileText(request.address(), 255));
+        if (request.emergencyContactName() != null) user.setEmergencyContactName(profileText(request.emergencyContactName(), 120));
+        if (request.emergencyContactPhone() != null) user.setEmergencyContactPhone(profileText(request.emergencyContactPhone(), 30));
+        if (request.profileNotes() != null) user.setProfileNotes(profileText(request.profileNotes(), 255));
         return profileView(users.save(user));
     }
 
@@ -134,6 +140,12 @@ public class SocietyApiController {
         profile.put("email", user.getEmail());
         profile.put("phone", user.getPhone() == null ? "" : user.getPhone());
         profile.put("designation", user.getDesignation() == null ? "" : user.getDesignation());
+        profile.put("workShift", clean(user.getWorkShift()));
+        profile.put("employeeId", clean(user.getEmployeeId()));
+        profile.put("address", clean(user.getAddress()));
+        profile.put("emergencyContactName", clean(user.getEmergencyContactName()));
+        profile.put("emergencyContactPhone", clean(user.getEmergencyContactPhone()));
+        profile.put("profileNotes", clean(user.getProfileNotes()));
         profile.put("role", user.getRole().name());
         profile.put("tenantId", user.getTenantId() == null ? "Platform" : user.getTenantId());
         profile.put("accountLocked", user.isAccountLocked());
@@ -143,7 +155,13 @@ public class SocietyApiController {
         return profile;
     }
 
-    public record ProfileRequest(String name, String phone, String designation) {}
+    private String profileText(String value, int maxLength) {
+        String text = clean(value).trim();
+        if (text.length() > maxLength) throw new IllegalArgumentException("Profile value is too long");
+        return text.isBlank() ? null : text;
+    }
+    public record ProfileRequest(String name, String phone, String designation, String address,
+                                 String emergencyContactName, String emergencyContactPhone, String profileNotes) {}
     public record PasswordChangeRequest(String currentPassword, String newPassword) {}
 
     @GetMapping("/overview")
@@ -214,6 +232,22 @@ public class SocietyApiController {
             return Map.of("sent", false, "message", "Mail service is not configured on this server");
         }
         return mailService.sendResidentSelfRegistrationLink(request.email().trim(), request.registrationLink().trim());
+    }
+
+    @GetMapping("/available-workers")
+    @PreAuthorize("hasAnyRole('SOCIETY_ADMIN','MAINTENANCE_STAFF','FACILITY_MANAGER','SUPER_ADMIN')")
+    public List<Map<String,Object>> availableWorkers() {
+        String tenant = currentUser.requireTenantId();
+        if (tenant == null || tenant.isBlank()) {
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN,
+                    "Your account has no society assigned. Select a society account to assign workers.");
+        }
+        return users.findByTenantIdAndRole(tenant, UserRole.MAINTENANCE_STAFF).stream()
+                .filter(u -> !com.smartapartment.service.DemoWorkerAccounts.isDemo(u.getEmail()))
+                .filter(u -> !u.isAccountLocked() && u.getAccessRevokedAt() == null)
+                .filter(u -> workerAvailabilityRepository != null && workerAvailabilityRepository.findByWorkerId(u.getId())
+                        .map(a -> "AVAILABLE".equalsIgnoreCase(a.getStatus())).orElse(false))
+                .map(this::teamUserView).toList();
     }
 
     @GetMapping("/team-users")
@@ -326,14 +360,10 @@ public class SocietyApiController {
     @GetMapping("/security/gates")
     @PreAuthorize("hasAnyRole('SOCIETY_ADMIN','SECURITY_STAFF')")
     public List<Map<String, Object>> securityGates() {
-        return List.of(
-                map("value", "Gate 1", "label", "Gate 1 · Main Entrance"),
-                map("value", "Gate 2", "label", "Gate 2 · Resident Entry"),
-                map("value", "Gate 3", "label", "Gate 3 · Visitor Entry"),
-                map("value", "Gate 4", "label", "Gate 4 · North / Emergency Access"),
-                map("value", "Service Gate", "label", "Service Gate · Vendors & Deliveries"),
-                map("value", "Basement Gate", "label", "Basement Gate · Parking Access")
-        );
+        return gates.findByTenantIdOrderByGateNumberAsc(currentUser.requireTenantId()).stream()
+                .filter(gate -> "ACTIVE".equalsIgnoreCase(gate.getStatus()))
+                .map(gate -> map("value", gate.getGateNumber(), "label", gate.getGateNumber() + " · " + gate.getGateName()))
+                .toList();
     }
 
     @PostMapping("/security/assignments")
@@ -605,6 +635,10 @@ public class SocietyApiController {
         Complaint complaint = complaints.findByIdAndTenantId(id, actor.getTenantId())
                 .orElseThrow(() -> new IllegalArgumentException("Complaint was not found"));
         if (actor.getRole() != UserRole.SOCIETY_ADMIN) {
+            if (!"MAINTENANCE".equalsIgnoreCase(clean(complaint.getAssignedTo()))) {
+                throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN,
+                        "This complaint has not been assigned to the maintenance team");
+            }
             if (!clean(request.assignedTo()).isBlank() && !clean(request.assignedTo()).equalsIgnoreCase(clean(complaint.getAssignedTo()))) {
                 throw new IllegalArgumentException("Only the Society Admin can assign a complaint");
             }
@@ -1086,7 +1120,7 @@ public class SocietyApiController {
 
     private Map<String, Object> residentView(Resident r) {
         return map("id", r.getId(), "name", r.getUser().getFullName(), "email", r.getUser().getEmail(),
-                "phone", clean(r.getUser().getPhone()), "unitNo", r.getApartment().getUnitNo(),
+                "phone", clean(r.getUser().getPhone()), "unitNo", r.getApartment() == null ? "" : r.getApartment().getUnitNo(),
                 "residentType", r.getResidentType(), "vehicleNumber", clean(r.getVehicleNumber()), "moveInDate", r.getMoveInDate());
     }
 

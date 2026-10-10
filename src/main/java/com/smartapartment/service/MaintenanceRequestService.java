@@ -102,7 +102,11 @@ public class MaintenanceRequestService {
         Resident resident = resolveResidentForUser(user);
         Apartment apartment = null;
         if (dto.apartmentId() != null) {
-            apartment = apartmentRepository.findById(dto.apartmentId()).orElse(null);
+            apartment = apartmentRepository.findById(dto.apartmentId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "The selected flat was not found"));
+            if (!Objects.equals(user.getTenantId(), apartment.getTenantId()) ||
+                    (isResidentRole(user) && (resident.getApartment() == null || !Objects.equals(resident.getApartment().getId(), apartment.getId())))) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Select the flat assigned to your account");
+            }
         }
         if (apartment == null && resident.getApartment() != null) {
             apartment = resident.getApartment();
@@ -118,9 +122,9 @@ public class MaintenanceRequestService {
 
         String societyName = (tenant != null) ? tenant.getSocietyName() : "SmartApartment Community";
         Long societyId = (tenant != null) ? tenant.getId() : null;
-        String buildingName = (apartment != null && apartment.getBlock() != null) ? apartment.getBlock().getName() : "Block A";
+        String buildingName = (apartment != null && apartment.getBlock() != null) ? apartment.getBlock().getName() : null;
         Long buildingId = (apartment != null && apartment.getBlock() != null) ? apartment.getBlock().getId() : null;
-        String apartmentUnit = (apartment != null) ? apartment.getUnitNo() : "Unit 101";
+        String apartmentUnit = (apartment != null) ? apartment.getUnitNo() : null;
         Long apartmentId = (apartment != null) ? apartment.getId() : null;
 
         // Generate unique request number
@@ -217,6 +221,7 @@ public class MaintenanceRequestService {
         }
 
         return requests.stream()
+                .filter(req -> isSuperAdmin(user) || Objects.equals(user.getTenantId(), req.getTenantId()))
                 .map(req -> MaintenanceRequestResponseDto.from(req, null))
                 .toList();
     }
@@ -317,6 +322,26 @@ public class MaintenanceRequestService {
     public MaintenanceRequestResponseDto updateRequest(Long id, UpdateMaintenanceRequestDto dto, AppUser user) {
         MaintenanceRequest request = findAndAuthorizeRequest(id, user);
         boolean isResident = isResidentRole(user);
+        if (isResident && (dto.status()!=null || dto.assignedWorkerId()!=null || dto.assignedWorkerName()!=null || dto.assignedWorkerPhone()!=null))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Residents cannot assign workers or update work progress");
+        boolean ordinaryWorker=user.getRole()==UserRole.MAINTENANCE_STAFF
+                && !Objects.toString(user.getDesignation(),"").toLowerCase(Locale.ROOT).matches(".*(lead|manager|supervisor).*")
+                && !DemoWorkerAccounts.isDemo(user.getEmail());
+        if (ordinaryWorker && (!Objects.equals(request.getAssignedWorkerId(),user.getId()) || dto.assignedWorkerId()!=null))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Only your assigned work may be updated");
+        if (dto.status()!=null && !dto.status().isBlank()) {
+            String next=dto.status().trim().toUpperCase(Locale.ROOT);
+            if (!ACTIVE_STATUSES.contains(next) && !COMPLETED_STATUSES.contains(next) && !"CANCELLED".equals(next))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Unsupported maintenance status");
+            if ("CANCELLED".equals(request.getRequestStatus()) && !"CANCELLED".equals(next))
+                throw new ResponseStatusException(HttpStatus.CONFLICT,"Cancelled work cannot be marked active or completed");
+        }
+        if (dto.assignedWorkerId()!=null) {
+            AppUser worker=userRepository.findById(dto.assignedWorkerId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Worker was not found"));
+            if (worker.getRole()!=UserRole.MAINTENANCE_STAFF || !Objects.equals(worker.getTenantId(),request.getTenantId())
+                    || worker.isAccountLocked() || !"ACTIVE".equalsIgnoreCase(worker.getStatus()))
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Select an active maintenance worker from this society");
+        }
 
         if (dto.title() != null && !dto.title().isBlank()) request.setTitle(dto.title().trim());
         if (dto.description() != null && !dto.description().isBlank()) request.setDescription(dto.description().trim());
@@ -415,11 +440,7 @@ public class MaintenanceRequestService {
             }
         } else if (!isSuperAdmin(user)) {
             String tenantId = user.getTenantId();
-            if (tenantId != null && !tenantId.isBlank() 
-                    && !tenantId.equalsIgnoreCase(request.getTenantId())
-                    && !"society-1".equalsIgnoreCase(request.getTenantId())
-                    && !"propertydirect".equalsIgnoreCase(request.getTenantId())
-                    && !"default".equalsIgnoreCase(request.getTenantId())) {
+            if (tenantId == null || tenantId.isBlank() || !tenantId.equalsIgnoreCase(request.getTenantId())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN,
                         "Unauthorized: Request belongs to another society/tenant.");
             }
@@ -429,24 +450,8 @@ public class MaintenanceRequestService {
 
     private Resident resolveResidentForUser(AppUser user) {
         return residentRepository.findFirstByUserOrderByIdAsc(user)
-                .orElseGet(() -> {
-                    // Create default resident profile if not yet linked
-                    Resident r = new Resident();
-                    r.setUser(user);
-                    r.setTenantId(user.getTenantId() != null ? user.getTenantId() : "default");
-                    r.setResidentType("Owner");
-                    r.setMoveInDate(LocalDate.now());
-
-                    Apartment apt = apartmentRepository.findAll().stream().findFirst().orElseGet(() -> {
-                        Apartment a = new Apartment();
-                        a.setUnitNo("A-101");
-                        a.setFloorNo(1);
-                        a.setOccupancyStatus("OCCUPIED");
-                        return apartmentRepository.save(a);
-                    });
-                    r.setApartment(apt);
-                    return residentRepository.save(r);
-                });
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT,
+                        "Your account has no resident profile. Ask your society administrator to assign your flat."));
     }
 
     private String generateUniqueRequestNumber() {
@@ -473,13 +478,13 @@ public class MaintenanceRequestService {
         if (lower.contains("plumb") || lower.contains("water") || lower.contains("pipe") || lower.contains("drain")) return "Plumbing";
         if (lower.contains("electr") || lower.contains("wiring") || lower.contains("light") || lower.contains("switch")) return "Electrical";
         if (lower.contains("carpent") || lower.contains("wood") || lower.contains("door") || lower.contains("furniture") || lower.contains("drill") || lower.contains("repair")) return "Carpentry";
-        if (lower.contains("ac") || lower.contains("cooling") || lower.contains("hvac")) return "AC";
+        if (lower.matches(".*\\bac\\b.*") || lower.contains("cooling") || lower.contains("hvac")) return "AC";
         if (lower.contains("paint")) return "Painting";
-        if (lower.contains("appliance") || lower.contains("fridge") || lower.contains("geyser") || lower.contains("ro")) return "Appliance";
+        if (lower.contains("appliance") || lower.contains("fridge") || lower.contains("geyser") || lower.matches(".*\\bro\\b.*")) return "Appliance";
         if (lower.contains("lift") || lower.contains("elevator")) return "Lift/Elevator";
         if (lower.contains("civil") || lower.contains("mason")) return "Civil Work";
         if (lower.contains("net") || lower.contains("wifi") || lower.contains("internet")) return "Internet/Network";
-        return "Other";
+        return trimmed;
     }
 
     private boolean isResidentRole(AppUser user) {

@@ -60,7 +60,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/society/**").authenticated()
                         .requestMatchers("/admin/**").hasAnyRole("SUPER_ADMIN", "SOCIETY_ADMIN")
                         .requestMatchers("/api/platform/**").permitAll()
-                        .requestMatchers("/api/superadmin/**").permitAll()
+                        .requestMatchers("/api/superadmin/**").hasRole("SUPER_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

@@ -3891,23 +3891,19 @@
 
                     const settingsObj = { supportEmail: email, approvalRule: rule, maintenanceMode: mode, smtpHost: host, sessionLimit: limit, retentionPolicy: retention };
 
-                    // Persist to localStorage immediately
-                    try {
-                        localStorage.setItem("smartsociety_platform_settings", JSON.stringify(settingsObj));
-                    } catch (e) {}
-
+                    e.stopImmediatePropagation();
+                    if (btn.disabled) return;
                     btn.disabled = true;
                     const origHtml = btn.innerHTML;
                     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1.5"></span>Saving…';
-
                     try {
-                        await fetch('/api/superadmin/security/config', {
-                            method: 'PUT',
-                            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-                            body: JSON.stringify(settingsObj)
-                        });
-                    } catch (err) {
-                        console.warn("Backend settings sync deferred:", err);
+                        const response = await fetch('/api/superadmin/security/config', {method:'PUT',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(settingsObj)});
+                        const saved = await response.json().catch(() => null);
+                        if (!response.ok || response.redirected || !saved) throw Error(saved?.detail || saved?.message || 'Platform settings could not be saved.');
+                    } catch (error) {
+                        showToast(error.message);
+                        btn.disabled = false;btn.innerHTML = origHtml;
+                        return;
                     }
 
                     const badge = document.getElementById("settingsSavedAt");
@@ -4899,7 +4895,7 @@
         });
     </script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261009-category-add-v7"></script>
+<script src="/smartapartment/js/home-services-pricing-admin.js?v=20261010-tab-auth-v8"></script>
 <script src="/smartapartment/js/saas-renewal.js"></script><style id="society-onboarding-field-alignment">
     #addSocietyModal .society-form-section .form-label {
         display: block;

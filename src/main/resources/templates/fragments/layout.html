@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
+    <script src="/smartapartment/js/dashboard-session.js?v=20261010-tab-session-v1"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${title} + ' - Smart Society'">Smart Society</title>
     
@@ -427,7 +428,7 @@
     <!-- Scripts Fragment -->
     <div th:fragment="scripts">
         <link rel="stylesheet" href="/shared/css/service-order-progress.css?v=20261009-v1">
-        <script defer src="/shared/js/service-order-progress.js?v=20261009-v1"></script>
+        <script defer src="/shared/js/service-order-progress.js?v=20261010-v2"></script>
         <script defer src="/smartapartment/js/dashboard-interface.js?v=20261009-shared-divider-v6"></script>
         <script defer src="/smartapartment/js/crud-workflows.js?v=20261008-crud-v1"></script>
         <script defer src="/smartapartment/js/accountant-button-workflows.js?v=20261008-role-actions-v1"></script>
@@ -439,7 +440,7 @@
         
         <!-- Application Logic -->
         <!-- Versioned so dashboard button fixes are not hidden by a browser cache. -->
-    <script th:src="@{/smartapartment/js/dashboard.js(v='20261008-demo-buttons-v2')}"></script>
+    <script th:src="@{/smartapartment/js/dashboard.js(v='20261010-saved-progress-v9')}"></script>
         <script th:src="@{/smartapartment/js/ai-helpdesk.js(v='20260826-ai-helpdesk-v2')}"></script>
     </div>
 

@@ -5,6 +5,15 @@
  */
 (() => {
     "use strict";
+    // sessionStorage belongs to this tab; other dashboard logins share the cookie.
+    function catalogueFetch(url, options = {}) {
+        const token = sessionStorage.getItem('society_superadmin_token');
+        return fetch(url, {...options, credentials:'same-origin', headers:{...options.headers,
+            ...(token ? {Authorization:'Bearer ' + token} : {})}});
+    }
+    document.addEventListener('click', event => {
+        if (event.target.closest('a[href="/dashboards/logout"]')) sessionStorage.removeItem('society_superadmin_token');
+    });
 
     let _allPackages = [];
     let _activeModalCategoryKey = null;
@@ -137,7 +146,7 @@
         }
 
         try {
-            const res = await fetch("/api/admin/home-services/packages", { credentials: "same-origin", headers: {Accept: "application/json"} });
+            const res = await catalogueFetch("/api/admin/home-services/packages", { credentials: "same-origin", headers: {Accept: "application/json"} });
             if (res.redirected || res.status === 401 || res.status === 403) {
                 throw new Error("Your session is not authenticated as superadmin. Sign out and sign in again, then retry the catalogue.");
             }
@@ -367,7 +376,7 @@
             matchingPkgs.sort((a, b) => (Number(a.price) || 0) - (Number(b.price) || 0));
             const basePkg = matchingPkgs[0];
             try {
-                await fetch(`/api/admin/home-services/packages/${basePkg.id}/price`, {
+                await catalogueFetch(`/api/admin/home-services/packages/${basePkg.id}/price`, {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ price: newPrice }),
@@ -549,7 +558,7 @@
         }
 
         try {
-            const res = await fetch(`/api/admin/home-services/packages/${id}/price`, {
+            const res = await catalogueFetch(`/api/admin/home-services/packages/${id}/price`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ price: newPrice }),
@@ -578,7 +587,7 @@
         }
 
         try {
-            const res = await fetch(`/api/admin/home-services/packages/${id}`, {
+            const res = await catalogueFetch(`/api/admin/home-services/packages/${id}`, {
                 method: "DELETE",
                 credentials: "same-origin"
             });
@@ -596,7 +605,7 @@
         }
 
         try {
-            const res = await fetch("/api/admin/home-services/packages/reset-defaults", {
+            const res = await catalogueFetch("/api/admin/home-services/packages/reset-defaults", {
                 method: "POST",
                 credentials: "same-origin"
             });
@@ -728,7 +737,7 @@
         try {
             const url = id ? `/api/admin/home-services/packages/${id}` : "/api/admin/home-services/packages";
             const method = id ? "PUT" : "POST";
-            const res = await fetch(url, {
+            const res = await catalogueFetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),

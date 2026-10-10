@@ -53,48 +53,31 @@ public class DataLoader {
                                PasswordEncoder encoder,
                                Environment environment) {
         return args -> {
-            boolean seedDemo = Boolean.parseBoolean(environment.getProperty("SEED_DEMO_ACCOUNTS", "true"));
-            String superAdminEmail = environment.getProperty("SEED_SUPER_ADMIN_EMAIL", "superadmin@smartapartment");
+            boolean seedDemo = Boolean.parseBoolean(environment.getProperty("SEED_DEMO_ACCOUNTS", "false"));
             String superAdminPassword = environment.getProperty("SEED_SUPER_ADMIN_PASSWORD", "superadmin123");
             String residentEmail = environment.getProperty("SEED_RESIDENT_EMAIL", "resident@smartapartment");
             String residentPassword = environment.getProperty("SEED_RESIDENT_PASSWORD", "resident123");
 
-            users.findByEmail("superadmin@smartapartment").ifPresentOrElse(superAdmin -> {
-                superAdmin.setTenantId("platform");
-                superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
-                superAdmin.setStatus("ACTIVE");
-                superAdmin.setAccountLocked(false);
-                users.save(superAdmin);
-            }, () -> {
-                AppUser superAdmin = new AppUser();
-                superAdmin.setTenantId("platform");
-                superAdmin.setFullName("Platform Super Admin");
-                superAdmin.setEmail("superadmin@smartapartment");
-                superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
-                superAdmin.setRole(UserRole.SUPER_ADMIN);
-                superAdmin.setStatus("ACTIVE");
-                superAdmin.setAccountLocked(false);
-                users.save(superAdmin);
-            });
-
-            users.findByEmail("superadmin@smartsociety").ifPresentOrElse(superAdmin -> {
-                superAdmin.setTenantId("platform");
-                superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
-                superAdmin.setStatus("ACTIVE");
-                superAdmin.setAccountLocked(false);
-                users.save(superAdmin);
-            }, () -> {
-                AppUser superAdmin = new AppUser();
-                superAdmin.setTenantId("platform");
-                superAdmin.setFullName("Platform Super Admin");
-                superAdmin.setEmail("superadmin@smartsociety");
-                superAdmin.setPasswordHash(encoder.encode(superAdminPassword));
-                superAdmin.setRole(UserRole.SUPER_ADMIN);
-                superAdmin.setStatus("ACTIVE");
-                superAdmin.setAccountLocked(false);
-                users.save(superAdmin);
-            });
-
+            // Bootstrap only explicitly configured accounts, or isolated opt-in demo fixtures.
+            // A restart must never reset an existing user's password or unlock their account.
+            String configuredEmail = environment.getProperty("SEED_SUPER_ADMIN_EMAIL");
+            String configuredPassword = environment.getProperty("SEED_SUPER_ADMIN_PASSWORD");
+            java.util.List<String> bootstrapEmails = seedDemo
+                    ? java.util.List.of("superadmin@smartapartment", "superadmin@smartsociety")
+                    : configuredEmail != null && !configuredEmail.isBlank() && configuredPassword != null && !configuredPassword.isBlank()
+                    ? java.util.List.of(configuredEmail.trim().toLowerCase(java.util.Locale.ROOT)) : java.util.List.of();
+            for (String email : bootstrapEmails) {
+                if (users.findByEmail(email).isPresent()) continue;
+                AppUser account = new AppUser();
+                account.setTenantId("platform");
+                account.setFullName("Platform Super Admin");
+                account.setEmail(email);
+                account.setPasswordHash(encoder.encode(superAdminPassword));
+                account.setRole(UserRole.SUPER_ADMIN);
+                account.setStatus("ACTIVE");
+                account.setAccountLocked(false);
+                users.save(account);
+            }
             ensurePlan(plans, "Free", "FREE", BigDecimal.ZERO, 50, 150, false, false, false);
             ensurePlan(plans, "Standard", "STANDARD", new BigDecimal("4999"), 500, 1500, true, true, false);
             ensurePlan(plans, "Premium", "PREMIUM", new BigDecimal("9999"), 5000, 15000, true, true, true);
@@ -218,6 +201,7 @@ public class DataLoader {
                 AppUser plumberUser = createDemoUser(users, encoder, "green-heights", "Ramesh Plumber",
                         "plumber@smartapartment", "password123", UserRole.MAINTENANCE_STAFF);
                 plumberUser.setDesignation("Plumber");
+                plumberUser.setWorkShift("ALL_DAY");
                 plumberUser.setPhone("9876543211");
                 users.save(plumberUser);
                 MaintenancePartner p1 = new MaintenancePartner();
@@ -240,6 +224,7 @@ public class DataLoader {
                 AppUser electricUser = createDemoUser(users, encoder, "green-heights", "Suresh Electrician",
                         "electrician@smartapartment", "password123", UserRole.MAINTENANCE_STAFF);
                 electricUser.setDesignation("Electrician");
+                electricUser.setWorkShift("ALL_DAY");
                 electricUser.setPhone("9876543212");
                 users.save(electricUser);
                 MaintenancePartner p2 = new MaintenancePartner();
@@ -305,104 +290,6 @@ public class DataLoader {
                 p4.setRatingCount(42);
                 partners.save(p4);
 
-                plumberUser.setWorkShift("ALL_DAY");
-                users.save(plumberUser);
-                electricUser.setWorkShift("ALL_DAY");
-                users.save(electricUser);
-
-                // Seed active attendance and availability for today for all demo workers
-                for (AppUser w : java.util.List.of(plumberUser, electricUser, carpUser, cleanUser)) {
-                    staffAttendances.findByTenantIdAndUserIdAndWorkDate("green-heights", w.getId(), LocalDate.now())
-                            .orElseGet(() -> {
-                                StaffAttendance att = new StaffAttendance();
-                                att.setTenantId("green-heights");
-                                att.setUser(w);
-                                att.setWorkDate(LocalDate.now());
-                                att.setCheckInAt(LocalDateTime.now().minusHours(2));
-                                return staffAttendances.save(att);
-                            });
-
-                    workerAttendances.findFirstByWorkerIdAndDateOrderByCreatedAtDesc(w.getId(), LocalDate.now())
-                            .orElseGet(() -> {
-                                com.smartapartment.entity.WorkerAttendance wa = new com.smartapartment.entity.WorkerAttendance();
-                                wa.setWorkerId(w.getId());
-                                wa.setTenantId("green-heights");
-                                wa.setDate(LocalDate.now());
-                                wa.setShiftId("ALL_DAY");
-                                wa.setAttendanceStatus("PRESENT");
-                                wa.setClockIn(LocalDateTime.now().minusHours(2));
-                                return workerAttendances.save(wa);
-                            });
-
-                    workerAvailabilities.findByWorkerId(w.getId())
-                            .orElseGet(() -> {
-                                com.smartapartment.entity.WorkerAvailability wav = new com.smartapartment.entity.WorkerAvailability();
-                                wav.setWorkerId(w.getId());
-                                wav.setTenantId("green-heights");
-                                wav.setStatus("AVAILABLE");
-                                wav.setLastUpdatedAt(LocalDateTime.now());
-                                return workerAvailabilities.save(wav);
-                            });
-                }
-            }
-
-            // Unconditionally ensure cleaner and all maintenance workers have shifts, attendance, and availability
-            AppUser cleanerStaff = users.findByEmail("cleaner@smartapartment").orElseGet(() -> {
-                AppUser u = createDemoUser(users, encoder, "green-heights", "Manoj Cleaner",
-                        "cleaner@smartapartment", "password123", UserRole.MAINTENANCE_STAFF);
-                u.setDesignation("Housekeeping");
-                u.setWorkShift("ALL_DAY");
-                u.setPhone("9876543214");
-                return users.save(u);
-            });
-            cleanerStaff.setDesignation("Housekeeping");
-            cleanerStaff.setWorkShift("ALL_DAY");
-            users.save(cleanerStaff);
-
-            if (partners.findByUserId(cleanerStaff.getId()).isEmpty()) {
-                MaintenancePartner p4 = new MaintenancePartner();
-                p4.setUserId(cleanerStaff.getId());
-                p4.setName("Manoj Cleaner");
-                p4.setPhone("9876543214");
-                p4.setHubId(defaultHub.getId());
-                p4.setTrade("Cleaning");
-                p4.setSkillCategories("Cleaning,Deep Cleaning,Housekeeping,Disinfection");
-                p4.setEmploymentType("INTERNAL");
-                p4.setOnDuty(true);
-                p4.setWorkState("IDLE");
-                p4.setAvailability("IDLE");
-                p4.setLatitude(12.9716);
-                p4.setLongitude(77.5946);
-                p4.setRating(4.9f);
-                p4.setRatingCount(42);
-                partners.save(p4);
-            }
-
-            for (AppUser w : users.findAll().stream().filter(u -> u.getRole() == UserRole.MAINTENANCE_STAFF).toList()) {
-                w.setWorkShift("ALL_DAY");
-                users.save(w);
-
-                workerAttendances.findFirstByWorkerIdAndDateOrderByCreatedAtDesc(w.getId(), LocalDate.now())
-                        .orElseGet(() -> {
-                            com.smartapartment.entity.WorkerAttendance wa = new com.smartapartment.entity.WorkerAttendance();
-                            wa.setWorkerId(w.getId());
-                            wa.setTenantId(w.getTenantId() != null ? w.getTenantId() : "green-heights");
-                            wa.setDate(LocalDate.now());
-                            wa.setShiftId("ALL_DAY");
-                            wa.setAttendanceStatus("PRESENT");
-                            wa.setClockIn(LocalDateTime.now().minusHours(2));
-                            return workerAttendances.save(wa);
-                        });
-
-                workerAvailabilities.findByWorkerId(w.getId())
-                        .orElseGet(() -> {
-                            com.smartapartment.entity.WorkerAvailability wav = new com.smartapartment.entity.WorkerAvailability();
-                            wav.setWorkerId(w.getId());
-                            wav.setTenantId(w.getTenantId() != null ? w.getTenantId() : "green-heights");
-                            wav.setStatus("AVAILABLE");
-                            wav.setLastUpdatedAt(LocalDateTime.now());
-                            return workerAvailabilities.save(wav);
-                        });
             }
 
             Resident resident = residents.findFirstByUserOrderByIdAsc(residentUser).orElseGet(() -> {
@@ -478,11 +365,10 @@ public class DataLoader {
     private static AppUser createDemoUser(AppUserRepository users, PasswordEncoder encoder,
                                           String tenantId, String name, String email,
                                           String password, UserRole role) {
-        AppUser user = users.findByEmail(email).orElseGet(() -> {
-            AppUser u = new AppUser();
-            u.setEmail(email);
-            return u;
-        });
+        var existing = users.findByEmail(email);
+        if (existing.isPresent()) return existing.get();
+        AppUser user = new AppUser();
+        user.setEmail(email);
         user.setTenantId(tenantId);
         user.setFullName(name);
         user.setPasswordHash(encoder.encode(password));

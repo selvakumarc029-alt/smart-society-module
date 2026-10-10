@@ -3,10 +3,10 @@ const assert=require('node:assert/strict');
 const vm=require('node:vm');
 const source=require('node:fs').readFileSync('src/main/resources/static/smartapartment/js/home-services-pricing-admin.js','utf8');
 const start=source.indexOf('    async function loadAdminPackages()');
-const code=source.slice(start,source.indexOf('    function updateCatalogKpis()',start));
+const code=source.slice(source.indexOf('    function catalogueFetch('),source.indexOf("    document.addEventListener('click'"))+source.slice(start,source.indexOf('    function updateCatalogKpis()',start));
 function setup(response){
  const grid={innerHTML:''};let rendered=0;
- const ctx={document:{getElementById:()=>grid},fetch:async()=>response,escapeHtml:s=>s,console:{error(){}},renderAdminCategoryCards:()=>rendered++,updateCatalogKpis(){},_activeModalCategoryKey:null};
+ const ctx={sessionStorage:{getItem:()=>null},document:{getElementById:()=>grid},fetch:async()=>response,escapeHtml:s=>s,console:{error(){}},renderAdminCategoryCards:()=>rendered++,updateCatalogKpis(){},_activeModalCategoryKey:null};
  vm.createContext(ctx);vm.runInContext(code,ctx);return{ctx,grid,rendered:()=>rendered};
 }
 test('login redirect never attempts to parse HTML as JSON',async()=>{

@@ -47,6 +47,18 @@ class SecurityConsoleTests {
  void select(Gate gate)throws Exception{token=result(call("/session",Map.of("gateId",gate.getId())).andExpect(status().isOk())).get("token").asText();}
  ResultActions action(Visitor v,String action)throws Exception{return call("/action",Map.of("visitorId",v.getId(),"action",action,"token",token));}
 
+ @Test void residentDecisionControlsSecurityEntry()throws Exception{
+  Visitor approved=visitor(one);approved.setApprovalStatus("PENDING");approved.setStatus("PENDING_APPROVAL");visitors.save(approved);
+  action(approved,"ENTRY").andExpect(status().isConflict());
+  mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch("/api/society/gate-entries/"+approved.getId()+"/approve")
+   .with(user(resident.getUser().getEmail()).roles("RESIDENT"))).andExpect(status().isOk());
+  action(approved,"ENTRY").andExpect(status().isOk());
+  Visitor rejected=visitor(one);rejected.setApprovalStatus("PENDING");rejected.setStatus("PENDING_APPROVAL");visitors.save(rejected);
+  mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch("/api/society/gate-entries/"+rejected.getId()+"/reject")
+   .with(user(resident.getUser().getEmail()).roles("RESIDENT"))).andExpect(status().isOk());
+  action(rejected,"ENTRY").andExpect(status().isConflict()).andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.startsWith("PASS_REJECTED")));
+  assertNull(visitors.findById(rejected.getId()).orElseThrow().getCheckInAt());
+ }
  @Test void wrongGateIsDeniedAndAuditSurvives()throws Exception{
   Visitor v=visitor(one);select(two);
   action(v,"ENTRY").andExpect(status().isConflict()).andExpect(jsonPath("$.message").value("GATE_MISMATCH_ERROR: Re-route to Gate 1"));

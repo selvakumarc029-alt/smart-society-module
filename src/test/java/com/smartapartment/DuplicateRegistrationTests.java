@@ -13,7 +13,7 @@ class DuplicateRegistrationTests {
         PropertyCustomerRepository customers = mock(PropertyCustomerRepository.class);
         TenantRepository tenants = mock(TenantRepository.class);
         AuthController controller = new AuthController(null, new MockEnvironment(), customers,
-                null, null, users, tenants, null, null, null, false);
+                null, null, null, users, tenants, null, null, null, false);
         when(users.existsByEmailIgnoreCase("existing@example.com")).thenReturn(true);
         var society = controller.registerResident(new AuthController.ResidentSelfRegisterRequest(
                 "Existing", " EXISTING@example.com ", "", "password123", "", "", "", ""));

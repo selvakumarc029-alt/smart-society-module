@@ -203,7 +203,7 @@ function setupDetailedProfileSettings() {
         <div class="profile-settings__summary">
             <div class="profile-avatar" id="profileAvatar">—</div>
             <div><strong id="profileSummaryName">Loading profile…</strong><span id="profileSummaryRole">${roleNames[dashboardRole] || "Dashboard User"}</span><small id="profileSummaryEmail"></small></div>
-            <dl><div><dt>Workspace</dt><dd id="profileWorkspace">—</dd></div><div><dt>Account</dt><dd id="profileAccountStatus">—</dd></div><div><dt>MFA</dt><dd id="profileMfaStatus">—</dd></div></dl>
+            <dl ${dashboardRole === 'maintenance' ? 'hidden style="display:none"' : ''}><div><dt>Workspace</dt><dd id="profileWorkspace">—</dd></div><div><dt>Account</dt><dd id="profileAccountStatus">—</dd></div><div><dt>MFA</dt><dd id="profileMfaStatus">—</dd></div></dl>
         </div>
         <form id="dashboardProfileForm" class="profile-settings__section">
             <div class="profile-settings__section-title"><span class="profile-settings__icon-box"><i class="fa-solid fa-address-card"></i></span><div><h3>Personal information</h3><p>These details identify you to the people and workflows you manage.</p></div></div>
@@ -837,6 +837,14 @@ function dashboardContentRoot() {
 // progressive UI enhancements; authoritative records always come from the API.
 async function loadSocietyBackendData() {
     if (dashboardRole === "superadmin") return loadPlatformBackendData();
+    const failedDatasets = [];
+    // Never expose template examples as saved society records while hydration fails.
+    document.querySelectorAll('table[data-table="flats"],table[data-table="residents"],table[data-table="billing"],table[data-table="complaints"],table[data-table="visitors"]').forEach(table => {
+        if (table.dataset.serverRecords === 'true' || !table.tBodies?.[0]) return;
+        const row=document.createElement('tr'),cell=document.createElement('td');
+        cell.colSpan=table.querySelectorAll('thead th').length||10;
+        cell.textContent='Loading saved records…';row.appendChild(cell);table.tBodies[0].replaceChildren(row);
+    });
     const request = async (path) => {
         const response = await fetch(`/api/society/${path}`, { headers: { Accept: "application/json" } });
         if (response.redirected) throw new Error("Sign in with your society account to load saved records. Dashboard totals have not loaded.");
@@ -844,7 +852,7 @@ async function loadSocietyBackendData() {
             window.location.href = "/?loginRequired=true";
             throw new Error("Authentication required");
         }
-        if (response.status === 403) throw new Error(`The ${path} dataset is not available to this role`);
+        if (response.status === 403) { const error=new Error(`The ${path} dataset is not available to this role`);error.status=403;throw error; }
         if (!response.ok) throw new Error(`Unable to load ${path}`);
         return response.json();
     };
@@ -854,11 +862,12 @@ async function loadSocietyBackendData() {
         document.querySelectorAll(selector).forEach(table => {
             const body = table.tBodies[0]; if (!body) return; body.replaceChildren();
             items.forEach(item => body.appendChild(render(item, cell, statusCell, table)));
+            table.dataset.serverRecords = 'true';
         });
     };
 
     try {
-        const optional = path => request(path).catch(() => []);
+        const optional = path => request(path).catch(error => { if(error.status!==403)failedDatasets.push(`${path}: ${error.message}`);return []; });
         const canReadResidents = ["admin", "accountant", "security", "maintenance"].includes(dashboardRole);
         const canReadFinance = ["admin", "accountant"].includes(dashboardRole);
         const [overview, apartments, residents, complaints, visitors, bills, amenityItems, bookingItems, noticeItems, me, expenseItems, paymentItems, teamItems, subscription] = await Promise.all([
@@ -933,10 +942,10 @@ async function loadSocietyBackendData() {
             }
             r.appendChild(td);return r;
         });
-        fill('table[data-table="visitors"],table[data-table="entries"]', visitors, (v,c,s,table) => { const r=document.createElement("tr");r.dataset.recordId=v.id;c(r,v.name);if(dashboardRole==="admin"){c(r,v.unitNo);c(r,v.purpose);c(r,v.expectedAt && !Number.isNaN(Date.parse(v.expectedAt)) ? new Date(v.expectedAt).toLocaleString("en-IN", {day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : (v.expectedAt || "—"));}else{c(r,v.phone);c(r,v.unitNo);if(table.dataset.table==="entries"){c(r,v.purpose);c(r,v.resident);}else{c(r,v.checkInAt||v.expectedAt);}}s(r,v.status);const td=document.createElement("td");if(v.status==="CHECKED_OUT")td.textContent="Checked out";else{const b=document.createElement("button");b.dataset.backendAction=v.status==="CHECKED_IN"?"visitor-checkout":"visitor-checkin";b.textContent=v.status==="CHECKED_IN"?"Check Out":"Check In";td.appendChild(b);}r.appendChild(td);return r; });
+        fill('table[data-table="visitors"],table[data-table="entries"]', visitors, (v,c,s,table) => { const r=document.createElement("tr");r.dataset.recordId=v.id;c(r,v.name);if(dashboardRole==="admin"){c(r,v.unitNo);c(r,v.purpose);c(r,v.expectedAt && !Number.isNaN(Date.parse(v.expectedAt)) ? new Date(v.expectedAt).toLocaleString("en-IN", {day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}) : (v.expectedAt || "—"));}else{c(r,v.phone);c(r,v.unitNo);if(table.dataset.table==="entries"){c(r,v.purpose);c(r,v.resident);}else{c(r,v.checkInAt||v.expectedAt);}}s(r,v.status);const td=document.createElement("td");if(v.status==="CHECKED_OUT"||v.checkOutAt)td.textContent="Checked out";else if(v.status==="CHECKED_IN"||v.checkInAt||String(v.approvalStatus).toUpperCase()==="APPROVED"){const b=document.createElement("button");b.type="button";b.className="btn btn-sm btn-primary";const inside=v.status==="CHECKED_IN"||!!v.checkInAt;b.dataset.backendAction=inside?"visitor-checkout":"visitor-checkin";b.textContent=inside?"Check Out":"Check In";td.appendChild(b);}else{td.textContent=String(v.approvalStatus).toUpperCase()==="REJECTED"?"Entry rejected by resident":"Awaiting resident approval";td.className="text-muted small";}r.appendChild(td);return r; });
         const visitorCounters = document.querySelectorAll('[data-view="visitors"] .compact-stats strong');
         const visitorStatus = value => String(value || "").toUpperCase();
-        if (visitorCounters[0]) visitorCounters[0].textContent = visitors.filter(visitor => ["WAITING", "EXPECTED", "PENDING"].includes(visitorStatus(visitor.status))).length;
+        if (visitorCounters[0]) visitorCounters[0].textContent = visitors.filter(visitor => ["WAITING", "EXPECTED", "PENDING", "PENDING_APPROVAL", "APPROVED"].includes(visitorStatus(visitor.status))).length;
         if (visitorCounters[1]) visitorCounters[1].textContent = visitors.filter(visitor => ["INSIDE", "CHECKED_IN"].includes(visitorStatus(visitor.status))).length;
         if (visitorCounters[2]) visitorCounters[2].textContent = visitors.filter(visitor => visitorStatus(visitor.status) === "CHECKED_OUT").length;
         fill('table[data-table="expenses"]',expenseItems,(x,c,s)=>{const r=document.createElement("tr");r.dataset.recordId=x.id;c(r,`${x.title || x.category}${x.invoiceNumber ? ` · Invoice: ${x.invoiceNumber}` : ""}${x.description ? ` · ${x.description}` : ""}`);c(r,`${x.vendor || "—"}${x.vendorPhone ? ` · ${x.vendorPhone}` : ""}`);c(r,`Rs. ${Number(x.amount || 0).toLocaleString("en-IN")}${Number(x.taxAmount || 0) ? ` + tax Rs. ${Number(x.taxAmount).toLocaleString("en-IN")}` : ""}`);c(r,`Expense: ${x.date || "—"}${x.dueDate ? ` · Due: ${x.dueDate}` : ""}${x.paidDate ? ` · Paid: ${x.paidDate}` : ""}`);s(r,x.approvalStatus);const td=document.createElement("td");if(x.approvalStatus==="PENDING"){[["expense-edit","Edit","btn-outline-primary"],["expense-approve","Approve","btn-primary"],["expense-reject","Reject","btn-outline-danger"],["expense-delete","Remove","btn-outline-secondary"]].forEach(([action,label,style])=>{const b=document.createElement("button");b.type="button";b.className=`btn btn-sm ${style} me-2 mb-1`;b.dataset.backendAction=action;b.textContent=label;if(action==="expense-edit")b.dataset.expense=JSON.stringify(x);td.appendChild(b);});}else if(x.approvalStatus==="APPROVED"){const b=document.createElement("button");b.type="button";b.className="btn btn-sm btn-success";b.dataset.backendAction="expense-pay";b.textContent="Record payment";td.appendChild(b);}else td.textContent=x.approvalStatus==="PAID" ? `${x.paymentMode || "Paid"}${x.paymentReference ? ` · ${x.paymentReference}` : ""}` : (x.approvalNote || "Closed");r.appendChild(td);return r;});
@@ -949,6 +958,7 @@ async function loadSocietyBackendData() {
         renderAmenityBookingDesk(amenityItems, bookingItems, residents);
         renderAnnouncements(noticeItems);
         renderSharedComplaintsToTables();
+        if (dashboardRole === "resident") window.updateResidentComplaintStats?.();
         if (subscription) renderSocietySubscription(subscription);
         const setOverviewQuick = (id, count, label) => { const node = document.getElementById(id); if (node) node.textContent = `${count} ${label}`; };
         setOverviewQuick("overviewVisitorRecords", visitors.length, `visitor record${visitors.length === 1 ? "" : "s"}`);
@@ -960,10 +970,19 @@ async function loadSocietyBackendData() {
         const nameField=document.querySelector('[data-profile-field="name"]');const emailField=document.querySelector('[data-profile-field="email"]');if(nameField)nameField.value=me.name;if(emailField)emailField.value=me.email;
         const residentWelcomeName = document.getElementById("residentWelcomeName");
         if (residentWelcomeName && me?.name) residentWelcomeName.textContent = me.name;
-        document.documentElement.dataset.backendConnected = "true";
+        document.documentElement.dataset.backendConnected = failedDatasets.length ? "partial" : "true";
         const state = document.getElementById("societyAdminLoadState");
-        if (state) state.hidden = true;
+        if (state) {state.hidden=!failedDatasets.length;if(failedDatasets.length)state.textContent=`Some saved records could not load. ${failedDatasets.join('; ')}`;}
+        else if(failedDatasets.length)showToast('Some saved records could not load. Refresh and check your account session.');
     } catch (error) {
+        document.querySelectorAll('table[data-table="flats"],table[data-table="residents"],table[data-table="billing"],table[data-table="complaints"],table[data-table="visitors"]').forEach(table => {
+            if (table.dataset.serverRecords === 'true' || !table.tBodies?.[0]) return;
+            table.tBodies[0].replaceChildren();
+            const row = document.createElement('tr'); row.className = 'dashboard-empty-row';
+            const cell = document.createElement('td'); cell.colSpan = table.tHead?.querySelectorAll('th').length || 10;
+            cell.className = 'text-center text-danger py-4'; cell.textContent = error.message || 'Saved records could not load. Refresh to retry.';
+            row.appendChild(cell); table.tBodies[0].appendChild(row);
+        });
         const state = document.getElementById("societyAdminLoadState");
         if (state) { state.hidden = false; state.textContent = error.message || "Society records could not be loaded. Try refreshing the dashboard."; }
         else console.error("Dashboard backend hydration failed", error);
@@ -1239,7 +1258,7 @@ async function mutateSociety(path, method, body) {
     if (window.smartCrudRequest) return window.smartCrudRequest(`/api/${path}`, method, body);
     const response = await fetch(`/api/${path}`, {method, headers:{"Content-Type":"application/json",Accept:"application/json"}, body:body===undefined?undefined:JSON.stringify(body)});
     const result = await response.json().catch(()=>({}));
-    if(!response.ok) throw new Error(result.message || "The operation could not be completed");
+    if(!response.ok) throw new Error(result.detail || result.message || result.error || "The operation could not be completed");
     return result;
 }
 
@@ -1278,6 +1297,7 @@ function ensureTargetedAnnouncementPanel() {
     nav.appendChild(link);
     const panel = document.createElement("section");
     panel.className = "d-none animate__animated animate__fadeIn";
+    if (dashboardRole === "maintenance") panel.classList.add("maintenance-announcements");
     panel.dataset.view = "announcements";
     panel.id = "panel-announcements";
     panel.tabIndex = -1;
@@ -1333,10 +1353,13 @@ function renderAnnouncements(noticeItems = []) {
     list.replaceChildren();
     const audiences = dashboardRole === "resident" ? ["ALL", "RESIDENTS"] : dashboardRole === "maintenance" ? ["ALL", "STAFF", "MAINTENANCE"] : ["ALL", "STAFF", "SECURITY"];
     const roleNotices = noticeItems.filter(n => audiences.includes(String(n.audience || "ALL").toUpperCase()));
-    if (!roleNotices.length) { list.innerHTML = '<div class="text-center text-muted py-5"><i class="fa-regular fa-bell-slash fs-2 d-block mb-2"></i>No active society notices.</div>'; return; }
+    if (!roleNotices.length) { list.innerHTML = dashboardRole === "maintenance"
+        ? '<article class="maintenance-notice-card maintenance-notice-empty"><span class="maintenance-notice-icon"><i class="fa-regular fa-bell-slash" aria-hidden="true"></i></span><h5>No announcements yet</h5><p>Society notices for the maintenance team will appear here when published.</p></article>'
+        : '<div class="text-center text-muted py-5"><i class="fa-regular fa-bell-slash fs-2 d-block mb-2"></i>No active society notices.</div>'; return; }
     roleNotices.forEach(notice => {
         const article = document.createElement("article");
         article.className = `alert border-start border-4 shadow-sm mb-3 ${notice.emergency ? "alert-danger border-danger" : "alert-info border-primary"}`;
+        if (dashboardRole === "maintenance") article.className = `maintenance-notice-card ${notice.emergency ? "maintenance-notice-urgent" : ""}`;
         const badges = [notice.category ? `<span class="badge text-bg-light me-2">${escapeAttribute(notice.category.replaceAll("_"," "))}</span>` : "", notice.actionRequired ? '<span class="badge text-bg-warning">Action required</span>' : ""].join("");
         const contact = [notice.contactPerson, notice.contactPhone].filter(Boolean).join(" · ");
         article.innerHTML = `<div class="d-flex justify-content-between align-items-start gap-3"><h5 class="alert-heading fw-bold mb-2"><i class="fa-solid ${notice.emergency ? "fa-triangle-exclamation" : "fa-bullhorn"} me-2"></i>${escapeAttribute(notice.title)}</h5><div>${badges}</div></div><p class="mb-2" style="white-space:pre-wrap">${escapeAttribute(notice.message)}</p>${contact ? `<p class="small mb-2"><strong>Contact:</strong> ${escapeAttribute(contact)}</p>` : ""}${notice.attachmentReference ? `<p class="small mb-2"><strong>Reference:</strong> ${escapeAttribute(notice.attachmentReference)}</p>` : ""}<hr class="my-2 opacity-25"><p class="mb-0 small fw-semibold">Published by Society Admin · ${notice.createdAt ? new Date(notice.createdAt).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}) : "Just now"}${notice.validUntil ? ` · Visible until ${new Date(notice.validUntil).toLocaleString([], {dateStyle:"medium",timeStyle:"short"})}` : ""}</p>`;
@@ -1811,7 +1834,14 @@ document.addEventListener("click",event=>{
             try { await loadPlatformBackendData(); } catch (e) { console.error(e); }
         }
         return loadSocietyBackendData();
-    }).catch(error=>showToast(error.message)).finally(()=>button.disabled=false);
+    }).catch(error=>{
+        if(action.startsWith("visitor-") && button.parentElement){
+            let feedback=button.parentElement.querySelector('[data-visitor-feedback]');
+            if(!feedback){feedback=document.createElement('div');feedback.dataset.visitorFeedback='true';feedback.className='small text-danger mt-2';feedback.setAttribute('role','alert');button.parentElement.appendChild(feedback);}
+            feedback.textContent=error.message;
+        }
+        showToast(error.message);
+    }).finally(()=>button.disabled=false);
 },true);
 
 function persistDashboardState() {
@@ -2150,45 +2180,8 @@ function pushResidentInboxItem(item) {
 }
 
 function sharedComplaints() {
-    try {
-        const stored = localStorage.getItem("smartapartment-shared-complaints:v1");
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        }
-        const defaults = [
-            {
-                id: "complaint-102",
-                ticketNo: "T-102",
-                title: "Bathroom Water Leakage",
-                category: "Plumbing",
-                subcategory: "Pipe Leakage",
-                priority: "HIGH",
-                assignedTo: "Ramesh (Plumber)",
-                createdAt: "2026-08-03",
-                status: "In Progress",
-                location: "Flat A-101",
-                description: "Water leaking under the bathroom washbasin"
-            },
-            {
-                id: "complaint-088",
-                ticketNo: "T-088",
-                title: "Balcony Switchboard Fault",
-                category: "Electrical",
-                subcategory: "Wiring",
-                priority: "NORMAL",
-                assignedTo: "Suresh (Electrician)",
-                createdAt: "2026-07-28",
-                status: "Resolved",
-                location: "Flat A-101",
-                description: "Switch sparking during heavy monsoon rains"
-            }
-        ];
-        localStorage.setItem("smartapartment-shared-complaints:v1", JSON.stringify(defaults));
-        return defaults;
-    } catch {
-        return [];
-    }
+    // Legacy browser examples are not saved society records.
+    return [];
 }
 
 function persistSharedComplaint(values) {
@@ -2271,7 +2264,7 @@ function buildResidentComplaintRow(item) {
         "Parking": "fa-square-parking text-secondary"
     };
     const iconClass = catIcons[item.category] || "fa-screwdriver-wrench text-secondary";
-    const assigned = item.assignedTo || item.staff || (item.category === "Plumbing" ? "Ramesh (Plumber)" : item.category === "Electrical" ? "Suresh (Electrician)" : null);
+    const assigned = item.assignedTo || item.staff || null;
     
     let createdDate = "Today";
     if (item.createdAt) {
@@ -2289,14 +2282,14 @@ function buildResidentComplaintRow(item) {
     const rawStatus = String(item.status || "Open").toUpperCase();
     const isClosed = rawStatus === "RESOLVED" || rawStatus === "CLOSED";
     const isInProgress = rawStatus.includes("PROGRESS");
-    const statusLabel = isClosed ? (rawStatus === "RESOLVED" ? "Resolved" : "Closed") : (isInProgress ? "In Progress" : "Open");
+    const statusLabel = rawStatus.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, letter => letter.toUpperCase());
     const statusBadgeClass = isClosed ? "status-resolved" : (isInProgress ? "status-progress" : "status-open");
     const dotColor = isClosed ? "dot-resolved" : (isInProgress ? "dot-progress" : "dot-open");
 
     const description = item.description || item.details || "";
     const subTitle = (description && description !== item.title) ? 
         (description.length > 45 ? description.substring(0, 45) + '…' : description) : 
-        (item.subcategory || item.location || 'Flat A-101');
+        (item.subcategory || item.locationDetails || item.unitNo || '');
 
     tr.innerHTML = 
         `<td>` +
@@ -2308,6 +2301,7 @@ function buildResidentComplaintRow(item) {
         `<td>` +
             `<div class="ticket-title-text">${escapeAttribute(item.title)}</div>` +
             `<div class="ticket-desc-text">${escapeAttribute(subTitle)}</div>` +
+            (item.resolutionNotes ? `<div class="small text-primary mt-1">Maintenance update: ${escapeAttribute(item.resolutionNotes)}</div>` : "") +
         `</td>` +
         `<td>` +
             `<span class="ticket-cat-badge"><i class="fa-solid ${iconClass} me-1.5"></i>${escapeAttribute(item.category || "General")}</span>` +
@@ -2315,7 +2309,7 @@ function buildResidentComplaintRow(item) {
         `<td>` +
             (assigned ? 
                 `<div class="d-inline-flex align-items-center gap-2"><span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span><span class="staff-name-text">${escapeAttribute(assigned)}</span></div>` :
-                `<span class="badge-auto-assigning"><i class="fa-solid fa-clock-rotate-left me-1"></i>Auto-Assigning</span>`) +
+                `<span class="badge-auto-assigning"><i class="fa-solid fa-clock-rotate-left me-1"></i>Awaiting assignment</span>`) +
         `</td>` +
         `<td>` +
             `<span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1.5"></i>${escapeAttribute(createdDate)}</span>` +
@@ -2323,11 +2317,7 @@ function buildResidentComplaintRow(item) {
         `<td>` +
             `<span class="badge status-pill ${statusBadgeClass} status" data-status="${statusLabel}"><span class="status-dot ${dotColor}"></span>${statusLabel}</span>` +
         `</td>` +
-        `<td>` +
-            (isClosed ? 
-                `<span class="badge-ticket-closed"><i class="fa-solid fa-check-double text-success me-1"></i>Closed</span>` :
-                `<button type="button" class="btn btn-sm btn-resolve-ticket" data-action="close" data-ticket-id="${escapeAttribute(item.id)}" onclick="window.resolveResidentComplaintRow(this, '${escapeAttribute(item.id)}')"><i class="fa-solid fa-check me-1.5"></i>Mark Resolved</button>`) +
-        `</td>`;
+        `<td><span class="text-muted small">${isClosed ? 'Saved resolution' : 'Awaiting maintenance update'}</span></td>`;
     return tr;
 }
 
@@ -4490,6 +4480,26 @@ function openActionModal(action, button) {
             return section + actionInputMarkup(action, field, index, existingValues[index]);
         })
         .join("");
+    if (action === "assign" && dashboardRole === "admin") {
+        const controls=modal.querySelectorAll('#dashboardActionFields input, #dashboardActionFields select, #dashboardActionFields textarea');
+        const team=controls[0], original=controls[1];
+        if(original){
+            const worker=document.createElement('select');
+            for(const attribute of original.attributes){if(!['type','value','placeholder'].includes(attribute.name))worker.setAttribute(attribute.name,attribute.value);}
+            worker.required=true;
+            worker.appendChild(new Option('Loading available workers…',''));original.replaceWith(worker);
+            const update=workers=>{
+                const trade=String(team?.value||'').replace(/ team$/i,'').toLowerCase();
+                const matches=workers.filter(w=>!w.designation || ['facility','maintenance'].includes(trade) || String(w.designation).toLowerCase().includes(trade));
+                worker.replaceChildren(new Option(matches.length?'Select available worker':'No available workers for this team',''));
+                matches.forEach(w=>worker.appendChild(new Option(`${w.name}${w.designation?' · '+w.designation:''}`,w.name)));
+            };
+            fetch('/api/society/available-workers',{credentials:'same-origin',headers:{Accept:'application/json'}})
+                .then(async response=>{if(!response.ok||response.redirected)throw Error('Could not load available workers. Sign in as society admin and retry.');const workers=await response.json();if(!Array.isArray(workers))throw Error('Invalid worker response');return workers;})
+                .then(workers=>{update(workers);team?.addEventListener('change',()=>update(workers));})
+                .catch(error=>{worker.replaceChildren(new Option('Unable to load workers — reopen to retry',''));showToast(error.message);});
+        }
+    }
     if (document.body.dataset.platform === "smartsociety" && dashboardRole === "admin") {
         modal.querySelectorAll('#dashboardActionFields input[type="password"]').forEach(input => {
             const wrapper = document.createElement('div');
@@ -4654,22 +4664,20 @@ async function performAction(action, button, values = []) {
             emergencyContact, termsAccepted, specialInstructions] = values;
         if (!amenityId || !residentId || !startTime || !endTime || !paymentMethod) return { title: "Booking details required", lines: ["Select the amenity and resident, then enter the requested date, time and payment method."] };
         if (!eventPurpose || !organizerName || !organizerPhone || termsAccepted !== "Yes") return { title: "Complete booking details required", lines: ["Enter the event purpose and organizer contact, then confirm that the amenity terms are accepted."] };
-        mutateSociety("society/bookings/admin", "POST", { amenityId: Number(amenityId), residentId: Number(residentId), startTime, endTime,
+        await mutateSociety("society/bookings/admin", "POST", { amenityId: Number(amenityId), residentId: Number(residentId), startTime, endTime,
             eventType, eventPurpose, expectedGuests: Number(expectedGuests || 1), childrenCount: Number(childrenCount || 0), vehicleCount: Number(vehicleCount || 0),
             organizerName, organizerPhone, organizerEmail, setupStyle, equipmentRequired, cateringDetails, decorationDetails,
             accessibilityNeeds, vehicleDetails, paymentMethod, paymentReference: paymentReference || "", securityDeposit: Number(securityDeposit || 0),
-            depositStatus, emergencyContact, termsAccepted: termsAccepted === "Yes", specialInstructions })
-            .then(() => { loadSocietyBackendData(); showToast("Amenity booking recorded"); })
-            .catch(error => showToast(error.message || "Amenity booking could not be recorded"));
+            depositStatus, emergencyContact, termsAccepted: termsAccepted === "Yes", specialInstructions });
+        await loadSocietyBackendData();
         return { title: "Detailed amenity booking recorded", lines: [`<strong>Event:</strong> ${eventType} · ${eventPurpose}`, `<strong>Attendance:</strong> ${expectedGuests || 1} guests · ${vehicleCount || 0} vehicles`, `<strong>Organizer:</strong> ${organizerName} · ${organizerPhone}`, `<strong>Payment:</strong> ${paymentMethod} · Deposit ${depositStatus}`] };
     }
 
     if (dashboardRole === "admin" && action === "amenity-price-edit") {
         const [name, capacity, bookingFee, approvalRequired] = values;
         if (!name || !capacity || bookingFee === "") return { title: "Amenity details required", lines: ["Enter the amenity name, capacity and booking price."] };
-        mutateSociety(`society/amenities/${button.dataset.amenityId}`, "PATCH", { name, capacity: Number(capacity), bookingFee: Number(bookingFee), approvalRequired: approvalRequired === "Yes" })
-            .then(() => { loadSocietyBackendData(); showToast("Amenity price updated"); })
-            .catch(error => showToast(error.message || "Amenity price could not be updated"));
+        await mutateSociety(`society/amenities/${button.dataset.amenityId}`, "PATCH", { name, capacity: Number(capacity), bookingFee: Number(bookingFee), approvalRequired: approvalRequired === "Yes" });
+        await loadSocietyBackendData();
         return { title: "Amenity price updated", lines: [`<strong>${name}</strong> is now Rs. ${bookingFee} per booking.`] };
     }
 
@@ -4677,7 +4685,9 @@ async function performAction(action, button, values = []) {
         const row = button.closest("tr");
         const payload = flatPayload(values, row);
         if (!payload.unitNo || !payload.ownerName) return { title: "Flat details required", lines: ["Enter a flat number and owner name before saving."] };
-        if (row?.dataset.recordId) mutateSociety(`society/apartments/${row.dataset.recordId}`, "PATCH", payload).then(() => loadSocietyBackendData()).catch(error => showToast(error.message || "Flat could not be updated"));
+        if (!row?.dataset.recordId) throw new Error("This flat has no saved record. Refresh the list before editing.");
+        await mutateSociety(`society/apartments/${row.dataset.recordId}`, "PATCH", payload);
+        await loadSocietyBackendData();
         if (row) Object.entries(payload).forEach(([key,value])=>row.dataset[key]=value??"");
         appendDashboardActivity(`Flat updated: ${payload.unitNo}`);
         persistDashboardState();
@@ -4938,26 +4948,33 @@ async function performAction(action, button, values = []) {
     }
     if (action === "pay") {
         if (dashboardRole === "accountant" && button.closest('[data-table="billing"]')) {
+            const row = button.closest('tr');
+            if (!row?.dataset.recordId) throw new Error('Refresh the invoice list before recording a payment.');
+            if (!values[1]?.trim()) throw new Error('Enter the verified transaction or receipt reference.');
+            await mutateSociety(`society/finance/bills/${row.dataset.recordId}/pay`, 'POST', {mode:values[0],transactionId:values[1].trim()});
+            await loadSocietyBackendData();
             setStatus(button, "Paid", "paid");
             button.textContent = "Paid";
             button.disabled = true;
             button.dataset.action = "";
             updateBillingStats(button);
             persistDashboardState();
-            return { title: "Payment marked as paid", lines: [] };
+            return { title: "Payment recorded", persisted:true, lines: [] };
         }
         if (dashboardRole === "admin" && button.closest('[data-table="billing"]')) {
             const row = button.closest("tr");
             const data = billingRowData(row);
             const paidAt = values[2] || new Date().toLocaleDateString("en-IN");
-            const method = values[0] || "Manual verification";
-            const ref = values[1] || `SA-${data.flat}-${data.month}`.replace(/\s+/g, "-");
+            const method = values[0];
+            const ref = values[1]?.trim();
             const proof = values[3] || "Admin verified";
-            if (row?.dataset.recordId) {
-                mutateSociety(`society/finance/bills/${row.dataset.recordId}/pay`, "POST", {
+            if (!row?.dataset.recordId) throw new Error('Refresh the invoice list before recording a payment.');
+            if (!ref) throw new Error('Enter the verified transaction or receipt reference.');
+            {
+                await mutateSociety(`society/finance/bills/${row.dataset.recordId}/pay`, "POST", {
                     mode: method,
                     transactionId: ref
-                }).then(() => loadSocietyBackendData()).catch(error => showToast(error.message || "Payment could not be recorded"));
+                });
             }
             setStatus(button, "Paid", "paid");
             button.textContent = "Receipt";
@@ -4972,7 +4989,9 @@ async function performAction(action, button, values = []) {
             });
             updateBillingStats(button);
             persistDashboardState();
-            return showBillingReceipt(row);
+            const receipt = showBillingReceipt(row);
+            await loadSocietyBackendData();
+            return {...receipt, persisted:true};
         }
         setStatus(button, "Paid", "paid");
         button.textContent = "Receipt";
@@ -5159,12 +5178,12 @@ async function performAction(action, button, values = []) {
                 subcategory: values[2] || "General Maintenance",
                 priority: values[3] || "NORMAL",
                 incidentAt: (values[4] && values[4].trim() !== "") ? values[4].trim() : null,
-                locationDetails: values[5] || "Flat 205",
+                locationDetails: values[5] || window.societyCurrentUser?.unitNo || "",
                 preferredContactMethod: values[6] || "PHONE",
-                reporterPhone: values[7] || "8778293269",
+                reporterPhone: values[7] || window.societyCurrentUser?.phone || "",
                 accessPermission: values[8] === "Yes",
                 attachmentReference: values[9] || "",
-                description: values[10] || values[0] || "Water leakage assistance required",
+                description: values[10] || values[0],
                 residentId: null,
                 assignedTo: ""
             };
@@ -5220,28 +5239,16 @@ async function performAction(action, button, values = []) {
         }
         if (dashboardRole === "admin" && table === "residents") {
             const payload={name:values[0],email:values[1],phone:values[2],unitNo:values[3],residentType:values[4]||"TENANT",moveInDate:values[5]||null,vehicleNumber:values[6]||"",address:values[7]||"",emergencyContactName:values[8]||"",emergencyContactPhone:values[9]||"",notes:values[10]||"",temporaryPassword:values[11]};
-            mutateSociety("society/residents","POST",payload).then(()=>{loadSocietyBackendData();showToast("Resident account created");}).catch(e=>showToast(e.message));
+            await mutateSociety("society/residents","POST",payload);
+            await loadSocietyBackendData();
             appendDashboardActivity(`Resident added: ${payload.name}`);
-            const newRes = {
-                id: 'RES_' + Date.now(),
-                name: payload.name,
-                phone: payload.phone,
-                email: payload.email,
-                unitNo: payload.unitNo,
-                type: payload.residentType,
-                status: 'Active',
-                registeredAt: new Date().toISOString()
-            };
-            let existingList = JSON.parse(localStorage.getItem('smartapartment_residents') || '[]');
-            existingList.unshift(newRes);
-            localStorage.setItem('smartapartment_residents', JSON.stringify(existingList));
-            if (typeof window.renderSmartApartmentResidents === 'function') window.renderSmartApartmentResidents();
             return {title:"Resident account created",lines:[`<strong>Name:</strong> ${payload.name}`,`<strong>Flat:</strong> ${payload.unitNo}`,`<strong>Type:</strong> ${payload.residentType}`,`<strong>Login:</strong> ${payload.email}`]};
         }
         if (dashboardRole === "admin" && ["security-users","maintenance-users","accountant-users"].includes(table)) {
             const role=table==="security-users"?"SECURITY_STAFF":table==="maintenance-users"?"MAINTENANCE_STAFF":"ACCOUNTANT";
             const payload={name:values[0],email:values[1],phone:values[2],role,designation:values[3],employeeId:values[4]||"",joiningDate:values[5]||null,workShift:values[6]||"",address:values[7]||"",emergencyContactName:values[8]||"",emergencyContactPhone:values[9]||"",notes:values[10]||"",temporaryPassword:values[11]};
-            mutateSociety("society/team-users","POST",payload).then(()=>{loadSocietyBackendData();showToast(`${payload.designation} account created`);}).catch(e=>showToast(e.message));
+            await mutateSociety("society/team-users","POST",payload);
+            await loadSocietyBackendData();
             appendDashboardActivity(`${role.replaceAll("_"," ")} added: ${payload.name}`);
             return {title:"Society team account created",lines:[`<strong>Name:</strong> ${payload.name}`,`<strong>Role:</strong> ${role.replaceAll("_"," ")}`,`<strong>Designation:</strong> ${payload.designation}`,`<strong>Employee ID:</strong> ${payload.employeeId||"Not assigned"}`,`<strong>Login:</strong> ${payload.email}`]};
         }
@@ -5370,7 +5377,7 @@ async function submitActionModal() {
         const inputs = [...modal.querySelectorAll("[data-action-input]")];
         const categoryVal = inputs[1]?.value?.trim() || "Plumbing";
         const descVal = inputs[10]?.value?.trim() || "";
-        const locVal = inputs[5]?.value?.trim() || "Flat 205";
+        const locVal = inputs[5]?.value?.trim() || window.societyCurrentUser?.unitNo || '';
 
         if (inputs[0] && !inputs[0].value.trim()) {
             const shortDesc = descVal ? (descVal.length > 35 ? descVal.substring(0, 35) + "…" : descVal) : "Maintenance Issue";
@@ -5380,10 +5387,10 @@ async function submitActionModal() {
             inputs[2].value = "General Maintenance";
         }
         if (inputs[5] && !inputs[5].value.trim()) {
-            inputs[5].value = "Flat 205";
+            inputs[5].value = window.societyCurrentUser?.unitNo || '';
         }
         if (inputs[7] && !inputs[7].value.trim()) {
-            inputs[7].value = "8778293269";
+            inputs[7].value = window.societyCurrentUser?.phone || '';
         }
     }
 
@@ -5408,8 +5415,8 @@ async function submitActionModal() {
         save.textContent = "Submitting…";
         try {
             const receipt = await submitResidentAmenityBooking(activeAction.button, values);
-            const saved = await persistWorkflowAction(activeAction.action, activeAction.button, values).catch(() => ({ id: "LOCAL" }));
-            receipt.lines.push(`<strong>Database reference:</strong> WF-${saved.id}`);
+            const saved = await persistWorkflowAction(activeAction.action, activeAction.button, values).catch(() => null);
+            if (saved?.id) receipt.lines.push(`<strong>Database reference:</strong> WF-${saved.id}`);
             activeAction = null;
             showActionReceipt(receipt);
         } catch (error) {
@@ -5549,7 +5556,7 @@ if (dashboardRole === "superadmin") {
     loadPlatformBackendData();
 } else {
     loadSocietyBackendData();
-    if (["admin", "maintenance"].includes(dashboardRole) && !window.societyComplaintSyncReady) {
+    if (["admin", "maintenance", "resident"].includes(dashboardRole) && !window.societyComplaintSyncReady) {
         window.societyComplaintSyncReady = true;
         const refreshSharedComplaints = () => {
             if (document.visibilityState === "visible") loadSocietyBackendData();

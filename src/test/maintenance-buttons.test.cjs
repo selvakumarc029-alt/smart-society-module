@@ -14,16 +14,16 @@ const managerSource=fs.readFileSync('src/main/resources/static/smartapartment/js
 test('live manager renders bind each manual action button only once',()=>{const start=managerSource.indexOf('    const boundActionButtons'),end=managerSource.indexOf('    // Audited Manual Action Handlers',start);const listeners=[];let called=0;const button={dataset:{act:'assign',id:'42'},addEventListener:(type,fn)=>listeners.push(fn)};vm.runInNewContext(managerSource.slice(start,end)+';attachActionListeners();attachActionListeners();',{WeakSet,document:{querySelectorAll:()=>[button]},handleManualAction:()=>called++});assert.equal(listeners.length,1);listeners[0]({preventDefault(){}});assert.equal(called,1);});
 test('manager API failures are returned to the form instead of reporting success',async()=>{const start=managerSource.indexOf('    async function executeSimpleAction'),end=managerSource.indexOf('    function showManagerToast',start);const toasts=[];let refreshes=0;const scope={fetch:async()=>({ok:false,json:async()=>({message:'Worker is on leave'})}),showManagerToast:(...args)=>toasts.push(args),loadDashboardSummary:()=>refreshes++};vm.runInNewContext(managerSource.slice(start,end)+';this.run=executeSimpleAction;',scope);assert.equal(await scope.run('/action',{},'Saved'),false);assert.equal(toasts[0][1],'Worker is on leave');assert.equal(refreshes,0);});
 test('shared interface leaves PropertyDirect completely unchanged',()=>{const source=fs.readFileSync('src/main/resources/static/smartapartment/js/dashboard-interface.js','utf8');vm.runInNewContext(source,{Set,document:{readyState:'complete',body:{dataset:{platform:'propertydirect',dashboardRole:'admin'}},querySelectorAll(){throw new Error('PropertyDirect must be excluded');}}});});
-test('technician profile requires a name and never reports success when browser persistence fails',()=>{
+test('technician profile requires a name and never reports success when backend persistence fails',async()=>{
  const template=fs.readFileSync('src/main/resources/templates/dashboards/maintenance.html','utf8');
  const start=template.indexOf("                const profileSaveBtn = e.target.closest('[data-action=\"save\"]');");
  const end=template.indexOf('                // Copy Worker Login Action',start);assert.ok(start>0&&end>start);
  for(const name of ['', 'Technician']) {
   const notices=[];let saves=0;const button={closest:()=>true};
   const document={getElementById:id=>({value:id==='techName'?name:'',focus(){}})};
-  const scope={document,window:{showToast:(...args)=>notices.push(args)},localStorage:{setItem(){saves++;throw new Error('Storage unavailable');}},Date,setTimeout(){throw new Error('Failed saves must not schedule success UI');}};
-  vm.runInNewContext('this.handle=function(e){'+template.slice(start,end)+'}',scope);
-  scope.handle({target:{closest:()=>button},preventDefault(){},stopPropagation(){},stopImmediatePropagation(){}});
+  const scope={document,window:{showToast:(...args)=>notices.push(args)},fetch:async()=>{saves++;return {ok:false,json:async()=>({message:'Save refused'})};},Date,setTimeout(){throw new Error('Failed saves must not schedule success UI');}};
+  vm.runInNewContext('this.handle=async function(e){'+template.slice(start,end)+'}',scope);
+  await scope.handle({target:{closest:()=>button},preventDefault(){},stopPropagation(){},stopImmediatePropagation(){}});
   assert.equal(saves,name?1:0);assert.equal(notices.length,1);assert.equal(notices[0][1],'danger');
  }
 });

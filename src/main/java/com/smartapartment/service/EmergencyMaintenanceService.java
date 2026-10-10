@@ -72,72 +72,39 @@ public class EmergencyMaintenanceService {
     }
     public record Actor(Long id, String platform, String tenant, String name, boolean admin, boolean worker) {}
     public Actor actor(HttpSession session, String platform) {
-        if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:superadmin")) 
-                || Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:superadmin"))) {
-            return new Actor(0L, platform != null ? platform : "smartsociety", "system", "Maintenance Admin", true, false);
-        }
-        if (session != null && (session.getAttribute("propertydirect:customerId") != null 
-                || Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:admin")))) {
-            platform = "propertydirect";
-        }
-        if ("propertydirect".equals(platform)) {
-            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:admin"))) {
-                return new Actor(0L, "propertydirect", "propertydirect", "PropertyDirect Admin", true, false);
-            }
-            Object id = session.getAttribute("propertydirect:customerId");
-            if (!(id instanceof Number)) {
-                if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:customer")) 
-                        || Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:resident"))) {
-                    PropertyCustomer defCust = customers.findAll().stream().filter(PropertyCustomer::isActive).findFirst().orElse(null);
-                    if (defCust == null) {
-                        defCust = new PropertyCustomer();
-                        defCust.setName("PropertyDirect Customer");
-                        defCust.setEmail("customer@propertydirect.com");
-                        defCust.setPhone("9844022010");
-                        defCust.setActive(true);
-                        defCust = customers.save(defCust);
-                    }
-                    if (session != null) session.setAttribute("propertydirect:customerId", defCust.getId());
-                    return new Actor(defCust.getId(), "propertydirect", "propertydirect", defCust.getName(), false, false);
-                }
-                throw error(401,"Sign in to PropertyDirect first");
-            }
-            PropertyCustomer c = customers.findById(((Number)id).longValue()).filter(PropertyCustomer::isActive)
-                    .orElseThrow(() -> error(401,"Active customer account required"));
-            return new Actor(c.getId(), "propertydirect", "propertydirect", c.getName(), false, false);
-        }
-        var auth=SecurityContextHolder.getContext().getAuthentication();
-        AppUser u = null;
+        var auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
-            u = users.findByEmail(auth.getName()).filter(x->!x.isAccountLocked()).orElse(null);
+            AppUser user = users.findByEmail(auth.getName()).filter(account -> !account.isAccountLocked())
+                    .orElseThrow(() -> error(401, "Active society account required"));
+            String designation = Objects.toString(user.getDesignation(), "").toLowerCase(Locale.ROOT);
+            boolean lead = user.getRole() == UserRole.MAINTENANCE_STAFF &&
+                    (isSeededMaintenanceAdmin(user.getEmail()) || designation.contains("lead") || designation.contains("manager") || designation.contains("supervisor"));
+            boolean admin = user.getRole() == UserRole.SUPER_ADMIN || user.getRole() == UserRole.SOCIETY_ADMIN
+                    || user.getRole() == UserRole.FACILITY_MANAGER || lead;
+            if (user.getRole() != UserRole.SUPER_ADMIN && (user.getTenantId() == null || user.getTenantId().isBlank()))
+                throw error(403, "Your account has no society assigned");
+            return new Actor(user.getId(), "smartsociety", user.getRole() == UserRole.SUPER_ADMIN ? "system" : user.getTenantId(),
+                    user.getFullName(), admin, user.getRole() == UserRole.MAINTENANCE_STAFF
+                            && (!lead || partners.findByUserId(user.getId()).isPresent()));
         }
-        if (u == null) {
-            if (session != null && Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:resident"))) {
-                u = users.findByEmail("resident@smartsociety")
-                        .or(() -> users.findByEmail("resident@smartapartment"))
-                        .or(() -> users.findAll().stream().filter(x -> x.getRole() == UserRole.RESIDENT).findFirst())
-                        .orElse(null);
-            }
-            if (u == null && session != null && (Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:admin"))
-                    || Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:maintenance")))) {
-                u = users.findByEmail("admin@smartsociety")
-                        .or(() -> users.findByEmail("admin@smartapartment"))
-                        .orElse(null);
-            }
-            if (u == null) {
-                u = users.findByEmail("resident@smartsociety")
-                        .or(() -> users.findByEmail("resident@smartapartment"))
-                        .orElse(null);
+        // PropertyDirect has its own authenticated session and customer records.
+        if (session != null && ("propertydirect".equals(platform) || session.getAttribute("propertydirect:customerId") instanceof Number)) {
+            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:superadmin")))
+                return new Actor(0L, "propertydirect", "system", "PropertyDirect Superadmin", true, false);
+            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:admin")))
+                return new Actor(0L, "propertydirect", "propertydirect", "PropertyDirect Admin", true, false);
+            Object id = session.getAttribute("propertydirect:customerId");
+            if (id instanceof Number number) {
+                PropertyCustomer customer = customers.findById(number.longValue()).filter(PropertyCustomer::isActive)
+                        .orElseThrow(() -> error(401, "Active customer account required"));
+                return new Actor(customer.getId(), "propertydirect", "propertydirect", customer.getName(), false, false);
             }
         }
-        if (u == null) throw error(401,"Please sign in to SmartSociety");
-        boolean isPartner = partners.findByUserId(u.getId()).isPresent();
-        boolean maintenanceDashboardSession = Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:maintenance"));
-        boolean seededMaintenanceAdmin = maintenanceDashboardSession && isSeededMaintenanceAdmin(u.getEmail());
-        boolean isMaintenanceWorker = u.getRole()==UserRole.MAINTENANCE_STAFF && !seededMaintenanceAdmin;
-        boolean isAdmin = u.getRole()==UserRole.SUPER_ADMIN || u.getRole()==UserRole.SOCIETY_ADMIN || u.getRole()==UserRole.FACILITY_MANAGER || maintenanceDashboardSession || seededMaintenanceAdmin;
-        return new Actor(u.getId(), "smartsociety",u.getTenantId(),u.getFullName(),
-                isAdmin, isMaintenanceWorker || isPartner);
+        throw error(401, "Sign in with your account before accessing maintenance records");
+    }
+
+    public boolean canAccessTenant(Actor actor, String tenant) {
+        return actor.admin() && "system".equals(actor.tenant()) || Objects.equals(actor.tenant(), tenant);
     }
 
     private boolean isSeededMaintenanceAdmin(String email) {
@@ -480,7 +447,7 @@ public class EmergencyMaintenanceService {
 
     public EmergencyMaintenanceBooking workflowReadable(Actor a, String identifier) {
         EmergencyMaintenanceBooking b = resolveWorkflowBooking(identifier);
-        boolean allowed = a.admin() || (a.worker() && assigned(a, b)) || (!a.worker() && owns(a, b));
+        boolean allowed = a.admin() && canAccessTenant(a, b.getTenantId()) || (a.worker() && assigned(a, b)) || (!a.worker() && owns(a, b));
         if (!allowed) throw error(403, "This maintenance order is not available to your account");
         return b;
     }
@@ -714,12 +681,18 @@ public class EmergencyMaintenanceService {
                 && WorkerShift.fromString(user.getWorkShift()).isWithinShift(java.time.LocalTime.now())).orElse(false);
     }
 
+    private boolean isFreePartner(MaintenancePartner partner) {
+        Set<String> free = Set.of("IDLE", "AVAILABLE");
+        return free.contains(Objects.toString(partner.getWorkState(), partner.getAvailability()).toUpperCase(Locale.ROOT))
+                && free.contains(Objects.toString(partner.getAvailability(), partner.getWorkState()).toUpperCase(Locale.ROOT));
+    }
+
     public List<MaintenancePartner> findEligiblePartners(EmergencyMaintenanceBooking b, MaintenanceHub h) {
         if (h == null || b == null) return List.of();
         return partners.findByHubId(h.getId()).stream()
                 .filter(MaintenancePartner::isOnDuty)
                 .filter(this::withinWorkerShift)
-                .filter(p -> "IDLE".equalsIgnoreCase(p.getWorkState() == null ? p.getAvailability() : p.getWorkState()))
+                .filter(this::isFreePartner)
                 .filter(p -> !"BUSY".equalsIgnoreCase(p.getWorkState()) && !"BUSY".equalsIgnoreCase(p.getAvailability()))
                 .filter(p -> !"OFFLINE".equalsIgnoreCase(p.getWorkState()) && !"OFFLINE".equalsIgnoreCase(p.getAvailability()))
                 .filter(p -> isTradeMatch(p, b.getCategory()))
@@ -784,6 +757,10 @@ public class EmergencyMaintenanceService {
     }
 
     public void dispatch(EmergencyMaintenanceBooking b, boolean isTimeout) {
+        String state = Objects.toString(b.getJobStatus(), "").toUpperCase(Locale.ROOT);
+        if (Set.of("ACCEPTED", "ASSIGNED", "EN_ROUTE", "REACHED_LOCATION", "PHOTO_START", "IN_PROGRESS", "COMPLETED", "CANCELLED").contains(state)) return;
+        if ("OFFERED".equals(state) && b.getPartnerId() != null
+                && !Objects.toString(b.getDeclinedPartnerIds(), ",").contains("," + b.getPartnerId() + ",")) return;
         if (b.getPreferredDate() != null && b.getPreferredDate().isAfter(LocalDate.now())) {
             b.setJobStatus("UNASSIGNED");
             b.setDispatchReason("Scheduled for " + b.getPreferredDate() + "; worker matching begins on the scheduled date");
@@ -885,7 +862,7 @@ public class EmergencyMaintenanceService {
         // dispatch loops cannot allocate overlapping emergency work to the same person.
         MaintenancePartner lockedPartner = partners.lockById(p.getId()).orElseThrow(() -> error(404, "Partner not found"));
         if (!lockedPartner.isOnDuty()
-                || !"IDLE".equalsIgnoreCase(lockedPartner.getAvailability())
+                || !isFreePartner(lockedPartner)
                 || activeJobCount(lockedPartner.getId()) > 0) {
             throw error(409, "Partner availability changed during dispatch; retry matching");
         }
@@ -936,7 +913,7 @@ public class EmergencyMaintenanceService {
         if(!"UNASSIGNED".equals(b.getJobStatus()) && !"FAILED_ASSIGNMENT".equals(b.getJobStatus()))throw error(409,"Only unassigned or failed bookings can be assigned");
         MaintenancePartner p=partners.lockById(partnerId).orElseThrow(()->error(404,"Partner not found"));
         MaintenanceHub h=hubs.findById(p.getHubId()).orElseThrow();
-        if(!"IDLE".equalsIgnoreCase(p.getAvailability()) || !isTradeMatch(p, b.getCategory()) || !h.getCity().equalsIgnoreCase(b.getCity())
+        if(!isFreePartner(p) || !isTradeMatch(p, b.getCategory()) || !h.getCity().equalsIgnoreCase(b.getCity())
             || !"ACTIVE".equalsIgnoreCase(h.getStatus()) || users.findById(p.getUserId()).map(AppUser::isAccountLocked).orElse(true)
             || activeJobCount(p.getId()) > 0)
             throw error(409,"Choose an idle, active partner with the matching trade, no active emergency job, and the correct service city");
@@ -953,13 +930,13 @@ public class EmergencyMaintenanceService {
     private boolean assigned(Actor a,EmergencyMaintenanceBooking b) {return a.worker() && b.getPartnerId()!=null && partners.findById(b.getPartnerId()).map(p->p.getUserId().equals(a.id())).orElse(false);}
     public EmergencyMaintenanceBooking readable(Actor a,Long id) {
         EmergencyMaintenanceBooking b=bookings.findById(id).orElseThrow(()->error(404,"Booking not found"));
-        boolean allowed = a.admin() || (a.worker() && assigned(a, b)) || (!a.worker() && owns(a, b));
+        boolean allowed = a.admin() && canAccessTenant(a, b.getTenantId()) || (a.worker() && assigned(a, b)) || (!a.worker() && owns(a, b));
         if(!allowed) throw error(403,"This booking is not assigned to your account");
         return b;
     }
     public List<Map<String,Object>> list(Actor a) {
         return bookings.findAll().stream()
-                .filter(b -> a.admin() || (a.worker() && assigned(a, b)) || (!a.worker() && owns(a, b)))
+                .filter(b -> a.admin() && canAccessTenant(a, b.getTenantId()) || (a.worker() && assigned(a, b)) || (!a.worker() && owns(a, b)))
                 .sorted(Comparator.comparing(EmergencyMaintenanceBooking::getId).reversed())
                 .map(b -> view(a, b))
                 .toList();
@@ -2308,8 +2285,8 @@ public class EmergencyMaintenanceService {
     }
 
     public List<Map<String, Object>> getWorkersStatusList(String tenant) {
-        List<AppUser> workers = users.findAll().stream()
-                .filter(u -> u.getRole() == UserRole.MAINTENANCE_STAFF && !isSeededMaintenanceAdmin(u.getEmail()))
+        List<AppUser> workers = users.findByTenantId(tenant).stream()
+                .filter(u -> u.getRole() == UserRole.MAINTENANCE_STAFF && !DemoWorkerAccounts.isDemo(u.getEmail()))
                 .sorted(Comparator.comparing(AppUser::getId))
                 .toList();
 
@@ -2332,7 +2309,7 @@ public class EmergencyMaintenanceService {
                 if (att.getCheckInAt() != null) checkInTime = att.getCheckInAt().format(DateTimeFormatter.ofPattern("hh:mm a"));
                 if (att.getCheckOutAt() != null) checkOutTime = att.getCheckOutAt().format(DateTimeFormatter.ofPattern("hh:mm a"));
             } else {
-                checkedIn = pOpt.map(MaintenancePartner::isOnDuty).orElse(true);
+                checkedIn = false;
             }
 
             long activeLoad = getWorkerActiveWorkload(w.getId(), pOpt.map(MaintenancePartner::getId).orElse(null));
@@ -2354,7 +2331,7 @@ public class EmergencyMaintenanceService {
             map.put("isFreeNow", isFreeNow);
             map.put("onDuty", pOpt.map(MaintenancePartner::isOnDuty).orElse(checkedIn));
             map.put("workState", pOpt.map(MaintenancePartner::getWorkState).orElse(isFreeNow ? "IDLE" : "BUSY"));
-            map.put("rating", pOpt.map(MaintenancePartner::getRating).orElse(4.8f));
+            map.put("rating", pOpt.map(MaintenancePartner::getRating).orElse(null));
             list.add(map);
         }
         return list;

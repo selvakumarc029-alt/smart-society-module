@@ -44,5 +44,5 @@ test('superadmin and PropertyDirect never receive worker controls or requests',(
 test('SuperAdmin no longer renders status editing actions',()=>{
     const template=fs.readFileSync('src/main/resources/templates/dashboards/superadmin.html','utf8');
     assert.doesNotMatch(template,/updateSmartSocietyServiceRequestStatus|Quick status update:/);
-    assert.match(template,/Status is updated by the assigned maintenance worker/);
+    assert.doesNotMatch(template,/data-worker-ticket-action/);
 });

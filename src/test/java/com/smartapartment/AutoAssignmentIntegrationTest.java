@@ -314,18 +314,18 @@ class AutoAssignmentIntegrationTest {
         assertNull(assigned.getAutoAssignDeadline());
     }
 
-    // 11. Non-urgent request -> Places in AUTO_ASSIGN_PENDING with countdown
+    // Available workers receive non-urgent work immediately; there is no fabricated countdown.
     @Test
-    void testNonUrgentRequest_HasAutoAssignCountdown() {
+    void testNonUrgentRequest_AssignsAvailableWorkerImmediately() {
         clockInWorker(workerA);
 
         MaintenanceRequest req = createRequest("Plumbing", "MEDIUM", "Sink Stoppage");
         autoAssignmentService.scheduleAssignment(req);
 
         MaintenanceRequest pending = requestRepository.findById(req.getId()).orElseThrow();
-        assertEquals("AUTO_ASSIGN_PENDING", pending.getRequestStatus());
-        assertNotNull(pending.getAutoAssignDeadline());
-        assertTrue(pending.getAutoAssignDeadline().isAfter(LocalDateTime.now()));
+        assertEquals("ASSIGNED", pending.getRequestStatus());
+        assertEquals(workerA.getId(), pending.getAssignedWorkerId());
+        assertNull(pending.getAutoAssignDeadline());
     }
 
     // 12. Queue Priority Ordering -> URGENT > HIGH > MEDIUM > LOW
@@ -351,24 +351,20 @@ class AutoAssignmentIntegrationTest {
         assertEquals("LOW", queue.get(2).priority());
     }
 
-    // 13. Manual assignment cancels auto-assignment countdown
+    // Manual assignment moves a saved waiting request to an available worker.
     @Test
-    void testManualAssignment_CancelsAutoAssignCountdown() {
-        clockInWorker(workerA);
+    void testManualAssignment_DrainsWaitingRequest() {
 
         MaintenanceRequest req = createRequest("Plumbing", "MEDIUM", "Faucet replacement");
         autoAssignmentService.scheduleAssignment(req);
 
         MaintenanceRequest pending = requestRepository.findById(req.getId()).orElseThrow();
-        assertEquals("AUTO_ASSIGN_PENDING", pending.getRequestStatus());
-        assertNotNull(pending.getAutoAssignDeadline());
+        assertEquals("WAITING_FOR_WORKER", pending.getRequestStatus());
+        assertNull(pending.getAutoAssignDeadline());
 
         // Admin assigns manually
-        pending.setAssignedWorkerId(workerA.getId());
-        pending.setAssignedWorkerName(workerA.getFullName());
-        pending.setRequestStatus("ASSIGNED");
-        pending.setAutoAssignDeadline(null);
-        requestRepository.save(pending);
+        clockInWorker(workerA);
+        assertTrue(autoAssignmentService.assignWorker(pending, workerA, "MANUAL"));
 
         MaintenanceRequest updated = requestRepository.findById(req.getId()).orElseThrow();
         assertEquals("ASSIGNED", updated.getRequestStatus());

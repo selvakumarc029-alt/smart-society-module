@@ -23,6 +23,8 @@ public class WorkerAttendanceService {
     private final MaintenanceRequestRepository requestRepository;
     private final AutoAssignmentService autoAssignmentService;
     private final MaintenanceTrackingService trackingService;
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private SocietyWorkerBreakRepository societyBreaks;
 
     public WorkerAttendanceService(
             WorkerAttendanceRepository attendanceRepository,
@@ -366,18 +368,29 @@ public class WorkerAttendanceService {
 
     @Transactional(readOnly = true)
     public List<ManagerWorkerAttendanceViewDto> listAttendances(LocalDate date, AppUser requester) {
+        if (requester == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sign in to view worker attendance");
         LocalDate targetDate = date != null ? date : LocalDate.now();
         String tenantId = requester != null ? requester.getTenantId() : null;
 
         List<AppUser> workers;
-        if (tenantId == null || "platform".equalsIgnoreCase(tenantId)) {
+        if (requester.getRole() == UserRole.SUPER_ADMIN) {
             workers = userRepository.findByRole(UserRole.MAINTENANCE_STAFF);
         } else {
+            if (tenantId == null || tenantId.isBlank()) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account has no society assigned");
             workers = userRepository.findByTenantIdAndRole(tenantId, UserRole.MAINTENANCE_STAFF);
+            if (requester.getRole() == UserRole.MAINTENANCE_STAFF
+                    && !String.valueOf(requester.getDesignation()).toLowerCase(Locale.ROOT).matches(".*(lead|manager|supervisor).*" )
+                    && !DemoWorkerAccounts.isDemo(requester.getEmail())) {
+                workers = workers.stream().filter(w -> Objects.equals(w.getId(), requester.getId())).toList();
+            } else if (requester.getRole() != UserRole.MAINTENANCE_STAFF && requester.getRole() != UserRole.SOCIETY_ADMIN
+                    && requester.getRole() != UserRole.FACILITY_MANAGER) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Maintenance attendance access required");
+            }
         }
 
         List<ManagerWorkerAttendanceViewDto> views = new ArrayList<>();
         for (AppUser worker : workers) {
+            if (DemoWorkerAccounts.isDemo(worker.getEmail())) continue;
             WorkerAttendance attendance = attendanceRepository
                     .findFirstByWorkerIdAndDateOrderByCreatedAtDesc(worker.getId(), targetDate)
                     .orElse(null);
@@ -386,12 +399,17 @@ public class WorkerAttendanceService {
                     .orElse(null);
 
             int todayMinutes = 0;
-            if (attendance != null) {
-                if (attendance.getTotalWorkingMinutes() != null && attendance.getTotalWorkingMinutes() > 0) {
-                    todayMinutes = attendance.getTotalWorkingMinutes();
-                } else if (attendance.getClockIn() != null) {
-                    LocalDateTime end = attendance.getClockOut() != null ? attendance.getClockOut() : LocalDateTime.now();
-                    todayMinutes = calculateNetMinutes(attendance.getClockIn(), end, attendance.getBreakStart(), attendance.getBreakEnd());
+            for (WorkerAttendance session : attendanceRepository.findByWorkerIdOrderByDateDesc(worker.getId())) {
+                if (!targetDate.equals(session.getDate()) || session.getClockIn() == null) continue;
+                LocalDateTime end = session.getClockOut() != null ? session.getClockOut() : LocalDateTime.now();
+                var recordedBreaks = societyBreaks == null ? List.<SocietyWorkerBreak>of()
+                        : societyBreaks.findByTenantIdAndAttendanceIdOrderByStartedAtAsc(worker.getTenantId(), session.getId());
+                if (recordedBreaks.isEmpty()) {
+                    todayMinutes += calculateNetMinutes(session.getClockIn(), end, session.getBreakStart(), session.getBreakEnd());
+                } else {
+                    long paused = recordedBreaks.stream().filter(b -> b.getStartedAt() != null)
+                            .mapToLong(b -> Math.max(0, Duration.between(b.getStartedAt(), b.getEndedAt() == null ? end : b.getEndedAt()).toMinutes())).sum();
+                    todayMinutes += Math.max(0, (int)(Duration.between(session.getClockIn(), end).toMinutes() - paused));
                 }
             }
 

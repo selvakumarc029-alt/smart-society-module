@@ -64,7 +64,7 @@ public class MaintenanceManagerService {
         String tenantId = user.getTenantId();
         boolean isSuper = user.getRole() == UserRole.SUPER_ADMIN;
 
-        List<MaintenanceRequest> allRequests = (isSuper || user.getRole() != UserRole.RESIDENT || tenantId == null || tenantId.isBlank())
+        List<MaintenanceRequest> allRequests = isSuper
                 ? requestRepository.findAllByOrderByCreatedAtDesc()
                 : requestRepository.findByTenantIdOrderByCreatedAtDesc(tenantId);
 
@@ -167,7 +167,7 @@ public class MaintenanceManagerService {
         String tenantId = user.getTenantId();
         boolean isSuper = user.getRole() == UserRole.SUPER_ADMIN;
 
-        List<MaintenanceRequest> requests = (isSuper || user.getRole() != UserRole.RESIDENT || tenantId == null || tenantId.isBlank())
+        List<MaintenanceRequest> requests = isSuper
                 ? requestRepository.findAllByOrderByCreatedAtDesc()
                 : requestRepository.findByTenantIdOrderByCreatedAtDesc(tenantId);
 
@@ -926,9 +926,20 @@ public class MaintenanceManagerService {
         }
         boolean isManager = user.getRole() == UserRole.FACILITY_MANAGER
                 || user.getRole() == UserRole.SOCIETY_ADMIN
-                || user.getRole() == UserRole.SUPER_ADMIN;
+                || user.getRole() == UserRole.SUPER_ADMIN
+                || (user.getRole() == UserRole.MAINTENANCE_STAFF && isMaintenanceLead(user));
         if (!isManager) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Manager authorization required");
         }
+        if (user.getRole() != UserRole.SUPER_ADMIN && (user.getTenantId() == null || user.getTenantId().isBlank())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your account has no society assigned");
+        }
+    }
+
+    private boolean isMaintenanceLead(AppUser user) {
+        String email = user.getEmail() == null ? "" : user.getEmail().toLowerCase(Locale.ROOT);
+        String designation = user.getDesignation() == null ? "" : user.getDesignation().toLowerCase(Locale.ROOT);
+        return email.equals("maintenance@smartapartment") || email.equals("maintenance@smartsociety")
+                || designation.contains("lead") || designation.contains("manager") || designation.contains("supervisor");
     }
 }

@@ -40,21 +40,10 @@ public class MaintenanceManagerApiController {
     private AppUser resolveActiveManager(HttpSession session) {
         try {
             return currentUser.requireUser();
-        } catch (Exception e) {
-            if (session != null && (Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:admin"))
-                    || Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:maintenance"))
-                    || Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:superadmin")))) {
-                return userRepository.findByEmail("admin@smartsociety")
-                        .or(() -> userRepository.findByEmail("admin@smartapartment"))
-                        .or(() -> userRepository.findAll().stream()
-                                .filter(u -> u.getRole() == UserRole.FACILITY_MANAGER || u.getRole() == UserRole.SOCIETY_ADMIN || u.getRole() == UserRole.SUPER_ADMIN)
-                                .findFirst())
-                        .orElse(null);
-            }
+        } catch (IllegalStateException exception) {
             return null;
         }
     }
-
     @GetMapping("/summary")
     public ResponseEntity<ManagerDashboardSummaryDto> getDashboardSummary(HttpSession session) {
         AppUser manager = resolveActiveManager(session);

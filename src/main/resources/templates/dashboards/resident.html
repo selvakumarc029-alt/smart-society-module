@@ -984,7 +984,7 @@
                     <h2 class="mb-0 fw-bold text-dark text-truncate" id="title">Overview</h2>
                 </div>
                 <div class="d-flex align-items-center gap-2 header-actions">
-                    <button type="button" class="btn btn-outline-primary rounded-pill shadow-sm px-3 fw-semibold text-nowrap" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')">
+                    <button type="button" class="btn btn-outline-primary rounded-pill shadow-sm px-3 fw-semibold text-nowrap" onclick="forceOpenPanel('maintenance-chat'); loadResidentChatThreads();">
                         <i class="fa-solid fa-comments me-1.5 text-primary"></i>Chat with Maintenance
                     </button>
                     <a class="btn btn-primary rounded-pill shadow-sm px-3 fw-semibold text-nowrap" href="tel:+919844022010" aria-label="Call gate guard at +91 98440 22010" title="Gate Guard: +91 98440 22010">
@@ -1669,8 +1669,8 @@
                                 <span class="stat-label">Open Tickets</span>
                                 <span class="stat-icon-wrapper stat-icon-amber"><i class="fa-solid fa-clock"></i></span>
                             </div>
-                            <strong class="stat-number text-warning" id="statOpenTickets">01</strong>
-                            <span class="stat-subtitle"><i class="fa-solid fa-user-gear text-warning me-1"></i>Technician Assigned</span>
+                            <strong class="stat-number text-warning" id="statOpenTickets">—</strong>
+                            <span class="stat-subtitle"><i class="fa-solid fa-user-gear text-warning me-1"></i>Saved open requests</span>
                         </article>
 
                         <article class="complaint-stat-card">
@@ -1678,8 +1678,8 @@
                                 <span class="stat-label">In Progress</span>
                                 <span class="stat-icon-wrapper stat-icon-blue"><i class="fa-solid fa-screwdriver-wrench"></i></span>
                             </div>
-                            <strong class="stat-number text-primary" id="statProgressTickets">01</strong>
-                            <span class="stat-subtitle"><i class="fa-solid fa-spinner fa-spin text-primary me-1"></i>Plumbing & AC Repair</span>
+                            <strong class="stat-number text-primary" id="statProgressTickets">—</strong>
+                            <span class="stat-subtitle"><i class="fa-solid fa-spinner fa-spin text-primary me-1"></i>Worker updates</span>
                         </article>
 
                         <article class="complaint-stat-card">
@@ -1687,7 +1687,7 @@
                                 <span class="stat-label">Resolved</span>
                                 <span class="stat-icon-wrapper stat-icon-green"><i class="fa-solid fa-circle-check"></i></span>
                             </div>
-                            <strong class="stat-number text-success" id="statResolvedTickets">01</strong>
+                            <strong class="stat-number text-success" id="statResolvedTickets">—</strong>
                             <span class="stat-subtitle"><i class="fa-solid fa-check-double text-success me-1"></i>Closed with Confirmation</span>
                         </article>
 
@@ -1701,139 +1701,7 @@
                         </article>
                     </div>
 
-                    <!-- Active Work Order Spotlight Card (Compact) -->
-                    <div class="active-ticket-spotlight position-relative">
-                        <!-- Top Header Row -->
-                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
-                            <div class="d-flex align-items-center gap-2.5">
-                                <div class="spotlight-icon-box">
-                                    <i class="fa-solid fa-fan"></i>
-                                </div>
-                                <div>
-                                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-2 py-0.5 fw-bold text-uppercase" style="font-size:0.65rem; letter-spacing:0.4px;">Active Work Order</span>
-                                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2 py-0.5 fw-bold" style="font-size:0.65rem;"><i class="fa-solid fa-circle text-warning me-1" style="font-size:0.45rem;"></i>MEDIUM</span>
-                                        <span class="text-muted small" style="font-size:0.75rem;"><i class="fa-regular fa-clock me-1"></i>Today, 10:15 AM</span>
-                                    </div>
-                                    <h5 class="fw-bold text-dark mb-0 mt-0.5" style="font-size: 1.05rem;">AC Repair & Cooling Diagnostics</h5>
-                                    <span class="text-muted small" style="font-size:0.75rem;"><i class="fa-solid fa-location-dot text-primary me-1"></i>Master Bedroom · Unit A-101 <span class="mx-1 text-muted">|</span> Low refrigerant check</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <span class="badge bg-primary text-white font-monospace fw-bold px-2.5 py-1 rounded-pill small shadow-xs">
-                                    <i class="fa-solid fa-ticket me-1"></i>#REQ-1024
-                                </span>
-                                <span class="badge bg-warning text-dark rounded-pill px-2.5 py-1 fw-bold small shadow-xs">
-                                    <i class="fa-solid fa-person-digging me-1"></i>Worker Assigned & On-Site
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- 4-Stage Horizontal Progress Stepper (Compact) -->
-                        <div class="ticket-stepper-wrap">
-                            <div class="d-flex justify-content-between align-items-center mb-1.5 px-1">
-                                <span class="fw-bold text-dark text-uppercase" style="font-size:0.68rem; letter-spacing:0.4px;">
-                                    <i class="fa-solid fa-route text-primary me-1"></i>Service Pipeline (Stage 2 of 4)
-                                </span>
-                                <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-2 py-0.2" style="font-size:0.65rem;">
-                                    <i class="fa-solid fa-satellite-dish me-1"></i>Live Sync
-                                </span>
-                            </div>
-                            <div class="position-relative my-2">
-                                <div class="progress" style="height: 4px; border-radius: 6px; background: #e2e8f0;">
-                                    <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <div class="d-flex justify-content-between position-relative" style="margin-top: -14px;">
-                                    <!-- Step 1 -->
-                                    <div class="text-center" style="width: 25%;">
-                                        <div class="stepper-dot completed mx-auto"><i class="fa-solid fa-check"></i></div>
-                                        <span class="stepper-label mt-1 fw-bold text-dark d-block">Raised</span>
-                                        <small class="text-muted d-block" style="font-size:0.65rem;">10:15 AM</small>
-                                    </div>
-                                    <!-- Step 2 -->
-                                    <div class="text-center" style="width: 25%;">
-                                        <div class="stepper-dot active mx-auto"><i class="fa-solid fa-user-check"></i></div>
-                                        <span class="stepper-label mt-1 fw-bold text-primary d-block">Kumar Dispatched</span>
-                                        <small class="text-primary fw-semibold d-block" style="font-size:0.65rem;">On-Site (10:45 AM)</small>
-                                    </div>
-                                    <!-- Step 3 -->
-                                    <div class="text-center" style="width: 25%;">
-                                        <div class="stepper-dot pending mx-auto"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-                                        <span class="stepper-label mt-1 text-muted d-block">Repairing</span>
-                                        <small class="text-muted d-block" style="font-size:0.65rem;">In Progress</small>
-                                    </div>
-                                    <!-- Step 4 -->
-                                    <div class="text-center" style="width: 25%;">
-                                        <div class="stepper-dot pending mx-auto"><i class="fa-solid fa-circle-check"></i></div>
-                                        <span class="stepper-label mt-1 text-muted d-block">OTP Sign-off</span>
-                                        <small class="text-muted d-block" style="font-size:0.65rem;">Pending</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 3-Column Ticket Detail Cards (Compact) -->
-                        <div class="row g-2">
-                            <!-- Col 1: Assigned Technician -->
-                            <div class="col-lg-4 col-md-6">
-                                <div class="detail-subcard">
-                                    <span class="text-muted text-uppercase fw-bold d-block mb-1" style="font-size:0.65rem; letter-spacing:0.4px;">Assigned Specialist</span>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <div class="position-relative">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center shadow-xs" style="width: 34px; height: 34px; background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; font-size: 0.95rem;">
-                                                <i class="fa-solid fa-user-gear"></i>
-                                            </div>
-                                            <span class="position-absolute bottom-0 end-0 p-1 bg-success border border-white rounded-circle" style="width:7px; height:7px;" title="Online"></span>
-                                        </div>
-                                        <div>
-                                            <strong class="text-dark small d-block" style="font-size:0.84rem;">Kumar</strong>
-                                            <span class="text-muted small d-block" style="font-size:0.72rem;">Senior HVAC Specialist</span>
-                                        </div>
-                                        <span class="badge bg-warning-subtle text-dark border border-warning-subtle rounded-pill px-1.5 py-0.2 ms-auto" style="font-size:0.65rem;">⭐ 4.9</span>
-                                    </div>
-                                    <div class="mt-1 pt-1 border-top border-light-subtle text-muted" style="font-size:0.7rem;">
-                                        <i class="fa-solid fa-id-badge text-primary me-1"></i>Gate Pass: <strong>#GP-AC-1024</strong>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Col 2: SLA & Time Window -->
-                            <div class="col-lg-4 col-md-6">
-                                <div class="detail-subcard">
-                                    <span class="text-muted text-uppercase fw-bold d-block mb-1" style="font-size:0.65rem; letter-spacing:0.4px;">Service Window & ETA</span>
-                                    <div class="d-flex align-items-center justify-content-between mb-1" style="font-size:0.78rem;">
-                                        <span class="text-muted">Estimated:</span>
-                                        <strong class="text-dark"><i class="fa-regular fa-clock text-primary me-1"></i>~2 Hours (by 6:30 PM)</strong>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-between" style="font-size:0.78rem;">
-                                        <span class="text-muted">Target SLA:</span>
-                                        <span class="badge bg-light text-dark border rounded-pill px-2 py-0.5 fw-semibold" style="font-size:0.7rem;">Within 4 Hours</span>
-                                    </div>
-                                    <div class="mt-1 pt-1 border-top border-light-subtle text-muted" style="font-size:0.7rem;">
-                                        <i class="fa-solid fa-shield-halved text-success me-1"></i>SLA Compliance: <strong>100%</strong>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Col 3: Direct Actions -->
-                            <div class="col-lg-4 col-md-12">
-                                <div class="detail-subcard d-flex flex-column justify-content-between">
-                                    <span class="text-muted text-uppercase fw-bold d-block mb-1" style="font-size:0.65rem; letter-spacing:0.4px;">Quick Actions</span>
-                                    <div class="d-flex gap-1.5">
-                                        <button type="button" class="btn btn-primary rounded-pill px-3 py-1 fw-bold shadow-xs flex-grow-1 small" style="font-size:0.76rem;" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)', true)">
-                                            <i class="fa-solid fa-comments me-1"></i> Chat
-                                        </button>
-                                        <button type="button" class="btn btn-outline-secondary rounded-pill px-2.5 py-1 fw-semibold small" style="font-size:0.76rem;" onclick="showTrackWorkerModal('Kumar', 'REQ-1024')" title="Track Location">
-                                            <i class="fa-solid fa-map-location-dot text-primary"></i> Track
-                                        </button>
-                                        <a class="btn btn-outline-secondary rounded-pill px-2.5 py-1 fw-semibold small text-nowrap" style="font-size:0.76rem;" href="tel:+919844022010" title="Call Maintenance">
-                                            <i class="fa-solid fa-phone text-success"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="alert alert-info mb-4" role="status">Assignments and repair progress below reflect saved maintenance updates. Until a worker is assigned, your request remains awaiting assignment.</div>
 
                     <!-- All Complaints & Service Tickets Main Table Card (Compact) -->
                     <div class="card complaints-card shadow-sm border-0 rounded-4">
@@ -1851,9 +1719,9 @@
                             <div class="d-flex align-items-center gap-2 flex-wrap">
                                 <!-- Filter Pills -->
                                 <div class="complaints-filter-pills d-flex gap-1 bg-light p-0.5 rounded-pill border">
-                                    <button type="button" class="filter-pill-btn active" data-filter="all" onclick="window.filterComplaintsTable('all')">All (3)</button>
-                                    <button type="button" class="filter-pill-btn" data-filter="in-progress" onclick="window.filterComplaintsTable('in-progress')">In Progress (2)</button>
-                                    <button type="button" class="filter-pill-btn" data-filter="resolved" onclick="window.filterComplaintsTable('resolved')">Resolved (1)</button>
+                                    <button type="button" class="filter-pill-btn active" data-filter="all" onclick="window.filterComplaintsTable('all')">All</button>
+                                    <button type="button" class="filter-pill-btn" data-filter="in-progress" onclick="window.filterComplaintsTable('in-progress')">In Progress</button>
+                                    <button type="button" class="filter-pill-btn" data-filter="resolved" onclick="window.filterComplaintsTable('resolved')">Resolved</button>
                                 </div>
 
                                 <button class="btn btn-primary btn-raise-ticket rounded-pill px-3 py-1 shadow-xs" data-action="add" data-table="complaints">
@@ -1872,7 +1740,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-7 text-md-end text-muted small" style="font-size:0.72rem;">
-                                    <span>Showing <strong id="complaintsVisibleCount">3</strong> service tickets for <strong>Unit A-101</strong></span>
+                                    <span>Showing <strong id="complaintsVisibleCount">0</strong> saved service tickets</span>
                                 </div>
                             </div>
                         </div>
@@ -1890,118 +1758,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr data-record-id="req-1024">
-                                        <td>
-                                            <div class="d-flex align-items-center gap-1.5">
-                                                <span class="ticket-id-tag">#REQ-1024</span>
-                                                <span class="badge-priority-medium">MED</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="ticket-title-text fw-bold text-dark">AC Repair & Cooling Diagnostic</div>
-                                            <div class="ticket-desc-text">Master bedroom AC unit not cooling · Low refrigerant check</div>
-                                        </td>
-                                        <td>
-                                            <span class="ticket-cat-badge"><i class="fa-solid fa-fan text-info me-1"></i>AC</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-inline-flex align-items-center gap-1.5">
-                                                <span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span>
-                                                <span class="staff-name-text">Kumar (AC)</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1"></i>Today</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge status-pill status-progress status" data-status="Assigned"><span class="status-dot dot-progress"></span>Assigned</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-2.5 py-0.5 shadow-xs" style="font-size:0.74rem;" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)')">
-                                                    <i class="fa-solid fa-comments me-1"></i>Chat
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-0.5 shadow-xs" style="font-size:0.74rem;" onclick="showTrackWorkerModal('Kumar', 'REQ-1024')" title="Track Kumar">
-                                                    <i class="fa-solid fa-location-dot text-primary"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr data-record-id="complaint-102">
-                                        <td>
-                                            <div class="d-flex align-items-center gap-1.5">
-                                                <span class="ticket-id-tag">#T-102</span>
-                                                <span class="badge-priority-urgent">HIGH</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="ticket-title-text fw-bold text-dark">Bathroom Water Leakage</div>
-                                            <div class="ticket-desc-text">Washbasin pipe joint replacement</div>
-                                        </td>
-                                        <td>
-                                            <span class="ticket-cat-badge"><i class="fa-solid fa-wrench text-primary me-1"></i>Plumbing</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-inline-flex align-items-center gap-1.5">
-                                                <span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span>
-                                                <span class="staff-name-text">Ramesh (Plumber)</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1"></i>03 Aug</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge status-pill status-progress status" data-status="In Progress"><span class="status-dot dot-progress"></span>In Progress</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1 align-items-center">
-                                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-2.5 py-0.5 shadow-xs" style="font-size:0.74rem;" onclick="openResidentChat('req_T-102_cust', 'T-102', 'Bathroom Water Leakage', 'Ramesh (Plumber)')">
-                                                    <i class="fa-solid fa-comments me-1"></i>Chat
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-resolve-ticket" data-action="close" data-ticket-id="complaint-102" onclick="window.resolveResidentComplaintRow(this, 'complaint-102')">
-                                                    <i class="fa-solid fa-check me-1"></i>Resolve
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr data-record-id="complaint-088">
-                                        <td>
-                                            <div class="d-flex align-items-center gap-1.5">
-                                                <span class="ticket-id-tag">#T-088</span>
-                                                <span class="badge-priority-low">NORM</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="ticket-title-text fw-bold text-dark">Balcony Switchboard Fault</div>
-                                            <div class="ticket-desc-text">Weatherproof cover installed</div>
-                                        </td>
-                                        <td>
-                                            <span class="ticket-cat-badge"><i class="fa-solid fa-bolt text-warning me-1"></i>Electrical</span>
-                                        </td>
-                                        <td>
-                                            <div class="d-inline-flex align-items-center gap-1.5">
-                                                <span class="staff-avatar-mini"><i class="fa-solid fa-user-gear"></i></span>
-                                                <span class="staff-name-text">Suresh (Electrician)</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="ticket-date"><i class="fa-regular fa-calendar-days text-muted me-1"></i>28 Jul</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge status-pill status-resolved status" data-status="Resolved"><span class="status-dot dot-resolved"></span>Resolved</span>
-                                        </td>
-                                        <td>
-                                            <span class="badge-ticket-closed"><i class="fa-solid fa-check-double text-success me-1"></i>Closed</span>
-                                        </td>
-                                    </tr>
-                                    <tr id="complaintsEmptySearchRow" style="display: none;">
-                                        <td colspan="7" class="text-center py-3 text-muted small">
-                                            <i class="fa-solid fa-inbox fa-lg mb-1 d-block text-secondary opacity-50"></i>
-                                            No maintenance tickets match your search filter.
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody><tr class="dashboard-empty-row"><td colspan="7" class="text-center text-muted py-4">Loading saved maintenance tickets…</td></tr></tbody>
                             </table>
                         </div>
                     </div>
@@ -2026,7 +1783,7 @@
                 <!-- Deliveries Section -->
                 <section class="d-none animate__animated animate__fadeIn" data-view="deliveries">
                     <div class="row g-4 mb-4 stats">
-                        <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Waiting at gate</span><strong class="fs-2 fw-bold text-warning mt-2 d-block">01</strong><span class="small text-muted d-block mt-1">Amazon parcel</span></article></div>
+                        <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Waiting at gate</span><strong class="fs-2 fw-bold text-warning mt-2 d-block">—</strong><span class="small text-muted d-block mt-1">Amazon parcel</span></article></div>
                         <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Collected today</span><strong class="fs-2 fw-bold text-success mt-2 d-block">02</strong><span class="small text-muted d-block mt-1">Confirmed handover</span></article></div>
                         <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Delivery address</span><strong class="fs-2 fw-bold text-primary mt-2 d-block">A-101</strong><span class="small text-muted d-block mt-1">Share with provider</span></article></div>
                         <div class="col-md-3"><article class="card p-4 h-100 shadow-sm border-0"><span class="text-muted small fw-bold text-uppercase">Collection rule</span><strong class="fs-2 fw-bold text-danger mt-2 d-block">ID check</strong><span class="small text-muted d-block mt-1">For stored parcels</span></article></div>
@@ -3000,57 +2757,7 @@
                             </div>
 
                             <!-- Threads List -->
-                            <div class="wa-thread-list" id="residentChatThreadsList">
-                                
-                                <!-- Active Ticket Thread: REQ-1024 (Kumar) -->
-                                <div class="wa-thread-card active" id="thread-item-req_REQ-1024_cust" onclick="openResidentChat('req_REQ-1024_cust', 'REQ-1024', 'AC Repair', 'Kumar (AC Specialist)', false, 'Flat A-204')">
-                                    <div class="wa-thread-avatar wa-avatar-tech">
-                                        <i class="fa-solid fa-wrench"></i>
-                                        <div class="wa-online-dot"></div>
-                                    </div>
-                                    <div class="wa-thread-info">
-                                        <div class="wa-thread-row-top">
-                                            <span class="wa-thread-name">Kumar (AC Specialist)</span>
-                                            <span class="wa-thread-time" id="thread-time-req_REQ-1024_cust">Just now</span>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-2 mb-1">
-                                            <span class="wa-thread-ticket-tag">#REQ-1024 AC Repair</span>
-                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle rounded-pill" style="font-size:0.65rem;">Assigned</span>
-                                        </div>
-                                        <div class="wa-thread-row-msg">
-                                            <div class="wa-thread-preview" id="thread-last-req_REQ-1024_cust">
-                                                <i class="fa-solid fa-check-double wa-read-tick"></i>
-                                                <span class="text-truncate">Approximately 15 minutes.</span>
-                                            </div>
-                                            <span class="wa-unread-badge" id="thread-badge-req_REQ-1024_cust">2</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Thread: T-102 (Ramesh) -->
-                                <div class="wa-thread-card" id="thread-item-req_T-102_cust" onclick="openResidentChat('req_T-102_cust', 'T-102', 'Bathroom Water Leakage', 'Ramesh (Plumber)', false, 'Flat A-101')">
-                                    <div class="wa-thread-avatar wa-avatar-plumb">
-                                        <i class="fa-solid fa-faucet-drip"></i>
-                                    </div>
-                                    <div class="wa-thread-info">
-                                        <div class="wa-thread-row-top">
-                                            <span class="wa-thread-name">Ramesh (Plumber)</span>
-                                            <span class="wa-thread-time">40m ago</span>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-2 mb-1">
-                                            <span class="wa-thread-ticket-tag" style="background:#fef3c7; color:#b45309;">#T-102 Plumbing</span>
-                                            <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill" style="font-size:0.65rem;">In Progress</span>
-                                        </div>
-                                        <div class="wa-thread-row-msg">
-                                            <div class="wa-thread-preview" id="thread-last-req_T-102_cust">
-                                                <i class="fa-solid fa-check-double wa-read-tick"></i>
-                                                <span class="text-truncate">On my way with sealant.</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
+                            <div class="wa-thread-list" id="residentChatThreadsList"><div class="text-center text-muted py-5 px-3">Loading saved conversations...</div></div>
                         </div>
 
                         <!-- Right Pane: WhatsApp Active Conversation Window -->
@@ -3458,11 +3165,11 @@
         window.__lastResidentMaxMessageId = 0;
 
         let activeResidentChat = {
-            conversationId: 'req_REQ-1024_cust',
-            ticketNumber: 'REQ-1024',
-            ticketTitle: 'AC Repair',
-            workerName: 'Kumar (AC Specialist)',
-            flatNumber: 'Flat A-204'
+            conversationId: '',
+            ticketNumber: '',
+            ticketTitle: '',
+            workerName: '',
+            flatNumber: ''
         };
         let residentChatPollInterval = null;
 
@@ -3488,10 +3195,11 @@
 
         window.openResidentChatByKey = function(convKey, forceModal = false) {
             const t = window.__residentThreadsCache ? window.__residentThreadsCache[convKey] : null;
-            const ticketNum = t ? (t.ticketNumber || '') : 'REQ-1024';
-            const ticketTitle = t ? (t.ticketTitle || t.title || 'AC Repair') : 'AC Repair';
-            const workerName = t ? (t.maintenanceUserName || 'Kumar (AC Specialist)') : 'Kumar (AC Specialist)';
-            const flatNum = t ? (t.customerUnit || t.unit || 'Flat A-204') : 'Flat A-204';
+            if (!t) { forceOpenPanel('maintenance-chat'); window.loadResidentChatThreads(); return; }
+            const ticketNum = t.ticketNumber || '';
+            const ticketTitle = t.ticketTitle || t.title || 'Maintenance request';
+            const workerName = t.maintenanceUserName || 'Maintenance team';
+            const flatNum = t.customerUnit || t.unit || '';
 
             activeResidentChat = {
                 conversationId: convKey,
@@ -3509,13 +3217,13 @@
             if (workerTitle) workerTitle.textContent = activeResidentChat.workerName;
             const panelWorker = document.getElementById('panelChatWorkerSubtitle');
             if (panelWorker) {
-                panelWorker.innerHTML = `<i class="fa-solid fa-circle" style="font-size:0.55rem; color:#00a884; margin-right:3px;"></i>online · Ticket <span class="fw-bold">#${escapeHtml(activeResidentChat.ticketNumber)}</span> (${escapeHtml(activeResidentChat.ticketTitle)})`;
+                panelWorker.innerHTML = `<i class="fa-solid fa-circle" style="font-size:0.55rem; color:#00a884; margin-right:3px;"></i>Saved conversation · Ticket <span class="fw-bold">#${escapeHtml(activeResidentChat.ticketNumber)}</span> (${escapeHtml(activeResidentChat.ticketTitle)})`;
             }
 
             const pinnedDetails = document.getElementById('waPinnedTicketDetails');
             const pinnedTrackBtn = document.getElementById('waPinnedTrackBtn');
             if (pinnedDetails) {
-                pinnedDetails.innerHTML = `<strong>Ticket #${escapeHtml(activeResidentChat.ticketNumber)}: ${escapeHtml(activeResidentChat.ticketTitle)}</strong> &bull; Worker: <strong>${escapeHtml(activeResidentChat.workerName)}</strong> &bull; Status: <strong class="text-success">Active Thread</strong> &bull; ETA: <strong>15 Mins</strong>`;
+                pinnedDetails.innerHTML = `<strong>Ticket #${escapeHtml(activeResidentChat.ticketNumber)}: ${escapeHtml(activeResidentChat.ticketTitle)}</strong> &bull; Worker: <strong>${escapeHtml(activeResidentChat.workerName)}</strong> &bull; Status: <strong class="text-success">Active Thread</strong>`;
                 if (pinnedTrackBtn) {
                     pinnedTrackBtn.setAttribute('onclick', `showTrackWorkerModal('${escapeHtml(activeResidentChat.workerName)}', '${escapeHtml(activeResidentChat.ticketNumber)}')`);
                 }
@@ -3550,7 +3258,7 @@
             if (!list) return;
             try {
                 const res = await fetch('/api/chat/threads?channelType=CUSTOMER_MAINTENANCE&viewerRole=CUSTOMER');
-                if (!res.ok) return;
+                if (!res.ok) { list.textContent = res.status === 401 || res.status === 403 ? 'Sign in again to load your maintenance conversations.' : 'Unable to load saved conversations. Please retry.'; return; }
                 const threads = await res.json();
 
                 window.__residentThreadsCache = {};
@@ -3572,9 +3280,9 @@
                     const isActive = (convKey === activeResidentChat.conversationId || String(t.conversationId) === String(activeResidentChat.conversationId) || t.ticketNumber === activeResidentChat.ticketNumber);
                     if (isActive) foundActive = true;
 
-                    const ticketNum = t.ticketNumber || 'REQ-1024';
-                    const ticketTitle = t.ticketTitle || t.title || 'AC Repair';
-                    const worker = t.maintenanceUserName || 'Kumar (Technician)';
+                    const ticketNum = t.ticketNumber || '';
+                    const ticketTitle = t.ticketTitle || t.title || 'Maintenance request';
+                    const worker = t.maintenanceUserName || 'Maintenance team';
                     const unread = t.unreadCount || 0;
                     const isPlumb = ticketTitle.toLowerCase().includes('plumb') || ticketTitle.toLowerCase().includes('water');
                     const avatarIcon = isPlumb ? 'fa-faucet-drip' : 'fa-wrench';
@@ -3627,7 +3335,8 @@
             const container = document.getElementById(containerId);
             if (!container) return;
             try {
-                const convId = activeResidentChat.conversationId || 'req_REQ-1024_cust';
+                const convId = activeResidentChat.conversationId;
+                if (!convId) { container.textContent = 'Select a saved maintenance conversation to view messages.'; return; }
                 const res = await fetch(`/api/chat/messages?conversationId=${encodeURIComponent(convId)}&viewerRole=CUSTOMER`);
                 if (!res.ok) return;
                 const messages = await res.json();
@@ -3789,13 +3498,17 @@
 
         async function postResidentChatMessage(text, containerId) {
             try {
+                if (!activeResidentChat.conversationId) throw new Error('Select a saved maintenance conversation first.');
+                const profileResponse = await fetch('/api/society/me');
+                if (!profileResponse.ok) throw new Error('Sign in again before sending a message.');
+                const profile = await profileResponse.json();
                 const payload = {
                     conversationKey: activeResidentChat.conversationId,
                     channelType: 'CUSTOMER_MAINTENANCE',
                     senderRole: 'CUSTOMER',
-                    senderName: 'Selva',
-                    senderEmail: 'selva@smartsociety.com',
-                    senderUnit: activeResidentChat.flatNumber || (activeResidentChat.ticketNumber === 'REQ-1024' ? 'Flat A-204' : 'Flat A-101'),
+                    senderName: profile.name || '',
+                    senderEmail: profile.email || '',
+                    senderUnit: activeResidentChat.flatNumber || '',
                     ticketNumber: activeResidentChat.ticketNumber,
                     ticketTitle: activeResidentChat.ticketTitle,
                     message: text,
@@ -3809,9 +3522,12 @@
                 if (res.ok) {
                     await loadResidentChatMessages(containerId);
                     loadResidentChatThreads(true);
-                }
+                } else throw new Error('Your message could not be saved. Please retry.');
             } catch (err) {
                 console.error("Failed to send message", err);
+                const input = document.getElementById(containerId === 'modalChatMessagesContainer' ? 'modalChatInput' : 'residentChatInput');
+                if (input && !input.value) input.value = text;
+                alert(err.message || 'Unable to save your message.');
             }
         }
 
@@ -4072,7 +3788,8 @@
                 const row = document.createElement("tr");
                 const qrCell = document.createElement("td");
                 const code = document.createElement("strong");
-                code.textContent = pass.qrCode || "Pending code";
+                code.textContent = pass.passNumber || "Pass not issued";
+                code.style.cssText = "font-family:monospace;white-space:nowrap;letter-spacing:.04em;color:#2457d6";
                 qrCell.append(code);
                 row.appendChild(qrCell);
                 [pass.name, pass.phone, pass.expectedAt ? new Date(pass.expectedAt).toLocaleString("en-IN") : "—", pass.purpose, pass.gateNumber || "Gate 1"].forEach(value => {
@@ -4123,7 +3840,7 @@
                 event.currentTarget.reset();
                 await loadResidentVisitorRequests();
                 window.loadSocietyBackendData?.();
-                showToast(`Visitor request sent to security. Share code: ${pass.qrCode}`);
+                showToast(`Visitor request sent to security. Share passcode: ${pass.passNumber || 'Pass not issued'}`);
             });
             loadResidentVisitorRequests();
 
@@ -4773,7 +4490,7 @@
 <script src="/shared/js/home-services-dashboard.js?v=20261005-nobroker-force-v3"></script>
 <script defer src="/smartapartment/js/resident-billing-refresh.js?v=20261008-flat-billing-v1"></script>
 <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-<script src="/smartapartment/js/resident-gate-approvals.js?v=20260916-multigate-v1"></script>
+<script src="/smartapartment/js/resident-gate-approvals.js?v=20261010-approval-cards-v2"></script>
 <script src="/smartapartment/js/maintenance-workflow.js?v=20260925-15day-window-v1"></script>
 <script>
     function toggleCityDropdown(event) {

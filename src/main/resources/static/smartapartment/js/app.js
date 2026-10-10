@@ -464,6 +464,15 @@ async function submitDashboardCredentials() {
             submitDashboardLogin.innerHTML = '<span class="spinner-border spinner-border-sm me-2" style="width:1rem;height:1rem;border-width:2px;"></span>Opening Dashboard...';
         }
         const target = data.redirect || pendingDashboardLogin.target || "/dashboards/superadmin";
+        if (data.token && !target.startsWith('/propertydirect')) {
+            sessionStorage.setItem('society_dashboard_token', data.token);
+            sessionStorage.setItem('society_dashboard_role', data.role);
+        } else {
+            sessionStorage.removeItem('society_dashboard_token');
+            sessionStorage.removeItem('society_dashboard_role');
+        }
+        if (data.token && data.role === 'superadmin') sessionStorage.setItem('society_superadmin_token', data.token);
+        else sessionStorage.removeItem('society_superadmin_token');
         window.location.replace(target);
     } catch (error) {
         showToast("Login failed. Please try again.");

@@ -1623,3 +1623,14 @@ dialog::backdrop {
         scroll-behavior: auto !important;
     }
 }
+
+/* Common gate arrivals are one action away from every operational view. */
+.arrival-shortcuts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:24px 0}
+.arrival-shortcuts button{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:18px;text-align:left;background:#fff;border:1px solid #dce5f2;border-radius:14px;color:#142342;min-width:0}
+.arrival-shortcuts button:hover{border-color:#3164ff;background:#f4f7ff}
+.arrival-shortcuts button>span{color:#2563eb;font-size:24px;line-height:1}
+.arrival-shortcuts strong{font-size:14px}.arrival-shortcuts small{font-size:12px;color:#64748b;line-height:1.5}
+.queue-tools{flex-wrap:wrap;gap:12px}.queue-tools select{padding:10px 12px;border:1px solid #dce5f2;background:#fff;border-radius:10px;color:#142342;max-width:100%;font:inherit;font-size:13px}
+.gate-detail strong{max-width:65%;text-align:right;overflow-wrap:anywhere}
+@media(max-width:1100px){.arrival-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.arrival-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}.arrival-shortcuts button{padding:14px}.queue-tools select{width:100%}}

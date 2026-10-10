@@ -720,42 +720,6 @@
             `;
         }
 
-        // 5. DEMO SIMULATION CONTROLS (Allows user to test all technician stages right from browser)
-        slotHtml += `
-            <div class="mw-sim-toolbar">
-                <div class="sim-title"><i class="fa-solid fa-sliders"></i> Technician & Workflow Test Simulation Toolbar</div>
-                <div class="d-flex flex-wrap gap-2">
-                    ${['OFFERED', 'ASSIGNED'].includes(status) ? `
-                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simVendorResponse(true)"><i class="fa-solid fa-check me-1"></i> Accept Job</button>
-                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="simVendorResponse(false)"><i class="fa-solid fa-xmark me-1"></i> Decline Job (Reassign)</button>
-                    ` : ''}
-
-                    ${status === 'ACCEPTED' ? `
-                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simTravel()"><i class="fa-solid fa-motorcycle me-1"></i> Start Travel</button>
-                    ` : ''}
-
-                    ${status === 'TRAVELING' ? `
-                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simArrive()"><i class="fa-solid fa-location-dot me-1"></i> Arrived at Apartment</button>
-                    ` : ''}
-
-                    ${status === 'ARRIVED' ? `
-                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simDiagnosis()"><i class="fa-solid fa-magnifying-glass me-1"></i> Start Diagnosis</button>
-                    ` : ''}
-
-                    ${status === 'DIAGNOSING' ? `
-                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simStartRepair()"><i class="fa-solid fa-wrench me-1"></i> No Extra Cost (Start Repair)</button>
-                        <button type="button" class="btn btn-sm btn-warning rounded-pill px-3 fw-bold" onclick="simSubmitEstimate()"><i class="fa-solid fa-file-invoice-dollar me-1"></i> Extra Cost (Submit Estimate)</button>
-                    ` : ''}
-
-                    ${status === 'IN_PROGRESS' ? `
-                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simCompleteWork()"><i class="fa-solid fa-check-double me-1"></i> Technician: Mark Work Completed</button>
-                    ` : ''}
-
-                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="loadTicketData('${state.activeTicketRef}')"><i class="fa-solid fa-rotate me-1"></i> Refresh</button>
-                </div>
-            </div>
-        `;
-
         slotContainer.innerHTML = slotHtml;
 
         // Bind star clicks if form is present
@@ -871,80 +835,13 @@
         }
     };
 
-    // Technician simulations
-    window.simVendorResponse = async function(accept) {
-        await fetch(`/api/maintenance/workflow/tickets/${state.activeBookingId}/vendor-response`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ accept, declineReason: accept ? null : 'Technician busy on high priority emergency' })
-        });
-        await loadTicketData(state.activeTicketRef);
-    };
-
-    window.simTravel = async function() {
-        await fetch(`/api/maintenance/workflow/tickets/${state.activeBookingId}/travel`, { method: 'POST' });
-        await loadTicketData(state.activeTicketRef);
-    };
-
-    window.simArrive = async function() {
-        await fetch(`/api/maintenance/workflow/tickets/${state.activeBookingId}/arrive`, { method: 'POST' });
-        await loadTicketData(state.activeTicketRef);
-    };
-
-    window.simDiagnosis = async function() {
-        await fetch(`/api/maintenance/workflow/tickets/${state.activeBookingId}/diagnosis`, { method: 'POST' });
-        await loadTicketData(state.activeTicketRef);
-    };
-
-    window.simStartRepair = async function() {
-        await fetch(`/api/maintenance/workflow/tickets/${state.activeBookingId}/start-repair`, { method: 'POST' });
-        await loadTicketData(state.activeTicketRef);
-    };
-
-    window.simSubmitEstimate = async function() {
-        const parts = prompt('Enter parts cost in INR:', '350');
-        const labor = prompt('Enter labor cost in INR:', '200');
-        if (!parts || !labor) return;
-        const total = parseFloat(parts) + parseFloat(labor);
-
-        await fetch(`/api/maintenance/workflow/tickets/${state.activeBookingId}/estimate`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                amount: total,
-                estimateAmount: total,
-                parts: `₹${parts} (Heavy-duty brass valve & Teflon seal)`,
-                partsBreakdown: `₹${parts} (Heavy-duty brass valve & Teflon seal)`,
-                labor: `₹${labor} (Disassembly & fitting charge)`,
-                laborBreakdown: `₹${labor} (Disassembly & fitting charge)`,
-                description: 'Replaced cracked internal fitting and seal ring.'
-            })
-        });
-        await loadTicketData(state.activeTicketRef);
-    };
-
-    window.simCompleteWork = async function() {
-        const notes = prompt('Technician completion notes:', 'Work completed smoothly. Checked with pressure test and zero leaks detected.');
-        if (notes === null) return;
-
-        await fetch(`/api/maintenance/workflow/tickets/${state.activeBookingId}/complete`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                completionNotes: notes,
-                photoUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&auto=format&fit=crop&q=80'
-            })
-        });
-        await loadTicketData(state.activeTicketRef);
-    };
-
     // Quick helper to track the latest order
     window.openLatestActiveTracker = function() {
         if (state.activeTicketRef) {
             openMaintenanceLiveTracker(state.activeTicketRef);
         } else {
             // Find from bookings or default
-            openMaintenanceLiveTracker('ORD-EMG-0001');
+            alert('Select a saved service order to view its progress.');
         }
     };
 

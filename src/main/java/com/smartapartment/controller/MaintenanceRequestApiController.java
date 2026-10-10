@@ -40,71 +40,10 @@ public class MaintenanceRequestApiController {
     private AppUser resolveActiveUser(HttpSession session) {
         try {
             return currentUser.requireUser();
-        } catch (Exception e) {
-            // Check if resident session is active
-            if (session != null && Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:resident"))) {
-                return userRepository.findByEmail("resident@smartsociety")
-                        .or(() -> userRepository.findByEmail("resident@smartapartment"))
-                        .or(() -> userRepository.findAll().stream()
-                                .filter(u -> u.getRole() == UserRole.RESIDENT)
-                                .findFirst())
-                        .orElseGet(this::createFallbackResident);
-            }
-
-            // Check if admin / maintenance session is active
-            if (session != null && (Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:admin"))
-                    || Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:maintenance"))
-                    || Boolean.TRUE.equals(session.getAttribute("dashboard:smartapartment:superadmin")))) {
-                return userRepository.findByEmail("admin@smartsociety")
-                        .or(() -> userRepository.findByEmail("admin@smartapartment"))
-                        .or(() -> userRepository.findAll().stream()
-                                .filter(u -> u.getRole() == UserRole.SOCIETY_ADMIN || u.getRole() == UserRole.SUPER_ADMIN)
-                                .findFirst())
-                        .orElseGet(this::createFallbackResident);
-            }
-
-            // Check if customer session is active for PropertyDirect
-            if (session != null && Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:customer"))) {
-                return userRepository.findByEmail("customer@propertydirect")
-                        .or(() -> userRepository.findByEmail("resident@smartsociety"))
-                        .or(() -> userRepository.findAll().stream()
-                                .filter(u -> u.getRole() == UserRole.RESIDENT)
-                                .findFirst())
-                        .orElseGet(this::createFallbackCustomer);
-            }
-
-            // Fallback for resident
-            return userRepository.findByEmail("resident@smartsociety")
-                    .or(() -> userRepository.findByEmail("resident@smartapartment"))
-                    .or(() -> userRepository.findAll().stream()
-                            .filter(u -> u.getRole() == UserRole.RESIDENT)
-                            .findFirst())
-                    .orElseGet(this::createFallbackResident);
+        } catch (IllegalStateException error) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sign in to your society account before accessing maintenance requests");
         }
     }
-
-    private AppUser createFallbackCustomer() {
-        AppUser u = new AppUser();
-        u.setTenantId("society-1");
-        u.setFullName("PropertyDirect Customer");
-        u.setEmail("customer@propertydirect");
-        u.setPhone("9844022010");
-        u.setPasswordHash("$2a$10$abcdefghijklmnopqrstuvwxyz0123456789ABCDEF");
-        u.setRole(UserRole.RESIDENT);
-        return userRepository.save(u);
-    }
-
-    private AppUser createFallbackResident() {
-        AppUser u = new AppUser();
-        u.setTenantId("society-1");
-        u.setFullName("Kavya Sharma");
-        u.setEmail("resident@smartsociety");
-        u.setPhone("9844022010");
-        u.setPasswordHash("$2a$10$abcdefghijklmnopqrstuvwxyz0123456789ABCDEF");
-        u.setRole(UserRole.RESIDENT);
-        return userRepository.save(u);
-    }
-
     @PostMapping
     public ResponseEntity<MaintenanceRequestResponseDto> createRequest(
             @Valid @RequestBody CreateMaintenanceRequestDto dto,

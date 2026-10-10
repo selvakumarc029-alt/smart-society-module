@@ -32,9 +32,9 @@ public class CommonMaintenanceController {
     public List<CommonMaintenanceTicket> list(@RequestParam(required = false) String sourcePlatform,
                                               @RequestParam(required = false) String status, HttpSession session) {
         var actor = dispatch.actor(session, sourcePlatform == null ? "smartsociety" : sourcePlatform);
-        var stream = tickets.findAll().stream().filter(t -> actor.admin() ||
+        var stream = tickets.findAll().stream().filter(t -> !actor.admin() || dispatch.canAccessTenant(actor, t.getTenantId())).filter(t -> actor.admin() ||
                 (actor.worker() ? java.util.Objects.equals(actor.id(), t.getVendorId()) :
-                actor.platform().equalsIgnoreCase(t.getSourcePlatform())));
+                actor.platform().equalsIgnoreCase(t.getSourcePlatform()) && java.util.Objects.equals(actor.id(), t.getRequesterId())));
         if (sourcePlatform != null && !sourcePlatform.isBlank()) {
             stream = stream.filter(t -> sourcePlatform.equalsIgnoreCase(t.getSourcePlatform()));
         }
@@ -89,6 +89,8 @@ public class CommonMaintenanceController {
     public CommonMaintenanceTicket updateStatus(@PathVariable Long id, @Valid @RequestBody MaintenanceStatusRequest request, HttpSession session) {
         var actor = dispatch.actor(session, "smartsociety");
         dispatch.admin(actor);
+        CommonMaintenanceTicket saved = tickets.findById(id).orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Maintenance ticket not found"));
+        if (!dispatch.canAccessTenant(actor, saved.getTenantId())) throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "This ticket belongs to another society");
         return service.updateStatus(id, new CommonMaintenanceService.StatusUpdateRequest(
                 request.ticketStatus(),
                 request.vendorId(),

@@ -1,0 +1,22 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const script = fs.readFileSync('src/main/resources/static/smartapartment/js/dashboard.js', 'utf8');
+test('resident complaints ignore browser demo records and fabricated worker progress', () => {
+ const start = script.indexOf('function sharedComplaints() {');
+ const end = script.indexOf('\nfunction persistSharedComplaint', start);
+ const context = {localStorage: {getItem: () => JSON.stringify([{id: 'fake', assignedTo: 'Kumar'}])}};
+ vm.createContext(context);
+ vm.runInContext(script.slice(start, end), context);
+ assert.equal(context.sharedComplaints().length, 0);
+ const template = fs.readFileSync('src/main/resources/templates/dashboards/resident.html', 'utf8');
+ assert.ok(!template.includes('Kumar Dispatched'));
+ const complaints = template.slice(template.indexOf('data-view="complaints"'), template.indexOf('<!-- Announcements Section -->'));
+ assert.ok(!complaints.includes('#REQ-1024'));
+ assert.ok(!template.includes('#GP-AC-1024'));
+ const renderer = script.slice(script.indexOf('function buildResidentComplaintRow'), script.indexOf('window.resolveResidentComplaintRow'));
+ assert.ok(!renderer.includes('Ramesh (Plumber)'));
+ assert.ok(!renderer.includes('Mark Resolved'));
+ assert.ok(renderer.includes('rawStatus.replaceAll'));
+});

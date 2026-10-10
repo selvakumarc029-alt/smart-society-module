@@ -234,6 +234,8 @@ public class EmergencyMaintenanceController {
         var t = tickets.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Maintenance ticket not found"));
         boolean samePlatform = actor.platform().equalsIgnoreCase(String.valueOf(t.getSourcePlatform()));
         boolean unassignedRequest = "REQUESTED".equalsIgnoreCase(String.valueOf(t.getTicketStatus())) && t.getVendorId() == null;
+        if (actor.admin() && !service.canAccessTenant(actor, t.getTenantId()))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This maintenance ticket belongs to another society");
         boolean assignedToWorker = Objects.equals(actor.id(), t.getVendorId());
         boolean workerCanManage = actor.worker() && (assignedToWorker || (samePlatform && Objects.equals(actor.tenant(), t.getTenantId()) && unassignedRequest));
         if (!actor.admin() && !workerCanManage) {

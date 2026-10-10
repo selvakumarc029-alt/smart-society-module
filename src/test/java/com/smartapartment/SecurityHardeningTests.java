@@ -18,6 +18,17 @@ class SecurityHardeningTests {
     MockMvc mockMvc;
 
     @Test
+    void anonymousDashboardUrlsCannotCreateSocietyLoginFlags() throws Exception {
+        for (String path : java.util.List.of("superadmin", "society-admin", "resident", "maintenance", "maintenance-worker", "accountant", "security")) {
+            var session = new org.springframework.mock.web.MockHttpSession();
+            mockMvc.perform(get("/dashboards/" + path).session(session))
+                    .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/?loginRequired=true"));
+            org.junit.jupiter.api.Assertions.assertNull(session.getAttribute("dashboard:smartapartment:superadmin"));
+            org.junit.jupiter.api.Assertions.assertNull(session.getAttribute("dashboard:smartapartment:maintenance"));
+        }
+    }
+
+    @Test
     void anonymousCannotAccessSuperAdminApi() throws Exception {
         mockMvc.perform(get("/api/superadmin/analytics/data"))
                 .andExpect(status().is3xxRedirection());

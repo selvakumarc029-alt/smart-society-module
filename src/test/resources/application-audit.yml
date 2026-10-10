@@ -1,0 +1,8 @@
+# Test-only fixtures; never connect a whole-suite audit to the live database.
+spring:
+  datasource:
+    url: jdbc:h2:mem:smartsociety_suite_audit;DB_CLOSE_DELAY=-1
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+SEED_DEMO_ACCOUNTS: true

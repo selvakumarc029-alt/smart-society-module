@@ -71,6 +71,11 @@ public class SecurityConsoleController {
             view.put("barrierStatus","NOT_CONNECTED");
             view.put("allowed",assigned.isEmpty() || assigned.stream().anyMatch(a->a.getGate().getId().equals(gate.getId()) && activeShift(a)));
             view.put("guard",allAssignments.stream().filter(a->a.getGate().getId().equals(gate.getId()) && activeShift(a)).findFirst().map(a->a.getSecurityGuard().getFullName()).orElse("No active assignment"));
+            view.put("guards",allAssignments.stream().filter(a->a.getGate().getId().equals(gate.getId()) && activeShift(a))
+                    .map(a->Map.of("id",a.getSecurityGuard().getId(),"name",a.getSecurityGuard().getFullName())).distinct().toList());
+            view.put("inside",people.stream().filter(this::inside).filter(v->v.getEntryGate()!=null && gate.getId().equals(v.getEntryGate().getId())).count());
+            view.put("pending",people.stream().filter(v->!inside(v) && v.getCheckOutAt()==null && "PENDING".equals(v.getApprovalStatus()))
+                    .filter(v->v.getEntryGate()!=null && gate.getId().equals(v.getEntryGate().getId())).count());
             view.put("shiftId",allAssignments.stream().filter(a->a.getGate().getId().equals(gate.getId()) && activeShift(a)).findFirst().map(SecurityGateAssignment::getId).orElse(null));
             view.put("throughput",hour.stream().filter(e->gate.getId().equals(e.getGateId()) && Set.of("ENTRY","EXIT","OVERRIDE").contains(e.getEventType())).count());
             view.put("lastVehicle",people.stream().filter(v->v.getEntryGate()!=null && gate.getId().equals(v.getEntryGate().getId()) && v.getCheckInAt()!=null && !clean(v.getVehicleNumber()).isBlank()).max(Comparator.comparing(Visitor::getCheckInAt)).map(Visitor::getVehicleNumber).orElse("No vehicle recorded"));
@@ -136,8 +141,8 @@ public class SecurityConsoleController {
         if(override) {
             if(!Set.of("RESIDENT_ESCORT","EMERGENCY_SERVICE","SYSTEM_OFFLINE").contains(clean(request.reason()))) throw new IllegalArgumentException("Select a valid override reason");
             validatePhoto(request.photo());
-            // An override may replace resident confirmation, never routing, blacklist, passback or lockdown.
-            if(problem!=null && !problem.startsWith("RESIDENT_APPROVAL")) return deny(gate,visitor,problem);
+            // Resident approval is required even for an audited manual action.
+            if(problem!=null) return deny(gate,visitor,problem);
         } else if(problem!=null) return deny(gate,visitor,problem);
         LocalDateTime now=LocalDateTime.now();
         if("EXIT".equals(request.action())) {
@@ -154,7 +159,7 @@ public class SecurityConsoleController {
         Gate active=terminal(session,request.token()); lockTenant();
         Gate assigned=gate(request.gateId());
         Resident resident=residents.findByIdAndTenantId(request.residentId(),current.requireTenantId()).orElseThrow(()->new IllegalArgumentException("Resident not found"));
-        if(!Set.of("GUEST","DELIVERY","CAB","DOMESTIC_STAFF","CONTRACTOR").contains(request.category())) throw new IllegalArgumentException("Invalid visitor category");
+        if(!Set.of("GUEST","DELIVERY","PARCEL","FOOD_DELIVERY","CAB","DOMESTIC_STAFF","CONTRACTOR").contains(request.category())) throw new IllegalArgumentException("Invalid visitor category");
         Visitor visitor=new Visitor(); visitor.setTenantId(current.requireTenantId()); visitor.setResident(resident);
         visitor.setVisitorName(request.name().trim()); visitor.setVisitorPhone(request.phone().trim()); visitor.setPurpose(request.purpose().trim());
         visitor.setVehicleNumber(clean(request.vehicle())); visitor.setEntryType(request.category()); visitor.setVisitorCategory(request.category());
@@ -232,7 +237,7 @@ public class SecurityConsoleController {
         if(policy!=null && "RESTRICTED_HOURS".equals(policy.getOperatingStatus()) && !within(LocalTime.now(),policy.getOpensAt(),policy.getClosesAt())) return "GATE_CLOSED: Outside permitted hours.";
         if("EXIT".equals(gate.getGateType()) || "EMERGENCY_EXIT_ONLY".equals(type)) return "EMERGENCY_EXIT_ONLY: Inbound access is prohibited.";
         if("PEDESTRIAN_ONLY".equals(type) && !clean(v.getVehicleNumber()).isBlank()) return "PEDESTRIAN_ONLY: Vehicles must use a vehicular gate.";
-        if("SERVICE_DELIVERY".equals(type) && !Set.of("DELIVERY","CONTRACTOR","DOMESTIC_STAFF").contains(clean(v.getEntryType()))) return "SERVICE_ONLY: Use the designated visitor entrance.";
+        if("SERVICE_DELIVERY".equals(type) && !Set.of("DELIVERY","PARCEL","FOOD_DELIVERY","CONTRACTOR","DOMESTIC_STAFF").contains(clean(v.getEntryType()))) return "SERVICE_ONLY: Use the designated visitor entrance.";
         SecurityConsolePass pass=passes.findByTenantIdAndVisitorId(current.requireTenantId(),v.getId()).orElse(null);
         Gate assigned=pass==null?v.getEntryGate():pass.getAssignedGate();
         boolean all=pass!=null && pass.isAllGates();

@@ -486,7 +486,7 @@
                         <strong class="d-block text-white text-truncate fw-bold" style="font-size: 0.95rem; letter-spacing: -0.01em;" id="workerSidebarName" th:text="${worker != null ? worker.fullName : 'Field Technician'}">Field Technician</strong>
                         <div class="d-flex align-items-center justify-content-between gap-1 mt-1">
                             <span class="text-info text-truncate small" style="font-size: 0.78rem; font-weight: 600;" id="workerSidebarTrade" th:text="${worker != null && worker.designation != null ? worker.designation : 'General Maintenance'}">General Maintenance</span>
-                            <span class="badge font-monospace flex-shrink-0" id="workerSidebarEmpId" th:text="${worker != null && worker.employeeId != null ? worker.employeeId : 'EMP-FIELD'}" style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.25); font-size: 0.68rem; padding: 0.2rem 0.5rem; letter-spacing: 0.04em;">EMP-FIELD</span>
+                            <span class="badge font-monospace flex-shrink-0" id="workerSidebarEmpId" th:text="${worker != null && worker.employeeId != null ? worker.employeeId : 'Not assigned'}" style="background: rgba(255, 255, 255, 0.15); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.25); font-size: 0.68rem; padding: 0.2rem 0.5rem; letter-spacing: 0.04em;">Not assigned</span>
                         </div>
                     </div>
                 </div>
@@ -587,7 +587,7 @@
                                 </div>
                                 <div class="kpi-footer">
                                     <i class="fa-solid fa-circle-check text-success"></i>
-                                    <span>Active shift session</span>
+                                    <span>Saved attendance total</span>
                                 </div>
                             </div>
                         </div>
@@ -688,6 +688,13 @@
                                 <i class="fa-solid fa-rotate"></i> <span>Refresh List</span>
                             </button>
                         </div>
+                        <section class="mb-4" aria-labelledby="workerComplaintsTitle">
+                            <h5 id="workerComplaintsTitle" class="fw-bold">Maintenance Team Complaints</h5>
+                            <p class="small text-muted">Complaints routed by your society administrator. Save progress and repair notes for the resident.</p>
+                            <button type="button" class="btn btn-sm btn-outline-primary mb-3" data-worker-complaints-refresh>Refresh complaints</button>
+                            <p id="workerComplaintsMessage" role="status" class="small"></p>
+                            <div id="workerComplaints" class="d-grid gap-3">Loading saved complaints…</div>
+                        </section>
                         <section class="mb-4" aria-labelledby="workerServiceTicketsTitle">
                             <h5 id="workerServiceTicketsTitle" class="fw-bold">Assigned Home Service Tickets</h5>
                             <p class="small text-muted">Update your assigned tickets. Saved changes appear in the resident’s service tickets.</p>
@@ -811,7 +818,8 @@
     <script defer src="/smartapartment/js/worker-service-tickets.js?v=20261008-worker-status-v1"></script>
     <script src="/shared/js/common-maintenance.js?v=20260908-common-maintenance-v1"></script>
     <script src="/smartapartment/js/dashboard-controls.js?v=20260910-backend-bridge-v1"></script>
-    <script src="/smartapartment/js/worker-attendance-module.js?v=20261008-society-break-history-v3"></script>
+    <link rel="stylesheet" href="/smartapartment/css/maintenance-worker-refinement.css?v=20261010-v1">
+    <script src="/smartapartment/js/worker-attendance-module.js?v=20261010-live-roster-v5"></script>
     <script>
         // Tab switching logic for Worker Dashboard
         document.addEventListener('DOMContentLoaded', () => {
@@ -870,5 +878,6 @@
             }, 10000);
         });
     </script>
+    <script defer src="/smartapartment/js/worker-complaints.js?v=20261010-saved-progress-v1"></script>
 </body>
 </html>

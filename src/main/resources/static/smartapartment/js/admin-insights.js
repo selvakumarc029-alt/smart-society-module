@@ -85,7 +85,17 @@
     document.querySelectorAll('[data-insights-refresh]').forEach(b=>b.addEventListener('click',()=>load(b.dataset.insightsRefresh)));
     document.querySelectorAll('[data-insights-export]').forEach(b=>b.addEventListener('click',()=>download(b.dataset.insightsExport)));
     document.querySelectorAll('[data-insights-date-form]').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();load(form.dataset.insightsDateForm);}));
-    $('insights-dues-rows').addEventListener('click',async event=>{const b=event.target.closest('[data-notice-flat]');if(!b||b.disabled)return;b.disabled=true;message('billing','Sending notice…');try{const result=await api(`/dues/${b.dataset.noticeFlat}/notice`,{method:'POST'});message('billing',result.message);}catch(error){message('billing',error.message,true);}finally{b.disabled=false;}});
+    $('insights-dues-rows').addEventListener('click',async event=>{
+      const b=event.target.closest('[data-notice-flat]');if(!b||b.disabled)return;
+      const label=b.textContent;
+      let feedback=b.parentElement?.querySelector('[data-notice-feedback]');
+      if(!feedback&&b.parentElement){feedback=el('div',null,'small mt-2');feedback.dataset.noticeFeedback='true';feedback.setAttribute('role','status');feedback.setAttribute('aria-live','polite');b.parentElement.append(feedback);}
+      const report=(text,error=false)=>{message('billing',text,error);if(feedback){feedback.textContent=text;feedback.classList.toggle('text-danger',error);feedback.classList.toggle('text-success',!error);}};
+      b.disabled=true;b.textContent='Sending…';report('Sending a notice to this flat’s residents…');
+      try{const result=await api(`/dues/${b.dataset.noticeFlat}/notice`,{method:'POST'});report(result.message||'Dues notice sent.');}
+      catch(error){report(error.message,true);}
+      finally{b.disabled=false;b.textContent=label;}
+    });
     $('insights-rent-form').addEventListener('submit',async event=>{event.preventDefault();const form=event.currentTarget,button=form.querySelector('[type="submit"]');if(button.disabled||!form.reportValidity())return;const id=$('insights-rent-flat').value;if(!id)return;
       const data={currentRent:Number($('insights-rent-current').value),newRent:Number($('insights-rent-new').value),effectiveDate:$('insights-rent-date').value,landlordName:$('insights-landlord').value.trim(),notes:$('insights-rent-note').value.trim(),expectedLatestId:form.dataset.latestId?Number(form.dataset.latestId):null};
       if(data.newRent<=data.currentRent){message('billing','New rent must be greater than current rent.',true);return;}

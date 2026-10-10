@@ -313,28 +313,6 @@
             `;
         }
 
-        // Add simulation controls
-        html += `
-            <div class="mw-sim-toolbar mt-3">
-                <div class="sim-title"><i class="fa-solid fa-sliders"></i> Simulation Toolbar</div>
-                <div class="d-flex flex-wrap gap-2">
-                    ${['OFFERED', 'ASSIGNED'].includes(d.jobStatus) ? `
-                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simVendorResponse(true)">Accept Job</button>
-                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="simVendorResponse(false)">Decline (Reassign)</button>
-                    ` : ''}
-                    ${d.jobStatus === 'ACCEPTED' ? `<button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simTravel()">Start Travel</button>` : ''}
-                    ${d.jobStatus === 'TRAVELING' ? `<button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simArrive()">Arrived</button>` : ''}
-                    ${d.jobStatus === 'ARRIVED' ? `<button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="simDiagnosis()">Start Diagnosis</button>` : ''}
-                    ${d.jobStatus === 'DIAGNOSING' ? `
-                        <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simStartRepair()">No Extra Cost</button>
-                        <button type="button" class="btn btn-sm btn-warning rounded-pill px-3 fw-bold" onclick="simSubmitEstimate()">Extra Cost</button>
-                    ` : ''}
-                    ${d.jobStatus === 'IN_PROGRESS' ? `<button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="simCompleteWork()">Complete Work</button>` : ''}
-                    <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="loadPageData()">Refresh</button>
-                </div>
-            </div>
-        `;
-
         slot.innerHTML = html;
     }
 

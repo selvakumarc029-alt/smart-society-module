@@ -21,264 +21,23 @@ public class ChatService {
     private final ChatConversationRepository conversationRepository;
     private final ChatMessageRepository messageRepository;
     private final MaintenanceRequestRepository maintenanceRequestRepository;
+    private final CurrentUserService currentUser;
+    private final com.smartapartment.repository.ResidentRepository residents;
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("hh:mm a");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd MMM, hh:mm a");
 
     public ChatService(ChatConversationRepository conversationRepository,
                        ChatMessageRepository messageRepository,
-                       MaintenanceRequestRepository maintenanceRequestRepository) {
+                       MaintenanceRequestRepository maintenanceRequestRepository,
+                       CurrentUserService currentUser,
+                       com.smartapartment.repository.ResidentRepository residents) {
         this.conversationRepository = conversationRepository;
         this.messageRepository = messageRepository;
         this.maintenanceRequestRepository = maintenanceRequestRepository;
-        seedInitialChatData();
-    }
+        this.currentUser = currentUser;
+        this.residents = residents;
 
-    /**
-     * Seeds initial conversation and message data connected to maintenance tickets.
-     */
-    private synchronized void seedInitialChatData() {
-        try {
-            if (conversationRepository.count() > 0) {
-                return;
-            }
-
-            // Ticket 1: REQ-1024 (AC Repair) - Customer <-> Maintenance
-            ChatConversation conv1 = new ChatConversation();
-            conv1.setTicketNumber("REQ-1024");
-            conv1.setTicketTitle("AC Repair");
-            conv1.setConversationType("CUSTOMER_MAINTENANCE");
-            conv1.setCustomerId("selva@smartsociety.com");
-            conv1.setCustomerName("Selva");
-            conv1.setCustomerUnit("Flat A-204");
-            conv1.setMaintenanceUserId("kumar.tech");
-            conv1.setMaintenanceUserName("Kumar");
-            conv1.setStatus("OPEN");
-            conv1.setCreatedAt(LocalDateTime.now().minusMinutes(40));
-            conv1.setUpdatedAt(LocalDateTime.now().minusMinutes(10));
-            
-            maintenanceRequestRepository.findByRequestNumber("REQ-1024")
-                    .or(() -> maintenanceRequestRepository.findByRequestNumber("MR-2026-00001"))
-                    .ifPresent(mr -> conv1.setMaintenanceRequestId(mr.getId()));
-            
-            ChatConversation savedConv1 = conversationRepository.save(conv1);
-
-            // Messages for REQ-1024
-            ChatMessage m1_1 = new ChatMessage();
-            m1_1.setConversationId(savedConv1.getId());
-            m1_1.setSenderId("kumar.tech");
-            m1_1.setSenderRole("MAINTENANCE");
-            m1_1.setSenderName("Kumar");
-            m1_1.setMessage("I have been assigned to your request.");
-            m1_1.setMessageType("TEXT");
-            m1_1.setRead(true);
-            m1_1.setCreatedAt(LocalDateTime.now().minusMinutes(35));
-            messageRepository.save(m1_1);
-
-            ChatMessage m1_2 = new ChatMessage();
-            m1_2.setConversationId(savedConv1.getId());
-            m1_2.setSenderId("selva@smartsociety.com");
-            m1_2.setSenderRole("CUSTOMER");
-            m1_2.setSenderName("Selva");
-            m1_2.setMessage("When will you reach?");
-            m1_2.setMessageType("TEXT");
-            m1_2.setRead(true);
-            m1_2.setCreatedAt(LocalDateTime.now().minusMinutes(30));
-            messageRepository.save(m1_2);
-
-            ChatMessage m1_3 = new ChatMessage();
-            m1_3.setConversationId(savedConv1.getId());
-            m1_3.setSenderId("kumar.tech");
-            m1_3.setSenderRole("MAINTENANCE");
-            m1_3.setSenderName("Kumar");
-            m1_3.setMessage("Approximately 15 minutes.");
-            m1_3.setMessageType("TEXT");
-            m1_3.setRead(true);
-            m1_3.setCreatedAt(LocalDateTime.now().minusMinutes(25));
-            messageRepository.save(m1_3);
-
-            // 2 unread messages from customer for REQ-1024
-            ChatMessage m1_4 = new ChatMessage();
-            m1_4.setConversationId(savedConv1.getId());
-            m1_4.setSenderId("selva@smartsociety.com");
-            m1_4.setSenderRole("CUSTOMER");
-            m1_4.setSenderName("Selva");
-            m1_4.setMessage("Okay, I am at Flat A-204 right now.");
-            m1_4.setMessageType("TEXT");
-            m1_4.setRead(false);
-            m1_4.setCreatedAt(LocalDateTime.now().minusMinutes(15));
-            messageRepository.save(m1_4);
-
-            ChatMessage m1_5 = new ChatMessage();
-            m1_5.setConversationId(savedConv1.getId());
-            m1_5.setSenderId("selva@smartsociety.com");
-            m1_5.setSenderRole("CUSTOMER");
-            m1_5.setSenderName("Selva");
-            m1_5.setMessage("Please check the AC refrigerant level as well.");
-            m1_5.setMessageType("TEXT");
-            m1_5.setRead(false);
-            m1_5.setCreatedAt(LocalDateTime.now().minusMinutes(10));
-            messageRepository.save(m1_5);
-
-            // Ticket 1: REQ-1024 (AC Repair) - Maintenance <-> Admin (INTERNAL ESCALATION)
-            ChatConversation conv1Admin = new ChatConversation();
-            conv1Admin.setTicketNumber("REQ-1024");
-            conv1Admin.setTicketTitle("AC Repair · Part Replacement Approval");
-            conv1Admin.setConversationType("MAINTENANCE_ADMIN");
-            conv1Admin.setCustomerId("selva@smartsociety.com");
-            conv1Admin.setCustomerName("Selva");
-            conv1Admin.setCustomerUnit("Flat A-204");
-            conv1Admin.setMaintenanceUserId("kumar.tech");
-            conv1Admin.setMaintenanceUserName("Kumar");
-            conv1Admin.setAdminId("admin.office");
-            conv1Admin.setAdminName("Society Admin Office");
-            conv1Admin.setStatus("OPEN");
-            conv1Admin.setCreatedAt(LocalDateTime.now().minusMinutes(20));
-            conv1Admin.setUpdatedAt(LocalDateTime.now().minusMinutes(5));
-            if (conv1.getMaintenanceRequestId() != null) {
-                conv1Admin.setMaintenanceRequestId(conv1.getMaintenanceRequestId());
-            }
-            ChatConversation savedConv1Admin = conversationRepository.save(conv1Admin);
-
-            ChatMessage m1Admin_1 = new ChatMessage();
-            m1Admin_1.setConversationId(savedConv1Admin.getId());
-            m1Admin_1.setSenderId("kumar.tech");
-            m1Admin_1.setSenderRole("MAINTENANCE");
-            m1Admin_1.setSenderName("Kumar");
-            m1Admin_1.setMessage("Inspected AC for Flat A-204 (Ticket #REQ-1024). Compressor start capacitor is blown. Replacement part cost: Rs. 1,800. Requesting board approval.");
-            m1Admin_1.setMessageType("TEXT");
-            m1Admin_1.setRead(true);
-            m1Admin_1.setCreatedAt(LocalDateTime.now().minusMinutes(15));
-            messageRepository.save(m1Admin_1);
-
-            ChatMessage m1Admin_2 = new ChatMessage();
-            m1Admin_2.setConversationId(savedConv1Admin.getId());
-            m1Admin_2.setSenderId("admin.office");
-            m1Admin_2.setSenderRole("ADMIN");
-            m1Admin_2.setSenderName("Society Admin Office");
-            m1Admin_2.setMessage("Approved. Use certified OEM spare and log vendor invoice under society maintenance budget.");
-            m1Admin_2.setMessageType("TEXT");
-            m1Admin_2.setRead(true);
-            m1Admin_2.setCreatedAt(LocalDateTime.now().minusMinutes(5));
-            messageRepository.save(m1Admin_2);
-
-            // Ticket 2: REQ-1025 (Plumbing) - Customer <-> Maintenance
-            ChatConversation conv2 = new ChatConversation();
-            conv2.setTicketNumber("REQ-1025");
-            conv2.setTicketTitle("Plumbing");
-            conv2.setConversationType("CUSTOMER_MAINTENANCE");
-            conv2.setCustomerId("arun@smartsociety.com");
-            conv2.setCustomerName("Arun");
-            conv2.setCustomerUnit("Flat B-103");
-            conv2.setMaintenanceUserId("ramesh.plumber");
-            conv2.setMaintenanceUserName("Ramesh (Plumber)");
-            conv2.setStatus("OPEN");
-            conv2.setCreatedAt(LocalDateTime.now().minusHours(1));
-            conv2.setUpdatedAt(LocalDateTime.now().minusMinutes(18));
-            ChatConversation savedConv2 = conversationRepository.save(conv2);
-
-            ChatMessage m2_1 = new ChatMessage();
-            m2_1.setConversationId(savedConv2.getId());
-            m2_1.setSenderId("ramesh.plumber");
-            m2_1.setSenderRole("MAINTENANCE");
-            m2_1.setSenderName("Ramesh (Plumber)");
-            m2_1.setMessage("I have taken up your plumbing request.");
-            m2_1.setMessageType("TEXT");
-            m2_1.setRead(true);
-            m2_1.setCreatedAt(LocalDateTime.now().minusMinutes(30));
-            messageRepository.save(m2_1);
-
-            // 1 unread message from customer for REQ-1025
-            ChatMessage m2_2 = new ChatMessage();
-            m2_2.setConversationId(savedConv2.getId());
-            m2_2.setSenderId("arun@smartsociety.com");
-            m2_2.setSenderRole("CUSTOMER");
-            m2_2.setSenderName("Arun");
-            m2_2.setMessage("Water is leaking from the sink tap. Please bring new gasket.");
-            m2_2.setMessageType("TEXT");
-            m2_2.setRead(false);
-            m2_2.setCreatedAt(LocalDateTime.now().minusMinutes(18));
-            messageRepository.save(m2_2);
-
-            // Ticket 2: T-102 (Bathroom Water Leakage) - Maintenance <-> Admin (INTERNAL ESCALATION)
-            ChatConversation conv2Admin = new ChatConversation();
-            conv2Admin.setTicketNumber("T-102");
-            conv2Admin.setTicketTitle("Bathroom Water Leakage (AMC Corrosion Notice)");
-            conv2Admin.setConversationType("MAINTENANCE_ADMIN");
-            conv2Admin.setCustomerId("kavya@smartsociety.com");
-            conv2Admin.setCustomerName("Kavya N");
-            conv2Admin.setCustomerUnit("Flat A-101");
-            conv2Admin.setMaintenanceUserId("suresh.lead");
-            conv2Admin.setMaintenanceUserName("Lead Engineer Suresh");
-            conv2Admin.setAdminId("admin.office");
-            conv2Admin.setAdminName("Society Admin Office");
-            conv2Admin.setStatus("OPEN");
-            conv2Admin.setCreatedAt(LocalDateTime.now().minusHours(1));
-            conv2Admin.setUpdatedAt(LocalDateTime.now().minusMinutes(35));
-            ChatConversation savedConv2Admin = conversationRepository.save(conv2Admin);
-
-            ChatMessage m2Admin_1 = new ChatMessage();
-            m2Admin_1.setConversationId(savedConv2Admin.getId());
-            m2Admin_1.setSenderId("suresh.lead");
-            m2Admin_1.setSenderRole("MAINTENANCE");
-            m2Admin_1.setSenderName("Lead Engineer Suresh");
-            m2Admin_1.setMessage("Internal note for #T-102: Main riser shaft shows early salt scaling. Recommended to include in quarterly plumbing AMC check.");
-            m2Admin_1.setMessageType("TEXT");
-            m2Admin_1.setRead(true);
-            m2Admin_1.setCreatedAt(LocalDateTime.now().minusMinutes(35));
-            messageRepository.save(m2Admin_1);
-
-            // Ticket 3: T-102 (Bathroom Water Leakage) - Customer <-> Maintenance
-            ChatConversation convT102 = new ChatConversation();
-            convT102.setTicketNumber("T-102");
-            convT102.setTicketTitle("Bathroom Water Leakage");
-            convT102.setConversationType("CUSTOMER_MAINTENANCE");
-            convT102.setCustomerId("selva@smartsociety.com");
-            convT102.setCustomerName("Selva");
-            convT102.setCustomerUnit("Flat A-101");
-            convT102.setMaintenanceUserId("ramesh.plumber");
-            convT102.setMaintenanceUserName("Ramesh (Plumber)");
-            convT102.setStatus("OPEN");
-            convT102.setCreatedAt(LocalDateTime.now().minusHours(1));
-            convT102.setUpdatedAt(LocalDateTime.now().minusMinutes(22));
-            ChatConversation savedConvT102 = conversationRepository.save(convT102);
-
-            ChatMessage mT102_1 = new ChatMessage();
-            mT102_1.setConversationId(savedConvT102.getId());
-            mT102_1.setSenderId("ramesh.plumber");
-            mT102_1.setSenderRole("MAINTENANCE");
-            mT102_1.setSenderName("Ramesh (Plumber)");
-            mT102_1.setMessage("Hello! I have taken up your bathroom water leakage request (Ticket #T-102).");
-            mT102_1.setMessageType("TEXT");
-            mT102_1.setRead(true);
-            mT102_1.setCreatedAt(LocalDateTime.now().minusMinutes(40));
-            messageRepository.save(mT102_1);
-
-            ChatMessage mT102_2 = new ChatMessage();
-            mT102_2.setConversationId(savedConvT102.getId());
-            mT102_2.setSenderId("selva@smartsociety.com");
-            mT102_2.setSenderRole("CUSTOMER");
-            mT102_2.setSenderName("Selva");
-            mT102_2.setMessage("Water is dripping continuously from the shower mixer valve onto the bathroom floor.");
-            mT102_2.setMessageType("TEXT");
-            mT102_2.setRead(true);
-            mT102_2.setCreatedAt(LocalDateTime.now().minusMinutes(35));
-            messageRepository.save(mT102_2);
-
-            ChatMessage mT102_3 = new ChatMessage();
-            mT102_3.setConversationId(savedConvT102.getId());
-            mT102_3.setSenderId("ramesh.plumber");
-            mT102_3.setSenderRole("MAINTENANCE");
-            mT102_3.setSenderName("Ramesh (Plumber)");
-            mT102_3.setMessage("Understood. I am on my way with replacement Teflon washers and sealing compound.");
-            mT102_3.setMessageType("TEXT");
-            mT102_3.setRead(true);
-            mT102_3.setCreatedAt(LocalDateTime.now().minusMinutes(22));
-            messageRepository.save(mT102_3);
-
-        } catch (Exception e) {
-            // Keep app bootstrap resilient
-        }
     }
 
     /**
@@ -294,6 +53,7 @@ public class ChatService {
         if (req.getConversationId() != null) {
             Optional<ChatConversation> byId = conversationRepository.findById(req.getConversationId());
             if (byId.isPresent()) {
+                requireAccess(byId.get());
                 return byId.get();
             }
         }
@@ -303,6 +63,7 @@ public class ChatService {
         if (ticketNum != null && !ticketNum.isBlank()) {
             Optional<ChatConversation> byTicket = conversationRepository.findByTicketNumberAndConversationType(ticketNum, convType);
             if (byTicket.isPresent()) {
+                requireAccess(byTicket.get());
                 return byTicket.get();
             }
         }
@@ -311,21 +72,30 @@ public class ChatService {
         if (req.getMaintenanceRequestId() != null) {
             Optional<ChatConversation> byReqId = conversationRepository.findByMaintenanceRequestIdAndConversationType(req.getMaintenanceRequestId(), convType);
             if (byReqId.isPresent()) {
+                requireAccess(byReqId.get());
                 return byReqId.get();
             }
         }
 
         // 4. Create new conversation connected to ticket
         ChatConversation conv = new ChatConversation();
+        conv.setTenantId(currentUser.requireTenantId());
+        if ("CUSTOMER".equals(req.getSenderRole())) conv.setCustomerId(currentUser.requireUser().getEmail());
         conv.setConversationType(convType);
         conv.setTicketNumber(ticketNum != null ? ticketNum : "TICKET-" + System.currentTimeMillis());
         conv.setTicketTitle(req.getTicketTitle() != null ? req.getTicketTitle() : "Maintenance Request");
         conv.setStatus("OPEN");
         conv.setMaintenanceRequestId(req.getMaintenanceRequestId());
+        if (req.getMaintenanceRequestId()!=null) {
+            var request=maintenanceRequestRepository.findById(req.getMaintenanceRequestId()).orElseThrow(() ->
+                    new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND,"Request was not found"));
+            requireRequestAccess(request);
+        }
 
         // Attempt to enrich from MaintenanceRequest entity if available
         if (ticketNum != null) {
             maintenanceRequestRepository.findByRequestNumber(ticketNum).ifPresent(mr -> {
+                requireRequestAccess(mr);
                 conv.setMaintenanceRequestId(mr.getId());
                 if (conv.getTicketTitle() == null || conv.getTicketTitle().equals("Maintenance Request")) {
                     conv.setTicketTitle(mr.getTitle());
@@ -341,7 +111,7 @@ public class ChatService {
             conv.setCustomerName(req.getSenderRole() != null && req.getSenderRole().equals("CUSTOMER") ? req.getSenderName() : "Resident");
         }
         if (conv.getCustomerUnit() == null) {
-            conv.setCustomerUnit(req.getSenderUnit() != null ? req.getSenderUnit() : "Flat A-101");
+            conv.setCustomerUnit(req.getSenderUnit() != null ? req.getSenderUnit() : "");
         }
         if (conv.getMaintenanceUserName() == null) {
             conv.setMaintenanceUserName(req.getSenderRole() != null && req.getSenderRole().equals("MAINTENANCE") ? req.getSenderName() : "Maintenance Crew");
@@ -352,6 +122,7 @@ public class ChatService {
 
         conv.setCreatedAt(LocalDateTime.now());
         conv.setUpdatedAt(LocalDateTime.now());
+        requireAccess(conv);
         return conversationRepository.save(conv);
     }
 
@@ -430,6 +201,15 @@ public class ChatService {
      */
     @Transactional
     public ChatMessageResponse sendMessage(SendMessageRequest req) {
+        var actor=currentUser.requireUser();
+        if (!java.util.Set.of(com.smartapartment.entity.UserRole.RESIDENT, com.smartapartment.entity.UserRole.MAINTENANCE_STAFF,
+                com.smartapartment.entity.UserRole.SOCIETY_ADMIN, com.smartapartment.entity.UserRole.FACILITY_MANAGER).contains(actor.getRole()))
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN);
+        req.setSenderRole(actor.getRole()==com.smartapartment.entity.UserRole.RESIDENT ? "CUSTOMER"
+                : actor.getRole()==com.smartapartment.entity.UserRole.MAINTENANCE_STAFF ? "MAINTENANCE" : "ADMIN");
+        req.setSenderId(actor.getEmail());req.setSenderEmail(actor.getEmail());req.setSenderName(actor.getFullName());
+        if (req.getMessage()==null || req.getMessage().isBlank())
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.BAD_REQUEST,"Message is required");
         ChatConversation conversation = resolveOrCreateConversation(req);
 
         ChatMessage msg = new ChatMessage();
@@ -462,6 +242,7 @@ public class ChatService {
         }
 
         ChatConversation conv = convOpt.get();
+        requireAccess(conv);
 
         // STRICT SEPARATION: Customer CANNOT view MAINTENANCE_ADMIN conversations
         if ("CUSTOMER".equalsIgnoreCase(viewerRole) && "MAINTENANCE_ADMIN".equalsIgnoreCase(conv.getConversationType())) {
@@ -494,6 +275,7 @@ public class ChatService {
         List<ConversationSummary> summaries = new ArrayList<>();
 
         for (ChatConversation conv : conversations) {
+            if (!canAccess(conv)) continue;
             List<ChatMessage> msgs = messageRepository.findByConversationIdOrderByCreatedAtAsc(conv.getId());
             String lastMsgText = "No messages yet";
             String lastSender = "";
@@ -551,8 +333,39 @@ public class ChatService {
     @Transactional
     public void markConversationAsRead(String convId, String readerRole) {
         resolveConversation(convId, null).ifPresent(conv -> {
+            requireAccess(conv);
             messageRepository.markConversationAsRead(conv.getId(), readerRole);
         });
+    }
+
+    private void requireAccess(ChatConversation conversation) {
+        if (!canAccess(conversation)) throw new org.springframework.web.server.ResponseStatusException(
+                org.springframework.http.HttpStatus.FORBIDDEN,"This conversation is not available to your account");
+    }
+
+    private boolean canAccess(ChatConversation conversation) {
+        var actor=currentUser.requireUser();
+        String tenant=conversation.getTenantId();
+        if (tenant==null && conversation.getMaintenanceRequestId()!=null)
+            tenant=maintenanceRequestRepository.findById(conversation.getMaintenanceRequestId()).map(com.smartapartment.entity.MaintenanceRequest::getTenantId).orElse(null);
+        if (!java.util.Objects.equals(actor.getTenantId(),tenant) || tenant==null) return false;
+        if (actor.getRole()==com.smartapartment.entity.UserRole.RESIDENT) {
+            if (!"CUSTOMER_MAINTENANCE".equals(conversation.getConversationType())) return false;
+            String customer=conversation.getCustomerId();
+            return actor.getEmail().equalsIgnoreCase(customer==null ? "" : customer)
+                    || residents.findFirstByUserOrderByIdAsc(actor).map(profile -> String.valueOf(profile.getId()).equals(customer)).orElse(false);
+        }
+        return actor.getRole()==com.smartapartment.entity.UserRole.SOCIETY_ADMIN
+                || actor.getRole()==com.smartapartment.entity.UserRole.FACILITY_MANAGER
+                || actor.getRole()==com.smartapartment.entity.UserRole.MAINTENANCE_STAFF;
+    }
+
+    private void requireRequestAccess(com.smartapartment.entity.MaintenanceRequest request) {
+        var actor=currentUser.requireUser();
+        if (!java.util.Objects.equals(actor.getTenantId(),request.getTenantId())
+                || actor.getRole()==com.smartapartment.entity.UserRole.RESIDENT
+                && !actor.getEmail().equalsIgnoreCase(request.getResidentEmail()==null ? "" : request.getResidentEmail()))
+            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN,"Request belongs to another account");
     }
 
     /**
@@ -564,12 +377,14 @@ public class ChatService {
 
         List<ChatConversation> custConvs = conversationRepository.findByConversationTypeOrderByUpdatedAtDesc("CUSTOMER_MAINTENANCE");
         for (ChatConversation c : custConvs) {
+            if (!canAccess(c)) continue;
             custUnread += messageRepository.countByConversationIdAndSenderRoleNotAndIsReadFalse(c.getId(), userRole);
         }
 
         if (!"CUSTOMER".equalsIgnoreCase(userRole)) {
             List<ChatConversation> adminConvs = conversationRepository.findByConversationTypeOrderByUpdatedAtDesc("MAINTENANCE_ADMIN");
             for (ChatConversation c : adminConvs) {
+                if (!canAccess(c)) continue;
                 adminUnread += messageRepository.countByConversationIdAndSenderRoleNotAndIsReadFalse(c.getId(), userRole);
             }
         }

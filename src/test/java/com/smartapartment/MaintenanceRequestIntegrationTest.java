@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
+@SpringBootTest(properties={"spring.datasource.url=jdbc:h2:mem:request_lifecycle_audit;DB_CLOSE_DELAY=-1","spring.jpa.hibernate.ddl-auto=create-drop","SEED_DEMO_ACCOUNTS=false"})
 @AutoConfigureMockMvc
 class MaintenanceRequestIntegrationTest {
 
@@ -33,24 +33,25 @@ class MaintenanceRequestIntegrationTest {
     private AppUserRepository userRepository;
 
     private MockHttpSession residentSession;
+    private AppUser residentAccount;
+    @Autowired com.smartapartment.repository.ResidentRepository residents;
 
     @BeforeEach
     void setUp() throws Exception {
-        residentSession = new MockHttpSession();
-        residentSession.setAttribute("dashboard:smartapartment:resident", Boolean.TRUE);
+        residentAccount=new AppUser();residentAccount.setEmail(java.util.UUID.randomUUID()+"@request.test");
+        residentAccount.setFullName("Request resident");residentAccount.setPasswordHash("unused");
+        residentAccount.setRole(UserRole.RESIDENT);residentAccount.setTenantId("request-"+java.util.UUID.randomUUID());
+        residentAccount=userRepository.save(residentAccount);
+        var profile=new com.smartapartment.entity.Resident();profile.setUser(residentAccount);profile.setTenantId(residentAccount.getTenantId());profile.setResidentType("TENANT");residents.save(profile);
+        residentSession=authenticatedSession(residentAccount);
+    }
 
-        // Ensure resident account exists
-        if (userRepository.findByEmail("resident@smartsociety").isEmpty()
-                && userRepository.findByEmail("resident@smartapartment").isEmpty()) {
-            AppUser resident = new AppUser();
-            resident.setEmail("resident@smartsociety");
-            resident.setFullName("Kavya Sharma");
-            resident.setPhone("9844022010");
-            resident.setPasswordHash("$2a$10$abcdefghijklmnopqrstuvwxyz0123456789ABCDEF");
-            resident.setRole(UserRole.RESIDENT);
-            resident.setTenantId("society-1");
-            userRepository.save(resident);
-        }
+    private MockHttpSession authenticatedSession(AppUser account) {
+        MockHttpSession session=new MockHttpSession();
+        var context=org.springframework.security.core.context.SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(account.getEmail(),"unused",java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_"+account.getRole().name()))));
+        session.setAttribute(org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,context);
+        return session;
     }
 
     @Test
@@ -79,7 +80,7 @@ class MaintenanceRequestIntegrationTest {
                 .andExpect(jsonPath("$.serviceType").value("Kitchen Tap Leakage"))
                 .andExpect(jsonPath("$.title").value("Kitchen sink pipe leaking continuously"))
                 .andExpect(jsonPath("$.priority").value("HIGH"))
-                .andExpect(jsonPath("$.status").value("REQUESTED"))
+                .andExpect(jsonPath("$.status").value("WAITING_FOR_WORKER"))
                 .andExpect(jsonPath("$.eligibleForCancellation").value(true))
                 .andExpect(jsonPath("$.eligibleForReopen").value(false))
                 .andExpect(jsonPath("$.history", hasSize(greaterThanOrEqualTo(1))))
@@ -193,9 +194,11 @@ class MaintenanceRequestIntegrationTest {
                         .content("{\"reason\": \"Another attempt\"}"))
                 .andExpect(status().isBadRequest());
 
-        // Update to COMPLETED via PUT (simulating staff completion with maintenance session)
-        MockHttpSession adminSession = new MockHttpSession();
-        adminSession.setAttribute("dashboard:smartapartment:maintenance", Boolean.TRUE);
+        AppUser admin=new AppUser();admin.setEmail(java.util.UUID.randomUUID()+"@admin.test");admin.setTenantId(residentAccount.getTenantId());admin.setFullName("Maintenance administrator");admin.setRole(UserRole.SOCIETY_ADMIN);admin.setPasswordHash("unused");admin=userRepository.save(admin);
+        MockHttpSession adminSession=authenticatedSession(admin);
+        mvc.perform(put("/api/maintenance/requests/"+id).session(adminSession).contentType(MediaType.APPLICATION_JSON).content("{\"status\":\"COMPLETED\"}")).andExpect(status().isConflict());
+        String next=mvc.perform(post("/api/maintenance/requests").session(residentSession).contentType(MediaType.APPLICATION_JSON).content(payload)).andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+        id=json.readTree(next).get("id").asLong();
 
         mvc.perform(put("/api/maintenance/requests/" + id)
                         .session(adminSession)

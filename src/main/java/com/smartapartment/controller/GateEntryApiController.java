@@ -52,7 +52,6 @@ public class GateEntryApiController {
     @Transactional
     public List<Map<String, Object>> listGates() {
         AppUser user = currentUser.requireUser();
-        ensureDefaultGates(user.getTenantId());
         List<Gate> available = gates.findByTenantIdOrderByGateNumberAsc(user.getTenantId());
         if (user.getRole() == UserRole.SECURITY_STAFF) {
             List<SecurityGateAssignment> assigned = gateAssignments.findByTenantIdAndSecurityGuardIdOrderByCreatedAtDesc(user.getTenantId(), user.getId());
@@ -307,14 +306,6 @@ public class GateEntryApiController {
         result.put("vehiclesInside", list.stream().filter(v -> v.getCheckInAt() != null && v.getCheckOutAt() == null && !clean(v.getVehicleNumber()).isBlank()).count());
         result.put("exitsToday", list.stream().filter(v -> v.getCheckOutAt() != null && today.equals(v.getCheckOutAt().toLocalDate())).count());
         return result;
-    }
-
-    private void ensureDefaultGates(String tenant) {
-        if (!gates.findByTenantIdOrderByGateNumberAsc(tenant).isEmpty()) return;
-        String[][] defaults = {{"Gate 1","Main Entrance","BOTH"},{"Gate 2","Residents Gate","BOTH"},{"Gate 3","Visitor Gate","ENTRY"},{"Gate 4","Service / Delivery Gate","BOTH"},{"Gate 5","Exit Gate","EXIT"}};
-        for (String[] item : defaults) {
-            Gate gate = new Gate(); gate.setTenantId(tenant); gate.setGateNumber(item[0]); gate.setGateName(item[1]); gate.setGateType(item[2]); gate.setStatus("ACTIVE"); gates.save(gate);
-        }
     }
 
     private void applyGate(Gate gate, GateRequest request) {

@@ -27,7 +27,7 @@ const source=fs.readFileSync('src/main/resources/static/smartapartment/js/dashbo
 const submit=source.slice(source.indexOf('async function submitActionModal()'),source.indexOf('\nfunction enhanceDashboardCategories()'));
 function modalHarness(performAction){
     const save={disabled:false,textContent:'Confirm'},toasts=[],receipts=[],audit=[];
-    const modal={querySelector:selector=>selector==='#dashboardActionSave'?save:selector==='#dashboardActionTitle'?{textContent:'Resident'}:{querySelector:()=>null},querySelectorAll:()=>[{type:'password',value:' secret123 '}]};
+    const modal={classList:{contains:()=>false},querySelector:selector=>selector==='#dashboardActionSave'?save:selector==='#dashboardActionTitle'?{textContent:'Resident'}:{querySelector:()=>null},querySelectorAll:()=>[{type:'password',value:' secret123 '}]};
     const context={activeAction:{action:'add',button:{dataset:{table:'residents'},closest:()=>null}},dashboardRole:'admin',window:{validateRequiredScope:()=>true},ensureActionModal:()=>modal,performAction,
         showToast:value=>toasts.push(value),showActionReceipt:r=>receipts.push(r),persistWorkflowAction:async(...args)=>{audit.push(args);return{id:1};}};
     vm.createContext(context);vm.runInContext(submit,context);return{context,save,toasts,receipts,audit};
@@ -46,4 +46,16 @@ test('PropertyDirect does not receive the CRUD module or management controls',()
     const context={window:{},document:{body:{dataset:{platform:'propertydirect'}}}};context.window.document=context.document;
     vm.runInNewContext(fs.readFileSync('src/main/resources/static/smartapartment/js/crud-workflows.js','utf8'),context);
     assert.equal(context.window.smartCrudRequest,undefined);assert.equal(context.window.performPersistedCrudAction,undefined);
+});
+test('failed admin payment never changes the invoice status or offers a receipt',async()=>{
+    const code=source.slice(source.indexOf('async function performAction('),source.indexOf('\nasync function submitActionModal()'));
+    let mutations=0,statusChanges=0;
+    const row={dataset:{recordId:'7'}},button={dataset:{},textContent:'Mark Paid',closest:()=>row};
+    const context={dashboardRole:'admin',window:{},getContext:()=>({panel:'billing'}),buttonLabel:b=>b.textContent,performControlQueueAction:()=>null,
+        billingRowData:()=>({flat:'A-01',month:'2026-10'}),mutateSociety:async()=>{mutations++;throw Error('Payment reference already used');},setStatus:()=>statusChanges++};
+    vm.createContext(context);vm.runInContext(code,context);
+    await assert.rejects(()=>context.performAction('pay',button,['BANK_TRANSFER','TX-7']),/already used/);
+    assert.equal(mutations,1);assert.equal(statusChanges,0);assert.equal(button.textContent,'Mark Paid');
+    await assert.rejects(()=>context.performAction('pay',button,['BANK_TRANSFER','']),/verified transaction/);
+    assert.equal(mutations,1);
 });

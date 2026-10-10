@@ -2,7 +2,7 @@
     'use strict';
     const role = document.body.dataset.dashboardRole;
     const worker = role === 'maintenance-worker';
-    const customer = role === 'resident' || role === 'customer';
+    const customer = role === 'customer';
     if (!worker && !customer) return;
     const platform = role === 'customer' ? 'propertydirect' : 'smartsociety';
     const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

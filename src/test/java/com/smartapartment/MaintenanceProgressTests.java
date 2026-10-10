@@ -30,7 +30,12 @@ class MaintenanceProgressTests {
         c.setEmail(UUID.randomUUID()+"@test.local"); c.setUsername(UUID.randomUUID().toString()); c.setPasswordHash("unused");
         customers.save(c); var s = new MockHttpSession(); s.setAttribute("propertydirect:customerId", c.getId()); return s;
     }
-    MockHttpSession admin() {var s = new MockHttpSession(); s.setAttribute("dashboard:smartapartment:superadmin", true); return s;}
+    MockHttpSession admin() {
+        AppUser account=new AppUser();account.setTenantId("platform");account.setEmail(UUID.randomUUID()+"@test.local");account.setFullName("Audit admin");account.setRole(UserRole.SUPER_ADMIN);account.setPasswordHash("unused");users.save(account);
+        var context=org.springframework.security.core.context.SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(account.getEmail(),null,java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_SUPER_ADMIN"))));
+        var session=new MockHttpSession();session.setAttribute(org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,context);return session;
+    }
     @Test void customerBookingIsVisibleToMaintenanceAndOnlyItsOwnerWithPersistedProgress() throws Exception {
         var owner = customer(); var stranger = customer(); var staff = admin();
         String body = """

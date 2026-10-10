@@ -127,18 +127,19 @@
                 console.warn("Could not load worker dashboard summary (status " + res.status + ")");
                 try {
                     const saved = JSON.parse(localStorage.getItem("smart_worker_local_state") || "null");
-                    if (saved) applyLocalAttendanceState(saved.attendanceStatus, saved.availabilityStatus);
+                    if (saved && !societyAttendance) applyLocalAttendanceState(saved.attendanceStatus, saved.availabilityStatus);
                 } catch(err) {}
                 return;
             }
             const data = await res.json();
             renderWorkerControlBar(data);
             renderWorkerTasks(data);
+            return data;
         } catch (e) {
             console.error("Error loading worker dashboard summary:", e);
             try {
                 const saved = JSON.parse(localStorage.getItem("smart_worker_local_state") || "null");
-                if (saved) applyLocalAttendanceState(saved.attendanceStatus, saved.availabilityStatus);
+                if (saved && !societyAttendance) applyLocalAttendanceState(saved.attendanceStatus, saved.availabilityStatus);
             } catch(err) {}
         }
     }
@@ -349,6 +350,20 @@
     }
 
     // Attendance Actions
+    async function requireAttendanceSession() {
+        if (!societyAttendance) return;
+        const response = await fetch("/api/society/me", {
+            credentials: "same-origin", headers: { "Accept": "application/json" }, cache: "no-store"
+        });
+        if (response.redirected || !response.ok) {
+            throw new Error("Your maintenance login has expired or changed. Sign in with your maintenance email and password, then retry Clock In.");
+        }
+        const account = await response.json();
+        if (account.role !== "MAINTENANCE_STAFF") {
+            throw new Error(`You are currently signed in as ${account.email || account.role}. Attendance requires a maintenance account. Signing in on another localhost tab changes the login for this tab too.`);
+        }
+    }
+
     let attendanceSaving = false;
     async function saveAttendance(buttonId, endpoint, successMessage, type = "success") {
         if (attendanceSaving) return;
@@ -361,17 +376,35 @@
         const label = button?.innerHTML;
         if (button) button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Saving...';
         let saved = false;
+        let feedback = document.getElementById("workerAttendanceFeedback");
+        const bar = document.getElementById("workerAttendanceControlBar");
+        if (!feedback && bar) {
+            feedback = document.createElement("p");
+            feedback.id = "workerAttendanceFeedback";
+            feedback.setAttribute("role", "status");
+            bar.appendChild(feedback);
+        }
+        if (feedback) feedback.textContent = "";
         try {
+            await requireAttendanceSession();
             const response = await fetch(endpoint, {
                 method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: "{}"
             });
             if (response.redirected || !response.ok) {
                 const error = await response.json().catch(() => ({}));
-                throw new Error(error.message || error.error || "Attendance was not saved. Refresh or sign in again.");
+                throw new Error(error.detail || error.message || (response.status === 403
+                    ? "Your session is not authorized to record maintenance attendance. Sign in with your maintenance account and retry."
+                    : error.error || "Attendance was not saved. Refresh or sign in again."));
             }
             saved = true;
             showToast(successMessage, type);
-        } catch (error) { showToast(error.message, "danger"); }
+        } catch (error) {
+            if (feedback) {
+                feedback.className = "text-danger mt-3 mb-0";
+                feedback.textContent = error.message;
+            }
+            showToast(error.message, "danger");
+        }
         finally {
             controls.forEach(({ element, disabled }) => { element.disabled = disabled; });
             if (button) button.innerHTML = label;
@@ -445,9 +478,11 @@
     }
 
     // Manager / Admin Attendance Roster Table in #workers
+    let rosterLoading = false;
     async function loadMaintenanceWorkersAttendance() {
         const table = document.getElementById("maintenanceWorkersAttendanceTable") || document.getElementById("maintenanceWorkersTable");
-        if (!table) return;
+        if (!table || rosterLoading) return;
+        rosterLoading = true;
 
         table.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4"><span class="spinner-border spinner-border-sm text-primary me-2"></span>Loading worker attendance and availability...</td></tr>`;
 
@@ -456,7 +491,10 @@
                 credentials: "same-origin",
                 headers: { "Accept": "application/json" }
             });
-            if (!res.ok) throw new Error("Failed to load worker attendance");
+            if (!res.ok || res.redirected) {
+                const detail = await res.json().catch(() => ({}));
+                throw new Error(detail.message || detail.detail || "Sign in with your maintenance account to load attendance.");
+            }
             const workers = await res.json();
 
             if (!Array.isArray(workers) || workers.length === 0) {
@@ -521,6 +559,8 @@
 
         } catch (e) {
             table.innerHTML = `<tr><td colspan="9" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load attendance: ${escapeHtml(e.message)}</td></tr>`;
+        } finally {
+            rosterLoading = false;
         }
     }
 
@@ -545,9 +585,6 @@
                     break;
                 }
             }
-            if (idx === 1 && !deptLower.includes("electric")) style = tradeStyles["electrical"];
-            if (idx === 2 && !deptLower.includes("carpent")) style = tradeStyles["carpentry"];
-            if (idx === 3 && !deptLower.includes("clean")) style = tradeStyles["cleaning"];
 
             const attBadge = getAttendanceBadge(w.attendanceStatus, true);
             const availBadge = getAvailabilityBadge(w.availabilityStatus, true);
@@ -830,6 +867,15 @@
     document.addEventListener("DOMContentLoaded", () => {
         loadWorkerDashboardSummary();
         loadMaintenanceWorkersAttendance();
+        setInterval(() => {
+            if (!document.hidden) {
+                loadMaintenanceWorkersAttendance();
+                loadWorkerDashboardSummary();
+            }
+        }, 15000);
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) loadMaintenanceWorkersAttendance();
+        });
         startWorkerResponseTicker();
         startTaskElapsedTicker();
     });

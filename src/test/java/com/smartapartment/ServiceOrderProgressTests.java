@@ -52,7 +52,7 @@ public class ServiceOrderProgressTests {
         b.setJobStatus("IN_PROGRESS");assertThrows(ResponseStatusException.class,()->service.review(new EmergencyMaintenanceService.Actor(3L,"smartsociety",null,"Resident",false,false),1L,5,"Good"));
     }
     @Test void futureAppointmentRemainsQueued() {
-        var b=booking(); b.setPreferredDate(java.time.LocalDate.now().plusDays(1));
+        var b=booking(); b.setJobStatus("UNASSIGNED");b.setPartnerId(null);b.setPreferredDate(java.time.LocalDate.now().plusDays(1));
         service.dispatch(b); assertEquals("UNASSIGNED",b.getJobStatus()); verify(partners,never()).findByHubId(anyLong());
     }
     public static void main(String[] args) {

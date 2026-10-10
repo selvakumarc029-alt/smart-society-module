@@ -18,6 +18,9 @@ public class ChatConversation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "tenant_id", length = 100)
+    private String tenantId;
+
     @Column(name = "maintenance_request_id")
     private Long maintenanceRequestId;
 

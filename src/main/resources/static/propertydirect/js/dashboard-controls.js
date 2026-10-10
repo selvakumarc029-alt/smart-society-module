@@ -27,7 +27,7 @@
             var active = view === selected;
             view.classList.toggle('hidden', !active);
             view.classList.toggle('d-none', !active);
-            view.style.display = active ? '' : 'none';
+            view.style.display = active ? 'block' : 'none';
         });
 
         var title = document.getElementById('panelTitle');

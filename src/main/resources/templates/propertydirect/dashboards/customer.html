@@ -291,6 +291,673 @@
             background: #059669 !important;
         }
 
+        /* ========================================================
+           INTERACTIVE SUBSCRIPTION CHECKOUT MODAL STYLES
+           ======================================================== */
+        .pd-plan-card {
+            cursor: pointer !important;
+            user-select: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .pd-plan-card:active {
+            transform: scale(0.985) !important;
+        }
+
+        .checkout-modal-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 999999 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 20px !important;
+            box-sizing: border-box !important;
+        }
+
+        .checkout-modal-overlay.hidden {
+            display: none !important;
+        }
+
+        .checkout-modal-backdrop {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            background: rgba(15, 23, 42, 0.7) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            animation: checkoutFadeIn 0.22s ease-out !important;
+        }
+
+        .checkout-modal-card {
+            position: relative !important;
+            width: 100% !important;
+            max-width: 580px !important;
+            max-height: 90vh !important;
+            overflow-y: auto !important;
+            background: #ffffff !important;
+            border-radius: 24px !important;
+            box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+            padding: 26px 28px !important;
+            box-sizing: border-box !important;
+            animation: checkoutSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            z-index: 2 !important;
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        }
+
+        @keyframes checkoutFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes checkoutSlideUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .checkout-modal-header {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            margin-bottom: 18px !important;
+        }
+
+        .checkout-header-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 7px !important;
+            background: #ecfdf5 !important;
+            border: 1px solid #a7f3d0 !important;
+            color: #065f46 !important;
+            font-size: 0.74rem !important;
+            font-weight: 800 !important;
+            padding: 4px 12px !important;
+            border-radius: 999px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+        }
+
+        .checkout-close-btn {
+            background: #f1f5f9 !important;
+            border: none !important;
+            border-radius: 50% !important;
+            width: 34px !important;
+            height: 34px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 1.25rem !important;
+            color: #64748b !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            line-height: 1 !important;
+        }
+
+        .checkout-close-btn:hover {
+            background: #e2e8f0 !important;
+            color: #0f172a !important;
+            transform: rotate(90deg) !important;
+        }
+
+        .checkout-plan-summary {
+            background: linear-gradient(135deg, #0f2246 0%, #1e3a8a 100%) !important;
+            border-radius: 18px !important;
+            padding: 20px 24px !important;
+            color: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 16px !important;
+            margin-bottom: 20px !important;
+            box-shadow: 0 10px 25px -5px rgba(15, 34, 70, 0.3) !important;
+        }
+
+        .plan-summary-eyebrow {
+            display: block !important;
+            font-size: 0.68rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.12em !important;
+            color: #93c5fd !important;
+            margin-bottom: 4px !important;
+        }
+
+        .checkout-plan-name {
+            font-size: 1.45rem !important;
+            font-weight: 800 !important;
+            color: #ffffff !important;
+            margin: 0 0 8px 0 !important;
+            line-height: 1.2 !important;
+        }
+
+        .checkout-plan-meta {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            flex-wrap: wrap !important;
+        }
+
+        .checkout-validity-pill {
+            background: rgba(255, 255, 255, 0.18) !important;
+            color: #ffffff !important;
+            font-size: 0.74rem !important;
+            font-weight: 700 !important;
+            padding: 3px 10px !important;
+            border-radius: 999px !important;
+            backdrop-filter: blur(4px) !important;
+        }
+
+        .checkout-fee-pill {
+            background: #10b981 !important;
+            color: #ffffff !important;
+            font-size: 0.72rem !important;
+            font-weight: 800 !important;
+            padding: 3px 9px !important;
+            border-radius: 999px !important;
+        }
+
+        .plan-summary-right {
+            text-align: right !important;
+            flex-shrink: 0 !important;
+        }
+
+        .checkout-price-label {
+            display: block !important;
+            font-size: 0.74rem !important;
+            color: #bfdbfe !important;
+            font-weight: 700 !important;
+            margin-bottom: 2px !important;
+        }
+
+        .checkout-amount-wrap {
+            display: flex !important;
+            align-items: baseline !important;
+            justify-content: flex-end !important;
+            color: #ffffff !important;
+        }
+
+        .checkout-currency {
+            font-size: 1.2rem !important;
+            font-weight: 700 !important;
+            margin-right: 2px !important;
+        }
+
+        .checkout-price-digits {
+            font-size: 1.95rem !important;
+            font-weight: 800 !important;
+            letter-spacing: -0.02em !important;
+        }
+
+        .checkout-tax-note {
+            display: block !important;
+            font-size: 0.68rem !important;
+            color: #93c5fd !important;
+            margin-top: 2px !important;
+        }
+
+        .checkout-tabs {
+            display: flex !important;
+            background: #f1f5f9 !important;
+            padding: 4px !important;
+            border-radius: 14px !important;
+            gap: 6px !important;
+            margin-bottom: 20px !important;
+        }
+
+        .checkout-tab-btn {
+            flex: 1 !important;
+            padding: 10px 14px !important;
+            border: none !important;
+            border-radius: 10px !important;
+            background: transparent !important;
+            color: #475569 !important;
+            font-size: 0.85rem !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 7px !important;
+            transition: all 0.2s ease !important;
+            font-family: inherit !important;
+        }
+
+        .checkout-tab-btn:hover {
+            color: #0f172a !important;
+        }
+
+        .checkout-tab-btn.active {
+            background: #ffffff !important;
+            color: #0f2246 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .checkout-tab-content {
+            display: block !important;
+        }
+
+        .checkout-tab-content.hidden {
+            display: none !important;
+        }
+
+        .upi-qr-section {
+            display: flex !important;
+            align-items: center !important;
+            gap: 20px !important;
+            padding: 18px 20px !important;
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 18px !important;
+            margin-bottom: 18px !important;
+        }
+
+        .qr-code-frame {
+            position: relative !important;
+            width: 150px !important;
+            height: 150px !important;
+            background: #ffffff !important;
+            border: 2px solid #cbd5e1 !important;
+            border-radius: 14px !important;
+            padding: 8px !important;
+            box-sizing: border-box !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        .checkout-qr-img {
+            width: 130px !important;
+            height: 130px !important;
+            object-fit: contain !important;
+            border-radius: 8px !important;
+        }
+
+        .upi-scan-instructions {
+            flex: 1 !important;
+        }
+
+        .instruction-badge {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            font-size: 0.74rem !important;
+            font-weight: 800 !important;
+            color: #2563eb !important;
+            background: #eff6ff !important;
+            border: 1px solid #bfdbfe !important;
+            padding: 3px 10px !important;
+            border-radius: 999px !important;
+            margin-bottom: 8px !important;
+        }
+
+        .instruction-lead {
+            font-size: 0.85rem !important;
+            color: #475569 !important;
+            line-height: 1.4 !important;
+            margin: 0 0 12px 0 !important;
+        }
+
+        .supported-upi-logos {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+        }
+
+        .upi-chip {
+            font-size: 0.72rem !important;
+            font-weight: 700 !important;
+            padding: 4px 9px !important;
+            border-radius: 6px !important;
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #334155 !important;
+        }
+
+        .quick-upi-actions {
+            margin-bottom: 18px !important;
+        }
+
+        .quick-upi-title {
+            display: block !important;
+            font-size: 0.8rem !important;
+            font-weight: 700 !important;
+            color: #64748b !important;
+            margin-bottom: 10px !important;
+        }
+
+        .upi-apps-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 10px !important;
+        }
+
+        .upi-app-btn {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            padding: 12px 8px !important;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            text-decoration: none !important;
+            color: #0f172a !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            transition: all 0.2s ease !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+            cursor: pointer !important;
+            font-family: inherit !important;
+            width: 100% !important;
+            outline: none !important;
+        }
+
+        .upi-app-btn:hover {
+            transform: translateY(-2px) !important;
+            border-color: #2563eb !important;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .upi-app-btn:active {
+            transform: scale(0.96) !important;
+        }
+
+        .upi-app-feedback {
+            margin-top: 10px !important;
+            padding: 10px 14px !important;
+            background: #eff6ff !important;
+            border: 1px solid #bfdbfe !important;
+            border-radius: 10px !important;
+            font-size: 0.78rem !important;
+            color: #1e40af !important;
+            text-align: center !important;
+            line-height: 1.4 !important;
+        }
+
+        .upi-app-icon {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 900 !important;
+            font-size: 0.95rem !important;
+            color: #ffffff !important;
+        }
+
+        .gpay-btn .upi-app-icon { background: #4285f4 !important; }
+        .phonepe-btn .upi-app-icon { background: #5f259f !important; }
+        .paytm-btn .upi-app-icon { background: #002970 !important; }
+        .generic-upi-btn .upi-app-icon { background: #10b981 !important; }
+
+        .upi-completion-callout {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 14px !important;
+            padding: 14px 18px !important;
+            background: #f0fdf4 !important;
+            border: 1px solid #bbf7d0 !important;
+            border-radius: 14px !important;
+        }
+
+        .callout-copy strong {
+            display: block !important;
+            font-size: 0.86rem !important;
+            color: #166534 !important;
+            margin-bottom: 2px !important;
+        }
+
+        .callout-copy p {
+            margin: 0 !important;
+            font-size: 0.78rem !important;
+            color: #15803d !important;
+            line-height: 1.3 !important;
+        }
+
+        .secondary-btn {
+            background: #ffffff !important;
+            border: 1px solid #86efac !important;
+            color: #166534 !important;
+            font-weight: 800 !important;
+            font-size: 0.78rem !important;
+            padding: 8px 14px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            white-space: nowrap !important;
+            transition: all 0.2s ease !important;
+            font-family: inherit !important;
+        }
+
+        .secondary-btn:hover {
+            background: #166534 !important;
+            color: #ffffff !important;
+        }
+
+        .manual-credentials-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 10px !important;
+            margin-bottom: 18px !important;
+        }
+
+        .credential-card {
+            background: #f8fafc !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 10px 14px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4px !important;
+        }
+
+        .credential-label {
+            font-size: 0.72rem !important;
+            color: #64748b !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.04em !important;
+        }
+
+        .credential-value-row {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 8px !important;
+        }
+
+        .credential-code {
+            font-family: 'Consolas', 'Courier New', monospace !important;
+            font-size: 0.88rem !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .copy-pill-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+            background: #eff6ff !important;
+            border: 1px solid #bfdbfe !important;
+            color: #2563eb !important;
+            padding: 3px 8px !important;
+            border-radius: 6px !important;
+            font-size: 0.74rem !important;
+            font-weight: 800 !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            font-family: inherit !important;
+            flex-shrink: 0 !important;
+        }
+
+        .copy-pill-btn:hover {
+            background: #2563eb !important;
+            color: #ffffff !important;
+        }
+
+        .verification-form {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 14px !important;
+        }
+
+        .form-row {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+        }
+
+        .form-field {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+
+        .form-field span {
+            font-size: 0.8rem !important;
+            font-weight: 800 !important;
+            color: #334155 !important;
+        }
+
+        .form-field input[type="text"] {
+            padding: 10px 14px !important;
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 10px !important;
+            font-size: 0.86rem !important;
+            color: #0f172a !important;
+            font-weight: 600 !important;
+            outline: none !important;
+            transition: all 0.2s ease !important;
+            box-sizing: border-box !important;
+            font-family: inherit !important;
+        }
+
+        .form-field input[type="text"]:focus {
+            border-color: #2563eb !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+        }
+
+        .file-upload-box {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            padding: 10px 14px !important;
+            border: 1px dashed #cbd5e1 !important;
+            border-radius: 12px !important;
+            background: #f8fafc !important;
+        }
+
+        .file-pick-btn {
+            background: #ffffff !important;
+            border: 1px solid #cbd5e1 !important;
+            color: #334155 !important;
+            font-size: 0.78rem !important;
+            font-weight: 700 !important;
+            padding: 6px 12px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            transition: all 0.2s ease !important;
+            font-family: inherit !important;
+        }
+
+        .file-pick-btn:hover {
+            border-color: #2563eb !important;
+            color: #2563eb !important;
+        }
+
+        .file-name-feedback {
+            font-size: 0.78rem !important;
+            color: #64748b !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+
+        .primary-submit-btn {
+            width: 100% !important;
+            padding: 13px 20px !important;
+            border-radius: 12px !important;
+            background: linear-gradient(135deg, #0f2246 0%, #1e3a8a 100%) !important;
+            color: #ffffff !important;
+            font-size: 0.92rem !important;
+            font-weight: 800 !important;
+            border: none !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            box-shadow: 0 4px 14px rgba(15, 34, 70, 0.25) !important;
+            transition: all 0.2s ease !important;
+            font-family: inherit !important;
+            margin-top: 4px !important;
+        }
+
+        .primary-submit-btn:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 6px 20px rgba(15, 34, 70, 0.35) !important;
+        }
+
+        .checkout-modal-footer {
+            margin-top: 18px !important;
+            padding-top: 14px !important;
+            border-top: 1px solid #f1f5f9 !important;
+        }
+
+        .security-guarantee {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            font-size: 0.75rem !important;
+            color: #64748b !important;
+            font-weight: 600 !important;
+            text-align: center !important;
+        }
+
+        @media (max-width: 600px) {
+            .checkout-modal-card {
+                padding: 20px 16px !important;
+            }
+            .upi-qr-section {
+                flex-direction: column !important;
+                text-align: center !important;
+            }
+            .upi-apps-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            .manual-credentials-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .form-row {
+                grid-template-columns: 1fr !important;
+            }
+            .checkout-plan-summary {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+            .plan-summary-right {
+                text-align: left !important;
+            }
+            .checkout-amount-wrap {
+                justify-content: flex-start !important;
+            }
+        }
+
         /* TAB SHOW / HIDE RESET - CRITICAL */
         .hidden,
         [hidden],
@@ -860,403 +1527,6 @@
             box-shadow: 0 4px 24px rgba(15, 23, 42, 0.03) !important;
             margin-bottom: 28px !important;
             box-sizing: border-box !important;
-        }
-
-        .card-head {
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: flex-start !important;
-            margin-bottom: 20px !important;
-            gap: 16px !important;
-            width: 100% !important;
-        }
-
-        .card-head h3 {
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 1.3rem !important;
-            font-weight: 800 !important;
-            color: var(--pd-navy) !important;
-            margin: 0 0 6px 0 !important;
-            line-height: 1.3 !important;
-        }
-
-        .card-head p {
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.88rem !important;
-            color: #64748b !important;
-            line-height: 1.4 !important;
-            margin: 0 !important;
-        }
-
-        .pill-row {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            align-items: center !important;
-            gap: 12px !important;
-            margin-top: 20px !important;
-            width: 100% !important;
-        }
-
-        .pill-row span {
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 10px 20px !important;
-            background: #f8fafc !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 12px !important;
-            color: #1e293b !important;
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.84rem !important;
-            font-weight: 700 !important;
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            white-space: nowrap !important;
-        }
-
-        .pill-row span:hover {
-            background: #0f2246 !important;
-            color: #ffffff !important;
-            border-color: #0f2246 !important;
-            box-shadow: 0 4px 12px rgba(15, 34, 70, 0.15) !important;
-        }
-
-
-        .form-grid {
-            display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
-            gap: 18px !important;
-            margin-bottom: 24px !important;
-        }
-
-        .form-grid label {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 6px !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            color: #475569 !important;
-        }
-
-        .form-grid input,
-        .form-grid select,
-        .form-grid textarea {
-            padding: 10px 16px !important;
-            border-radius: 12px !important;
-            border: 1px solid #cbd5e1 !important;
-            background: #ffffff !important;
-            color: var(--pd-navy) !important;
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.86rem !important;
-            font-weight: 500 !important;
-            outline: none !important;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-        }
-
-        .form-grid input:focus,
-        .form-grid select:focus,
-        .form-grid textarea:focus {
-            border-color: #1d376c !important;
-            box-shadow: 0 0 0 3px rgba(29, 55, 108, 0.12) !important;
-        }
-
-        .dashboard-table-scroll {
-            overflow-x: auto !important;
-            border-radius: 14px !important;
-            border: 1px solid #e2e8f0 !important;
-            margin-top: 18px !important;
-        }
-
-        table {
-            width: 100% !important;
-            border-collapse: collapse !important;
-            background: #ffffff !important;
-        }
-
-        th {
-            background: #f8fafc !important;
-            color: #475569 !important;
-            font-size: 0.78rem !important;
-            font-weight: 800 !important;
-            text-transform: uppercase !important;
-            padding: 14px 18px !important;
-            border-bottom: 2px solid #e2e8f0 !important;
-            text-align: left !important;
-        }
-
-        td {
-            padding: 16px 18px !important;
-            border-bottom: 1px solid #f1f5f9 !important;
-            color: #334155 !important;
-            font-size: 0.85rem !important;
-        }
-
-        td button {
-            padding: 7px 14px !important;
-            border-radius: 999px !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            background: #f1f5f9 !important;
-            color: #0f172a !important;
-            border: 1px solid #cbd5e1 !important;
-            cursor: pointer !important;
-        }
-
-        td button:hover {
-            background: #0f2246 !important;
-            border-radius: 0 !important;
-            padding: 0 32px !important;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.02) !important;
-            margin: 0 0 28px 0 !important;
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            box-sizing: border-box !important;
-        }
-
-        .dash-header .eyebrow {
-            color: #1d376c !important;
-            font-size: 0.74rem !important;
-            font-weight: 800 !important;
-            letter-spacing: 0.12em !important;
-            text-transform: uppercase !important;
-            margin-bottom: 4px !important;
-        }
-
-        .dash-header h1 {
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 1.7rem !important;
-            font-weight: 800 !important;
-            color: var(--pd-navy) !important;
-            letter-spacing: -0.03em !important;
-        }
-
-        .header-actions {
-            display: flex !important;
-            align-items: center !important;
-            gap: 14px !important;
-        }
-
-        .dash-header button.primary,
-        button.primary,
-        a.primary {
-            padding: 11px 22px !important;
-            border-radius: 12px !important;
-            background: #0f2246 !important;
-            color: #ffffff !important;
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.85rem !important;
-            font-weight: 700 !important;
-            border: none !important;
-            cursor: pointer !important;
-            box-shadow: 0 6px 18px rgba(15, 34, 70, 0.2) !important;
-            transition: all 0.22s ease !important;
-            text-decoration: none !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-
-        border-radius: 20px !important;
-        padding: 28px 32px !important;
-        box-shadow: 0 4px 24px rgba(15, 23, 42, 0.03) !important;
-        margin-bottom: 28px !important;
-        box-sizing: border-box !important;
-        }
-
-        .card-head {
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: flex-start !important;
-            margin-bottom: 20px !important;
-            gap: 16px !important;
-            width: 100% !important;
-        }
-
-        .card-head h3 {
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 1.3rem !important;
-            font-weight: 800 !important;
-            color: var(--pd-navy) !important;
-            margin: 0 0 6px 0 !important;
-            line-height: 1.3 !important;
-        }
-
-        .card-head p {
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.88rem !important;
-            color: #64748b !important;
-            line-height: 1.4 !important;
-            margin: 0 !important;
-        }
-
-        .pill-row {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            align-items: center !important;
-            gap: 12px !important;
-            margin-top: 20px !important;
-            width: 100% !important;
-        }
-
-        .pill-row span {
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            padding: 10px 20px !important;
-            background: #f8fafc !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 12px !important;
-            color: #1e293b !important;
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.84rem !important;
-            font-weight: 700 !important;
-            cursor: pointer !important;
-            transition: all 0.2s ease !important;
-            white-space: nowrap !important;
-        }
-
-        .pill-row span:hover {
-            background: #0f2246 !important;
-            color: #ffffff !important;
-            border-color: #0f2246 !important;
-            box-shadow: 0 4px 12px rgba(15, 34, 70, 0.15) !important;
-        }
-
-
-        .form-grid {
-            display: grid !important;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
-            gap: 18px !important;
-            margin-bottom: 24px !important;
-        }
-
-        .form-grid label {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 6px !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            color: #475569 !important;
-        }
-
-        .form-grid input,
-        .form-grid select,
-        .form-grid textarea {
-            padding: 10px 16px !important;
-            border-radius: 12px !important;
-            border: 1px solid #cbd5e1 !important;
-            background: #ffffff !important;
-            color: var(--pd-navy) !important;
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.86rem !important;
-            font-weight: 500 !important;
-            outline: none !important;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-        }
-
-        .form-grid input:focus,
-        .form-grid select:focus,
-        .form-grid textarea:focus {
-            border-color: #1d376c !important;
-            box-shadow: 0 0 0 3px rgba(29, 55, 108, 0.12) !important;
-        }
-
-        .dashboard-table-scroll {
-            overflow-x: auto !important;
-            border-radius: 14px !important;
-            border: 1px solid #e2e8f0 !important;
-            margin-top: 18px !important;
-        }
-
-        table {
-            width: 100% !important;
-            border-collapse: collapse !important;
-            background: #ffffff !important;
-        }
-
-        th {
-            background: #f8fafc !important;
-            color: #475569 !important;
-            font-size: 0.78rem !important;
-            font-weight: 800 !important;
-            text-transform: uppercase !important;
-            padding: 14px 18px !important;
-            border-bottom: 2px solid #e2e8f0 !important;
-            text-align: left !important;
-        }
-
-        td {
-            padding: 16px 18px !important;
-            border-bottom: 1px solid #f1f5f9 !important;
-            color: #334155 !important;
-            font-size: 0.85rem !important;
-        }
-
-        td button {
-            padding: 7px 14px !important;
-            border-radius: 999px !important;
-            font-size: 0.8rem !important;
-            font-weight: 700 !important;
-            background: #f1f5f9 !important;
-            color: #0f172a !important;
-            border: 1px solid #cbd5e1 !important;
-            cursor: pointer !important;
-        }
-
-        td button:hover {
-            background: #0f2246 !important;
-            color: #ffffff !important;
-        }
-
-        html {
-            background: #ffffff !important;
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-        }
-
-        body,
-        body.app-dashboard,
-        .app-dashboard,
-        main.dash-main,
-        .dash-main,
-        .dash-panel {
-            background: #ffffff !important;
-            color: var(--pd-navy) !important;
-            letter-spacing: -0.03em !important;
-        }
-
-        .header-actions {
-            display: flex !important;
-            align-items: center !important;
-            gap: 14px !important;
-        }
-
-        .dash-header button.primary,
-        button.primary,
-        a.primary {
-            padding: 11px 22px !important;
-            border-radius: 12px !important;
-            background: #0f2246 !important;
-            color: #ffffff !important;
-            font-family: 'Manrope', sans-serif !important;
-            font-size: 0.85rem !important;
-            font-weight: 700 !important;
-            border: none !important;
-            cursor: pointer !important;
-            box-shadow: 0 6px 18px rgba(15, 34, 70, 0.2) !important;
-            transition: all 0.22s ease !important;
-            text-decoration: none !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 8px !important;
-        }
-
-        border-radius: 20px !important;
-        padding: 28px 32px !important;
-        box-shadow: 0 4px 24px rgba(15, 23, 42, 0.03) !important;
-        margin-bottom: 28px !important;
-        box-sizing: border-box !important;
         }
 
         .card-head {
@@ -2379,6 +2649,15 @@
         line-height: 1 !important;
         box-sizing: border-box !important;
         flex-shrink: 0 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    html body.app-dashboard[data-platform="propertydirect"] .header-actions .user-avatar-badge:hover,
+    body[data-dashboard-role="customer"] .header-actions .user-avatar-badge:hover,
+    body[data-dashboard-role="customer"] .user-avatar-badge:hover {
+        transform: scale(1.08) !important;
+        background: #1e293b !important;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3) !important;
     }
 
     /* 4. DASH PANEL CONTENT - FLUSH AND PERFECTLY ALIGNED */
@@ -3159,14 +3438,15 @@
             <strong>Property<span>Direct</span></strong>
         </a>
         <nav class="sidebar-nav" aria-label="Customer dashboard sections">
-            <button class="active" type="button" data-panel="overview"><span>Overview</span></button>
-            <button type="button" data-panel="notifications"><span>Notifications</span></button>
-            <button type="button" data-panel="contacts"><span>Contacts</span></button>
-            <button type="button" data-panel="visits"><span>Site visits</span></button>
-            <button type="button" data-panel="services"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;"><path d="M14.5 5.5l4 4"/><path d="M4 20l6.5-6.5"/><path d="M13 4l7 7-5 5-7-7z"/><path d="M5 19l-1 1"/></svg><span>Carpentry & Home Services</span></button>
-            <button type="button" data-panel="plans"><span>Plans</span></button>
-            <button type="button" data-panel="become-owner" style="color:#059669; font-weight:800;"><span>🏠 Become Property Owner</span></button>
-            <button type="button" data-panel="support"><span>Support</span></button>
+            <button class="active" type="button" data-panel="overview" onclick="switchTab('overview')"><span>Overview</span></button>
+            <button type="button" data-panel="notifications" onclick="switchTab('notifications')"><span>Notifications</span></button>
+            <button type="button" data-panel="contacts" onclick="switchTab('contacts')"><span>Contacts</span></button>
+            <button type="button" data-panel="visits" onclick="switchTab('visits')"><span>Site visits</span></button>
+            <button type="button" data-panel="services" onclick="switchTab('services')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;"><path d="M14.5 5.5l4 4"/><path d="M4 20l6.5-6.5"/><path d="M13 4l7 7-5 5-7-7z"/><path d="M5 19l-1 1"/></svg><span>Carpentry & Home Services</span></button>
+            <button type="button" data-panel="plans" onclick="switchTab('plans')"><span>Plans</span></button>
+            <button type="button" data-panel="become-owner" onclick="switchTab('become-owner')" style="color:#059669; font-weight:800;"><span>🏠 Become Property Owner</span></button>
+            <button type="button" data-panel="profile" onclick="switchTab('profile')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile & Account</span></button>
+            <button type="button" data-panel="support" onclick="switchTab('support')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>Support</span></button>
         </nav>
         <a class="logout-link" href="/dashboards/logout?platform=propertydirect">Logout</a>
     </aside>
@@ -3181,7 +3461,7 @@
                 <button type="button" class="secondary" data-panel="become-owner" id="headerBecomeOwnerBtn" style="border:1px solid #10b981; color:#065f46; background:#ecfdf5; font-weight:800;">🏠 Apply for Owner Posting</button>
                 <a class="secondary" href="/propertydirect/apartments">Browse public listings</a>
                 <button class="primary" type="button" data-panel="search">Search Properties</button>
-                <span class="user-avatar-badge">CU</span>
+                <div class="user-avatar-badge" data-panel="profile" title="Customer Profile & Account Settings" role="button" aria-label="Customer Profile">CU</div>
             </div>
         </header>
 
@@ -3599,7 +3879,7 @@
                 </div>
                 <div class="cust-services-search-container">
                     <svg class="cust-services-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                    <input type="search" id="nobrokerHubSearchInput" class="cust-services-search-input" placeholder="Search Kitchen Cleaning, Painting, Packers, Carpenter, AC Repair..." onkeyup="filterNoBrokerServices(this.value)">
+                    <input type="search" id="nobrokerHubSearchInput" class="cust-services-search-input" placeholder="Search Kitchen Cleaning, Painting, Packers, Carpenter, AC Repair..." oninput="filterNoBrokerServices(this.value)" onsearch="filterNoBrokerServices(this.value)" onkeyup="filterNoBrokerServices(this.value)" onchange="filterNoBrokerServices(this.value)">
                 </div>
                 <button type="button" class="cust-services-bookings-btn" onclick="scrollToNoBrokerBookings()">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
@@ -3742,12 +4022,8 @@
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             My Service Bookings
                         </h5>
-                        <p>Saved into the common backend database. Refreshing the page will keep these records.</p>
+                        <p>Saved into the common backend database. Page records are synchronized automatically.</p>
                     </div>
-                    <button type="button" onclick="loadNoBrokerMaintenanceTickets()">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
-                        Refresh
-                    </button>
                 </div>
                 <div class="table-responsive">
                     <table>
@@ -3982,7 +4258,7 @@
 
                 <div class="pd-plans-grid-3">
                     <!-- Basic Plan Card -->
-                    <div class="pd-plan-card">
+                    <div class="pd-plan-card" onclick="openPaymentCheckoutModal('Basic Plan', 999, '45 days access')" title="Click to select Basic Plan">
                         <span class="pd-plan-type-badge starter">Starter</span>
                         <h5 class="pd-plan-name">Basic Plan</h5>
                         <p class="pd-plan-subtitle">For fast, direct owner search</p>
@@ -3997,11 +4273,11 @@
                             <li class="pd-plan-feature-item muted"><i class="fa-solid fa-circle-xmark cross"></i> Relationship Manager</li>
                             <li class="pd-plan-feature-item muted"><i class="fa-solid fa-circle-xmark cross"></i> Free Rental Agreement Draft</li>
                         </ul>
-                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="select-plan" data-plan-name="Basic">Select Basic Plan</button>
+                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="checkout-plan" data-plan-name="Basic Plan" onclick="event.stopPropagation(); openPaymentCheckoutModal('Basic Plan', 999, '45 days access')">Select Basic Plan</button>
                     </div>
 
                     <!-- Relax Plan Card (Featured) -->
-                    <div class="pd-plan-card featured">
+                    <div class="pd-plan-card featured" onclick="openPaymentCheckoutModal('Relax Plan', 1999, '90 days access')" title="Click to renew or select Relax Plan">
                         <span class="pd-plan-card-tag">Most Popular</span>
                         <span class="pd-plan-type-badge popular">Recommended</span>
                         <h5 class="pd-plan-name">Relax Plan</h5>
@@ -4017,13 +4293,13 @@
                             <li class="pd-plan-feature-item"><i class="fa-solid fa-circle-check check"></i> Free Rental Agreement Draft (Save ₹299)</li>
                             <li class="pd-plan-feature-item"><i class="fa-solid fa-circle-check check"></i> Home Cleaning & Move-in Support</li>
                         </ul>
-                        <button type="button" class="pd-plan-btn pd-plan-btn-current" data-action="current-plan" data-plan-name="Relax">
-                            <i class="fa-solid fa-circle-check"></i> Current Plan
+                        <button type="button" class="pd-plan-btn pd-plan-btn-current" data-action="checkout-plan" data-plan-name="Relax Plan" onclick="event.stopPropagation(); openPaymentCheckoutModal('Relax Plan', 1999, '90 days access')">
+                            <i class="fa-solid fa-circle-check"></i> Current Plan (Renew / Upgrade)
                         </button>
                     </div>
 
                     <!-- Assisted Plan Card -->
-                    <div class="pd-plan-card">
+                    <div class="pd-plan-card" onclick="openPaymentCheckoutModal('Assisted Plan', 4999, '90 days access')" title="Click to select Assisted Plan">
                         <span class="pd-plan-type-badge vip">VIP Care</span>
                         <h5 class="pd-plan-name">Assisted Plan</h5>
                         <p class="pd-plan-subtitle">Full concierge & field officer service</p>
@@ -4038,7 +4314,7 @@
                             <li class="pd-plan-feature-item"><i class="fa-solid fa-circle-check check"></i> Doorstep E-Stamp & Legal Delivery</li>
                             <li class="pd-plan-feature-item"><i class="fa-solid fa-circle-check check"></i> Priority Vendor Inspection Visit</li>
                         </ul>
-                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="select-plan" data-plan-name="Assisted">Select Assisted Plan</button>
+                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="checkout-plan" data-plan-name="Assisted Plan" onclick="event.stopPropagation(); openPaymentCheckoutModal('Assisted Plan', 4999, '90 days access')">Select Assisted Plan</button>
                     </div>
                 </div>
 
@@ -4050,127 +4326,860 @@
 
                 <div class="pd-plans-grid-2" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
                     <!-- Owner Freedom -->
-                    <div class="pd-plan-card">
+                    <div class="pd-plan-card" onclick="openPaymentCheckoutModal('Owner Freedom Plan', 1499, '60 days access')" title="Click to select Owner Freedom Plan">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <h5 class="pd-plan-name" style="margin: 0;">Owner Freedom Plan</h5>
                             <span style="background: #fef3c7; color: #d97706; font-size: 0.85rem; font-weight: 800; padding: 4px 14px; border-radius: 999px;">₹1,499</span>
                         </div>
                         <p class="pd-plan-subtitle" style="margin-bottom: 20px;">Rent out your house 3x faster with verified tenant matches.</p>
-                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="select-plan" data-plan-name="OwnerFreedom" style="max-width: 220px;">Select Owner Plan</button>
+                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="checkout-plan" data-plan-name="Owner Freedom Plan" style="max-width: 220px;" onclick="event.stopPropagation(); openPaymentCheckoutModal('Owner Freedom Plan', 1499, '60 days access')">Select Owner Plan</button>
                     </div>
 
                     <!-- Owner Concierge -->
-                    <div class="pd-plan-card">
+                    <div class="pd-plan-card" onclick="openPaymentCheckoutModal('Owner Concierge Plan', 3999, '90 days access')" title="Click to select Owner Concierge Plan">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                             <h5 class="pd-plan-name" style="margin: 0;">Owner Concierge Plan</h5>
                             <span style="background: #dcfce7; color: #166534; font-size: 0.85rem; font-weight: 800; padding: 4px 14px; border-radius: 999px;">₹3,999</span>
                         </div>
                         <p class="pd-plan-subtitle" style="margin-bottom: 20px;">End-to-end property manager, professional photo shoot & tenant screening.</p>
-                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="select-plan" data-plan-name="OwnerConcierge" style="max-width: 220px;">Select Concierge Plan</button>
+                        <button type="button" class="pd-plan-btn pd-plan-btn-outline" data-action="checkout-plan" data-plan-name="Owner Concierge Plan" style="max-width: 220px;" onclick="event.stopPropagation(); openPaymentCheckoutModal('Owner Concierge Plan', 3999, '90 days access')">Select Concierge Plan</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="dash-panel hidden" data-view="support">
-            <div class="dash-card">
+        <section class="dash-panel hidden" data-view="support" id="customerSupportPanel">
+            <!-- 1. Top Quick Help & Contact Channels -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin-bottom: 24px;">
+                <div class="dash-card" style="padding: 20px; border-radius: 18px; border: 1px solid #e2e8f0; display: flex; align-items: flex-start; gap: 14px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                        📞
+                    </div>
+                    <div>
+                        <strong style="font-size: 0.95rem; color: #0f172a; display: block; margin-bottom: 4px;">Phone Helpline</strong>
+                        <p style="margin: 0 0 8px 0; font-size: 0.82rem; color: #64748b;">Mon - Sat, 9:00 AM - 8:00 PM</p>
+                        <a href="tel:18004197860" style="font-weight: 700; color: #2563eb; font-size: 0.88rem; text-decoration: none;">1800-419-7860 (Toll Free)</a>
+                    </div>
+                </div>
+
+                <div class="dash-card" style="padding: 20px; border-radius: 18px; border: 1px solid #e2e8f0; display: flex; align-items: flex-start; gap: 14px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                        💬
+                    </div>
+                    <div>
+                        <strong style="font-size: 0.95rem; color: #0f172a; display: block; margin-bottom: 4px;">WhatsApp Support</strong>
+                        <p style="margin: 0 0 8px 0; font-size: 0.82rem; color: #64748b;">Instant replies within 5 mins</p>
+                        <a href="https://wa.me/919876543210" target="_blank" style="font-weight: 700; color: #059669; font-size: 0.88rem; text-decoration: none;">+91 98765 43210</a>
+                    </div>
+                </div>
+
+                <div class="dash-card" style="padding: 20px; border-radius: 18px; border: 1px solid #e2e8f0; display: flex; align-items: flex-start; gap: 14px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                        ✉️
+                    </div>
+                    <div>
+                        <strong style="font-size: 0.95rem; color: #0f172a; display: block; margin-bottom: 4px;">Email Support</strong>
+                        <p style="margin: 0 0 8px 0; font-size: 0.82rem; color: #64748b;">Response within 2 hours</p>
+                        <a href="mailto:support@propertydirect.in" style="font-weight: 700; color: #d97706; font-size: 0.88rem; text-decoration: none;">support@propertydirect.in</a>
+                    </div>
+                </div>
+
+                <div class="dash-card" style="padding: 20px; border-radius: 18px; border: 1px solid #e2e8f0; display: flex; align-items: flex-start; gap: 14px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #f3e8ff; color: #9333ea; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0;">
+                        ⚡
+                    </div>
+                    <div>
+                        <strong style="font-size: 0.95rem; color: #0f172a; display: block; margin-bottom: 4px;">Visit Concierge</strong>
+                        <p style="margin: 0 0 8px 0; font-size: 0.82rem; color: #64748b;">Live site visit assistance</p>
+                        <span style="font-weight: 700; color: #9333ea; font-size: 0.88rem;">Available 7 Days</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Raise Ticket Card -->
+            <div class="dash-card" style="margin-bottom: 24px;">
                 <div class="card-head">
                     <div>
-                        <h3>Support</h3>
-                        <p>Raise a traceable PropertyDirect support request with complete context.</p>
-                    </div><span class="inline-state" id="supportState">Ready</span>
+                        <h3>Raise a Support Ticket</h3>
+                        <p>Submit your enquiry or issue with booking, visit schedule, or agreement assistance.</p>
+                    </div>
+                    <span class="inline-state" id="supportState">Ready</span>
                 </div>
                 <form class="form-grid detailed-property-form" id="propertySupportForm">
-                    <label><span>Issue Title</span><input name="title" required maxlength="140" placeholder="Short summary of the issue"></label>
+                    <label><span>Issue Title</span><input name="title" required maxlength="140" placeholder="Short summary of the issue (e.g. Need to reschedule visit)"></label>
                     <label><span>Category</span><select name="category" required>
-                        <option>ACCOUNT_ACCESS</option>
-                        <option>LISTING_APPROVAL</option>
-                        <option>PAYMENT_OR_PLAN</option>
-                        <option>OWNER_CONTACT</option>
-                        <option>VISIT_OR_SERVICE</option>
-                        <option>PRIVACY_OR_SAFETY</option>
-                        <option>TECHNICAL_ISSUE</option>
+                        <option value="ACCOUNT_ACCESS">Account & Login Access</option>
+                        <option value="VISIT_OR_SERVICE">Site Visit & Home Services</option>
+                        <option value="OWNER_CONTACT">Owner Contact & Enquiries</option>
+                        <option value="PAYMENT_OR_PLAN">Payments, Plans & Invoices</option>
+                        <option value="LISTING_APPROVAL">Property Listing Verification</option>
+                        <option value="PRIVACY_OR_SAFETY">Security & Privacy Inquiry</option>
+                        <option value="TECHNICAL_ISSUE">Technical / Application Glitch</option>
                     </select></label>
                     <label><span>Priority</span><select name="priority" required>
-                        <option>NORMAL</option>
-                        <option>HIGH</option>
-                        <option>URGENT</option>
+                        <option value="NORMAL">Normal Priority (24h SLA)</option>
+                        <option value="HIGH">High Priority (4h SLA)</option>
+                        <option value="URGENT">Urgent Escalation (1h SLA)</option>
                     </select></label>
-                    <label><span>Related Listing / Reference ID</span><input name="reference" placeholder="e.g. Prop #101 or Txn #45"></label>
+                    <label><span>Related Property / Booking ID</span><input name="reference" placeholder="e.g. Prop #101 or Booking #45"></label>
                     <label><span>Preferred Contact Method</span><select name="contactMethod">
-                        <option>In-app update</option>
-                        <option>Phone</option>
-                        <option>Email</option>
+                        <option value="In-app update">In-app Ticket Response</option>
+                        <option value="Phone">Phone Callback</option>
+                        <option value="WhatsApp">WhatsApp Message</option>
+                        <option value="Email">Email Communication</option>
                     </select></label>
                     <label><span>Available Callback Time</span><input name="callbackAt" type="datetime-local"></label>
                     <label class="profile-wide">
                         <span>Detailed Issue</span>
-                        <textarea name="details" required minlength="15" maxlength="2000" placeholder="Explain what happened, expected result, error message and steps already tried..."></textarea>
+                        <textarea name="details" required maxlength="2000" placeholder="Please describe the issue or question in detail..."></textarea>
                     </label>
                     <label class="profile-wide">
                         <span>Screenshot / Document Reference</span>
-                        <input name="attachmentReference" placeholder="Filename or reference URL">
+                        <input name="attachmentReference" placeholder="Filename, photo or reference link (optional)">
                     </label>
-                    <button class="primary profile-wide" data-action="support" type="button">Raise Detailed Ticket</button>
+                    <button class="primary profile-wide" id="raiseSupportTicketBtn" data-action="support" data-property-api-action="support-ticket" type="button">Raise Detailed Ticket</button>
                 </form>
-                <h3 style="margin-top: 24px;">Tickets</h3>
-                <ul class="task-list" id="supportTickets">
-                    <li>No active support tickets</li>
+
+                <h3 style="margin-top: 28px; margin-bottom: 14px; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Active Support Tickets</h3>
+                <ul class="task-list" id="supportTickets" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+                    <li style="padding: 14px 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                        <div>
+                            <strong style="color: #0f172a;">#TKT-8902 · Site Visit Confirmation with Owner</strong>
+                            <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #64748b;">Category: Site Visit · Priority: Normal · Created 2 hours ago</p>
+                        </div>
+                        <span class="inline-state" style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 0.75rem; padding: 2px 10px; border-radius: 999px;">Under Review</span>
+                    </li>
+                    <li style="padding: 14px 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                        <div>
+                            <strong style="color: #0f172a;">#TKT-8419 · Rental Agreement E-Stamp Delivery Query</strong>
+                            <p style="margin: 2px 0 0 0; font-size: 0.82rem; color: #64748b;">Category: Legal Services · Priority: High · Completed yesterday</p>
+                        </div>
+                        <span class="inline-state" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-size: 0.75rem; padding: 2px 10px; border-radius: 999px;">Resolved</span>
+                    </li>
                 </ul>
+            </div>
+
+            <!-- 3. FAQs Card -->
+            <div class="dash-card">
+                <div class="card-head">
+                    <div>
+                        <h3>Frequently Asked Questions</h3>
+                        <p>Quick answers to common questions about visits, owner contacts, and home services.</p>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                    <div style="padding: 16px; border: 1px solid #e2e8f0; border-radius: 14px; background: #ffffff;">
+                        <h5 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 700; color: #0f172a;">How do I reschedule a site visit?</h5>
+                        <p style="margin: 0; font-size: 0.84rem; color: #64748b; line-height: 1.5;">Go to the <strong>Site visits</strong> tab in your sidebar, locate your upcoming visit, and click 'Reschedule Slot'. The property owner will be notified instantly.</p>
+                    </div>
+                    <div style="padding: 16px; border: 1px solid #e2e8f0; border-radius: 14px; background: #ffffff;">
+                        <h5 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 700; color: #0f172a;">How fast do owners respond to contacts?</h5>
+                        <p style="margin: 0; font-size: 0.84rem; color: #64748b; line-height: 1.5;">Verified owners typically respond within 15 to 30 minutes via WhatsApp or phone. You can view all responses under the <strong>Contacts</strong> tab.</p>
+                    </div>
+                    <div style="padding: 16px; border: 1px solid #e2e8f0; border-radius: 14px; background: #ffffff;">
+                        <h5 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 700; color: #0f172a;">Can I cancel a booked Home Service?</h5>
+                        <p style="margin: 0; font-size: 0.84rem; color: #64748b; line-height: 1.5;">Yes, you can cancel or reschedule any home service (cleaning, carpentry, painting) free of charge up to 2 hours before the service slot.</p>
+                    </div>
+                    <div style="padding: 16px; border: 1px solid #e2e8f0; border-radius: 14px; background: #ffffff;">
+                        <h5 style="margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 700; color: #0f172a;">Are properties verified before publishing?</h5>
+                        <p style="margin: 0; font-size: 0.84rem; color: #64748b; line-height: 1.5;">Every listing on PropertyDirect undergoes automated RERA and owner identity verification before going live to ensure 100% zero brokerage transparency.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="dash-panel hidden" data-view="profile" id="customerProfilePanel">
+            <div class="dash-card" style="margin-bottom: 24px; padding: 24px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 18px;">
+                        <div class="user-avatar-badge" style="width: 64px !important; height: 64px !important; min-width: 64px !important; font-size: 1.5rem !important; background: linear-gradient(135deg, #0f172a, #1e293b) !important; color: #fff; box-shadow: 0 4px 12px rgba(15,23,42,0.25);">CU</div>
+                        <div>
+                            <h2 style="margin: 0 0 4px 0; font-size: 1.35rem; font-weight: 800; color: #0f172a;" id="displayCustomerName">Customer User</h2>
+                            <p style="margin: 0; font-size: 0.9rem; color: #64748b; display: flex; align-items: center; gap: 8px;">
+                                <span id="displayCustomerEmail">customer@propertydirect.in</span> • 
+                                <span class="stat-card-tag tag-emerald" style="padding: 2px 8px; font-size: 0.75rem;">Verified Account</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" class="secondary" data-panel="search">🔍 Browse Properties</button>
+                        <button type="button" class="primary" onclick="document.getElementById('custFullName').focus()">Edit Profile</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dash-card">
+                <div class="card-head">
+                    <div>
+                        <h3>Customer Profile & Search Preferences</h3>
+                        <p>Manage your personal profile, preferred property criteria, and contact preferences.</p>
+                    </div>
+                    <span class="inline-state" id="customerProfileState">Active</span>
+                </div>
+                <form class="form-grid detailed-property-form" id="customerProfileForm" onsubmit="event.preventDefault(); saveCustomerProfile();">
+                    <label>
+                        <span>Full Name</span>
+                        <input name="fullName" id="custFullName" required placeholder="e.g. Rahul Sharma" value="Customer User">
+                    </label>
+                    <label>
+                        <span>Email Address</span>
+                        <input name="email" id="custEmail" type="email" required placeholder="customer@example.com" value="customer@propertydirect.in">
+                    </label>
+                    <label>
+                        <span>Phone Number</span>
+                        <input name="phone" id="custPhone" type="tel" placeholder="+91 98765 43210" value="+91 98765 43210">
+                    </label>
+                    <label>
+                        <span>Alternate Contact</span>
+                        <input name="altPhone" id="custAltPhone" type="tel" placeholder="+91 98765 00000">
+                    </label>
+                    <label>
+                        <span>Preferred Locality / City</span>
+                        <input name="locality" id="custLocality" placeholder="e.g. Whitefield, Bangalore">
+                    </label>
+                    <label>
+                        <span>Looking For</span>
+                        <select name="propertyIntent" id="custPropertyIntent">
+                            <option value="BUY">Buy Apartment / House</option>
+                            <option value="RENT">Rent Apartment / House</option>
+                            <option value="INVEST">Investment</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Budget Range</span>
+                        <select name="budgetRange" id="custBudgetRange">
+                            <option value="UNDER_50L">Under ₹50 Lakhs</option>
+                            <option value="50L_1CR">₹50 Lakhs - ₹1 Crore</option>
+                            <option value="1CR_2CR">₹1 Crore - ₹2 Crores</option>
+                            <option value="ABOVE_2CR">Above ₹2 Crores</option>
+                        </select>
+                    </label>
+                    <label>
+                        <span>Preferred Configuration (BHK)</span>
+                        <select name="preferredBhk" id="custPreferredBhk">
+                            <option value="ANY">Any BHK</option>
+                            <option value="1BHK">1 BHK</option>
+                            <option value="2BHK" selected>2 BHK</option>
+                            <option value="3BHK">3 BHK</option>
+                            <option value="4BHK+">4+ BHK</option>
+                        </select>
+                    </label>
+                    <div class="profile-wide" style="display: flex; align-items: center; gap: 14px; margin-top: 10px;">
+                        <button class="primary" type="submit">Save Profile Details</button>
+                        <span id="custProfileStatusMsg" style="font-weight: 700; font-size: 0.88rem; color: #16a34a; display: none;">✓ Profile details updated successfully!</span>
+                    </div>
+                </form>
             </div>
         </section>
     </main>
     <div class="toast hidden" id="toast"></div>
 
+    <!-- ========================================================
+         SUBSCRIPTION PAYMENT CHECKOUT MODAL
+         ======================================================== -->
+    <div id="paymentCheckoutModal" class="checkout-modal-overlay hidden" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="checkoutPlanName">
+        <div class="checkout-modal-backdrop" onclick="closePaymentCheckoutModal()"></div>
+        <div class="checkout-modal-card">
+            <!-- Modal Top Header -->
+            <div class="checkout-modal-header">
+                <div class="checkout-header-badge">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>256-Bit SSL Encrypted Checkout</span>
+                </div>
+                <button type="button" class="checkout-close-btn" onclick="closePaymentCheckoutModal()" aria-label="Close checkout modal">&times;</button>
+            </div>
+
+            <!-- Selected Plan Summary Card -->
+            <div class="checkout-plan-summary">
+                <div class="plan-summary-left">
+                    <span class="plan-summary-eyebrow">SELECTED SUBSCRIPTION</span>
+                    <h3 id="checkoutPlanName" class="checkout-plan-name">Basic Plan</h3>
+                    <div class="checkout-plan-meta">
+                        <span id="checkoutPlanValidity" class="checkout-validity-pill">45 Days Access</span>
+                        <span class="checkout-fee-pill">0% Gateway Convenience Fee</span>
+                    </div>
+                </div>
+                <div class="plan-summary-right">
+                    <span class="checkout-price-label">Total Payable</span>
+                    <div class="checkout-amount-wrap">
+                        <span class="checkout-currency">₹</span>
+                        <span id="checkoutPlanPrice" class="checkout-price-digits">999</span>
+                    </div>
+                    <span class="checkout-tax-note">Inclusive of GST</span>
+                </div>
+            </div>
+
+            <!-- Payment Method Segmented Tabs -->
+            <div class="checkout-tabs" role="tablist">
+                <button type="button" class="checkout-tab-btn active" id="tabBtnUpi" onclick="switchCheckoutTab('upi')" role="tab" aria-selected="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    <span>UPI & QR Scanner</span>
+                </button>
+                <button type="button" class="checkout-tab-btn" id="tabBtnManual" onclick="switchCheckoutTab('manual')" role="tab" aria-selected="false">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2l9 5H3l9-5z"></path></svg>
+                    <span>Bank Transfer / Manual UTR</span>
+                </button>
+            </div>
+
+            <!-- TAB 1: UPI & Dynamic QR Code Scanner -->
+            <div id="checkoutTabUpi" class="checkout-tab-content">
+                <div class="upi-qr-section">
+                    <div class="qr-code-frame">
+                        <img id="checkoutQrImage" src="" alt="Dynamic UPI QR Code" class="checkout-qr-img" />
+                    </div>
+                    <div class="upi-scan-instructions">
+                        <div class="instruction-badge">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            <span>Scan with any UPI App</span>
+                        </div>
+                        <p class="instruction-lead">Scan this QR code using Google Pay, PhonePe, Paytm, or BHIM to pay instantly.</p>
+                        <div class="supported-upi-logos">
+                            <span class="upi-chip">Google Pay</span>
+                            <span class="upi-chip">PhonePe</span>
+                            <span class="upi-chip">Paytm</span>
+                            <span class="upi-chip">BHIM / CRED</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick UPI App Mobile Deep-Links -->
+                <div class="quick-upi-actions">
+                    <span class="quick-upi-title">Tap below to pay directly on this mobile device:</span>
+                    <div class="upi-apps-grid">
+                        <button type="button" id="deepLinkGpay" class="upi-app-btn gpay-btn" onclick="handleQuickUpiAppPay('Google Pay')">
+                            <span class="upi-app-icon">G</span>
+                            <span>Google Pay</span>
+                        </button>
+                        <button type="button" id="deepLinkPhonepe" class="upi-app-btn phonepe-btn" onclick="handleQuickUpiAppPay('PhonePe')">
+                            <span class="upi-app-icon">P</span>
+                            <span>PhonePe</span>
+                        </button>
+                        <button type="button" id="deepLinkPaytm" class="upi-app-btn paytm-btn" onclick="handleQuickUpiAppPay('Paytm')">
+                            <span class="upi-app-icon">₹</span>
+                            <span>Paytm</span>
+                        </button>
+                        <button type="button" id="deepLinkGeneric" class="upi-app-btn generic-upi-btn" onclick="handleQuickUpiAppPay('Default UPI')">
+                            <span class="upi-app-icon">⚡</span>
+                            <span>Default UPI</span>
+                        </button>
+                    </div>
+                    <div id="upiAppFeedback" class="upi-app-feedback" style="display: none;"></div>
+                </div>
+
+                <!-- Switch to Manual UTR Submission Callout -->
+                <div class="upi-completion-callout">
+                    <div class="callout-copy">
+                        <strong>Already completed the payment?</strong>
+                        <p>Submit your 12-digit UTR reference to verify and instantly activate your benefits.</p>
+                    </div>
+                    <button type="button" class="secondary-btn" onclick="switchCheckoutTab('manual')">
+                        Submit UTR Proof &rarr;
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 2: Manual Payment & Verification -->
+            <div id="checkoutTabManual" class="checkout-tab-content hidden" style="display: none;">
+                <div class="manual-credentials-grid">
+                    <div class="credential-card">
+                        <span class="credential-label">Official Merchant UPI ID</span>
+                        <div class="credential-value-row">
+                            <code class="credential-code">propertydirect@icici</code>
+                            <button type="button" class="copy-pill-btn" onclick="copyCheckoutText('propertydirect@icici', this)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="credential-card">
+                        <span class="credential-label">Bank Account Number (NEFT / IMPS)</span>
+                        <div class="credential-value-row">
+                            <code class="credential-code">987654321098</code>
+                            <button type="button" class="copy-pill-btn" onclick="copyCheckoutText('987654321098', this)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="credential-card">
+                        <span class="credential-label">Bank IFSC Code</span>
+                        <div class="credential-value-row">
+                            <code class="credential-code">ICIC0001234</code>
+                            <button type="button" class="copy-pill-btn" onclick="copyCheckoutText('ICIC0001234', this)">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="credential-card">
+                        <span class="credential-label">Beneficiary Name & Branch</span>
+                        <div class="credential-value-row">
+                            <span style="font-size: 0.82rem; font-weight: 700; color: #1e293b; line-height: 1.3;">PropertyDirect Realty Pvt Ltd (ICICI Bank, MG Road)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Verification Submission Form -->
+                <form id="paymentVerificationForm" onsubmit="submitPaymentVerification(event)" class="verification-form">
+                    <div class="form-row">
+                        <label class="form-field">
+                            <span>12-Digit Transaction / UTR Number <strong style="color: #dc2626;">*</strong></span>
+                            <input type="text" id="manualUtrInput" name="utrNumber" required placeholder="e.g. 427189024512" maxlength="32" autocomplete="off" />
+                        </label>
+                        <label class="form-field">
+                            <span>Sender UPI ID or Account Name (Optional)</span>
+                            <input type="text" id="manualSenderInput" name="senderDetail" placeholder="e.g. resident@okhdfcbank" autocomplete="off" />
+                        </label>
+                    </div>
+
+                    <label class="form-field full-width">
+                        <span>Payment Screenshot / Proof (Optional)</span>
+                        <div class="file-upload-box">
+                            <input type="file" id="manualProofFile" accept="image/*,application/pdf" onchange="handleProofFileChange(this)" style="display: none;" />
+                            <button type="button" class="file-pick-btn" onclick="document.getElementById('manualProofFile').click()">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                <span>Choose Screenshot File</span>
+                            </button>
+                            <span id="proofFileName" class="file-name-feedback">No file selected (optional)</span>
+                        </div>
+                    </label>
+
+                    <button type="submit" id="btnSubmitVerification" class="primary-submit-btn">
+                        <span>Verify & Activate Subscription</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Modal Footer Security Note -->
+            <div class="checkout-modal-footer">
+                <div class="security-guarantee">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Instant activation after UTR verification · 100% money back guarantee if unmatched</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            function switchTab(panelId) {
-                if (!panelId) return;
+        function switchTab(panelId) {
+            if (!panelId) return;
 
-                document.querySelectorAll("[data-panel]").forEach(function (btn) {
-                    if (btn.dataset.panel === panelId) {
-                        btn.classList.add("active");
-                    } else {
-                        btn.classList.remove("active");
-                    }
-                });
+            document.querySelectorAll("[data-panel]").forEach(function (btn) {
+                var active = btn.dataset.panel === panelId;
+                btn.classList.toggle("active", active);
+                btn.setAttribute("aria-selected", String(active));
+            });
 
-                document.querySelectorAll("[data-view]").forEach(function (view) {
-                    if (view.dataset.view === panelId) {
-                        view.classList.remove("hidden");
-                        view.style.display = "block";
-                    } else {
-                        view.classList.add("hidden");
-                        view.style.display = "none";
-                    }
-                });
-
-                var activeBtn = document.querySelector('.sidebar-nav [data-panel="' + panelId + '"]');
-                var titleElem = document.getElementById("panelTitle");
-                var eyebrowElem = document.querySelector(".dash-header .eyebrow");
-                var headerOwnerBtn = document.getElementById("headerBecomeOwnerBtn") || document.querySelector('.header-actions button[data-panel="become-owner"]');
-
-                if (panelId === "become-owner") {
-                    if (titleElem) titleElem.textContent = "Become Property Owner";
-                    if (eyebrowElem) eyebrowElem.textContent = "OWNER APPLICATION";
-                    if (headerOwnerBtn) headerOwnerBtn.style.display = "none";
+            document.querySelectorAll("[data-view]").forEach(function (view) {
+                var active = view.dataset.view === panelId;
+                view.classList.toggle("hidden", !active);
+                view.classList.toggle("d-none", !active);
+                if (active) {
+                    view.removeAttribute("hidden");
+                    view.style.setProperty("display", "block", "important");
                 } else {
-                    if (headerOwnerBtn) headerOwnerBtn.style.display = "";
-                    if (eyebrowElem) eyebrowElem.textContent = "CUSTOMER DASHBOARD";
-                    if (activeBtn && titleElem) {
-                        var text = activeBtn.textContent.trim();
-                        titleElem.textContent = text;
-                    }
+                    view.style.setProperty("display", "none", "important");
                 }
+            });
 
-                if (history.pushState) {
-                    history.pushState(null, null, '#' + panelId);
-                } else {
-                    location.hash = '#' + panelId;
+            var activeBtn = document.querySelector('.sidebar-nav [data-panel="' + panelId + '"]');
+            var titleElem = document.getElementById("panelTitle");
+            var eyebrowElem = document.querySelector(".dash-header .eyebrow");
+            var headerOwnerBtn = document.getElementById("headerBecomeOwnerBtn") || document.querySelector('.header-actions button[data-panel="become-owner"]');
+
+            if (panelId === "become-owner") {
+                if (titleElem) titleElem.textContent = "Become Property Owner";
+                if (eyebrowElem) eyebrowElem.textContent = "OWNER APPLICATION";
+                if (headerOwnerBtn) headerOwnerBtn.style.display = "none";
+            } else if (panelId === "profile") {
+                if (titleElem) titleElem.textContent = "Profile & Account Settings";
+                if (eyebrowElem) eyebrowElem.textContent = "USER PROFILE";
+                if (headerOwnerBtn) headerOwnerBtn.style.display = "";
+            } else if (panelId === "support") {
+                if (titleElem) titleElem.textContent = "Support & Help Center";
+                if (eyebrowElem) eyebrowElem.textContent = "CUSTOMER SUPPORT";
+                if (headerOwnerBtn) headerOwnerBtn.style.display = "";
+            } else {
+                if (headerOwnerBtn) headerOwnerBtn.style.display = "";
+                if (eyebrowElem) eyebrowElem.textContent = "CUSTOMER DASHBOARD";
+                if (activeBtn && titleElem) {
+                    var text = activeBtn.textContent.trim();
+                    titleElem.textContent = text;
                 }
-
-                window.scrollTo({ top: 0, behavior: 'instant' });
             }
+
+            if (history.pushState) {
+                history.pushState(null, null, '#' + panelId);
+            } else {
+                location.hash = '#' + panelId;
+            }
+
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+        window.switchTab = switchTab;
+        window.openPanel = switchTab;
+        window.PropertyDirectDashboardControls = window.PropertyDirectDashboardControls || {};
+        window.PropertyDirectDashboardControls.setPanel = switchTab;
+
+        // ========================================================
+        // SUBSCRIPTION CHECKOUT MODAL LOGIC
+        // ========================================================
+        window.currentCheckoutPlan = { name: "Basic Plan", price: 999, validity: "45 days access" };
+
+        window.openPaymentCheckoutModal = function (planName, price, validity) {
+            window.currentCheckoutPlan = {
+                name: planName || "Basic Plan",
+                price: Number(String(price).replace(/[^\d.]/g, '')) || 999,
+                validity: validity || "45 days access"
+            };
+
+            var modal = document.getElementById("paymentCheckoutModal");
+            var nameElem = document.getElementById("checkoutPlanName");
+            var priceElem = document.getElementById("checkoutPlanPrice");
+            var validityElem = document.getElementById("checkoutPlanValidity");
+            var qrImg = document.getElementById("checkoutQrImage");
+            var utrInput = document.getElementById("manualUtrInput");
+            var senderInput = document.getElementById("manualSenderInput");
+            var proofFile = document.getElementById("manualProofFile");
+            var proofName = document.getElementById("proofFileName");
+
+            if (nameElem) nameElem.textContent = window.currentCheckoutPlan.name;
+            if (priceElem) priceElem.textContent = window.currentCheckoutPlan.price.toLocaleString("en-IN");
+            if (validityElem) validityElem.textContent = window.currentCheckoutPlan.validity;
+
+            if (utrInput) utrInput.value = "";
+            if (senderInput) senderInput.value = "";
+            if (proofFile) proofFile.value = "";
+            if (proofName) {
+                proofName.textContent = "No file selected (optional)";
+                proofName.style.color = "#64748b";
+                proofName.style.fontWeight = "normal";
+            }
+
+            var cleanAmount = String(window.currentCheckoutPlan.price);
+            var note = encodeURIComponent((window.currentCheckoutPlan.name || "Subscription") + " Plan");
+            var upiUri = "upi://pay?pa=propertydirect@icici&pn=PropertyDirect%20Realty&am=" + encodeURIComponent(cleanAmount) + "&cu=INR&tn=" + note;
+
+            if (qrImg) {
+                qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=" + encodeURIComponent(upiUri);
+                qrImg.onerror = function () {
+                    this.onerror = null;
+                    this.src = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 100 100"><rect width="100" height="100" fill="#f8fafc"/><rect x="10" y="10" width="30" height="30" fill="#0f2246"/><rect x="15" y="15" width="20" height="20" fill="#ffffff"/><rect x="20" y="20" width="10" height="10" fill="#0f2246"/><rect x="60" y="10" width="30" height="30" fill="#0f2246"/><rect x="65" y="15" width="20" height="20" fill="#ffffff"/><rect x="70" y="20" width="10" height="10" fill="#0f2246"/><rect x="10" y="60" width="30" height="30" fill="#0f2246"/><rect x="15" y="65" width="20" height="20" fill="#ffffff"/><rect x="20" y="70" width="10" height="10" fill="#0f2246"/><rect x="45" y="45" width="15" height="15" fill="#2563eb"/><text x="50" y="88" font-family="sans-serif" font-size="7" font-weight="bold" text-anchor="middle" fill="#0f2246">SCAN IN ANY UPI APP</text></svg>');
+                };
+            }
+
+            var feedbackEl = document.getElementById("upiAppFeedback");
+            if (feedbackEl) {
+                feedbackEl.style.display = "none";
+                feedbackEl.innerHTML = "";
+            }
+
+            switchCheckoutTab("upi");
+
+            if (modal) {
+                modal.classList.remove("hidden");
+                modal.style.display = "flex";
+            }
+            document.body.style.overflow = "hidden";
+        };
+
+        window.handleQuickUpiAppPay = function (appName) {
+            var plan = window.currentCheckoutPlan || { name: "Basic Plan", price: 999 };
+            var cleanAmount = String(plan.price || 999);
+            var note = encodeURIComponent((plan.name || "Subscription") + " Plan");
+            var upiId = "propertydirect@icici";
+            var upiUri = "upi://pay?pa=" + upiId + "&pn=PropertyDirect%20Realty&am=" + encodeURIComponent(cleanAmount) + "&cu=INR&tn=" + note;
+
+            // 1. Copy UPI ID automatically to clipboard
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(upiId);
+                } else {
+                    var ta = document.createElement("textarea");
+                    ta.value = upiId;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(ta);
+                }
+            } catch (e) {}
+
+            // 2. Visual click feedback on the selected button
+            var btnId = (appName === 'Google Pay') ? 'deepLinkGpay' :
+                        (appName === 'PhonePe') ? 'deepLinkPhonepe' :
+                        (appName === 'Paytm') ? 'deepLinkPaytm' : 'deepLinkGeneric';
+            var btn = document.getElementById(btnId);
+            if (btn) {
+                var prevBg = btn.style.background;
+                btn.style.background = "#eff6ff";
+                btn.style.borderColor = "#2563eb";
+                setTimeout(function () {
+                    btn.style.background = prevBg;
+                    btn.style.borderColor = "";
+                }, 800);
+            }
+
+            // 3. Detect mobile device
+            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768);
+
+            var feedbackEl = document.getElementById("upiAppFeedback");
+            if (feedbackEl) {
+                feedbackEl.style.display = "block";
+                if (isMobile) {
+                    feedbackEl.innerHTML = '<span style="font-weight: 800; color: #15803d;">📱 Launching ' + appName + '...</span><br><span style="font-size: 0.74rem; color: #334155;">UPI ID <code>' + upiId + '</code> copied to clipboard. If app doesn\'t open, scan the QR code above.</span>';
+                } else {
+                    feedbackEl.innerHTML = '<span style="font-weight: 800; color: #1d4ed8;">✓ UPI ID Copied: <code>' + upiId + '</code></span><br><span style="font-size: 0.74rem; color: #475569;">Scan the QR code above with <strong>' + appName + '</strong> on your mobile device to pay ₹' + Number(cleanAmount).toLocaleString('en-IN') + ' directly.</span>';
+                }
+            }
+
+            if (isMobile) {
+                // On mobile, trigger app protocol directly without opening a blank webpage or tab
+                try {
+                    window.location.href = upiUri;
+                } catch(e) {}
+                if (typeof showToast === 'function') {
+                    showToast('Opening ' + appName + '... (UPI ID copied)');
+                }
+            } else {
+                // On desktop browser, stay right here! Never navigate or open another page!
+                if (typeof showToast === 'function') {
+                    showToast('✓ UPI ID ' + upiId + ' copied! Scan QR code with ' + appName);
+                }
+            }
+        };
+
+        window.closePaymentCheckoutModal = function () {
+            var modal = document.getElementById("paymentCheckoutModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                modal.style.display = "none";
+            }
+            document.body.style.overflow = "";
+        };
+
+        window.switchCheckoutTab = function (tab) {
+            var upiTab = document.getElementById("checkoutTabUpi");
+            var manualTab = document.getElementById("checkoutTabManual");
+            var upiBtn = document.getElementById("tabBtnUpi");
+            var manualBtn = document.getElementById("tabBtnManual");
+
+            if (tab === "upi") {
+                if (upiTab) { upiTab.classList.remove("hidden"); upiTab.style.display = "block"; }
+                if (manualTab) { manualTab.classList.add("hidden"); manualTab.style.display = "none"; }
+                if (upiBtn) { upiBtn.classList.add("active"); upiBtn.setAttribute("aria-selected", "true"); }
+                if (manualBtn) { manualBtn.classList.remove("active"); manualBtn.setAttribute("aria-selected", "false"); }
+            } else {
+                if (manualTab) { manualTab.classList.remove("hidden"); manualTab.style.display = "block"; }
+                if (upiTab) { upiTab.classList.add("hidden"); upiTab.style.display = "none"; }
+                if (manualBtn) { manualBtn.classList.add("active"); manualBtn.setAttribute("aria-selected", "true"); }
+                if (upiBtn) { upiBtn.classList.remove("active"); upiBtn.setAttribute("aria-selected", "false"); }
+            }
+        };
+
+        window.copyCheckoutText = function (text, btn) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text);
+            } else {
+                var ta = document.createElement("textarea");
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand("copy");
+                document.body.removeChild(ta);
+            }
+            if (btn) {
+                var origText = btn.innerHTML;
+                btn.innerHTML = '<span>✓ Copied!</span>';
+                btn.style.background = "#dcfce7";
+                btn.style.color = "#166534";
+                btn.style.borderColor = "#86efac";
+                setTimeout(function () {
+                    btn.innerHTML = origText;
+                    btn.style.background = "";
+                    btn.style.color = "";
+                    btn.style.borderColor = "";
+                }, 2000);
+            }
+        };
+
+        window.handleProofFileChange = function (input) {
+            var feedback = document.getElementById("proofFileName");
+            if (!feedback) return;
+            if (input.files && input.files.length > 0) {
+                var file = input.files[0];
+                var sizeKb = Math.round(file.size / 1024);
+                feedback.textContent = "✓ " + file.name + " (" + sizeKb + " KB)";
+                feedback.style.color = "#16a34a";
+                feedback.style.fontWeight = "700";
+            } else {
+                feedback.textContent = "No file selected (optional)";
+                feedback.style.color = "#64748b";
+                feedback.style.fontWeight = "normal";
+            }
+        };
+
+        window.submitPaymentVerification = async function (e) {
+            if (e) e.preventDefault();
+            var utrInput = document.getElementById("manualUtrInput");
+            var utr = utrInput ? utrInput.value.trim() : "";
+            if (!utr) {
+                if (utrInput) utrInput.focus();
+                if (typeof showToast === "function") showToast("Please enter your 12-digit UTR Number");
+                else alert("Please enter your 12-digit UTR Number");
+                return;
+            }
+
+            var submitBtn = document.getElementById("btnSubmitVerification");
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Verifying & Submitting...</span>';
+            }
+
+            var plan = window.currentCheckoutPlan || { name: "Basic Plan", price: 999, validity: "45 days access" };
+            var sender = document.getElementById("manualSenderInput") ? document.getElementById("manualSenderInput").value.trim() : "";
+            var proofFile = document.getElementById("manualProofFile") ? document.getElementById("manualProofFile").files[0] : null;
+            var fileName = proofFile ? proofFile.name : "";
+
+            try {
+                await fetch("/api/workflows", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        workspace: "PropertyDirect",
+                        dashboardRole: "customer",
+                        panel: "plans",
+                        actionType: "subscription-payment-verification",
+                        targetLabel: "Subscription: " + plan.name,
+                        details: {
+                            planName: plan.name,
+                            price: plan.price,
+                            validity: plan.validity,
+                            utrNumber: utr,
+                            senderDetail: sender,
+                            fileName: fileName,
+                            submittedAt: new Date().toISOString()
+                        }
+                    })
+                }).catch(function () {});
+            } catch (err) {}
+
+            var successMsg = "Payment submitted for verification. Your " + plan.name + " will be activated shortly!";
+            if (typeof showToast === "function") {
+                showToast("✓ " + successMsg);
+            } else {
+                alert(successMsg);
+            }
+
+            // Update plan card button in UI to show pending verification
+            var planButtons = document.querySelectorAll("[data-plan-name]");
+            planButtons.forEach(function (b) {
+                if (b.dataset.planName && b.dataset.planName.toLowerCase().includes(plan.name.split(" ")[0].toLowerCase())) {
+                    b.className = "pd-plan-btn pd-plan-btn-current";
+                    b.style.background = "#d97706";
+                    b.style.color = "#ffffff";
+                    b.innerHTML = '<i class="fa-solid fa-clock"></i> Verification Pending';
+                }
+            });
+
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Verify & Activate Subscription</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            }
+
+            closePaymentCheckoutModal();
+        };
+
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                closePaymentCheckoutModal();
+            }
+        });
+
+        window.saveCustomerProfile = function () {
+            var name = document.getElementById("custFullName") ? document.getElementById("custFullName").value.trim() : "";
+            var email = document.getElementById("custEmail") ? document.getElementById("custEmail").value.trim() : "";
+            var phone = document.getElementById("custPhone") ? document.getElementById("custPhone").value.trim() : "";
+            var altPhone = document.getElementById("custAltPhone") ? document.getElementById("custAltPhone").value.trim() : "";
+            var locality = document.getElementById("custLocality") ? document.getElementById("custLocality").value.trim() : "";
+            var intent = document.getElementById("custPropertyIntent") ? document.getElementById("custPropertyIntent").value : "";
+            var budget = document.getElementById("custBudgetRange") ? document.getElementById("custBudgetRange").value : "";
+            var bhk = document.getElementById("custPreferredBhk") ? document.getElementById("custPreferredBhk").value : "";
+
+            var profileData = {
+                name: name,
+                email: email,
+                phone: phone,
+                altPhone: altPhone,
+                locality: locality,
+                intent: intent,
+                budget: budget,
+                bhk: bhk,
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                localStorage.setItem("propertydirect_customer_profile", JSON.stringify(profileData));
+            } catch(e) {}
+
+            if (name) {
+                var dispName = document.getElementById("displayCustomerName");
+                if (dispName) dispName.textContent = name;
+                var initials = name.split(" ").filter(Boolean).map(function(n) { return n[0]; }).join("").toUpperCase().substring(0, 2);
+                if (initials) {
+                    document.querySelectorAll(".user-avatar-badge").forEach(function(badge) {
+                        badge.textContent = initials;
+                    });
+                }
+            }
+            if (email) {
+                var dispEmail = document.getElementById("displayCustomerEmail");
+                if (dispEmail) dispEmail.textContent = email;
+            }
+
+            var msg = document.getElementById("custProfileStatusMsg");
+            if (msg) {
+                msg.style.display = "inline";
+                setTimeout(function() { msg.style.display = "none"; }, 3500);
+            }
+        };
+
+        window.loadSavedCustomerProfile = function () {
+            try {
+                var raw = localStorage.getItem("propertydirect_customer_profile");
+                if (!raw) return;
+                var p = JSON.parse(raw);
+                if (p.name && document.getElementById("custFullName")) document.getElementById("custFullName").value = p.name;
+                if (p.email && document.getElementById("custEmail")) document.getElementById("custEmail").value = p.email;
+                if (p.phone && document.getElementById("custPhone")) document.getElementById("custPhone").value = p.phone;
+                if (p.altPhone && document.getElementById("custAltPhone")) document.getElementById("custAltPhone").value = p.altPhone;
+                if (p.locality && document.getElementById("custLocality")) document.getElementById("custLocality").value = p.locality;
+                if (p.intent && document.getElementById("custPropertyIntent")) document.getElementById("custPropertyIntent").value = p.intent;
+                if (p.budget && document.getElementById("custBudgetRange")) document.getElementById("custBudgetRange").value = p.budget;
+                if (p.bhk && document.getElementById("custPreferredBhk")) document.getElementById("custPreferredBhk").value = p.bhk;
+
+                if (p.name) {
+                    var dispName = document.getElementById("displayCustomerName");
+                    if (dispName) dispName.textContent = p.name;
+                    var initials = p.name.split(" ").filter(Boolean).map(function(n) { return n[0]; }).join("").toUpperCase().substring(0, 2);
+                    if (initials) {
+                        document.querySelectorAll(".user-avatar-badge").forEach(function(badge) {
+                            badge.textContent = initials;
+                        });
+                    }
+                }
+                if (email) {
+                    var dispEmail = document.getElementById("displayCustomerEmail");
+                    if (dispEmail) dispEmail.textContent = p.email;
+                }
+            } catch(e) {}
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+            loadSavedCustomerProfile();
 
             document.addEventListener("click", function (e) {
                 var target = e.target.closest("[data-panel]");
@@ -4837,13 +5846,39 @@
             setTimeout(ensureScrollable, 1500);
         })();
 
-        // Guaranteed handler for "My Bookings" button in Customer Services panel
-                window.filterNoBrokerServices = window.filterNoBrokerServices || function(query) {
+        // Guaranteed handler for search and filtering in Customer Services panel
+        window.filterNoBrokerServices = function(query) {
             const q = (query || '').toLowerCase().trim();
-            document.querySelectorAll('#nobrokerCategoryGrid .nobroker-cat-item').forEach(el => {
-                const text = (el.textContent + ' ' + (el.dataset.keywords || '')).toLowerCase();
-                el.style.display = (!q || text.includes(q)) ? '' : 'none';
+            const items = document.querySelectorAll('#nobrokerCategoryGrid .nobroker-cat-item');
+            let matchCount = 0;
+
+            items.forEach(el => {
+                const title = (el.querySelector('.service-card-title')?.textContent || '');
+                const subtitle = (el.querySelector('.service-card-subtitle')?.textContent || '');
+                const keywords = (el.dataset.keywords || '');
+                const text = (title + ' ' + subtitle + ' ' + keywords + ' ' + el.textContent).toLowerCase();
+                const isMatch = !q || text.includes(q);
+
+                el.style.display = isMatch ? '' : 'none';
+                if (isMatch) matchCount++;
             });
+
+            let emptyMsg = document.getElementById('nobrokerSearchEmptyMsg');
+            const grid = document.getElementById('nobrokerCategoryGrid');
+            if (grid) {
+                if (matchCount === 0 && q) {
+                    if (!emptyMsg) {
+                        emptyMsg = document.createElement('div');
+                        emptyMsg.id = 'nobrokerSearchEmptyMsg';
+                        emptyMsg.style.cssText = 'grid-column: 1 / -1; padding: 32px 16px; text-align: center; color: #64748b; font-weight: 600; background: #f8fafc; border-radius: 12px; border: 1.5px dashed #cbd5e1; margin-top: 12px;';
+                        grid.appendChild(emptyMsg);
+                    }
+                    emptyMsg.innerHTML = `🔍 No home services found matching "<strong>${q.replace(/[&<>"']/g, '')}</strong>". Try searching for <em>Cleaning, Painting, Carpenter, AC Repair, Packers</em>...`;
+                    emptyMsg.style.display = 'block';
+                } else if (emptyMsg) {
+                    emptyMsg.style.display = 'none';
+                }
+            }
         };
 
         window.scrollToNoBrokerBookings = window.scrollToNoBrokerBookings || function() {

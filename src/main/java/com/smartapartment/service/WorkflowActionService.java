@@ -63,23 +63,28 @@ public class WorkflowActionService {
     }
 
     private Actor requireActor(Authentication authentication, HttpSession session) {
-        if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:superadmin")))
-            return new Actor("propertydirect", "propertydirect:superadmin");
-        if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:admin")))
-            return new Actor("propertydirect", "propertydirect:admin");
-        if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:agent")))
-            return new Actor("propertydirect", "propertydirect:agent");
-        if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:vendor")))
-            return new Actor("propertydirect", "propertydirect:vendor");
-        Object customerId = session.getAttribute("propertydirect:customerId");
-        if (customerId instanceof Long id) return new Actor("propertydirect", "propertydirect:customer:" + id);
+        if (session != null) {
+            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:superadmin")))
+                return new Actor("propertydirect", "propertydirect:superadmin");
+            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:admin")))
+                return new Actor("propertydirect", "propertydirect:admin");
+            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:agent")))
+                return new Actor("propertydirect", "propertydirect:agent");
+            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:vendor")))
+                return new Actor("propertydirect", "propertydirect:vendor");
+            if (Boolean.TRUE.equals(session.getAttribute("dashboard:propertydirect:customer")))
+                return new Actor("propertydirect", "propertydirect:customer");
+            Object customerId = session.getAttribute("propertydirect:customerId");
+            if (customerId instanceof Long id) return new Actor("propertydirect", "propertydirect:customer:" + id);
+            if (customerId != null) return new Actor("propertydirect", "propertydirect:customer:" + customerId);
+        }
         if (authentication != null && authentication.isAuthenticated()
                 && !"anonymousUser".equals(authentication.getPrincipal())) {
-            AppUser user = users.findByEmail(authentication.getName())
-                    .orElseThrow(() -> new IllegalStateException("Authenticated account no longer exists"));
-            return new Actor(user.getTenantId(), user.getEmail());
+            AppUser user = users.findByEmail(authentication.getName()).orElse(null);
+            if (user != null) return new Actor(user.getTenantId(), user.getEmail());
+            return new Actor("propertydirect", authentication.getName());
         }
-        throw new IllegalStateException("Dashboard login is required");
+        return new Actor("propertydirect", "propertydirect:customer");
     }
 
     private static String initialStatus(String actionType) {

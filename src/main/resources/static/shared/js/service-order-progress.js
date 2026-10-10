@@ -2,7 +2,7 @@
     'use strict';
     const role = document.body.dataset.dashboardRole;
     const worker = role === 'maintenance-worker';
-    const customer = role === 'customer';
+    const customer = role === 'resident' || role === 'customer';
     if (!worker && !customer) return;
     const platform = role === 'customer' ? 'propertydirect' : 'smartsociety';
     const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -19,7 +19,7 @@
         const panel = document.querySelector(worker ? '[data-view="tasks"]' : '[data-view="services"]');
         if (!panel) return false;
         host = document.createElement('section'); host.className = 'service-order-progress';
-        host.innerHTML = `<header><div><h3>${worker ? 'Assigned service orders' : 'Your service updates'}</h3><p>${worker ? 'Only you can update the progress of your assigned jobs.' : 'Progress is updated by your assigned maintenance worker.'}</p></div><button type="button" data-refresh>Refresh</button></header><div data-orders aria-live="polite">Loading service orders…</div>`;
+        host.innerHTML = `<header><div><h3>${worker ? 'Assigned service orders' : 'Your service updates'}</h3><p>${worker ? 'Only you can update the progress of your assigned jobs.' : 'Progress is updated by your assigned maintenance worker.'}</p></div></header><div data-orders aria-live="polite">Loading service orders…</div>`;
         panel.prepend(host); host.addEventListener('click', click);
         return true;
     }
